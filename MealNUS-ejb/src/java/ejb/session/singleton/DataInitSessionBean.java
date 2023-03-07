@@ -48,6 +48,9 @@ public class DataInitSessionBean {
     public void postConstruct() {
         if (userSessionBean.retrieveAllUsers().isEmpty()) {
             userSessionBean.createUser(new User("eric", "tang", "user@gmail.com", "password"));
+            userSessionBean.createUser(new User("eric1", "tang1", "user1@gmail.com", "password"));
+            userSessionBean.createUser(new User("eric2", "tang2", "user2@gmail.com", "password"));
+            userSessionBean.createUser(new User("eric3", "tang3", "user3@gmail.com", "password"));
         }
         
         if (allergenSessionBean.retrieveAllAllergens().isEmpty()) {
