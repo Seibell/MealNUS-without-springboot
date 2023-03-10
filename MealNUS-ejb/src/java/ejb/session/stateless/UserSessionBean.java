@@ -71,4 +71,6 @@ public class UserSessionBean implements UserSessionBeanLocal {
         }
     }
     
+    // Testing 123
+    
 }
