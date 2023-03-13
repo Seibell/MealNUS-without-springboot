@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.enumeration.ForumCategory;
 
 /**
  *
@@ -34,7 +35,15 @@ public class ForumSessionBean implements ForumSessionBeanLocal {
     }
 
     @Override
-    public List<ForumPost> getAllForumPosts() {
+    public List<ForumPost> retrieveForumPostsByForumCategory(ForumCategory fc) {
+        Query query = em.createQuery("SELECT fp FROM ForumPost fp WHERE fp.forumCategory = :forumCategory", ForumPost.class);
+        query.setParameter("forumCategory", fc);
+        List<ForumPost> forumPosts = query.getResultList();
+        return forumPosts;
+    }
+
+    @Override
+    public List<ForumPost> retrieveAllForumPosts() {
         Query query = em.createQuery("SELECT f FROM ForumPost f", ForumPost.class);
         return query.getResultList();
     }
@@ -46,6 +55,6 @@ public class ForumSessionBean implements ForumSessionBeanLocal {
 
     @Override
     public void deleteForumPost(ForumPost forumPost) {
-            em.remove(forumPost);
+        em.remove(forumPost);
     }
 }

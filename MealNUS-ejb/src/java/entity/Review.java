@@ -34,6 +34,9 @@ public class Review implements Serializable {
     @ManyToOne
     private User user;
 
+    @ManyToOne
+    private MealBox mealBox;
+    
     public Review() {
     }
 
@@ -117,6 +120,34 @@ public class Review implements Serializable {
      */
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    /**
+     * @return the user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * @return the mealBox
+     */
+    public MealBox getMealBox() {
+        return mealBox;
+    }
+
+    /**
+     * @param mealBox the mealBox to set
+     */
+    public void setMealBox(MealBox mealBox) {
+        this.mealBox = mealBox;
     }
     
 }

@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.ForumPost;
 import java.util.List;
 import javax.ejb.Local;
+import util.enumeration.ForumCategory;
 
 /**
  *
@@ -20,10 +21,12 @@ public interface ForumSessionBeanLocal {
 
     public ForumPost retrieveForumPostById(Long id);
 
-    public List<ForumPost> getAllForumPosts();
+    public List<ForumPost> retrieveAllForumPosts();
 
     public ForumPost updateForumPost(ForumPost forumPost);
 
     public void deleteForumPost(ForumPost forumPost);
+
+    public List<ForumPost> retrieveForumPostsByForumCategory(ForumCategory fc);
     
 }

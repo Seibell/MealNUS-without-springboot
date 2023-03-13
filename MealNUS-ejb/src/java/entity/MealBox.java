@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -41,6 +42,8 @@ public class MealBox implements Serializable {
     
     @ManyToMany
     private List<Category> categories;
+    @OneToMany(mappedBy = "mealBox")
+    private List<Review> reviews;
 
     public MealBox() {
     }
@@ -172,6 +175,62 @@ public class MealBox implements Serializable {
      */
     public void setQuantityAvailable(Integer quantityAvailable) {
         this.quantityAvailable = quantityAvailable;
+    }
+
+    /**
+     * @return the allergens
+     */
+    public List<Allergen> getAllergens() {
+        return allergens;
+    }
+
+    /**
+     * @param allergens the allergens to set
+     */
+    public void setAllergens(List<Allergen> allergens) {
+        this.allergens = allergens;
+    }
+
+    /**
+     * @return the ingredients
+     */
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    /**
+     * @param ingredients the ingredients to set
+     */
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    /**
+     * @return the categories
+     */
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    /**
+     * @param categories the categories to set
+     */
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    /**
+     * @return the reviews
+     */
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    /**
+     * @param reviews the reviews to set
+     */
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
     
 }

@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import util.enumeration.ForumCategory;
 
 /**
  *
@@ -30,18 +31,17 @@ public class ForumPost implements Serializable {
     private String posTitle;
     private String postDescription;
     private String[] postAttachments;
-
+    private ForumCategory forumCategory;
     public ForumPost() {
     }
 
-    public ForumPost(Date postDate, String posTitle, String postDescription, String[] postAttachments) {
+    public ForumPost(Date postDate, String posTitle, String postDescription, String[] postAttachments, ForumCategory forumCategory) {
         this.postDate = postDate;
         this.posTitle = posTitle;
         this.postDescription = postDescription;
         this.postAttachments = postAttachments;
+        this.forumCategory = forumCategory;
     }
-    
-    
 
     public Long getPostId() {
         return postId;
@@ -130,6 +130,20 @@ public class ForumPost implements Serializable {
      */
     public void setPostAttachments(String[] postAttachments) {
         this.postAttachments = postAttachments;
+    }
+
+    /**
+     * @return the forumCategory
+     */
+    public ForumCategory getForumCategory() {
+        return forumCategory;
+    }
+
+    /**
+     * @param forumCategory the forumCategory to set
+     */
+    public void setForumCategory(ForumCategory forumCategory) {
+        this.forumCategory = forumCategory;
     }
     
 }
