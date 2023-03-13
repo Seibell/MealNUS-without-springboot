@@ -30,5 +30,11 @@
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-ejb/setup/glassfish-resources.xml</file>
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-ejb/src/java/ejb/session/stateless/UserSessionBean.java</file>
         </group>
+        <group>
+            <file>file:/C:/Users/60540/Desktop/IS3106/MealNUS-without-springboot/MealNUS-ejb/src/java/ejb/session/stateless/MealBoxSessionBeanLocal.java</file>
+            <file>file:/C:/Users/60540/Desktop/IS3106/MealNUS-without-springboot/MealNUS-ejb/src/java/ejb/session/stateless/IngredientSessionBean.java</file>
+            <file>file:/C:/Users/60540/Desktop/IS3106/MealNUS-without-springboot/MealNUS-ejb/src/java/ejb/session/singleton/DataInitSessionBean.java</file>
+            <file>file:/C:/Users/60540/Desktop/IS3106/MealNUS-without-springboot/MealNUS-ejb/src/java/ejb/session/stateless/AllergenSessionBeanLocal.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -9,7 +9,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 import util.enumeration.AddressEnum;
 import util.enumeration.OrderStatus;
 
-@Generated(value="EclipseLink-2.7.7.v20200504-rNA", date="2023-03-07T14:25:50")
+@Generated(value="EclipseLink-2.7.7.v20200504-rNA", date="2023-03-10T19:53:28")
 @StaticMetamodel(Orders.class)
 public class Orders_ { 
 

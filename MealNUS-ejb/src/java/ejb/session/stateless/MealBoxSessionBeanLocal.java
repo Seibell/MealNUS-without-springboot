@@ -5,7 +5,10 @@
  */
 package ejb.session.stateless;
 
+import entity.MealBox;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.MealBoxNotFoundException;
 
 /**
  *
@@ -13,5 +16,15 @@ import javax.ejb.Local;
  */
 @Local
 public interface MealBoxSessionBeanLocal {
+
+    public List<MealBox> retrieveAllMealBoxes();
+
+    public void updateMealBox(MealBox updatedMealBox);
+
+    public MealBox retrieveMealBoxById(Long id) throws MealBoxNotFoundException;
+
+    public void deleteMealBox(MealBox mealBox);
+
+    public void createMealBox(MealBox mealBox);
     
 }

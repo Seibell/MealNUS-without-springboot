@@ -5,7 +5,13 @@
  */
 package ejb.session.stateless;
 
+import entity.MealBox;
+import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import util.exception.MealBoxNotFoundException;
 
 /**
  *
@@ -14,6 +20,40 @@ import javax.ejb.Stateless;
 @Stateless
 public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @PersistenceContext(unitName = "MealNUS-ejbPU")
+    private EntityManager em;
+
+    public void persist(Object object) {
+        em.persist(object);
+    }
+
+    @Override
+    public void createMealBox(MealBox mealBox) {
+        em.persist(mealBox);
+    }
+
+    @Override
+    public List<MealBox> retrieveAllMealBoxes() {
+        Query query = em.createQuery("SELECT m FROM MealBox m", MealBox.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public MealBox retrieveMealBoxById(Long id) throws MealBoxNotFoundException {
+        MealBox mealBox = em.find(MealBox.class, id);
+        if (mealBox == null) {
+            throw new MealBoxNotFoundException("Meal box with id " + id + " not found.");
+        }
+        return mealBox;
+    }
+
+    @Override
+    public void updateMealBox(MealBox updatedMealBox) {
+        em.merge(updatedMealBox);
+    }
+
+    @Override
+    public void deleteMealBox(MealBox mealBox) {
+        em.remove(mealBox);
+    }
 }
