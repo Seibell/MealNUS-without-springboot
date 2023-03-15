@@ -28,9 +28,12 @@ public class Category implements Serializable {
     private Long categoryId;
     private String name;
     private String picture;
-    
+
     @ManyToMany
     private List<MealBox> mealBoxes;
+
+    @ManyToOne
+    private Promotion promotion;
 
     public Category() {
     }
@@ -39,8 +42,8 @@ public class Category implements Serializable {
         this.name = name;
         this.picture = picture;
         this.mealBoxes = new ArrayList<>();
+        this.promotion = new Promotion();
     }
-    
 
     public Long getCategoryId() {
         return categoryId;
@@ -102,5 +105,19 @@ public class Category implements Serializable {
     public void setPicture(String picture) {
         this.picture = picture;
     }
-    
+
+    /**
+     * @return the promotion
+     */
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
+    /**
+     * @param promotion the promotion to set
+     */
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
+
 }
