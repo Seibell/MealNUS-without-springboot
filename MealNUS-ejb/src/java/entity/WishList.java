@@ -24,13 +24,13 @@ public class WishList implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishListId;
-    private List<MealBox> wishlistItems;
+    private List<MealBox> wishListItems;
 
     public WishList() {
     }
 
     public WishList(List<MealBox> wishlistItems) {
-        this.wishlistItems = wishlistItems;
+        this.wishListItems = wishlistItems;
     }
 
     public Long getWishListId() {
@@ -67,17 +67,17 @@ public class WishList implements Serializable {
     }
 
     /**
-     * @return the wishlistItems
+     * @return the wishListItems
      */
-    public List<MealBox> getWishlistItems() {
-        return wishlistItems;
+    public List<MealBox> getWishListItems() {
+        return wishListItems;
     }
 
     /**
-     * @param wishlistItems the wishlistItems to set
+     * @param wishListItems the wishListItems to set
      */
-    public void setWishlistItems(List<MealBox> wishlistItems) {
-        this.wishlistItems = wishlistItems;
+    public void setWishListItems(List<MealBox> wishListItems) {
+        this.wishListItems = wishListItems;
     }
     
 }

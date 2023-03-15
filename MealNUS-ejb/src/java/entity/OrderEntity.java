@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
@@ -25,32 +26,47 @@ import util.enumeration.OrderStatus;
  * @author ryanl
  */
 @Entity
-public class Orders implements Serializable { //name is because order dosent work with SQL
+public class OrderEntity implements Serializable {
 
+//name is because order dosent work with SQL  <-- can i replace with OrderEntity?? -CH
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
     @Temporal(TemporalType.DATE)
     private Date orderDate;
-    
+
     private List<Pair<MealBox, Integer>> orderDetails;
-    
+
+//    Q) shld we have price and cost lists? priceList.size()=costList.size()=orderDetails.size()
+//    This is to lock in the price and cost of each mealbox in a particular order and account for
+//    possible changes in prices and costs of mealboxes over time. Failure to do so will affect all
+//    the statistics for my dashboard...
+    private List<BigDecimal> priceList;
+    private List<BigDecimal> costList;
+
+//    Q) shld orderAmount be an attribute or be a method in session bean?
+//    private BigDecimal orderAmount;
+//    Q) similar to orderAmount, how abt profit?
+//    private BigDecimal profit;
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;
-    
+
     @Enumerated
     private AddressEnum address;
     @Enumerated
     private OrderStatus orderStatus;
-    
+
     @ManyToOne
     private User user;
 
-    public Orders() {
+//    Q) is review going to be under orders?
+//    @ManyToOne
+//    private Review review;
+    public OrderEntity() {
     }
 
-    public Orders(Date orderDate, List<Pair<MealBox, Integer>> orderDetails, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, User user) {
+    public OrderEntity(Date orderDate, List<Pair<MealBox, Integer>> orderDetails, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, User user) {
         this.orderDate = orderDate;
         this.orderDetails = orderDetails;
         this.deliveryDate = deliveryDate;
@@ -59,7 +75,6 @@ public class Orders implements Serializable { //name is because order dosent wor
         this.user = user;
     }
 
-    
     public Long getOrderId() {
         return orderId;
     }
@@ -78,10 +93,10 @@ public class Orders implements Serializable { //name is because order dosent wor
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the orderId fields are not set
-        if (!(object instanceof Orders)) {
+        if (!(object instanceof OrderEntity)) {
             return false;
         }
-        Orders other = (Orders) object;
+        OrderEntity other = (OrderEntity) object;
         if ((this.orderId == null && other.orderId != null) || (this.orderId != null && !this.orderId.equals(other.orderId))) {
             return false;
         }
@@ -150,7 +165,58 @@ public class Orders implements Serializable { //name is because order dosent wor
     }
 
     /**
+     * @return the orderDetails
+     */
+    public List<Pair<MealBox, Integer>> getOrderDetails() {
+        return orderDetails;
+    }
+
+    /**
+     * @param orderDetails the orderDetails to set
+     */
+    public void setOrderDetails(List<Pair<MealBox, Integer>> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    /**
      * @return the user
      */
-    
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * @return the priceList
+     */
+    public List<BigDecimal> getPriceList() {
+        return priceList;
+    }
+
+    /**
+     * @param priceList the priceList to set
+     */
+    public void setPriceList(List<BigDecimal> priceList) {
+        this.priceList = priceList;
+    }
+
+    /**
+     * @return the costList
+     */
+    public List<BigDecimal> getCostList() {
+        return costList;
+    }
+
+    /**
+     * @param costList the costList to set
+     */
+    public void setCostList(List<BigDecimal> costList) {
+        this.costList = costList;
+    }
 }

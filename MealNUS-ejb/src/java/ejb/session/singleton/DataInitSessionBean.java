@@ -11,6 +11,7 @@ import ejb.session.stateless.UserSessionBeanLocal;
 import entity.Allergen;
 import entity.Ingredient;
 import entity.User;
+import entity.WishList;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -43,20 +44,20 @@ public class DataInitSessionBean {
     public void persist(Object object) {
         em.persist(object);
     }
-    
+
     @PostConstruct
     public void postConstruct() {
         if (userSessionBean.retrieveAllUsers().isEmpty()) {
-            userSessionBean.createUser(new User("eric", "tang", "user@gmail.com", "password"));
-            userSessionBean.createUser(new User("eric1", "tang1", "user1@gmail.com", "password"));
-            userSessionBean.createUser(new User("eric2", "tang2", "user2@gmail.com", "password"));
-            userSessionBean.createUser(new User("eric3", "tang3", "user3@gmail.com", "password"));
+            userSessionBean.createUser(new User("eric", "tang", "user@gmail.com", "password", new WishList()));
+            userSessionBean.createUser(new User("eric1", "tang1", "user1@gmail.com", "password", new WishList()));
+            userSessionBean.createUser(new User("eric2", "tang2", "user2@gmail.com", "password", new WishList()));
+            userSessionBean.createUser(new User("eric3", "tang3", "user3@gmail.com", "password", new WishList()));
         }
-        
+
         if (allergenSessionBean.retrieveAllAllergens().isEmpty()) {
             allergenSessionBean.createAllergen(new Allergen("Peanut", "deez nutz"));
         }
-        
+
         if (ingredientSessionBean.retrieveAllIngredients().isEmpty()) {
             ingredientSessionBean.createIngredient(new Ingredient("Rice",
                     "https://media.istockphoto.com/id/1069180776/photo/uncooked-white-long-grain-rice-background.jpg?s=612x612&w=is&k=20&c=DGoWb_yAHltTChGq9fb4m2ynsXPdCaeoQ_qovRrWjjY="));

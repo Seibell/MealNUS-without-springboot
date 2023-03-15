@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -29,20 +30,24 @@ public class User implements Serializable {
     private String lastName;
     private String email;
     private String password;
-    
+
     @OneToMany
     private List<Review> reviews;
-    
+
     @OneToMany
-    private List<Orders> orders;
-    
+    private List<OrderEntity> orders;
+
     @OneToMany
     private List<CreditCard> creditCards;
+
+    // Added just in case we are still displaying product detail and the number of wishlists its in
+    @OneToOne
+    private WishList wishList;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password) {
+    public User(String firstName, String lastName, String email, String password, WishList wishList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -50,6 +55,7 @@ public class User implements Serializable {
         this.reviews = new ArrayList<>();
         this.orders = new ArrayList<>();
         this.creditCards = new ArrayList<>();
+        this.wishList = wishList;
     }
 
     public Long getUserId() {
@@ -140,5 +146,19 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
+    /**
+     * @return the wishList
+     */
+    public WishList getWishList() {
+        return wishList;
+    }
+
+    /**
+     * @param wishList the wishList to set
+     */
+    public void setWishList(WishList wishList) {
+        this.wishList = wishList;
+    }
+
 }

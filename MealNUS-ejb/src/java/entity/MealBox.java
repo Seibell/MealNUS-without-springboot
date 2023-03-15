@@ -30,16 +30,17 @@ public class MealBox implements Serializable {
     private String itemName;
     private Long ItemCode;
     private String itemImage;
+    private BigDecimal itemCost;
     private BigDecimal itemPrice;
     private String itemDescription;
     private Integer quantityAvailable;
-    
+
     @ManyToMany
     private List<Allergen> allergens;
-    
+
     @ManyToMany
     private List<Ingredient> ingredients;
-    
+
     @ManyToMany
     private List<Category> categories;
     @OneToMany(mappedBy = "mealBox")
@@ -48,11 +49,12 @@ public class MealBox implements Serializable {
     public MealBox() {
     }
 
-    public MealBox(String itemName, Long ItemCode, String itemImage, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable) {
+    public MealBox(String itemName, Long ItemCode, String itemImage, BigDecimal itemPrice, BigDecimal itemCost, String itemDescription, Integer quantityAvailable) {
         this.itemName = itemName;
         this.ItemCode = ItemCode;
         this.itemImage = itemImage;
         this.itemPrice = itemPrice;
+        this.itemCost = itemCost;
         this.itemDescription = itemDescription;
         this.quantityAvailable = quantityAvailable;
         this.allergens = new ArrayList<>();
@@ -232,5 +234,19 @@ public class MealBox implements Serializable {
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
-    
+
+    /**
+     * @return the itemCost
+     */
+    public BigDecimal getItemCost() {
+        return itemCost;
+    }
+
+    /**
+     * @param itemCost the itemCost to set
+     */
+    public void setItemCost(BigDecimal itemCost) {
+        this.itemCost = itemCost;
+    }
+
 }

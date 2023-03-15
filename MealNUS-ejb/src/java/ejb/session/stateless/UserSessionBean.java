@@ -30,13 +30,13 @@ public class UserSessionBean implements UserSessionBeanLocal {
     public void createUser(User user) {
         em.persist(user);
     }
-    
+
     @Override
     public List<User> retrieveAllUsers() {
         Query query = em.createQuery("SELECT u FROM User u");
         return query.getResultList();
     }
-    
+
     @Override
     public User retrieveUserByEmail(String email) throws UserNotFoundException {
         Query query = em.createQuery("SELECT u FROM User u WHERE u.email = :email");
@@ -50,28 +50,17 @@ public class UserSessionBean implements UserSessionBeanLocal {
     }
 
     @Override
-    public User userLogin(String email, String password) throws InvalidLoginException
-    {
-        try
-        {
+    public User userLogin(String email, String password) throws InvalidLoginException {
+        try {
             User user = retrieveUserByEmail(email);
-            
-            if (user.getPassword().equals(password))
-            {
+
+            if (user.getPassword().equals(password)) {
                 return user;
-            }
-            else
-            {
+            } else {
                 throw new InvalidLoginException("Email does not exist or invalid password!");
             }
-        }
-        catch (UserNotFoundException ex)
-        {
+        } catch (UserNotFoundException ex) {
             throw new InvalidLoginException("Email does not exist or invalid password!");
         }
     }
-    
-    // Testing 456
-    // This is Chang Hui
-    
 }
