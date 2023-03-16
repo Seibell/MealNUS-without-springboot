@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.MealBox;
 import entity.OrderEntity;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -124,7 +125,8 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 
     @Override
     public List<OrderEntity> retrieveOrdersByMealBoxNameAndDate(String mealBoxNameToCheck, Date queryDate) {
-        List<OrderEntity> orderList = retrieveAllOrders();
+        List<OrderEntity> orderList = retrieveOrdersByOrderDate(queryDate);
+
         if (orderList.isEmpty()) {
             return orderList; //return empty list to signify no order made under mealBoxNameToCheck
         }
@@ -132,15 +134,13 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         ArrayList<OrderEntity> ordersThatMatchMealBoxNameToCheck = new ArrayList<>();
 
         for (OrderEntity order : orderList) {
-            if (order.getOrderDate().compareTo(queryDate) == 0) {
-                List<Pair<MealBox, Integer>> orderDetails = order.getOrderDetails();
-                for (Pair<MealBox, Integer> orderLineItem : orderDetails) {
-                    MealBox mealBox = orderLineItem.getKey();
-                    String mealBoxName = mealBox.getItemName();
-                    if (mealBoxName.equals(mealBoxNameToCheck)) {
-                        ordersThatMatchMealBoxNameToCheck.add(order);
-                        break;
-                    }
+            List<Pair<MealBox, Integer>> orderDetails = order.getOrderDetails();
+            for (Pair<MealBox, Integer> orderLineItem : orderDetails) {
+                MealBox mealBox = orderLineItem.getKey();
+                String mealBoxName = mealBox.getItemName();
+                if (mealBoxName.equals(mealBoxNameToCheck)) {
+                    ordersThatMatchMealBoxNameToCheck.add(order);
+                    break;
                 }
             }
         }
@@ -151,8 +151,20 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     // Dashboard :: Order Summary
     @Override
     public List<OrderEntity> retrieveOrdersByOrderDate(Date queryDate) {
-        Query query = em.createQuery("SELECT o FROM OrderEntity o WHERE o.orderDate = :inQueryDate");
-        query.setParameter("inQueryDate", queryDate);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(queryDate);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date firstSecondOfDay = cal.getTime();
+        cal.add(Calendar.DATE, 1);
+        cal.add(Calendar.MILLISECOND, -1);
+        Date lastSecondOfDay = cal.getTime();
+
+        Query query = em.createQuery("SELECT o FROM OrderEntity o WHERE o.orderDate >= :start AND o.lendDate <= :end", OrderEntity.class);
+        query.setParameter("start", firstSecondOfDay);
+        query.setParameter("end", lastSecondOfDay);
         return query.getResultList();
     }
 
