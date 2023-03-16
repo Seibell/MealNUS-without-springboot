@@ -84,6 +84,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         return query.getResultList();
     }
 
+    // This method supports Customer Portal Order Management
     @Override
     public List<OrderEntity> retrieveOrdersByUserEmail(String email) throws UserNotFoundException {
         Query query = em.createQuery("SELECT o FROM OrderEntity o WHERE o.user.email = :inUserEmail");

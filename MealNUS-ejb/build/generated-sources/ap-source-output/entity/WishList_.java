@@ -6,11 +6,11 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.7.7.v20200504-rNA", date="2023-03-10T19:53:28")
+@Generated(value="EclipseLink-2.7.7.v20200504-rNA", date="2023-03-16T09:25:14")
 @StaticMetamodel(WishList.class)
 public class WishList_ { 
 
-    public static volatile ListAttribute<WishList, MealBox> wishlistItems;
     public static volatile SingularAttribute<WishList, Long> wishListId;
+    public static volatile ListAttribute<WishList, MealBox> wishListItems;
 
 }
