@@ -10,9 +10,6 @@
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-war/src/java/ws/model/RetrieveAllUsersResponse.java</file>
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-war/src/java/ws/rest/UserResource.java</file>
         </group>
-        <group>
-            <file>file:/C:/Users/60540/Desktop/IS3106/MealNUS-without-springboot/MealNUS-war/src/java/ws/rest/ApplicationConfig.java</file>
-            <file>file:/C:/Users/60540/Desktop/IS3106/MealNUS-without-springboot/MealNUS-war/src/java/ws/model/RetrieveAllUsersResponse.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

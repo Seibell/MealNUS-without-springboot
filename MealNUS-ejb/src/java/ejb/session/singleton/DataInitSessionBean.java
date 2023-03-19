@@ -7,11 +7,15 @@ package ejb.session.singleton;
 
 import ejb.session.stateless.AllergenSessionBeanLocal;
 import ejb.session.stateless.IngredientSessionBeanLocal;
+import ejb.session.stateless.MealBoxSessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.Allergen;
 import entity.Ingredient;
+import entity.MealBox;
 import entity.User;
 import entity.WishList;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -38,6 +42,11 @@ public class DataInitSessionBean {
     @EJB
     private UserSessionBeanLocal userSessionBean;
 
+    @EJB
+    private MealBoxSessionBeanLocal mealBoxSessionBean;
+    
+    
+    
     @PersistenceContext(unitName = "MealNUS-ejbPU")
     private EntityManager em;
 
@@ -56,6 +65,12 @@ public class DataInitSessionBean {
 
         if (allergenSessionBean.retrieveAllAllergens().isEmpty()) {
             allergenSessionBean.createAllergen(new Allergen("Peanut", "deez nutz"));
+        }
+        
+        if (mealBoxSessionBean.retrieveAllMealBoxes().isEmpty()) {
+            mealBoxSessionBean.createMealBox(new MealBox("Vegetable's Party Box",001L,new BigDecimal(7),new BigDecimal(12),"This is a vegetable mealBox",15));
+            mealBoxSessionBean.createMealBox(new MealBox("BBQ Bliss Box",002L,new BigDecimal(9),new BigDecimal(15),"This is a BBQ meat mealBox",15));
+            mealBoxSessionBean.createMealBox(new MealBox("All-in-One Box",003L,new BigDecimal(11),new BigDecimal(18),"This is a all in one meat & vegetable mealBox",15));
         }
 
         if (ingredientSessionBean.retrieveAllIngredients().isEmpty()) {
