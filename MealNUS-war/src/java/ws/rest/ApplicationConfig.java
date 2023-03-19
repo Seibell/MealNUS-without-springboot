@@ -35,6 +35,7 @@ public class ApplicationConfig extends Application {
         resources.add(ws.rest.CorsFilter.class);
         resources.add(ws.rest.ForumResource.class);
         resources.add(ws.rest.MealBoxResource.class);
+        resources.add(ws.rest.NotificationResource.class);
         resources.add(ws.rest.ReviewResource.class);
         resources.add(ws.rest.UserResource.class);
     }    
