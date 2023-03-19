@@ -34,5 +34,9 @@ public interface PromotionSessionBeanLocal {
     public void updatePromotion(Promotion promotion);
 
     public void deletePromotion(Promotion promotion);
+
+    public void applyPromotionAcrossPlatform(String promotionCode);
+
+    public Promotion retrievePromotionByPromotionCode(String promotionCode);
     
 }

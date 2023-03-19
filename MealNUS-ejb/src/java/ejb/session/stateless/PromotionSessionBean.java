@@ -5,9 +5,12 @@
  */
 package ejb.session.stateless;
 
+import entity.MealBox;
 import entity.Promotion;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,10 +26,29 @@ import util.exception.UnknownPersistenceException;
 @Stateless
 public class PromotionSessionBean implements PromotionSessionBeanLocal {
 
+    @EJB
+    private MealBoxSessionBeanLocal mealBoxSessionBean;
+
     @PersistenceContext(unitName = "MealNUS-ejbPU")
     private EntityManager em;
+
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    //Should we offer applying the promotion code across categories as well?
+    //If so, should we ensure a check that a box is only in one category?
+    @Override
+    public void applyPromotionAcrossPlatform(String promotionCode) {
+        Promotion promotionToBeApplied = retrievePromotionByPromotionCode(promotionCode);
+        BigDecimal discountToBeApplied = promotionToBeApplied.getDiscount();
+        //Neeed to insert a check that ensure that the promotion discount is between 0 and 1
+
+        List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
+        for (MealBox box : mealBoxesAcrossPlatform) {
+            BigDecimal mealBoxPrice = box.getItemPrice();
+            BigDecimal updatedMealBoxPrice = mealBoxPrice.multiply(discountToBeApplied);
+            box.setItemPrice(updatedMealBoxPrice);
+        }
+    }
 
     @Override
     public void createPromotion(Promotion promotion) throws PromotionNotFoundException, UnknownPersistenceException {
@@ -58,17 +80,25 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         Promotion promotion = (Promotion) query.getSingleResult();
         return promotion;
     }
-    
+
+    @Override
+    public Promotion retrievePromotionByPromotionCode(String promotionCode) {
+        Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.promotionCode = :promotionCode", Promotion.class);
+        query.setParameter("inName", promotionCode);
+        Promotion promotion = (Promotion) query.getSingleResult();
+        return promotion;
+    }
+
     @Override
     public List<Promotion> retrievePromotionsByStartDate(Date startDate) {
         Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.startDate = :inStartDate");
         query.setParameter("inStartDate", startDate);
         return query.getResultList();
     }
-    
+
     @Override
     public List<Promotion> retrievePromotionsByEndDate(Date endDate) {
-         Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.endDate = :inEndDate");
+        Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.endDate = :inEndDate");
         query.setParameter("inEndDate", endDate);
         return query.getResultList();
     }
@@ -81,6 +111,8 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
 
     @Override
     public void updatePromotion(Promotion promotion) {
+        //Potentially could change it to have each attribute changed using the set method
+        //It is possible to let the user choose which fields to change the same way a book was edited in the assignment
         em.merge(promotion);
     }
 
