@@ -19,6 +19,8 @@ import javax.persistence.Query;
 import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
 
+//Checking if it can be pushed
+
 /**
  *
  * @author Darie
