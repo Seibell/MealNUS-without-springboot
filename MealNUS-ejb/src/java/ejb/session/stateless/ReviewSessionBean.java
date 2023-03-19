@@ -18,6 +18,7 @@ import javax.persistence.Query;
  *
  * @author 60540
  */
+// might need to fix the delete method to satisfy the bi-directional relationship
 @Stateless
 public class ReviewSessionBean implements ReviewSessionBeanLocal {
 

@@ -35,6 +35,14 @@ public class ForumPost implements Serializable {
     public ForumPost() {
     }
 
+    public ForumPost(Date postDate, String posTitle, String postDescription) {
+        this.postDate = postDate;
+        this.posTitle = posTitle;
+        this.postDescription = postDescription;
+    }
+
+    
+    
     public ForumPost(Date postDate, String posTitle, String postDescription, String[] postAttachments, ForumCategory forumCategory) {
         this.postDate = postDate;
         this.posTitle = posTitle;

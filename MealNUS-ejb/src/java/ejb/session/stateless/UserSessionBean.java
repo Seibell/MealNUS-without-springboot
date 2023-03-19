@@ -39,7 +39,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
 
     @Override
     public User retrieveUserByEmail(String email) throws UserNotFoundException {
-        Query query = em.createQuery("SELECT u FROM User u WHERE u.email = :email");
+        Query query = em.createQuery("SELECT u FROM User u WHERE u.email = :inEmail");
         query.setParameter("inEmail", email);
 
         try {

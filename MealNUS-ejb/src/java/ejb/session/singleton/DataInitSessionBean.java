@@ -6,18 +6,25 @@
 package ejb.session.singleton;
 
 import ejb.session.stateless.AllergenSessionBeanLocal;
+import ejb.session.stateless.ForumSessionBeanLocal;
 import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.MealBoxSessionBeanLocal;
+import ejb.session.stateless.NotificationSessionBeanLocal;
 import ejb.session.stateless.PromotionSessionBeanLocal;
+import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.Allergen;
+import entity.ForumPost;
 import entity.Ingredient;
 import entity.MealBox;
+import entity.Notification;
 import entity.Promotion;
+import entity.Review;
 import entity.User;
 import entity.WishList;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +37,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UserNotFoundException;
 
 /**
  *
@@ -39,6 +47,15 @@ import util.exception.UnknownPersistenceException;
 @LocalBean
 @Startup
 public class DataInitSessionBean {
+
+    @EJB
+    private NotificationSessionBeanLocal notificationSessionBean;
+
+    @EJB
+    private ReviewSessionBeanLocal reviewSessionBean;
+
+    @EJB
+    private ForumSessionBeanLocal forumSessionBean;
 
     @EJB
     private PromotionSessionBeanLocal promotionSessionBean;
@@ -96,7 +113,27 @@ public class DataInitSessionBean {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        //TESTING PURPOSE
+        if (forumSessionBean.retrieveAllForumPosts().isEmpty()) {
+            Calendar calendar = Calendar.getInstance();
+            forumSessionBean.createForumPost(new ForumPost(new Date(calendar.getTime().getTime()), "Test", "Welcome to MealNUS Forum!"));
+        }
 
+        //TESTING PURPOSE
+        if (reviewSessionBean.retrieveAllReviews().isEmpty()) {
+            Calendar calendar = Calendar.getInstance();
+            try {
+            reviewSessionBean.createReview(new Review(new Date(calendar.getTime().getTime()),5,"This is a default review",userSessionBean.retrieveUserByEmail("user@gmail.com")));
+            } catch (UserNotFoundException ex) {
+                Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+        }
+        
+        //TESTING PURPOSE
+        if(notificationSessionBean.retrieveAllNotifications().isEmpty()) {
+            Calendar calendar = Calendar.getInstance();
+            notificationSessionBean.createNotification(new Notification(new Date(calendar.getTime().getTime()),"Notification","Hello, MealNUS Admin!"));
+        }
     }
 
     // Add business logic below. (Right-click in editor and choose
