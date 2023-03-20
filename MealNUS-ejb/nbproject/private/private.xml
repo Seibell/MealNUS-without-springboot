@@ -30,6 +30,8 @@
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-ejb/setup/glassfish-resources.xml</file>
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-ejb/src/java/ejb/session/stateless/UserSessionBean.java</file>
         </group>
-        <group/>
+        <group>
+            <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-ejb/src/java/entity/MealBox.java</file>
+        </group>
     </open-files>
 </project-private>
