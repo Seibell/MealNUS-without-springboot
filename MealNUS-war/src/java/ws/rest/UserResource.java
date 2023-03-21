@@ -6,18 +6,22 @@
 package ws.rest;
 
 import ejb.session.stateless.UserSessionBeanLocal;
+import entity.User;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
+import util.exception.InvalidLoginException;
 import ws.model.RetrieveAllUsersResponse;
 
 /**
@@ -51,8 +55,29 @@ public class UserResource
         
         return Response.status(Status.OK).entity(retrieveAllUsersResponse).build();
     }
-
     
+    /*
+    * Example GET Request for login: http://localhost:8080/MealNUS-war/rest/User/userLogin?email=user@gmail.com&password=password
+    */
+    @Path("userLogin")
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response userLogin(@QueryParam("email") String email,
+            @QueryParam("password") String password) {
+        try {
+            User user = userSessionBeanLocal.userLogin(email, password);
+            System.out.println("*** userLogin(): User = " + user.getEmail()+ " login remotely via web service");           
+
+            return Response.status(Response.Status.OK).entity(user).build();
+        }
+        catch (InvalidLoginException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        }
+        catch (Exception ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
     
     private UserSessionBeanLocal lookupUserSessionBeanLocal() {
         try {

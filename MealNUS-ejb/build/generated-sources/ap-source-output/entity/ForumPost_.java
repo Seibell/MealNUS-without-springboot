@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import util.enumeration.ForumCategory;
 
-@Generated(value="EclipseLink-2.7.7.v20200504-rNA", date="2023-03-19T16:18:27")
+@Generated(value="EclipseLink-2.7.7.v20200504-rNA", date="2023-03-22T01:00:14")
 @StaticMetamodel(ForumPost.class)
 public class ForumPost_ { 
 
