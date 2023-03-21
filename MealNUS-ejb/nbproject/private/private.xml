@@ -30,6 +30,11 @@
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-ejb/setup/glassfish-resources.xml</file>
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-ejb/src/java/ejb/session/stateless/UserSessionBean.java</file>
         </group>
-        <group/>
+        <group>
+            <file>file:/C:/Users/Darie/Desktop/Is3106/MealNUS/MealNUS-without-springboot/MealNUS-ejb/src/java/ejb/session/singleton/DataInitSessionBean.java</file>
+            <file>file:/C:/Users/Darie/Desktop/Is3106/MealNUS/MealNUS-without-springboot/MealNUS-ejb/src/java/entity/Promotion.java</file>
+            <file>file:/C:/Users/Darie/Desktop/Is3106/MealNUS/MealNUS-without-springboot/MealNUS-ejb/src/java/ejb/session/stateless/PromotionSessionBean.java</file>
+            <file>file:/C:/Users/Darie/Desktop/Is3106/MealNUS/MealNUS-without-springboot/MealNUS-ejb/src/java/ejb/session/stateless/OrderSessionBean.java</file>
+        </group>
     </open-files>
 </project-private>

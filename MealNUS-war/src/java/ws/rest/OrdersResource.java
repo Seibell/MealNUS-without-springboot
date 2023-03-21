@@ -7,12 +7,9 @@ package ws.rest;
 
 import entity.MealBox;
 import entity.OrderEntity;
-import util.exception.NoResultException;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
-import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
@@ -22,8 +19,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import ejb.session.stateless.OrderSessionBeanLocal;
@@ -43,11 +38,10 @@ import java.util.Map;
  * @author kylie
  */
 @Path("orders")
-@RequestScoped
 public class OrdersResource {
     
     @EJB
-     private  OrderSessionBeanLocal orderBoxSessionBeanLocal;
+     private OrderSessionBeanLocal orderBoxSessionBeanLocal;
     
 
     public OrdersResource() {
