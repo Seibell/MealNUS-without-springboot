@@ -423,4 +423,18 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     public void deleteOrder(OrderEntity orderToRemove) {
         em.remove(orderToRemove);
     }
+    
+    @Override
+    public List<OrderEntity> searchOrderEntitybyId(String id) { 
+        Query q; 
+        if (id != null) { 
+            q = em.createQuery("SELECT o FROM OrderEntity o WHERE " 
+                    + "LOWER(o.orderId) LIKE :orderId"); 
+            q.setParameter("orderId", "%" + id.toLowerCase() + "%"); 
+        } else { 
+            q = em.createQuery("SELECT o FROM OrderEntity o"); 
+        } 
+        return q.getResultList(); 
+    } //end
+     
 }

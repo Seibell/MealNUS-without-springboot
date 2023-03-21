@@ -56,4 +56,17 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
     public void deleteMealBox(MealBox mealBox) {
         em.remove(mealBox);
     }
+    
+    @Override
+    public List<MealBox> searchMealBox(String item) { 
+        Query q; 
+        if (item != null) { 
+            q = em.createQuery("SELECT m FROM MealBox m WHERE " 
+                    + "LOWER(m.itemName) LIKE :itemName"); 
+            q.setParameter("itemName", "%" + item.toLowerCase() + "%"); 
+        } else { 
+            q = em.createQuery("SELECT m FROM MealBox m"); 
+        } 
+        return q.getResultList(); 
+    } //end 
 }

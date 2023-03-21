@@ -31,7 +31,11 @@
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-ejb/src/java/ejb/session/stateless/UserSessionBean.java</file>
         </group>
         <group>
+            <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-ejb/nbproject/private/private.properties</file>
             <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-ejb/src/java/entity/MealBox.java</file>
+            <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-ejb/src/java/util/exception/NoResultException.java</file>
+            <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-ejb/src/java/ejb/session/stateless/OrderSessionBean.java</file>
+            <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-ejb/src/java/entity/OrderEntity.java</file>
         </group>
     </open-files>
 </project-private>

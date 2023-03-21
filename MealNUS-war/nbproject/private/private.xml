@@ -10,6 +10,12 @@
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-war/src/java/ws/model/RetrieveAllUsersResponse.java</file>
             <file>file:/C:/Users/ryanl/Documents/NetBeansProjects/IS3106/MealNUS/MealNUS-war/src/java/ws/rest/UserResource.java</file>
         </group>
-        <group/>
+        <group>
+            <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-war/src/java/ws/rest/NotificationResource.java</file>
+            <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-war/src/java/ws/rest/OrdersResource.java</file>
+            <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-war/src/java/ws/rest/MealBoxResource.java</file>
+            <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-war/src/java/ws/model/RetrieveAllMealBoxesResponse.java</file>
+            <file>file:/C:/Users/kylie/Documents/GitHub/MealNUS-without-springboot/MealNUS-war/nbproject/rest-build.xml</file>
+        </group>
     </open-files>
 </project-private>

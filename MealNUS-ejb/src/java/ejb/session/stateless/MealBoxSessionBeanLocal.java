@@ -27,4 +27,6 @@ public interface MealBoxSessionBeanLocal {
 
     public void createMealBox(MealBox mealBox);
     
+    public List<MealBox> searchMealBox(String item);
+    
 }

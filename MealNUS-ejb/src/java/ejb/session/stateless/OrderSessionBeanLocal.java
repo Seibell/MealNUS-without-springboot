@@ -61,5 +61,7 @@ public interface OrderSessionBeanLocal {
     public List<OrderEntity> retrieveOrdersByMealBoxNameAndDate(String mealBoxNameToCheck, Date queryDate);
 
     public List<OrderEntity> retrieveOrdersByMealBoxName(String mealBoxNameToCheck);
+    
+    public List<OrderEntity> searchOrderEntitybyId(String id);
 
 }

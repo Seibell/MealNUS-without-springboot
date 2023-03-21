@@ -36,4 +36,17 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
         Query query = em.createQuery("SELECT i FROM Ingredient i");
         return query.getResultList();
     }
+    
+    @Override
+    public List<Ingredient> searchIngredient(String item) { 
+        Query q; 
+        if (item != null) { 
+            q = em.createQuery("SELECT i FROM Ingredient i WHERE " 
+                    + "LOWER(i.name) LIKE :name"); 
+            q.setParameter("name", "%" + item.toLowerCase() + "%"); 
+        } else { 
+            q = em.createQuery("SELECT i FROM Ingredient i"); 
+        } 
+        return q.getResultList(); 
+    } //end 
 }

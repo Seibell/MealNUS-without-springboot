@@ -10,6 +10,7 @@ import ejb.session.stateless.ForumSessionBeanLocal;
 import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.MealBoxSessionBeanLocal;
 import ejb.session.stateless.NotificationSessionBeanLocal;
+import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PromotionSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
@@ -18,16 +19,24 @@ import entity.ForumPost;
 import entity.Ingredient;
 import entity.MealBox;
 import entity.Notification;
+import entity.OrderEntity;
 import entity.Promotion;
 import entity.Review;
 import entity.User;
 import entity.WishList;
+import util.enumeration.AddressEnum;
+import util.enumeration.OrderStatus;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -35,6 +44,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.exception.OrderNotFoundException;
 import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UserNotFoundException;
@@ -71,6 +81,9 @@ public class DataInitSessionBean {
 
     @EJB
     private MealBoxSessionBeanLocal mealBoxSessionBean;
+    
+    @EJB
+    private OrderSessionBeanLocal orderSessionBean;
 
     @PersistenceContext(unitName = "MealNUS-ejbPU")
     private EntityManager em;
@@ -134,8 +147,34 @@ public class DataInitSessionBean {
             Calendar calendar = Calendar.getInstance();
             notificationSessionBean.createNotification(new Notification(new Date(calendar.getTime().getTime()),"Notification","Hello, MealNUS Admin!"));
         }
-    }
+        
+        //TESTING PURPOSE
+        
+        if(orderSessionBean.retrieveAllOrders().isEmpty()) {
+            try {
+                User user1;
+                user1 = userSessionBean.retrieveUserByEmail("user@gmail.com");
+                System.out.print(user1);
+                List<MealBox> m = mealBoxSessionBean.searchMealBox("Vegetable's Party Box");
+                System.out.print(m);
+                Pair<MealBox, Integer> pair = new Pair<>(m.get(0),2);
+                List<Pair<MealBox, Integer>> orderDetails = new ArrayList<>();
+                orderDetails.add(pair);
+                OrderEntity order1 = new OrderEntity(new Date(2023, 3, 13),orderDetails,new Date(2023, 3, 26),
+                        AddressEnum.EUSOFF_HALL,OrderStatus.COMPLETED,user1);
+                orderSessionBean.createOrder(order1);
+            } catch (UserNotFoundException ex) {
+                Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (OrderNotFoundException ex) {
+                Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnknownPersistenceException ex) {
+                Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
+        
+    }
+    
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     //try push

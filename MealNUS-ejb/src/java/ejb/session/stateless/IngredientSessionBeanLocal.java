@@ -20,4 +20,6 @@ public interface IngredientSessionBeanLocal {
 
     public List<Ingredient> retrieveAllIngredients();
     
+    public List<Ingredient> searchIngredient(String item);
+    
 }
