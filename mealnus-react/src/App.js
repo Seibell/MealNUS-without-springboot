@@ -1,28 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
-import Axios from 'axios';
-import { useState } from 'react';
+import React, { Component } from 'react';
+import mealnus from './assets/mealnus-logo.png';
+import RetrieveAllUsers from './components/RetrieveAllUsers'
+import UserLogin from './components/UserLogin';
+import StaffLogin from './components/StaffLogin';
+import NavBar from './components/NavBar';
 
 function App() {
-  const [users, setUsers] = useState("");
-
-  const getUsers = () => {
-    Axios.get("http://localhost:8080/MealNUS-war/rest/User/retrieveAllUsers")
-      .then((response) => {
-        setUsers(response.data);
-        console.log(response.data);
-      }).catch(err => {
-        console.log(err);
-      });
-  };
-
+  let component
+  switch (window.location.pathname) {
+    case "/userLogin":
+      component = <UserLogin />
+      break
+    case "/staffLogin":
+      component = <StaffLogin />
+      break
+    case "/retrieveAllUsers":
+      component = <RetrieveAllUsers />
+      break
+  }
   return (
-    <div>
-      <h1>MealNUS</h1>
-      <button onClick={getUsers}>Get Users</button>
-      <p>{JSON.stringify(users.userEntities)}</p>
+    <div className="App">
+      <NavBar />
+      {component}
     </div>
-  );
+  )
 }
-
 export default App;
