@@ -168,6 +168,25 @@ public class DataInitSessionBean {
                 OrderStatus orderStatus = OrderStatus.PREPARING;
                 User user = new User("eric4", "tang4", "user4@gmail.com", "password");
                 orderSessionBean.createOrder(new OrderEntity(orderDate,orderDetails,priceList,costList,deliveryDate,address,orderStatus,user));
+                
+                Date orderDate2 = new Date();
+                MealBox mealBox2 = new MealBox("Aww in One Box", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
+                Integer qty2 = 23;
+                List<Pair<MealBox, Integer>> orderDetails2 = new ArrayList<>();
+                orderDetails2.add(new Pair<>(mealBox2, qty2));
+                List<BigDecimal> priceList2 = new ArrayList<>();
+                priceList2.add(mealBox2.getItemPrice());
+                List<BigDecimal> costList2 = new ArrayList<>();
+                costList2.add(mealBox2.getItemCost());
+                Date deliveryDate2 = new Date();
+                Calendar calEnd2 = Calendar.getInstance();
+                calEnd2.setTime(deliveryDate2);
+                calEnd2.add(Calendar.DAY_OF_MONTH, 3);
+                deliveryDate2 = calEnd2.getTime();
+                AddressEnum address2 = AddressEnum.UTOWN_RESIDENCES;
+                OrderStatus orderStatus2 = OrderStatus.PAID;
+                User user2 = new User("eric5", "tang5", "user5@gmail.com", "password");
+                OrderEntity newOrder2 = orderSessionBean.createOrder(new OrderEntity(orderDate2, orderDetails2, priceList2, costList2, deliveryDate2, address2, orderStatus2, user2));
             } catch (OrderNotFoundException | UnknownPersistenceException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
