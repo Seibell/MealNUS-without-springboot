@@ -39,10 +39,6 @@ public class OrderEntity implements Serializable {
 
     private List<Pair<MealBox, Integer>> orderDetails;
 
-//    Q) shld we have price and cost lists? priceList.size()=costList.size()=orderDetails.size()
-//    This is to lock in the price and cost of each mealbox in a particular order and account for
-//    possible changes in prices and costs of mealboxes over time. Failure to do so will affect all
-//    the statistics for my dashboard...
     private List<BigDecimal> priceList;
     private List<BigDecimal> costList;
 
