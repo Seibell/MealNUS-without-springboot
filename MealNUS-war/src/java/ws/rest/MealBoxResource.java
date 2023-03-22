@@ -45,6 +45,7 @@ public class MealBoxResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllMealBoxes() {
         RetrieveAllMealBoxesResponse retrieveAllUsersResponse = new RetrieveAllMealBoxesResponse(mealBoxSessionBeanLocal.retrieveAllMealBoxes());
+        System.out.println("hello");
         return Response.status(Status.OK).entity(retrieveAllUsersResponse).build();
     }
 
