@@ -13,6 +13,7 @@ import ejb.session.stateless.NotificationSessionBeanLocal;
 import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PromotionSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
+import ejb.session.stateless.StaffSessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.Allergen;
 import entity.ForumPost;
@@ -22,6 +23,7 @@ import entity.Notification;
 import entity.OrderEntity;
 import entity.Promotion;
 import entity.Review;
+import entity.Staff;
 import entity.User;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -80,6 +82,9 @@ public class DataInitSessionBean {
 
     @EJB
     private MealBoxSessionBeanLocal mealBoxSessionBean;
+    
+    @EJB
+    private StaffSessionBeanLocal staffSessionBean;
 
     @PersistenceContext(unitName = "MealNUS-ejbPU")
     private EntityManager em;
@@ -95,6 +100,10 @@ public class DataInitSessionBean {
             userSessionBean.createUser(new User("eric1", "tang1", "user1@gmail.com", "password"));
             userSessionBean.createUser(new User("eric2", "tang2", "user2@gmail.com", "password"));
             userSessionBean.createUser(new User("eric3", "tang3", "user3@gmail.com", "password"));
+        }
+        
+        if (staffSessionBean.retrieveAllStaff().isEmpty()) {
+            staffSessionBean.createStaff(new Staff("firstname", "lastname", "staff@gmail.com", "password"));
         }
 
         if (allergenSessionBean.retrieveAllAllergens().isEmpty()) {
