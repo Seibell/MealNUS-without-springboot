@@ -10,6 +10,7 @@ import ejb.session.stateless.ForumSessionBeanLocal;
 import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.MealBoxSessionBeanLocal;
 import ejb.session.stateless.NotificationSessionBeanLocal;
+import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PromotionSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
@@ -18,14 +19,18 @@ import entity.ForumPost;
 import entity.Ingredient;
 import entity.MealBox;
 import entity.Notification;
+import entity.OrderEntity;
 import entity.Promotion;
 import entity.Review;
 import entity.User;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -33,6 +38,9 @@ import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.enumeration.AddressEnum;
+import util.enumeration.OrderStatus;
+import util.exception.OrderNotFoundException;
 import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UserNotFoundException;
@@ -45,6 +53,9 @@ import util.exception.UserNotFoundException;
 @LocalBean
 @Startup
 public class DataInitSessionBean {
+
+    @EJB
+    private OrderSessionBeanLocal orderSessionBean;
 
     @EJB
     private NotificationSessionBeanLocal notificationSessionBean;
@@ -105,9 +116,7 @@ public class DataInitSessionBean {
             try {
                 promotionSessionBean.createPromotion(new Promotion("Promotion 1", "https://cdn.hellofresh.com/us/lp/images/hellofresh-coupons-and-promos-30OFF.jpg", new Date(2023, 3, 13), new Date(2023, 3, 17), BigDecimal.valueOf(0.3)));
                 //Promotion starts on the 13th of March and ends on the 17th. The reason why the month is 2 is because they start from a 0 index
-            } catch (PromotionNotFoundException ex) {
-                Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnknownPersistenceException ex) {
+            } catch (PromotionNotFoundException | UnknownPersistenceException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -121,20 +130,38 @@ public class DataInitSessionBean {
         if (reviewSessionBean.retrieveAllReviews().isEmpty()) {
             Calendar calendar = Calendar.getInstance();
             try {
-            reviewSessionBean.createReview(new Review(new Date(calendar.getTime().getTime()),5,"This is a default review",userSessionBean.retrieveUserByEmail("user@gmail.com")));
+                reviewSessionBean.createReview(new Review(new Date(calendar.getTime().getTime()), 5, "This is a default review", userSessionBean.retrieveUserByEmail("user@gmail.com")));
             } catch (UserNotFoundException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
         }
-        
+
         //TESTING PURPOSE
-        if(notificationSessionBean.retrieveAllNotifications().isEmpty()) {
+        if (notificationSessionBean.retrieveAllNotifications().isEmpty()) {
             Calendar calendar = Calendar.getInstance();
-            notificationSessionBean.createNotification(new Notification(new Date(calendar.getTime().getTime()),"Notification","Hello, MealNUS Admin!"));
+            notificationSessionBean.createNotification(new Notification(new Date(calendar.getTime().getTime()), "Notification", "Hello, MealNUS Admin!"));
+        }
+
+        //TESTING PURPOSE
+        if (orderSessionBean.retrieveAllOrders().isEmpty()) {
+            try {
+                Date orderDate = new Date();
+                MealBox mealBox = new MealBox("Supreme Meat Box", 004L, new BigDecimal(15), new BigDecimal(20), "This is a high quality meat mealBox", 10);
+                Integer qty = 4;
+                List<Pair<MealBox,Integer>> orderDetails = new ArrayList<>();
+                orderDetails.add(new Pair<>(mealBox,qty));
+                List<BigDecimal> priceList = new ArrayList<>();
+                priceList.add(mealBox.getItemPrice());
+                List<BigDecimal> costList = new ArrayList<>();
+                costList.add(mealBox.getItemCost());
+                Date deliveryDate = new Date();
+                AddressEnum address = AddressEnum.PRINCE_GEORGE_PARK_RESIDENCE;
+                OrderStatus orderStatus = OrderStatus.PREPARING;
+                User user = new User("eric4", "tang4", "user4@gmail.com", "password");
+                orderSessionBean.createOrder(new OrderEntity(orderDate,orderDetails,priceList,costList,deliveryDate,address,orderStatus,user));
+            } catch (OrderNotFoundException | UnknownPersistenceException ex) {
+                Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-    //try push
 }

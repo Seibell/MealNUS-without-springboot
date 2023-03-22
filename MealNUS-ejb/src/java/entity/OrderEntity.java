@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -57,7 +58,7 @@ public class OrderEntity implements Serializable {
     @Enumerated
     private OrderStatus orderStatus;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private User user;
 
 //    Q) is review going to be under orders?
@@ -74,6 +75,19 @@ public class OrderEntity implements Serializable {
         this.orderStatus = orderStatus;
         this.user = user;
     }
+
+    public OrderEntity(Date orderDate, List<Pair<MealBox, Integer>> orderDetails, List<BigDecimal> priceList, List<BigDecimal> costList, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, User user) {
+        this.orderDate = orderDate;
+        this.orderDetails = orderDetails;
+        this.priceList = priceList;
+        this.costList = costList;
+        this.deliveryDate = deliveryDate;
+        this.address = address;
+        this.orderStatus = orderStatus;
+        this.user = user;
+    }
+    
+    
 
     public Long getOrderId() {
         return orderId;
