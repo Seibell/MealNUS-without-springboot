@@ -38,7 +38,7 @@ public class MealBoxResource {
     public MealBoxResource() {
         this.mealBoxSessionBeanLocal = lookupMealBoxSessionBeanLocal();
     }
-
+    //try new branch
     @GET
     @Path(value = "retrieveAllMealBoxes") //http://localhost:8080/MealNUS-war/rest/Mealbox/retrieveAllMealBoxes <- this should show json of mealbox class created in db
     @Produces(MediaType.APPLICATION_JSON)
