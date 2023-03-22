@@ -1,0 +1,55 @@
+/mealnus-react/nbproject/private/
+/MealNUS-ejb/build/
+/MealNUS-ejb/dist/
+/MealNUS-war/build/
+/MealNUS-war/dist/
+/build/
+/dist/
+MealNUS-war/nbproject/private/private.properties
+MealNUS-war/nbproject/private/private.properties
+
+# NetBeans specific #
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Class Files #
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+
+# User defined
+nbproject/private/
+build/
+dist/
+MealNUS-ejb/nbproject/private
+MealNUS-ejb/build/
+MealNUS-ejb/dist/
+
+MealNUS-war/nbproject/private
+MealNUS-war/build/
+MealNUS-war/dist/
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+/MealNUS-ejb/nbproject/private/
+/MealNUS-war/nbproject/private/
