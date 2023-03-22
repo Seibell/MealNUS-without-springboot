@@ -10,7 +10,7 @@ import entity.OrderEntity;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import javafx.util.Pair;
 import javax.ejb.Local;
 import util.enumeration.OrderStatus;
 import util.exception.OrderNotFoundException;
@@ -48,7 +48,7 @@ public interface OrderSessionBeanLocal {
 
     public BigDecimal getMtdProfit(Date queryDate);
 
-    public List<Map.Entry<MealBox, Integer>> findTopSellingMealBoxes(Date queryDate);
+    public List<Pair<String, Integer>> findTopSellingMealBoxes();
 
     public BigDecimal getMealBoxMtdTurnover(String mealBoxName, Date queryDate);
 
@@ -56,7 +56,7 @@ public interface OrderSessionBeanLocal {
 
     public void updateOrder(OrderEntity orderToUpdate);
 
-    public void deleteOrder(OrderEntity orderToRemove);
+    public void deleteOrder(Long oId);
 
     public List<OrderEntity> retrieveOrdersByMealBoxNameAndDate(String mealBoxNameToCheck, Date queryDate);
 

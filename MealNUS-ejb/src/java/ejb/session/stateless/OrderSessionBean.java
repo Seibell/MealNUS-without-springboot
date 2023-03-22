@@ -11,10 +11,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.util.Pair;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -79,7 +82,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     // This method supports Order Management :: Daily Orders
     @Override
     public List<OrderEntity> retrieveOrdersByOrderStatus(OrderStatus orderStatus) {
-        Query query = em.createQuery("SELECT o FROM OrderEntity o WHERE o.orderStatus = :inOrderStatus");
+        Query query = em.createQuery("SELECT o FROM OrderEntity o WHERE o.orderStatus = :inOrderStatus", OrderEntity.class);
         query.setParameter("inOrderStatus", orderStatus);
         return query.getResultList();
     }
@@ -161,7 +164,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         cal.add(Calendar.MILLISECOND, -1);
         Date lastSecondOfDay = cal.getTime();
 
-        Query query = em.createQuery("SELECT o FROM OrderEntity o WHERE o.orderDate >= :start AND o.lendDate <= :end", OrderEntity.class);
+        Query query = em.createQuery("SELECT o FROM OrderEntity o WHERE o.orderDate >= :start AND o.orderDate <= :end", OrderEntity.class);
         query.setParameter("start", firstSecondOfDay);
         query.setParameter("end", lastSecondOfDay);
         return query.getResultList();
@@ -184,11 +187,11 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
                 BigDecimal mealBoxPrice = order.getPriceList().get(i);
                 Integer quantity = orderLineItem.getValue();
                 BigDecimal orderLineItemValue = mealBoxPrice.multiply(BigDecimal.valueOf(quantity));
-                revenue.add(orderLineItemValue);
+                revenue = revenue.add(orderLineItemValue);
                 i++;
             }
         }
-        return revenue;
+        return revenue.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     @Override
@@ -204,14 +207,14 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
             List<Pair<MealBox, Integer>> orderDetails = order.getOrderDetails();
             int i = 0;
             for (Pair<MealBox, Integer> orderLineItem : orderDetails) {
-                BigDecimal mealBoxCost = order.getPriceList().get(i);
+                BigDecimal mealBoxCost = order.getCostList().get(i);
                 Integer quantity = orderLineItem.getValue();
                 BigDecimal orderLineItemCost = mealBoxCost.multiply(BigDecimal.valueOf(quantity));
-                cost.add(orderLineItemCost);
+                cost = cost.add(orderLineItemCost);
                 i++;
             }
         }
-        return cost;
+        return cost.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     // Dashboard :: MTD Sales Overview :: OrderEntity
@@ -259,12 +262,12 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 
         while (referenceDate.before(endDate)) {
             BigDecimal currentDateRevenue = calculateCurrentDateRevenue(referenceDate);
-            mtdOrderRevenue.add(currentDateRevenue);
+            mtdOrderRevenue = mtdOrderRevenue.add(currentDateRevenue);
             cal.add(Calendar.DAY_OF_MONTH, 1);
             referenceDate = cal.getTime();
         }
 
-        return mtdOrderRevenue;
+        return mtdOrderRevenue.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     // Dashboard :: MTD Sales Overview :: Cost
@@ -285,72 +288,81 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 
         while (referenceDate.before(endDate)) {
             BigDecimal currentDateCost = calculateCurrentDateCost(referenceDate);
-            mtdOrderCost.add(currentDateCost);
+            mtdOrderCost = mtdOrderCost.add(currentDateCost);
             cal.add(Calendar.DAY_OF_MONTH, 1);
             referenceDate = cal.getTime();
         }
 
-        return mtdOrderCost;
+        return mtdOrderCost.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     // Dashboard :: MTD Sales Overview :: Profit
     @Override
     public BigDecimal getMtdProfit(Date queryDate) {
-        return getMtdRevenue(queryDate).subtract(getMtdCost(queryDate));
+        return getMtdRevenue(queryDate).subtract(getMtdCost(queryDate)).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
-    // Dashboard :: Top Selling Box (from start of MealNUS until queryDate)
+    // Dashboard :: Top Selling Box (since start of MealNUS)
     // Arranges all mealboxes from top to worst selling QUANTITIES
-    // Returns whole list of entryset, can use getKey() and getValue() methods to display accordingly
+    // Returns sorted list of mealboxes and their corresponding sold quantities
     @Override
-    public List<Entry<MealBox, Integer>> findTopSellingMealBoxes(Date queryDate) {
+    public List<Pair<String, Integer>> findTopSellingMealBoxes() {
+
+//        List<OrderEntity> allOrders = retrieveAllOrders();
+//        Map<MealBox, Integer> mealBoxCounts = new HashMap<>();
+//        for (OrderEntity order : allOrders) {
+//            List<Pair<MealBox, Integer>> orderDetails = order.getOrderDetails();
+//            for (Pair<MealBox, Integer> orderDetail : orderDetails) {
+//                MealBox mealBox = orderDetail.getKey();
+//                int quantitySold = orderDetail.getValue();
+//                int totalSales = mealBoxCounts.getOrDefault(mealBox, 0) + quantitySold;
+//                mealBoxCounts.put(mealBox, totalSales);
+//            }
+//        }
+//
+//        List<Pair<MealBox, Integer>> sortedMealBoxList = new ArrayList<>();
+//        for (Map.Entry<MealBox, Integer> entry : mealBoxCounts.entrySet()) {
+//            MealBox mealBox = entry.getKey();
+//            int soldQuantity = entry.getValue();
+//            sortedMealBoxList.add(new Pair<>(mealBox, soldQuantity));
+//        }
+//
+//        Collections.sort(sortedMealBoxList, new Comparator<Pair<MealBox, Integer>>() {
+//            @Override
+//            public int compare(Pair<MealBox, Integer> mealBox1, Pair<MealBox, Integer> mealBox2) {
+//                return mealBox2.getValue().compareTo(mealBox1.getValue());
+//            }
+//        });
+//
+//        return sortedMealBoxList;
+        
         List<OrderEntity> allOrders = retrieveAllOrders();
-
-        Date referenceDate = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(referenceDate);
-
-        // Ensure the start of MealNUS is based on earliest orderDate
-        if (!allOrders.isEmpty()) {
-            OrderEntity earliestOrder = allOrders.get(0);
-            for (OrderEntity order : allOrders) {
-                if (order.getOrderDate().compareTo(earliestOrder.getOrderDate()) < 0) {
-                    earliestOrder = order;
-                    referenceDate = earliestOrder.getOrderDate();
-                    cal.setTime(referenceDate);
-                }
+        Map<String, Integer> mealBoxCounts = new HashMap<>();
+        for (OrderEntity order : allOrders) {
+            List<Pair<MealBox, Integer>> orderDetails = order.getOrderDetails();
+            for (Pair<MealBox, Integer> orderDetail : orderDetails) {
+                String mealBoxName = orderDetail.getKey().getItemName();
+                int quantitySold = orderDetail.getValue();
+                int totalSales = mealBoxCounts.getOrDefault(mealBoxName, 0) + quantitySold;
+                mealBoxCounts.put(mealBoxName, totalSales);
             }
         }
 
-        // Empty pair cannot be instantiated
-        HashMap<MealBox, Integer> mealBoxCounts = new HashMap<>();
-
-        Calendar calEnd = Calendar.getInstance();
-        calEnd.setTime(queryDate);
-        calEnd.add(Calendar.DAY_OF_MONTH, 1);
-        Date endDate = calEnd.getTime();
-
-        while (referenceDate.before(endDate)) {
-            List<OrderEntity> currentDateOrders = retrieveOrdersByOrderDate(referenceDate);
-            for (OrderEntity order : currentDateOrders) {
-                for (Pair<MealBox, Integer> orderLineItem : order.getOrderDetails()) {
-                    MealBox mealbox = orderLineItem.getKey();
-                    int count = orderLineItem.getValue();
-                    if (mealBoxCounts.containsKey(mealbox)) {
-                        mealBoxCounts.put(mealbox, mealBoxCounts.get(mealbox) + count);
-                    } else {
-                        mealBoxCounts.put(mealbox, count);
-                    }
-                }
-            }
-            cal.add(Calendar.DAY_OF_MONTH, 1);
-            referenceDate = cal.getTime();
+        List<Pair<String, Integer>> sortedMealBoxList = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : mealBoxCounts.entrySet()) {
+            String mealBoxName = entry.getKey();
+            int soldQuantity = entry.getValue();
+            sortedMealBoxList.add(new Pair<>(mealBoxName, soldQuantity));
         }
 
-        List<Entry<MealBox, Integer>> topSellingMealBoxes = new ArrayList<>(mealBoxCounts.entrySet());
-        Collections.sort(topSellingMealBoxes, (a, b) -> b.getValue().compareTo(a.getValue()));
+        Collections.sort(sortedMealBoxList, new Comparator<Pair<String, Integer>>() {
+            @Override
+            public int compare(Pair<String, Integer> mealBox1, Pair<String, Integer> mealBox2) {
+                return mealBox2.getValue().compareTo(mealBox1.getValue());
+            }
+        });
 
-        return topSellingMealBoxes;
+        return sortedMealBoxList;
     }
 
     // Product Detail :: MTD Turnover
@@ -381,7 +393,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
                         BigDecimal mealBoxPrice = order.getPriceList().get(orderDetails.indexOf(orderLineItem));
                         Integer quantity = orderLineItem.getValue();
                         BigDecimal orderLineItemRevenue = mealBoxPrice.multiply(BigDecimal.valueOf(quantity));
-                        mealBoxMtdTurnover.add(orderLineItemRevenue);
+                        mealBoxMtdTurnover = mealBoxMtdTurnover.add(orderLineItemRevenue);
                         break;
                     }
                 }
@@ -389,7 +401,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
             cal.add(Calendar.DAY_OF_MONTH, 1);
             referenceDate = cal.getTime();
         }
-        return mealBoxMtdTurnover;
+        return mealBoxMtdTurnover.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     // Product Detail :: Total Turnover
@@ -406,20 +418,38 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
                     BigDecimal mealBoxPrice = order.getPriceList().get(orderDetails.indexOf(orderLineItem));
                     Integer quantity = orderLineItem.getValue();
                     BigDecimal orderLineItemValue = mealBoxPrice.multiply(BigDecimal.valueOf(quantity));
-                    mealBoxTurnover.add(orderLineItemValue);
+                    mealBoxTurnover = mealBoxTurnover.add(orderLineItemValue);
                 }
             }
         }
-        return mealBoxTurnover;
+        return mealBoxTurnover.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     @Override
     public void updateOrder(OrderEntity orderToUpdate) {
-        em.merge(orderToUpdate);
+        try {
+            OrderEntity updatedOrder = retrieveOrderById(orderToUpdate.getOrderId());
+            updatedOrder.setOrderDate(orderToUpdate.getOrderDate());
+            updatedOrder.setOrderDetails(orderToUpdate.getOrderDetails());
+            updatedOrder.setPriceList(orderToUpdate.getPriceList());
+            updatedOrder.setCostList(orderToUpdate.getCostList());
+            updatedOrder.setDeliveryDate(orderToUpdate.getDeliveryDate());
+            updatedOrder.setAddress(orderToUpdate.getAddress());
+            updatedOrder.setOrderStatus(orderToUpdate.getOrderStatus());
+            updatedOrder.setUser(orderToUpdate.getUser());
+//        em.merge(updatedOrder);
+        } catch (OrderNotFoundException ex) {
+            Logger.getLogger(OrderSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
-    public void deleteOrder(OrderEntity orderToRemove) {
-        em.remove(orderToRemove);
+    public void deleteOrder(Long oId) {
+        try {
+            OrderEntity order = retrieveOrderById(oId);
+            em.remove(order);
+        } catch (OrderNotFoundException ex) {
+            Logger.getLogger(OrderSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
