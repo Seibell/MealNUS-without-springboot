@@ -1,6 +1,5 @@
 // Dashboard.js
 import React from 'react';
-import HeaderNavbar from './HeaderNavBar.js';
 import About from './About.js';
 import NavBar from './NavBar.js';
 import Work from './Work.js';
