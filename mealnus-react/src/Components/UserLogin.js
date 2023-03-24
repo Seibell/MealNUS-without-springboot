@@ -1,4 +1,30 @@
+// UserLogin.js
 import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import { Container, Box, Typography, TextField, Button, Alert } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import About from './About';
+
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '100vh',
+    backgroundColor: '#f5f5f5',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: '400px',
+  },
+  input: {
+    marginBottom: '16px',
+  },
+});
 
 function UserLogin() {
   const [email, setEmail] = useState('');
@@ -6,6 +32,7 @@ function UserLogin() {
   const [error, setError] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const classes = useStyles();
 
   const handleEmailChange = event => {
     setEmail(event.target.value);
@@ -29,29 +56,47 @@ function UserLogin() {
   };
 
   if (loggedIn) {
-    return (
-      <div>
-        <h1>Welcome, {user.firstName} {user.lastName}!</h1>
-      </div>
-    );
+    return <Navigate to="/dashboard" />;
   }
 
   return (
-    <div>
-      <h1>User Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" value={email} onChange={handleEmailChange} />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" value={password} onChange={handlePasswordChange} />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      {error && <p>{error}</p>}
-    </div>
+    <Container maxWidth="sm" className={classes.root}>
+      <Box>
+        <Typography variant="h4" component="h1" gutterBottom>
+          User Login
+        </Typography>
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <TextField
+            label="Email"
+            type="email"
+            id="email"
+            value={email}
+            onChange={handleEmailChange}
+            fullWidth
+            className={classes.input}
+            variant="outlined"
+          />
+          <TextField
+            label="Password"
+            type="password"
+            id="password"
+            value={password}
+            onChange={handlePasswordChange}
+            fullWidth
+            className={classes.input}
+            variant="outlined"
+          />
+          <Button type="submit" variant="contained" color="primary">
+            Login
+          </Button>
+        </form>
+        {error && (
+          <Box mt={2}>
+            <Alert severity="error">{error}</Alert>
+          </Box>
+        )}
+      </Box>
+    </Container>
   );
 }
 

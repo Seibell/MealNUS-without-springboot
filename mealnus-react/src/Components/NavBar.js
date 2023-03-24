@@ -11,7 +11,7 @@ import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import PhoneRoudnedIcon from '@mui/icons-material/PhoneRounded';
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
 
-import userLogin from './UserLogin';
+import MealNUSLogo from '../Assets/mealnus-svg.svg';
 
 const NavBar = () => {
 
