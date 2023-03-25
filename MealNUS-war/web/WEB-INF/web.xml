@@ -45,4 +45,10 @@
         <local>ejb.session.stateless.StaffSessionBeanLocal</local>
         <ejb-link>MealNUS-ejb.jar#StaffSessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>PromotionSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.PromotionSessionBeanLocal</local>
+        <ejb-link>MealNUS-ejb.jar#PromotionSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

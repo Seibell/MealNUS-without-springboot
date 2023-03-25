@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.MealBox;
 import entity.Promotion;
 import java.util.Date;
 import java.util.List;
@@ -21,22 +22,22 @@ public interface PromotionSessionBeanLocal {
 
     public void createPromotion(Promotion promotion) throws PromotionNotFoundException, UnknownPersistenceException;
 
-    public Promotion retrievePromotionById(Long promotionId);
+    public Promotion retrievePromotionById(Long promotionId) throws PromotionNotFoundException;
 
-    public Promotion retrievePromotionByName(String promotionName);
+    public List<Promotion> retrievePromotionByName(String promotionName) throws PromotionNotFoundException;
 
-    public List<Promotion> retrievePromotionsByStartDate(Date startDate);
+    public List<Promotion> retrievePromotionsByStartDate(Date startDate) throws PromotionNotFoundException;
 
-    public List<Promotion> retrievePromotionsByEndDate(Date endDate);
+    public List<Promotion> retrievePromotionsByEndDate(Date endDate) throws PromotionNotFoundException;
 
     public List<Promotion> retrieveAllPromotions();
 
-    public void updatePromotion(Promotion promotion);
+    public void updatePromotion(Promotion promotion) throws PromotionNotFoundException;
 
-    public void deletePromotion(Promotion promotion);
+    public void deletePromotion(Long promotionId);
 
-    public void applyPromotionAcrossPlatform(String promotionCode);
+    public List<MealBox> applyPromotionAcrossPlatform(String promotionCode) throws PromotionNotFoundException;
 
-    public Promotion retrievePromotionByPromotionCode(String promotionCode);
-    
+    public Promotion retrievePromotionByPromotionCode(String promotionCode) throws PromotionNotFoundException;
+
 }

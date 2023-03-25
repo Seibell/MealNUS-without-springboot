@@ -10,6 +10,8 @@ import entity.Promotion;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -20,7 +22,6 @@ import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
 
 //Checking if it can be pushed
-
 /**
  *
  * @author Darie
@@ -30,7 +31,6 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
 
     @EJB
     private MealBoxSessionBeanLocal mealBoxSessionBean;
-
     @PersistenceContext(unitName = "MealNUS-ejbPU")
     private EntityManager em;
 
@@ -39,17 +39,18 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     //Should we offer applying the promotion code across categories as well?
     //If so, should we ensure a check that a box is only in one category?
     @Override
-    public void applyPromotionAcrossPlatform(String promotionCode) {
+    public List<MealBox> applyPromotionAcrossPlatform(String promotionCode) throws PromotionNotFoundException {
         Promotion promotionToBeApplied = retrievePromotionByPromotionCode(promotionCode);
         BigDecimal discountToBeApplied = promotionToBeApplied.getDiscount();
         //Neeed to insert a check that ensure that the promotion discount is between 0 and 1
-
         List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
         for (MealBox box : mealBoxesAcrossPlatform) {
             BigDecimal mealBoxPrice = box.getItemPrice();
             BigDecimal updatedMealBoxPrice = mealBoxPrice.multiply(discountToBeApplied);
             box.setItemPrice(updatedMealBoxPrice);
         }
+
+        return mealBoxesAcrossPlatform;
     }
 
     @Override
@@ -70,36 +71,40 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
-    public Promotion retrievePromotionById(Long promotionId) {
+    public Promotion retrievePromotionById(Long promotionId) throws PromotionNotFoundException {
         Promotion promotion = em.find(Promotion.class, promotionId);
-        return promotion;
+        if (promotion != null) {
+            return promotion;
+        } else {
+            throw new PromotionNotFoundException("Promotion with ID " + promotionId + "does not exist!");
+        }
+
     }
 
     @Override
-    public Promotion retrievePromotionByName(String promotionName) {
+    public List<Promotion> retrievePromotionByName(String promotionName) throws PromotionNotFoundException {
         Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.promotionName = :inName", Promotion.class);
         query.setParameter("inName", promotionName);
+        return query.getResultList();
+    }
+
+    @Override
+    public Promotion retrievePromotionByPromotionCode(String promotionCode) throws PromotionNotFoundException {
+        Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.promotionCode = :inPromotionCode", Promotion.class);
+        query.setParameter("inPromotionCode", promotionCode);
         Promotion promotion = (Promotion) query.getSingleResult();
         return promotion;
     }
 
     @Override
-    public Promotion retrievePromotionByPromotionCode(String promotionCode) {
-        Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.promotionCode = :promotionCode", Promotion.class);
-        query.setParameter("inName", promotionCode);
-        Promotion promotion = (Promotion) query.getSingleResult();
-        return promotion;
-    }
-
-    @Override
-    public List<Promotion> retrievePromotionsByStartDate(Date startDate) {
+    public List<Promotion> retrievePromotionsByStartDate(Date startDate) throws PromotionNotFoundException {
         Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.startDate = :inStartDate");
         query.setParameter("inStartDate", startDate);
         return query.getResultList();
     }
 
     @Override
-    public List<Promotion> retrievePromotionsByEndDate(Date endDate) {
+    public List<Promotion> retrievePromotionsByEndDate(Date endDate) throws PromotionNotFoundException {
         Query query = em.createQuery("SELECT p FROM Promotion p WHERE p.endDate = :inEndDate");
         query.setParameter("inEndDate", endDate);
         return query.getResultList();
@@ -112,15 +117,28 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
-    public void updatePromotion(Promotion promotion) {
+    public void updatePromotion(Promotion promotion) throws PromotionNotFoundException {
         //Potentially could change it to have each attribute changed using the set method
         //It is possible to let the user choose which fields to change the same way a book was edited in the assignment
-        em.merge(promotion);
+        Promotion oldPromo = retrievePromotionById(promotion.getPromotionId());
+        oldPromo.setDiscount(promotion.getDiscount());
+        oldPromo.setPromotionName(promotion.getPromotionName());
+        oldPromo.setStartDate(promotion.getStartDate());
+        oldPromo.setEndDate(promotion.getEndDate());
+        oldPromo.setPicture(promotion.getPicture());
+        oldPromo.setPromotionCode(promotion.getPromotionCode());
+        //Should allow the picture to be changed too
     }
 
     @Override
-    public void deletePromotion(Promotion promotion) {
-        em.remove(promotion);
+    public void deletePromotion(Long promotionId) {
+        try {
+            Promotion promotionToDelete = retrievePromotionById(promotionId);
+            em.remove(promotionToDelete);
+        } catch (PromotionNotFoundException ex) {
+            Logger.getLogger(PromotionSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

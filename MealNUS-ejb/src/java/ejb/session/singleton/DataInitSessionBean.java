@@ -26,6 +26,8 @@ import entity.Review;
 import entity.Staff;
 import entity.User;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,6 +47,7 @@ import util.enumeration.OrderStatus;
 import util.exception.OrderNotFoundException;
 import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UserAlreadyExistsException;
 import util.exception.UserNotFoundException;
 
 /**
@@ -82,7 +85,7 @@ public class DataInitSessionBean {
 
     @EJB
     private MealBoxSessionBeanLocal mealBoxSessionBean;
-    
+
     @EJB
     private StaffSessionBeanLocal staffSessionBean;
 
@@ -96,12 +99,16 @@ public class DataInitSessionBean {
     @PostConstruct
     public void postConstruct() {
         if (userSessionBean.retrieveAllUsers().isEmpty()) {
-            userSessionBean.createUser(new User("eric", "tang", "user@gmail.com", "password"));
-            userSessionBean.createUser(new User("eric1", "tang1", "user1@gmail.com", "password"));
-            userSessionBean.createUser(new User("eric2", "tang2", "user2@gmail.com", "password"));
-            userSessionBean.createUser(new User("eric3", "tang3", "user3@gmail.com", "password"));
+            try {
+                userSessionBean.createUser(new User("eric", "tang", "user@gmail.com", "password"));
+                userSessionBean.createUser(new User("eric1", "tang1", "user1@gmail.com", "password"));
+                userSessionBean.createUser(new User("eric2", "tang2", "user2@gmail.com", "password"));
+                userSessionBean.createUser(new User("eric3", "tang3", "user3@gmail.com", "password"));
+            } catch (UserAlreadyExistsException ex) {
+                ex.printStackTrace();
+            }
         }
-        
+
         if (staffSessionBean.retrieveAllStaff().isEmpty()) {
             staffSessionBean.createStaff(new Staff("firstname", "lastname", "staff@gmail.com", "password"));
         }
@@ -123,9 +130,13 @@ public class DataInitSessionBean {
 
         if (promotionSessionBean.retrieveAllPromotions().isEmpty()) {
             try {
-                promotionSessionBean.createPromotion(new Promotion("Promotion 1", "https://cdn.hellofresh.com/us/lp/images/hellofresh-coupons-and-promos-30OFF.jpg", new Date(2023, 3, 13), new Date(2023, 3, 17), BigDecimal.valueOf(0.3)));
-                //Promotion starts on the 13th of March and ends on the 17th. The reason why the month is 2 is because they start from a 0 index
+                Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-03-11");
+                Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-04-05");
+
+                promotionSessionBean.createPromotion(new Promotion("Promotion 1", "https://cdn.hellofresh.com/us/lp/images/hellofresh-coupons-and-promos-30OFF.jpg", startDate, endDate, BigDecimal.valueOf(0.3)));
             } catch (PromotionNotFoundException | UnknownPersistenceException ex) {
+                Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -157,8 +168,8 @@ public class DataInitSessionBean {
                 Date orderDate = new Date();
                 MealBox mealBox = new MealBox("Supreme Meat Box", 004L, new BigDecimal(15), new BigDecimal(20), "This is a high quality meat mealBox", 10);
                 Integer qty = 4;
-                List<Pair<MealBox,Integer>> orderDetails = new ArrayList<>();
-                orderDetails.add(new Pair<>(mealBox,qty));
+                List<Pair<MealBox, Integer>> orderDetails = new ArrayList<>();
+                orderDetails.add(new Pair<>(mealBox, qty));
                 List<BigDecimal> priceList = new ArrayList<>();
                 priceList.add(mealBox.getItemPrice());
                 List<BigDecimal> costList = new ArrayList<>();
@@ -167,8 +178,8 @@ public class DataInitSessionBean {
                 AddressEnum address = AddressEnum.PRINCE_GEORGE_PARK_RESIDENCE;
                 OrderStatus orderStatus = OrderStatus.PREPARING;
                 User user = new User("eric4", "tang4", "user4@gmail.com", "password");
-                orderSessionBean.createOrder(new OrderEntity(orderDate,orderDetails,priceList,costList,deliveryDate,address,orderStatus,user));
-                
+                orderSessionBean.createOrder(new OrderEntity(orderDate, orderDetails, priceList, costList, deliveryDate, address, orderStatus, user));
+
                 Date orderDate2 = new Date();
                 MealBox mealBox2 = new MealBox("Aww in One Box", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
                 Integer qty2 = 23;
