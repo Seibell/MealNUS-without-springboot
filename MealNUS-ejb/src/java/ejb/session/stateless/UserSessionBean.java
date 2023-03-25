@@ -6,14 +6,17 @@
 package ejb.session.stateless;
 
 import entity.User;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import util.exception.InvalidLoginException;
+import util.exception.UserAlreadyExistsException;
 import util.exception.UserNotFoundException;
 
 /**
@@ -27,8 +30,14 @@ public class UserSessionBean implements UserSessionBeanLocal {
     private EntityManager em;
 
     @Override
-    public void createUser(User user) {
-        em.persist(user);
+    public void createUser(User user) throws UserAlreadyExistsException {
+        try {
+            em.persist(user);
+        } catch (PersistenceException ex) {
+            throw new UserAlreadyExistsException("User email already exists");
+        } catch (Exception ex) {
+            throw new UserAlreadyExistsException("Something bad happened, should never reach here");
+        }
     }
 
     @Override

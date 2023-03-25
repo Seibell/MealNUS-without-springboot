@@ -1,5 +1,3 @@
-import "./App.css";
-
 //Home Page Components
 import Home from "./Components/Home";
 import About from "./Components/About";
@@ -18,46 +16,10 @@ import OldNavBar from "./Components/OldNavBar";
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './Components/Dashboard';
+import SignUp from './Components/SignUp';
+import ForgotPassword from "./Components/ForgotPassword";
 import React from "react";
 
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <Home />
-//       <About />
-//       <Work />
-//       <Testimonial />
-//       <Contact />
-//       <Footer />
-
-//       {/* <div className="inline-block-child"><UserLogin/></div>
-//       <div className="inline-block-child"><StaffLogin/></div>
-//       <div><RetrieveAllUsers/></div> */}
-//     </div>
-//   );
-// }
-
-// function App() {
-//   let component
-//   switch (window.location.pathname) {
-//     case "/userLogin":
-//       component = <UserLogin />
-//       break
-//     case "/staffLogin":
-//       component = <StaffLogin />
-//       break
-//     case "/retrieveAllUsers":
-//       component = <RetrieveAllUsers />
-//       break
-//   }
-//   return (
-//     <div className="App">
-//       <OldNavBar />
-//       {component}
-//     </div>
-//   )
-// }
 
 function App() {
   return (
@@ -65,6 +27,8 @@ function App() {
       <Routes>
         <Route path="/" element={<UserLogin />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
       </Routes>
     </Router>
   );

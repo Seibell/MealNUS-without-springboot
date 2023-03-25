@@ -7,6 +7,8 @@ import Testimonial from './Testimonial.js';
 import Contact from './Contact.js';
 import Footer from './Footer.js';
 
+import '../App.css'
+
 function Dashboard() {
   return (
     <div>

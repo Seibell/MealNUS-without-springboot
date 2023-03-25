@@ -11,8 +11,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.persistence.PersistenceException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -22,6 +24,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import util.exception.InvalidLoginException;
+import util.exception.UserAlreadyExistsException;
 import ws.model.RetrieveAllUsersResponse;
 
 /**
@@ -30,35 +33,29 @@ import ws.model.RetrieveAllUsersResponse;
  */
 @Path("User")
 
-public class UserResource
-{
+public class UserResource {
+
     @Context
     private UriInfo context;
-    
+
     private final UserSessionBeanLocal userSessionBeanLocal;
-    
-    
-    
-    public UserResource()
-    {
+
+    public UserResource() {
         userSessionBeanLocal = lookupUserSessionBeanLocal();
     }
 
-    
-    
     @GET
     @Path(value = "retrieveAllUsers") //http://localhost:8080/MealNUS-war/rest/User/retrieveAllUsers <- this should show json of user class created in db
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveAllUsers() 
-    {
+    public Response retrieveAllUsers() {
         RetrieveAllUsersResponse retrieveAllUsersResponse = new RetrieveAllUsersResponse(userSessionBeanLocal.retrieveAllUsers());
-        
+
         return Response.status(Status.OK).entity(retrieveAllUsersResponse).build();
     }
-    
+
     /*
     * Example GET Request for login: http://localhost:8080/MealNUS-war/rest/User/userLogin?email=user@gmail.com&password=password
-    */
+     */
     @Path("userLogin")
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
@@ -67,18 +64,32 @@ public class UserResource
             @QueryParam("password") String password) {
         try {
             User user = userSessionBeanLocal.userLogin(email, password);
-            System.out.println("*** userLogin(): User = " + user.getEmail()+ " login remotely via web service");           
+            System.out.println("*** userLogin(): User = " + user.getEmail() + " login remotely via web service");
 
             return Response.status(Response.Status.OK).entity(user).build();
-        }
-        catch (InvalidLoginException ex) {
+        } catch (InvalidLoginException ex) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
-    
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createUser(User user) {
+        try {
+            userSessionBeanLocal.createUser(user);
+            System.out.println("*** createuser(): User = " + user.getEmail() + " created via web service");
+
+            return Response.status(Response.Status.OK).entity(user).build();
+        } catch (PersistenceException | UserAlreadyExistsException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("User email already exists!").build();
+        }
+    }
+
     private UserSessionBeanLocal lookupUserSessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
