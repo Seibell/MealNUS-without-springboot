@@ -49,7 +49,8 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
             BigDecimal updatedMealBoxPrice = mealBoxPrice.multiply(discountToBeApplied);
             box.setItemPrice(updatedMealBoxPrice);
         }
-
+        
+        promotionToBeApplied.setIsApplied(true);
         return mealBoxesAcrossPlatform;
     }
 
