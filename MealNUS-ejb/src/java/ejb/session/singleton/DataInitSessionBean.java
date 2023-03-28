@@ -198,6 +198,23 @@ public class DataInitSessionBean {
                 OrderStatus orderStatus2 = OrderStatus.PAID;
                 User user2 = new User("eric5", "tang5", "user5@gmail.com", "password");
                 OrderEntity newOrder2 = orderSessionBean.createOrder(new OrderEntity(orderDate2, orderDetails2, priceList2, costList2, deliveryDate2, address2, orderStatus2, user2));
+                
+                Date orderDate3 = new Date();
+                Integer qty3 = 25;
+                List<Pair<MealBox, Integer>> orderDetails3 = new ArrayList<>();
+                orderDetails3.add(new Pair<>(mealBox2, qty3));
+                List<BigDecimal> priceList3 = new ArrayList<>();
+                priceList3.add(mealBox2.getItemPrice());
+                List<BigDecimal> costList3 = new ArrayList<>();
+                costList3.add(mealBox2.getItemCost());
+                Date deliveryDate3 = new Date();
+                Calendar calEnd3 = Calendar.getInstance();
+                calEnd3.setTime(deliveryDate2);
+                calEnd3.add(Calendar.DAY_OF_MONTH, 1);
+                deliveryDate3 = calEnd3.getTime();
+                AddressEnum address3 = AddressEnum.TEMBUSU_COLLEGE;
+                OrderStatus orderStatus3 = OrderStatus.CREATED;
+                OrderEntity newOrder3 = orderSessionBean.createOrder(new OrderEntity(orderDate3, orderDetails3, priceList3, costList3, deliveryDate3, address3, orderStatus3, user2));
             } catch (OrderNotFoundException | UnknownPersistenceException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             }

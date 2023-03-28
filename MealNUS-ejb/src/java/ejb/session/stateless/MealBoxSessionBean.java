@@ -6,7 +6,9 @@
 package ejb.session.stateless;
 
 import entity.MealBox;
+import java.util.ArrayList;
 import java.util.List;
+import javafx.util.Pair;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,6 +38,18 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
     public List<MealBox> retrieveAllMealBoxes() {
         Query query = em.createQuery("SELECT m FROM MealBox m", MealBox.class);
         return query.getResultList();
+    }
+    
+    @Override
+    public List<Pair<String, Integer>> retrieveAllMealBoxesWithQty() {
+        List<MealBox> mealBoxList = retrieveAllMealBoxes();
+        List<Pair<String, Integer>> resultList = new ArrayList<>();
+        for (MealBox mealBox : mealBoxList) {
+            String mealBoxName = mealBox.getItemName();
+            Integer qtyAvailable = mealBox.getQuantityAvailable();
+            resultList.add(new Pair<>(mealBoxName, qtyAvailable));
+        }
+        return resultList;
     }
 
     @Override

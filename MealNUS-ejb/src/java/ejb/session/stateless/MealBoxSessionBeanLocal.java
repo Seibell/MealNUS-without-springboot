@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.MealBox;
 import java.util.List;
+import javafx.util.Pair;
 import javax.ejb.Local;
 import util.exception.MealBoxNotFoundException;
 
@@ -26,5 +27,7 @@ public interface MealBoxSessionBeanLocal {
     public void deleteMealBox(MealBox mealBox);
 
     public void createMealBox(MealBox mealBox);
+
+    public List<Pair<String, Integer>> retrieveAllMealBoxesWithQty();
     
 }

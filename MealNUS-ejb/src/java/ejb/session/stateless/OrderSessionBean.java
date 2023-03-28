@@ -8,6 +8,8 @@ package ejb.session.stateless;
 import entity.MealBox;
 import entity.OrderEntity;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -170,6 +172,47 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         return query.getResultList();
     }
 
+    @Override
+    public List<Pair<Date, Integer>> retrieveAllOrderCounts(Date queryDate) throws ParseException {
+        List<OrderEntity> allOrders = retrieveAllOrders();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date1 = sdf.format(allOrders.get(0).getOrderDate());
+        String date2 = sdf.format(queryDate);
+        Date dateFirst = sdf.parse(date1);
+        Date dateLast = sdf.parse(date2);
+
+        Date referenceDate = dateFirst;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(referenceDate);
+
+        Calendar calEnd = Calendar.getInstance();
+        calEnd.setTime(dateLast);
+        calEnd.add(Calendar.DAY_OF_MONTH, 2);
+        Date endDate = calEnd.getTime();
+
+        Map<Date, Integer> orderCountByDate = new HashMap<>();
+
+        while (referenceDate.before(endDate)) {
+            List<OrderEntity> currentDateOrders = retrieveOrdersByOrderDate(referenceDate);
+            Integer currentDateOrderCount = currentDateOrders.size();
+            orderCountByDate.put(referenceDate, currentDateOrderCount);
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            referenceDate = cal.getTime();
+        }
+
+        List<Pair<Date, Integer>> result = new ArrayList<>();
+        for (Map.Entry<Date, Integer> entry : orderCountByDate.entrySet()) {
+            result.add(new Pair<>(entry.getKey(), entry.getValue()));
+        }
+        
+         Collections.sort(result, 
+                 (Pair<Date, Integer> p1, Pair<Date, Integer> p2) -> 
+                         p1.getKey().compareTo(p2.getKey()));
+
+        return result;
+
+    }
+
     // Note: Revenue calculation inaccurate if need to consider refunds/returns
     @Override
     public BigDecimal calculateCurrentDateRevenue(Date queryDate) {
@@ -220,6 +263,12 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     // Dashboard :: MTD Sales Overview :: OrderEntity
     @Override
     public int getMtdOrderCount(Date queryDate) {
+        
+        List<OrderEntity> orders = retrieveAllOrders();
+        if (queryDate.before(orders.get(0).getOrderDate())) {
+            return 0;
+        }
+        
         Calendar cal = Calendar.getInstance();
         cal.setTime(queryDate);
         cal.add(Calendar.MONTH, -1);
@@ -229,7 +278,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         int mtdNumOfOrders = 0;
 
         Calendar calEnd = Calendar.getInstance();
-        calEnd.setTime(queryDate);
+        calEnd.setTime(new Date());
         calEnd.add(Calendar.DAY_OF_MONTH, 1);
         Date endDate = calEnd.getTime();
 
@@ -308,34 +357,6 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     @Override
     public List<Pair<String, Integer>> findTopSellingMealBoxes() {
 
-//        List<OrderEntity> allOrders = retrieveAllOrders();
-//        Map<MealBox, Integer> mealBoxCounts = new HashMap<>();
-//        for (OrderEntity order : allOrders) {
-//            List<Pair<MealBox, Integer>> orderDetails = order.getOrderDetails();
-//            for (Pair<MealBox, Integer> orderDetail : orderDetails) {
-//                MealBox mealBox = orderDetail.getKey();
-//                int quantitySold = orderDetail.getValue();
-//                int totalSales = mealBoxCounts.getOrDefault(mealBox, 0) + quantitySold;
-//                mealBoxCounts.put(mealBox, totalSales);
-//            }
-//        }
-//
-//        List<Pair<MealBox, Integer>> sortedMealBoxList = new ArrayList<>();
-//        for (Map.Entry<MealBox, Integer> entry : mealBoxCounts.entrySet()) {
-//            MealBox mealBox = entry.getKey();
-//            int soldQuantity = entry.getValue();
-//            sortedMealBoxList.add(new Pair<>(mealBox, soldQuantity));
-//        }
-//
-//        Collections.sort(sortedMealBoxList, new Comparator<Pair<MealBox, Integer>>() {
-//            @Override
-//            public int compare(Pair<MealBox, Integer> mealBox1, Pair<MealBox, Integer> mealBox2) {
-//                return mealBox2.getValue().compareTo(mealBox1.getValue());
-//            }
-//        });
-//
-//        return sortedMealBoxList;
-        
         List<OrderEntity> allOrders = retrieveAllOrders();
         Map<String, Integer> mealBoxCounts = new HashMap<>();
         for (OrderEntity order : allOrders) {

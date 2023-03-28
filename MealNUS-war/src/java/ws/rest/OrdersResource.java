@@ -66,6 +66,19 @@ public class OrdersResource {
         RetrieveAllOrdersResponse retrieveAllOrdersResponse = new RetrieveAllOrdersResponse(orderSessionBeanLocal.retrieveAllOrders());
         return Response.status(Status.OK).entity(retrieveAllOrdersResponse).build();
     }
+    
+    @GET
+    @Path("/retrieveAllOrderCounts/{queryDate}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllOrderCounts(@PathParam("queryDate") String date) throws ParseException {
+        Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        List<Pair<Date, Integer>> results = orderSessionBeanLocal.retrieveAllOrderCounts(date1);
+        GenericEntity<List<Pair<Date, Integer>>> entity
+                = new GenericEntity<List<Pair<Date, Integer>>>(results) {
+        };
+        return Response.status(200).entity(
+                entity).type(MediaType.APPLICATION_JSON).build();
+    }
 
 //    @GET
 //    @Produces(MediaType.APPLICATION_JSON)
@@ -236,6 +249,19 @@ public class OrdersResource {
         };
         return Response.status(200).entity(
                 entity).build();
+    }
+    
+    // e.g. http://localhost:8080/MealNUS-war/rest/orders/currentDateOrderCount/2023-03-22
+    @GET
+    @Path("/currentDateOrderCount/{queryDate}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCurrentDateOrderCount(@PathParam("queryDate") String date) throws ParseException {
+        // no need for try catch 
+        Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        List<OrderEntity> orders = orderSessionBeanLocal.retrieveOrdersByOrderDate(date1);
+        Integer orderCount = orders.size();
+        return Response.status(200).entity(
+                orderCount).build();
     }
 
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/currentDateRevenue/2023-03-22

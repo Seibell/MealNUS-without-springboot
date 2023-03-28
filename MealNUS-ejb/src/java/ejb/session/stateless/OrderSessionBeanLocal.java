@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.MealBox;
 import entity.OrderEntity;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
@@ -61,5 +62,7 @@ public interface OrderSessionBeanLocal {
     public List<OrderEntity> retrieveOrdersByMealBoxNameAndDate(String mealBoxNameToCheck, Date queryDate);
 
     public List<OrderEntity> retrieveOrdersByMealBoxName(String mealBoxNameToCheck);
+
+    public List<Pair<Date, Integer>> retrieveAllOrderCounts(Date queryDate) throws ParseException;
 
 }
