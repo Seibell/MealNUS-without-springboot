@@ -32,10 +32,12 @@ public class Promotion implements Serializable {
     private Date startDate;
     @Temporal(TemporalType.DATE)
     private Date endDate;
+    private Boolean isApplied;
 
     //Promotion code is automatically generated when either constructor is called
     public Promotion() {
-        this.promotionCode = UUID.randomUUID().toString();
+        this.promotionCode = UUID.randomUUID().toString().substring(0, 8);
+        this.isApplied = false;
     }
 
     public Promotion(String promotionName, String picture, Date startDate, Date endDate, BigDecimal discount) {
@@ -130,5 +132,24 @@ public class Promotion implements Serializable {
     public void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
+
+    /**
+     * @return the isApplied
+     */
+    public Boolean getIsApplied() {
+        return isApplied;
+    }
+
+    /**
+     * @param isApplied the isApplied to set
+     */
+    public void setIsApplied(Boolean isApplied) {
+        this.isApplied = isApplied;
+    }
+
+    /**
+     * @return the isApplied
+     */
+
 
 }

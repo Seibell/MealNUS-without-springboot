@@ -134,6 +134,11 @@ public class DataInitSessionBean {
                 Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-04-05");
 
                 promotionSessionBean.createPromotion(new Promotion("Promotion 1", "https://cdn.hellofresh.com/us/lp/images/hellofresh-coupons-and-promos-30OFF.jpg", startDate, endDate, BigDecimal.valueOf(0.3)));
+                
+                Promotion promoApplied = new Promotion("Promotion Applied", "https://cdn.hellofresh.com/us/lp/images/hellofresh-coupons-and-promos-30OFF.jpg", startDate, endDate, BigDecimal.valueOf(0.5));
+                promoApplied.setIsApplied(true);
+                
+                promotionSessionBean.createPromotion(promoApplied);
             } catch (PromotionNotFoundException | UnknownPersistenceException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
