@@ -170,7 +170,9 @@ public class DataInitSessionBean {
         //TESTING PURPOSE
         if (orderSessionBean.retrieveAllOrders().isEmpty()) {
             try {
-                Date orderDate = new Date();
+                Calendar calEnd = Calendar.getInstance();
+                calEnd.add(Calendar.DAY_OF_MONTH, -2);
+                Date orderDate = calEnd.getTime();
                 MealBox mealBox = new MealBox("Supreme Meat Box", 004L, new BigDecimal(15), new BigDecimal(20), "This is a high quality meat mealBox", 10);
                 Integer qty = 4;
                 List<Pair<MealBox, Integer>> orderDetails = new ArrayList<>();
@@ -183,9 +185,11 @@ public class DataInitSessionBean {
                 AddressEnum address = AddressEnum.PRINCE_GEORGE_PARK_RESIDENCE;
                 OrderStatus orderStatus = OrderStatus.PREPARING;
                 User user = new User("eric4", "tang4", "user4@gmail.com", "password");
-                orderSessionBean.createOrder(new OrderEntity(orderDate, orderDetails, priceList, costList, deliveryDate, address, orderStatus, user));
+                OrderEntity newOrder1 = orderSessionBean.createOrder(new OrderEntity(orderDate, orderDetails, priceList, costList, deliveryDate, address, orderStatus, user));
 
-                Date orderDate2 = new Date();
+                Calendar calEnd1 = Calendar.getInstance();
+                calEnd1.add(Calendar.DAY_OF_MONTH, -1);
+                Date orderDate2 = calEnd1.getTime();
                 MealBox mealBox2 = new MealBox("Aww in One Box", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
                 Integer qty2 = 23;
                 List<Pair<MealBox, Integer>> orderDetails2 = new ArrayList<>();

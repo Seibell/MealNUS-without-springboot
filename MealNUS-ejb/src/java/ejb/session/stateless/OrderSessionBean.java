@@ -278,7 +278,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         int mtdNumOfOrders = 0;
 
         Calendar calEnd = Calendar.getInstance();
-        calEnd.setTime(new Date());
+        calEnd.setTime( queryDate);
         calEnd.add(Calendar.DAY_OF_MONTH, 1);
         Date endDate = calEnd.getTime();
 
