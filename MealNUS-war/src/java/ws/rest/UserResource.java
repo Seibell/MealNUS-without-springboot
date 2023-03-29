@@ -15,7 +15,9 @@ import javax.persistence.PersistenceException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -88,6 +90,23 @@ public class UserResource {
         } catch (Exception ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("User email already exists!").build();
         }
+    }
+
+    @PUT
+    @Path("edit/{userId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editUser(@PathParam("userId") Long userId, User updatedUser) {
+        updatedUser.setUserId(userId);
+        
+        updatedUser = userSessionBeanLocal.editUser(userId, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getEmail(), updatedUser.getPassword());
+        
+        if (updatedUser != null) {
+            return Response.status(Response.Status.OK).entity(updatedUser).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
     }
 
     private UserSessionBeanLocal lookupUserSessionBeanLocal() {

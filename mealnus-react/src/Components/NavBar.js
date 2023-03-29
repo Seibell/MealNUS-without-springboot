@@ -10,10 +10,29 @@ import Divider from "@mui/material/Divider";
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import PhoneRoudnedIcon from '@mui/icons-material/PhoneRounded';
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
+import { Link } from 'react-router-dom';
+import MealNUSLogo from '../Assets/MealNUSLogo-nobg.svg';
 
-import MealNUSLogo from '../Assets/mealnus-svg.svg';
+import { IconButton, Menu, MenuItem } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
 const NavBar = () => {
+
+    const logoStyle = {
+        width: '175px',
+        height: 'auto',
+    };
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const [openMenu, setOpenMenu] = React.useState(false);
     const menuOptions = [
@@ -42,9 +61,9 @@ const NavBar = () => {
     return (
         <nav>
             <div className="nav-logo-container">
-                <img src={Logo} alt="" />
+                <img src={MealNUSLogo} alt="" style={logoStyle} />
             </div>
-            <div className="navbar-links-container">
+            <div className="navbar-links-container" style={{display: 'flex', alignItems: 'center'}}>
                 <a href="">Home</a>
                 <a href="">About</a>
                 <a href="">Testimonials</a>
@@ -52,7 +71,32 @@ const NavBar = () => {
                 <a href="">
                     <BsCart2 className="navbar-cart-icon" />
                 </a>
-                <button className="primary-button">Bookings Now</button>
+                <IconButton
+                    color="inherit"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    size="large"
+                >
+                    <AccountCircle />
+                </IconButton>
+                <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                >
+                    <MenuItem onClick={handleClose} component={Link} to="/viewprofile">
+                        View Profile
+                    </MenuItem>
+                    <MenuItem onClick={handleClose} component={Link} to="/editprofile">
+                        Edit Profile
+                    </MenuItem>
+                    <MenuItem onClick={handleClose} component={Link} to="/">
+                        Logout
+                    </MenuItem>
+                </Menu>
             </div>
             <div className="navbar-menu-container">
                 <HiOutlineBars3 onClick={() => setOpenMenu(true)} />

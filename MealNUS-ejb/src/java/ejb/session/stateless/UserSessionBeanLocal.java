@@ -26,5 +26,7 @@ public interface UserSessionBeanLocal {
     public User userLogin(String email, String password) throws InvalidLoginException;
 
     public User retrieveUserByEmail(String email) throws UserNotFoundException;
+
+    public User editUser(Long id, String firstName, String lastName, String email, String password);
     
 }
