@@ -63,7 +63,7 @@ const NavBar = () => {
             <div className="nav-logo-container">
                 <img src={MealNUSLogo} alt="" style={logoStyle} />
             </div>
-            <div className="navbar-links-container" style={{display: 'flex', alignItems: 'center'}}>
+            <div className="navbar-links-container" style={{alignItems: 'center'}}>
                 <a href="">Home</a>
                 <a href="">About</a>
                 <a href="">Testimonials</a>
