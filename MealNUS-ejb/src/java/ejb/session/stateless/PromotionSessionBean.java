@@ -41,7 +41,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     @Override
     public List<MealBox> applyPromotionAcrossPlatform(String promotionCode) throws PromotionNotFoundException {
         Promotion promotionToBeApplied = retrievePromotionByPromotionCode(promotionCode);
-        BigDecimal discountToBeApplied = promotionToBeApplied.getDiscount();
+        BigDecimal discountToBeApplied = BigDecimal.ONE.subtract(promotionToBeApplied.getDiscount());
         //Neeed to insert a check that ensure that the promotion discount is between 0 and 1
         List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
         for (MealBox box : mealBoxesAcrossPlatform) {
@@ -51,6 +51,27 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         }
         
         promotionToBeApplied.setIsApplied(true);
+        return mealBoxesAcrossPlatform;
+    }
+    
+    @Override
+    public List<MealBox> disablePromotion (String promotionCode) throws PromotionNotFoundException {
+        Promotion promotionToBeDisabled = retrievePromotionByPromotionCode(promotionCode);
+        
+        //Current implementation. But I would like to implement this such that the MealBox
+        //entity has an attribute called promotionPrice that is initally null, but updated according
+        //to the promotion and set back to null when the promotion is removed. However, for now,
+        //just to make sure that there will be no issue with the implementation of the meal box entity
+        //I will be reversing the promotion
+        List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
+        BigDecimal discountToBeDisabled = promotionToBeDisabled.getDiscount();
+        for (MealBox box : mealBoxesAcrossPlatform) {
+            BigDecimal mealBoxPrice = box.getItemPrice();
+            BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled);
+            box.setItemPrice(updatedMealBoxPrice);
+        }
+        
+        promotionToBeDisabled.setIsApplied(false);
         return mealBoxesAcrossPlatform;
     }
 

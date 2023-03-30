@@ -66,6 +66,27 @@ public class PromotionsResource {
                     .build();
         }
     } //end applyPromotionAcrossPlatform
+    
+        @GET
+    @Path("/disable/{promotionCode}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response disablePromotionAcrossPlatform(@PathParam("promotionCode") String promotionCode) {
+        try {
+            List<MealBox> results = promotionSessionBeanLocal.disablePromotion(promotionCode);
+
+            GenericEntity<List<MealBox>> entity
+                    = new GenericEntity<List<MealBox>>(results) {
+            };
+            return Response.status(200).entity(
+                    entity).build();
+        } catch (PromotionNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .build();
+        }
+    } //end disablePromotionAcrossPlatform
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

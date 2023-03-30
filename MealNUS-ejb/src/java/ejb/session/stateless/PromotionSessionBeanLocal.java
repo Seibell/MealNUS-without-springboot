@@ -40,4 +40,6 @@ public interface PromotionSessionBeanLocal {
 
     public Promotion retrievePromotionByPromotionCode(String promotionCode) throws PromotionNotFoundException;
 
+    public List<MealBox> disablePromotion(String promotionCode) throws PromotionNotFoundException;
+
 }
