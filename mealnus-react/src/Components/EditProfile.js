@@ -9,6 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import axios from 'axios';
 
 const API_KEY = '995621471943455';
+const default_image_url = 'https://i.imgur.com/Kvyecsm.png';
 const theme = createTheme();
 
 function EditProfile() {
@@ -34,6 +35,10 @@ function EditProfile() {
             setPassword(currentUser.password);
         }
     }, [currentUser]);
+
+    if (!currentUser) {
+        return <div>Error: User not found.</div>;
+    }
 
     const uploadImage = async (file) => {
         const formData = new FormData();
@@ -123,7 +128,6 @@ function EditProfile() {
                                 />
                                 <Avatar
                                     src={imageURL || currentUser.imageURL}
-                                    alt={`${currentUser.firstName} ${currentUser.lastName}`}
                                     sx={{ m: 1, bgcolor: 'primary.main', width: 250, height: 250, cursor: "pointer" }}
                                 />
                             </label>
