@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { TextField, Button, Grid, Box, Typography } from "@mui/material";
+import { TextField, Button, Grid, Box, Typography, CircularProgress } from "@mui/material";
 import { AuthContext } from './AuthContext';
 import NavBar from './NavBar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -21,6 +21,7 @@ function EditProfile() {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState("");
     const [imageURL, setImageURL] = useState("");
+    const [uploading, setUploading] = useState(false);
 
     const { currentUser, setCurrentUser } = useContext(AuthContext);
 
@@ -41,17 +42,20 @@ function EditProfile() {
     }
 
     const uploadImage = async (file) => {
+        setUploading(true);
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'mealnus');
         formData.append('api_key', API_KEY);
-    
+
         try {
             console.log(formData);
             const response = await axios.post('https://api.cloudinary.com/v1_1/drkpzjlro/image/upload', formData);
+            setUploading(false);
             return response.data.secure_url;
         } catch (error) {
             console.error('Error uploading image:', error.response?.data?.error || error.message);
+            setUploading(false);
             return null;
         }
     };
@@ -60,7 +64,7 @@ function EditProfile() {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
             const uploadedImageURL = await uploadImage(file);
-            
+
             if (uploadedImageURL) {
                 setImageURL(uploadedImageURL);
             } else {
@@ -126,10 +130,34 @@ function EditProfile() {
                                     onChange={handleFileChange}
                                     style={{ display: "none" }}
                                 />
-                                <Avatar
-                                    src={imageURL || currentUser.imageURL}
-                                    sx={{ m: 1, bgcolor: 'primary.main', width: 250, height: 250, cursor: "pointer" }}
-                                />
+                                <Box
+                                    sx={{
+                                        m: 1,
+                                        position: "relative",
+                                        width: 250,
+                                        height: 250,
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    <Avatar
+                                        src={imageURL || currentUser.imageURL}
+                                        alt={`${currentUser.firstName} ${currentUser.lastName}`}
+                                        sx={{
+                                            bgcolor: "primary.main",
+                                            width: "100%",
+                                            height: "100%",
+                                        }}
+                                    />
+                                    {uploading && (
+                                        <CircularProgress
+                                            sx={{
+                                                position: "absolute",
+                                                top: "48%",
+                                                left: "48%",
+                                            }}
+                                        />
+                                    )}
+                                </Box>
                             </label>
                         </Grid>
                         <form onSubmit={handleSubmit}>
