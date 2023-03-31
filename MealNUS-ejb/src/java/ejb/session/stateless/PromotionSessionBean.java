@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.MealBox;
 import entity.Promotion;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -54,26 +55,24 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         return mealBoxesAcrossPlatform;
     }
     
-    @Override
-    public List<MealBox> disablePromotion (String promotionCode) throws PromotionNotFoundException {
-        Promotion promotionToBeDisabled = retrievePromotionByPromotionCode(promotionCode);
-        
-        //Current implementation. But I would like to implement this such that the MealBox
-        //entity has an attribute called promotionPrice that is initally null, but updated according
-        //to the promotion and set back to null when the promotion is removed. However, for now,
-        //just to make sure that there will be no issue with the implementation of the meal box entity
-        //I will be reversing the promotion
-        List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
-        BigDecimal discountToBeDisabled = promotionToBeDisabled.getDiscount();
+@Override
+public List<MealBox> disablePromotion (String promotionCode) throws PromotionNotFoundException {
+    Promotion promotionToBeDisabled = retrievePromotionByPromotionCode(promotionCode);
+    
+    List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
+    BigDecimal discountToBeDisabled = promotionToBeDisabled.getDiscount();
+    if (discountToBeDisabled.compareTo(BigDecimal.ZERO) != 0) {
         for (MealBox box : mealBoxesAcrossPlatform) {
             BigDecimal mealBoxPrice = box.getItemPrice();
-            BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled);
+            BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled, 2, RoundingMode.HALF_UP);
             box.setItemPrice(updatedMealBoxPrice);
         }
-        
-        promotionToBeDisabled.setIsApplied(false);
-        return mealBoxesAcrossPlatform;
     }
+    
+    promotionToBeDisabled.setIsApplied(false);
+    return mealBoxesAcrossPlatform;
+}
+
 
     @Override
     public void createPromotion(Promotion promotion) throws PromotionNotFoundException, UnknownPersistenceException {
@@ -156,6 +155,9 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     public void deletePromotion(Long promotionId) {
         try {
             Promotion promotionToDelete = retrievePromotionById(promotionId);
+            if (promotionToDelete.getIsApplied() == true) {
+                disablePromotion(promotionToDelete.getPromotionCode());
+            }
             em.remove(promotionToDelete);
         } catch (PromotionNotFoundException ex) {
             Logger.getLogger(PromotionSessionBean.class.getName()).log(Level.SEVERE, null, ex);
