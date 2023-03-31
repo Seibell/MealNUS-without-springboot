@@ -10,6 +10,7 @@ function ForgotPassword() {
             </TextField>
         </form>
         <button>Send Email</button>
+        <a href="/">Back</a>
       </div>
     );
   }

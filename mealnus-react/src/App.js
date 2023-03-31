@@ -10,6 +10,8 @@ import Footer from "./Components/Footer";
 import UserLogin from "./Components/UserLogin";
 import StaffLogin from "./Components/StaffLogin";
 import RetrieveAllUsers from "./Components/RetrieveAllUsers";
+import ViewProfile from "./Components/ViewProfile";
+import EditProfile from "./Components/EditProfile";
 
 //OldNavBar
 import OldNavBar from "./Components/OldNavBar";
@@ -29,6 +31,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/viewprofile" element={<ViewProfile />} />
+        <Route path="/editprofile" element={<EditProfile />} />
       </Routes>
     </Router>
   );

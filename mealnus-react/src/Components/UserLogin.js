@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Alert } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AuthContext } from './AuthContext';
 
 const classes = {
   root: "container",
@@ -39,6 +40,7 @@ function UserLogin() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const theme = createTheme();
+  const { setCurrentUser } = useContext(AuthContext);
 
   const handleEmailChange = event => {
     setEmail(event.target.value);
@@ -55,6 +57,7 @@ function UserLogin() {
       .then(data => {
         setLoggedIn(true);
         setUser(data);
+        setCurrentUser(data);
       })
       .catch(error => {
         setError('Invalid email or password');

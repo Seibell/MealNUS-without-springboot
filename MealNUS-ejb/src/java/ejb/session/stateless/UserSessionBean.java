@@ -72,4 +72,20 @@ public class UserSessionBean implements UserSessionBeanLocal {
             throw new InvalidLoginException("Email does not exist or invalid password!");
         }
     }
+
+    @Override
+    public User editUser(Long userId, String firstName, String lastName, String email, String password, String imageURL) {
+        User user = em.find(User.class, userId);
+
+        if (user != null) {
+            user.setUserId(userId);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setImageURL(imageURL);
+            em.merge(user);
+        }
+        return user;
+    }
 }
