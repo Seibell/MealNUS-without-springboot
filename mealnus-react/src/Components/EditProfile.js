@@ -5,7 +5,10 @@ import NavBar from './NavBar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Navigate } from 'react-router-dom';
 import { Alert } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import axios from 'axios';
 
+const API_KEY = '995621471943455';
 const theme = createTheme();
 
 function EditProfile() {
@@ -16,6 +19,7 @@ function EditProfile() {
     const [password, setPassword] = useState("");
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState("");
+    const [imageURL, setImageURL] = useState("");
 
     const { currentUser, setCurrentUser } = useContext(AuthContext);
 
@@ -26,9 +30,39 @@ function EditProfile() {
             setFirstName(currentUser.firstName);
             setLastName(currentUser.lastName);
             setEmail(currentUser.email);
+            setImageURL(currentUser.imageURL);
             setPassword(currentUser.password);
         }
     }, [currentUser]);
+
+    const uploadImage = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'mealnus');
+        formData.append('api_key', API_KEY);
+    
+        try {
+            console.log(formData);
+            const response = await axios.post('https://api.cloudinary.com/v1_1/drkpzjlro/image/upload', formData);
+            return response.data.secure_url;
+        } catch (error) {
+            console.error('Error uploading image:', error.response?.data?.error || error.message);
+            return null;
+        }
+    };
+
+    const handleFileChange = async (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            const uploadedImageURL = await uploadImage(file);
+            
+            if (uploadedImageURL) {
+                setImageURL(uploadedImageURL);
+            } else {
+                setError("Failed to upload image");
+            }
+        }
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -40,6 +74,7 @@ function EditProfile() {
             lastName: lastName,
             email: email,
             password: password,
+            imageURL: imageURL,
             userId: currentUser.userId,
         };
 
@@ -77,6 +112,22 @@ function EditProfile() {
                         <Typography component="h1" variant="h5" align="center">
                             Edit Profile
                         </Typography>
+                        <Grid container alignItems="center" justifyContent="center">
+                            <label htmlFor="avatar-upload">
+                                <input
+                                    accept="image/*"
+                                    type="file"
+                                    id="avatar-upload"
+                                    onChange={handleFileChange}
+                                    style={{ display: "none" }}
+                                />
+                                <Avatar
+                                    src={imageURL || currentUser.imageURL}
+                                    alt={`${currentUser.firstName} ${currentUser.lastName}`}
+                                    sx={{ m: 1, bgcolor: 'primary.main', width: 250, height: 250, cursor: "pointer" }}
+                                />
+                            </label>
+                        </Grid>
                         <form onSubmit={handleSubmit}>
                             <TextField
                                 label="First Name"

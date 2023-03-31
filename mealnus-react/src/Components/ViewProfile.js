@@ -5,7 +5,6 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
-import PersonIcon from '@mui/icons-material/Person';
 import { AuthContext } from './AuthContext';
 import NavBar from './NavBar';
 
@@ -30,8 +29,9 @@ function ViewProfile() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-                        <PersonIcon />
+                    <Avatar 
+                        src={currentUser.imageURL}
+                        sx={{ m: 1, bgcolor: 'primary.main', width: 200, height: 200 }}>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         {currentUser.firstName} {currentUser.lastName}

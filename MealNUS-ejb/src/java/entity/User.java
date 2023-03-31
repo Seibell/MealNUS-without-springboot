@@ -43,6 +43,8 @@ public class User implements Serializable {
     @Column(nullable = false)
     @NotNull
     private String password;
+    
+    private String imageURL;
 
     @OneToMany
     private List<Review> reviews;
@@ -65,6 +67,7 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.imageURL = "https://i.imgur.com/Kvyecsm.png";
         this.reviews = new ArrayList<>();
         this.orders = new ArrayList<>();
         this.creditCards = new ArrayList<>();
@@ -172,5 +175,19 @@ public class User implements Serializable {
 //    public void setWishList(WishList wishList) {
 //        this.wishList = wishList;
 //    }
+
+    /**
+     * @return the imageURL
+     */
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    /**
+     * @param imageURL the imageURL to set
+     */
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 
 }
