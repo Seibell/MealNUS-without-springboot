@@ -2,11 +2,9 @@ import React from 'react';
 import Logo from '../Assets/Logo.svg';
 import { BsCart2 } from 'react-icons/bs';
 import { HiOutlineBars3 } from 'react-icons/hi2';
-import { Box, Drawer, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, Drawer, ListItem, ListItemButton, ListItemIcon, ListItemText, Avatar } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import PhoneRoudnedIcon from '@mui/icons-material/PhoneRounded';
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
@@ -14,9 +12,11 @@ import { Link } from 'react-router-dom';
 import MealNUSLogo from '../Assets/MealNUSLogo-nobg.svg';
 
 import { IconButton, Menu, MenuItem } from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useContext } from 'react';
+import { AuthContext } from './AuthContext';
 
 const NavBar = () => {
+    const { currentUser } = useContext(AuthContext);
 
     const logoStyle = {
         width: '175px',
@@ -79,7 +79,10 @@ const NavBar = () => {
                     onClick={handleMenu}
                     size="large"
                 >
-                    <AccountCircle />
+                    <Avatar 
+                        src={currentUser.imageURL}
+                        sx={{ m: 1, bgcolor: 'primary.main'}}>
+                    </Avatar>
                 </IconButton>
                 <Menu
                     id="menu-appbar"

@@ -99,7 +99,7 @@ public class UserResource {
     public Response editUser(@PathParam("userId") Long userId, User updatedUser) {
         updatedUser.setUserId(userId);
         
-        updatedUser = userSessionBeanLocal.editUser(userId, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getEmail(), updatedUser.getPassword());
+        updatedUser = userSessionBeanLocal.editUser(userId, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getEmail(), updatedUser.getPassword(), updatedUser.getImageURL());
         
         if (updatedUser != null) {
             return Response.status(Response.Status.OK).entity(updatedUser).build();

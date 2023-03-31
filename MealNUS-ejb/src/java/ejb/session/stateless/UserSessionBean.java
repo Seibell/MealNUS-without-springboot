@@ -74,7 +74,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
     }
 
     @Override
-    public User editUser(Long userId, String firstName, String lastName, String email, String password) {
+    public User editUser(Long userId, String firstName, String lastName, String email, String password, String imageURL) {
         User user = em.find(User.class, userId);
 
         if (user != null) {
@@ -83,6 +83,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
             user.setLastName(lastName);
             user.setEmail(email);
             user.setPassword(password);
+            user.setImageURL(imageURL);
             em.merge(user);
         }
         return user;

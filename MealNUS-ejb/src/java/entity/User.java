@@ -62,12 +62,25 @@ public class User implements Serializable {
     public User() {
     }
 
+    //Default constructor (upon account signup)
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.imageURL = "https://i.imgur.com/Kvyecsm.png";
+        this.imageURL = "https://i.imgur.com/Kvyecsm.png"; //profs face :D
+        this.reviews = new ArrayList<>();
+        this.orders = new ArrayList<>();
+        this.creditCards = new ArrayList<>();
+    }
+    
+    //Use this constructor for uploading image
+    public User(String firstName, String lastName, String email, String password, String imageURL) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.imageURL = imageURL;
         this.reviews = new ArrayList<>();
         this.orders = new ArrayList<>();
         this.creditCards = new ArrayList<>();
