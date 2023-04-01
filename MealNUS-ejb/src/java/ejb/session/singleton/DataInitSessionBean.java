@@ -125,7 +125,11 @@ public class DataInitSessionBean {
 
         if (ingredientSessionBean.retrieveAllIngredients().isEmpty()) {
             ingredientSessionBean.createIngredient(new Ingredient("Rice",
-                    "https://media.istockphoto.com/id/1069180776/photo/uncooked-white-long-grain-rice-background.jpg?s=612x612&w=is&k=20&c=DGoWb_yAHltTChGq9fb4m2ynsXPdCaeoQ_qovRrWjjY="));
+                    "https://images.unsplash.com/photo-1516684732162-798a0062be99?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cmljZXxlbnwwfHwwfHw%3D&w=1000&q=80"));
+      
+        ingredientSessionBean.createIngredient(new Ingredient("Noodle",
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Mama_instant_noodle_block.jpg/1200px-Mama_instant_noodle_block.jpg"));
+      
         }
 
         if (promotionSessionBean.retrieveAllPromotions().isEmpty()) {

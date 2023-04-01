@@ -28,12 +28,6 @@
         <ejb-link>MealNUS-ejb.jar#MealBoxSessionBean</ejb-link>
     </ejb-local-ref>
     <ejb-local-ref>
-        <ejb-ref-name>MealBoxSessionBeanLocal1</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.session.stateless.MealBoxSessionBeanLocal</local>
-        <ejb-link>MealNUS-ejb.jar#MealBoxSessionBean</ejb-link>
-    </ejb-local-ref>
-    <ejb-local-ref>
         <ejb-ref-name>StaffSessionBean</ejb-ref-name>
         <ejb-ref-type>Session</ejb-ref-type>
         <local>ejb.session.stateless.StaffSessionBeanLocal</local>
@@ -50,5 +44,17 @@
         <ejb-ref-type>Session</ejb-ref-type>
         <local>ejb.session.stateless.PromotionSessionBeanLocal</local>
         <ejb-link>MealNUS-ejb.jar#PromotionSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>IngredientSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.IngredientSessionBeanLocal</local>
+        <ejb-link>MealNUS-ejb.jar#IngredientSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>AllergenSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.AllergenSessionBeanLocal</local>
+        <ejb-link>MealNUS-ejb.jar#AllergenSessionBean</ejb-link>
     </ejb-local-ref>
 </web-app>

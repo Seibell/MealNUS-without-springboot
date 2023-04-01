@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.Ingredient;
 import entity.MealBox;
 import java.util.List;
 import javafx.util.Pair;
@@ -26,8 +27,14 @@ public interface MealBoxSessionBeanLocal {
 
     public void deleteMealBox(MealBox mealBox);
 
-    public void createMealBox(MealBox mealBox);
+    public Long createMealBox(MealBox mealBox);
 
     public List<Pair<String, Integer>> retrieveAllMealBoxesWithQty();
+
+    public void addIngredientsToBox(Long id, List<Ingredient> i );
+
+    public MealBox addNewQuantity(Long id, Integer quantity);
+
+    public MealBox updateMealBox(Long id, MealBox mealbox);
     
 }
