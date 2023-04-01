@@ -48,6 +48,9 @@ public class MealBox implements Serializable {
     private List<Review> reviews;
 
     public MealBox() {
+        this.allergens = new ArrayList<>();
+        this.ingredients = new ArrayList<>();
+        this.categories = new ArrayList<>();
     }
 
     public MealBox(String itemImage, String itemName, Long ItemCode, BigDecimal itemCost, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable) {
@@ -87,6 +90,17 @@ public class MealBox implements Serializable {
         this.categories = new ArrayList<>();
     }
 
+    public MealBox(String itemName, Long ItemCode, String itemImage, BigDecimal itemCost, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable, List<Ingredient> ingredients) {
+        this.itemName = itemName;
+        this.ItemCode = ItemCode;
+        this.itemImage = itemImage;
+        this.itemCost = itemCost;
+        this.itemPrice = itemPrice;
+        this.itemDescription = itemDescription;
+        this.quantityAvailable = quantityAvailable;
+        this.ingredients = ingredients;
+    }
+    
     public Long getMealBoxId() {
         return mealBoxId;
     }
@@ -228,6 +242,10 @@ public class MealBox implements Serializable {
      */
     public List<Ingredient> getIngredients() {
         return ingredients;
+    }
+    
+    public void addIngredients(Ingredient e) {
+        this.ingredients.add(e);
     }
 
     /**

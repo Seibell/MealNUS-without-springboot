@@ -32,8 +32,10 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) 
     {
+        resources.add(ws.rest.AllergenResource.class);
         resources.add(ws.rest.CorsFilter.class);
         resources.add(ws.rest.ForumResource.class);
+        resources.add(ws.rest.IngredientResource.class);
         resources.add(ws.rest.MealBoxResource.class);
         resources.add(ws.rest.NotificationResource.class);
         resources.add(ws.rest.OrdersResource.class);
