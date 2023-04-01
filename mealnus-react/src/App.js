@@ -16,12 +16,14 @@ import EditProfile from "./Components/EditProfile";
 //OldNavBar
 import OldNavBar from "./Components/OldNavBar";
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Dashboard from './Components/Dashboard';
-import SignUp from './Components/SignUp';
+//MealBoxes
+import MealBoxes from "./Components/MealBoxes";
+
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Dashboard from "./Components/Dashboard";
+import SignUp from "./Components/SignUp";
 import ForgotPassword from "./Components/ForgotPassword";
 import React from "react";
-
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/viewprofile" element={<ViewProfile />} />
         <Route path="/editprofile" element={<EditProfile />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/mealboxes" element={<MealBoxes />} />
       </Routes>
     </Router>
   );

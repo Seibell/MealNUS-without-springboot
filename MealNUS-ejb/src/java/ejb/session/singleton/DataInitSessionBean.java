@@ -235,7 +235,7 @@ public class DataInitSessionBean {
 
             Review r1 = reviewSessionBean.retrieveReviewById(2L);
             box1.addReview(r1);
-
+            System.out.println("###########TEST HERE:" + box1.getReviews().toString());
             Review r2 = reviewSessionBean.retrieveReviewById(3L);
             box2.addReview(r2);
 

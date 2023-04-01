@@ -143,6 +143,7 @@ public class MealBox implements Serializable {
     
     public void addReview(Review r) {
         this.reviews.add(r);
+        System.out.println("this line executed");
     }
 
     /**
