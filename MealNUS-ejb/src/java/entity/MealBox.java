@@ -43,6 +43,7 @@ public class MealBox implements Serializable {
 
     @ManyToMany
     private List<Category> categories;
+    
     @OneToMany(mappedBy = "mealBox")
     private List<Review> reviews;
 
@@ -52,6 +53,20 @@ public class MealBox implements Serializable {
         this.categories = new ArrayList<>();
     }
 
+    public MealBox(String itemImage, String itemName, Long ItemCode, BigDecimal itemCost, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable) {
+        this.itemImage = itemImage;
+        this.itemName = itemName;
+        this.ItemCode = ItemCode;
+        this.itemCost = itemCost;
+        this.itemPrice = itemPrice;
+        this.itemDescription = itemDescription;
+        this.quantityAvailable = quantityAvailable;
+        this.allergens = new ArrayList<>();
+        this.ingredients = new ArrayList<>();
+        this.categories = new ArrayList<>();
+        this.reviews = new ArrayList<>();
+    }
+    
     public MealBox(String itemName, Long ItemCode, BigDecimal itemCost, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable) {
         this.itemName = itemName;
         this.ItemCode = ItemCode;
@@ -60,7 +75,6 @@ public class MealBox implements Serializable {
         this.itemDescription = itemDescription;
         this.quantityAvailable = quantityAvailable;
     }
-    
     
     
     public MealBox(String itemName, Long ItemCode, String itemImage, BigDecimal itemPrice, BigDecimal itemCost, String itemDescription, Integer quantityAvailable) {
@@ -139,6 +153,11 @@ public class MealBox implements Serializable {
      */
     public Long getItemCode() {
         return ItemCode;
+    }
+    
+    public void addReview(Review r) {
+        this.reviews.add(r);
+        System.out.println("this line executed");
     }
 
     /**
@@ -250,6 +269,9 @@ public class MealBox implements Serializable {
         this.categories = categories;
     }
 
+    public void addCategory(Category category) {
+        this.categories.add(category);
+    }
     /**
      * @return the reviews
      */

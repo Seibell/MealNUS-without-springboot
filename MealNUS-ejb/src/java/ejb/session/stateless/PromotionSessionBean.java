@@ -42,7 +42,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     @Override
     public List<MealBox> applyPromotionAcrossPlatform(String promotionCode) throws PromotionNotFoundException {
         Promotion promotionToBeApplied = retrievePromotionByPromotionCode(promotionCode);
-        BigDecimal discountToBeApplied = BigDecimal.ONE.subtract(promotionToBeApplied.getDiscount());
+        BigDecimal discountToBeApplied = promotionToBeApplied.getDiscount();
         //Neeed to insert a check that ensure that the promotion discount is between 0 and 1
         List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
         for (MealBox box : mealBoxesAcrossPlatform) {

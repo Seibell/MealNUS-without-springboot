@@ -27,4 +27,6 @@ public interface IngredientSessionBeanLocal {
 
     public Ingredient updateIngredient(Long id, Ingredient i);
     
+    public Ingredient retrieveIngredientByName(String ingredientName);
+    
 }

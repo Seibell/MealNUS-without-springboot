@@ -16,9 +16,15 @@ import EditProfile from "./Components/EditProfile";
 //OldNavBar
 import OldNavBar from "./Components/OldNavBar";
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Dashboard from './Components/Dashboard';
-import SignUp from './Components/SignUp';
+//MealBoxes
+import MealBoxes from "./Components/MealBoxes";
+
+//Forum
+import Forum from "./Components/Forum";
+
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Dashboard from "./Components/Dashboard";
+import SignUp from "./Components/SignUp";
 import ForgotPassword from "./Components/ForgotPassword";
 import React from "react";
 
@@ -32,7 +38,6 @@ import AddMealBox from "./Components/Inventory/AddMealBox";
 import UpdateQuantity from "./Components/Inventory/updateQuantity";
 import UpdateMealBox from "./Components/Inventory/UpdateMealBox";
 import UpdateIngred from "./Components/Inventory/UpdateIngred";
-
 function App() {
   return (
     <Router>
@@ -52,6 +57,9 @@ function App() {
         <Route path="/UpdateQuantity" element={<UpdateQuantity />} />
         <Route path="/UpdateMealBox" element={<UpdateMealBox />} />
         <Route path="/UpdateIngred" element={<UpdateIngred />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/mealboxes" element={<MealBoxes />} />
+        <Route path="/forum" element={<Forum />} />
       </Routes>
     </Router>
   );

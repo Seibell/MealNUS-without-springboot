@@ -29,4 +29,6 @@ public interface UserSessionBeanLocal {
 
     public User editUser(Long id, String firstName, String lastName, String email, String password, String imageURL);
     
+    public User retrieveUserById(Long userId) throws UserNotFoundException;
+    
 }
