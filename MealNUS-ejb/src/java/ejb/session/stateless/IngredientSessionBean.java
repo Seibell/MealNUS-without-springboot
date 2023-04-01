@@ -9,8 +9,10 @@ import entity.Ingredient;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -36,4 +38,17 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
         Query query = em.createQuery("SELECT i FROM Ingredient i");
         return query.getResultList();
     }
+
+    @Override
+    public Ingredient retrieveIngredientByName(String ingredientName) {
+        TypedQuery<Ingredient> query = em.createQuery("SELECT i FROM Ingredient i WHERE i.name = :ingredientName", Ingredient.class);
+        query.setParameter("ingredientName", ingredientName);
+
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 }

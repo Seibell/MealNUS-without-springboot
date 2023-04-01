@@ -19,5 +19,7 @@ public interface IngredientSessionBeanLocal {
     public void createIngredient(Ingredient ingredient);
 
     public List<Ingredient> retrieveAllIngredients();
+
+    public Ingredient retrieveIngredientByName(String ingredientName);
     
 }

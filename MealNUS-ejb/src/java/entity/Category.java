@@ -42,7 +42,7 @@ public class Category implements Serializable {
         this.name = name;
         this.picture = picture;
         this.mealBoxes = new ArrayList<>();
-        this.promotion = new Promotion();
+        //this.promotion = new Promotion();
     }
 
     public Long getCategoryId() {
@@ -118,6 +118,24 @@ public class Category implements Serializable {
      */
     public void setPromotion(Promotion promotion) {
         this.promotion = promotion;
+    }
+
+    /**
+     * @return the mealBoxes
+     */
+    public List<MealBox> getMealBoxes() {
+        return mealBoxes;
+    }
+
+    /**
+     * @param mealBoxes the mealBoxes to set
+     */
+    public void setMealBoxes(List<MealBox> mealBoxes) {
+        this.mealBoxes = mealBoxes;
+    }
+    
+    public void addMealBox(MealBox m) {
+        this.mealBoxes.add(m);
     }
 
 }
