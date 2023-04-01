@@ -19,6 +19,13 @@ import OldNavBar from "./Components/OldNavBar";
 //MealBoxes
 import MealBoxes from "./Components/MealBoxes";
 
+//Cart & CartProvider
+import Cart from "./Components/Cart";
+import { CartProvider } from "./Context/CartContext";
+
+//Checkout
+import Checkout from "./Components/Checkout";
+
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./Components/Dashboard";
 import SignUp from "./Components/SignUp";
@@ -27,18 +34,22 @@ import React from "react";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<UserLogin />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/viewprofile" element={<ViewProfile />} />
-        <Route path="/editprofile" element={<EditProfile />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/mealboxes" element={<MealBoxes />} />
-      </Routes>
-    </Router>
+    <CartProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<UserLogin />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/viewprofile" element={<ViewProfile />} />
+          <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/mealboxes" element={<MealBoxes />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+        </Routes>
+      </Router>
+    </CartProvider>
   );
 }
 
