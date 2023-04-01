@@ -88,4 +88,15 @@ public class UserSessionBean implements UserSessionBeanLocal {
         }
         return user;
     }
+    
+    @Override
+    public User retrieveUserById(Long userId) throws UserNotFoundException {
+        User user = em.find(User.class, userId);
+        
+        if (user != null) {
+            return user;
+        } else {
+            throw new UserNotFoundException("User with user id: " + userId + " not found!");
+        }
+    }
 }
