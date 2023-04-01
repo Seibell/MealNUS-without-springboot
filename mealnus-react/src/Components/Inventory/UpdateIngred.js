@@ -7,7 +7,7 @@ const API_KEY = '995621471943455';
 const default_image_url = 'https://i.imgur.com/Kvyecsm.png';
 const theme = createTheme();
 
-const UploadForm = () => {
+const UpdateIngred = () => {
   //TEMP
   const [ingredientId, setingredientId] = useState('');
   const [picture, setpicture] = useState(null);
@@ -90,4 +90,4 @@ const handleFileChange = async (e) => {
   );
 };
 
-export default UploadForm;
+export default UpdateIngred;

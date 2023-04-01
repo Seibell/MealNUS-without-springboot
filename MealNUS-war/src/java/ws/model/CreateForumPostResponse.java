@@ -16,27 +16,38 @@ import javax.xml.bind.annotation.XmlElements;
  *
  * @author 60540
  */
-public class RetrieveAllForumPostsResponse {
 
-    private List<ForumPost> posts;
+import java.util.Date;
 
-    public RetrieveAllForumPostsResponse() {
-        posts = new ArrayList<>();
+public class CreateForumPostResponse {
+    private Date postDate;
+    private String postTitle;
+    private String postDescription;
+
+    public CreateForumPostResponse() {
     }
 
-    public RetrieveAllForumPostsResponse(List<ForumPost> posts) {
-        this.posts = posts;
+    public Date getPostDate() {
+        return postDate;
     }
 
-    @XmlElements({
-        @XmlElement(name = "posts", type = ForumPost.class)
-    })
-    @XmlElementWrapper
-    public List<ForumPost> getForumPostEntities() {
-        return posts;
+    public void setPostDate(Date postDate) {
+        this.postDate = postDate;
     }
 
-    public void setForumPostEntities(List<ForumPost> posts) {
-        this.posts = posts;
+    public String getPostTitle() {
+        return postTitle;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
+    }
+
+    public String getPostDescription() {
+        return postDescription;
+    }
+
+    public void setPostDescription(String postDescription) {
+        this.postDescription = postDescription;
     }
 }
