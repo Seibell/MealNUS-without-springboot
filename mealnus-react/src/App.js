@@ -19,6 +19,9 @@ import OldNavBar from "./Components/OldNavBar";
 //MealBoxes
 import MealBoxes from "./Components/MealBoxes";
 
+//Forum
+import Forum from "./Components/Forum";
+
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./Components/Dashboard";
 import SignUp from "./Components/SignUp";
@@ -37,6 +40,7 @@ function App() {
         <Route path="/editprofile" element={<EditProfile />} />
         <Route path="/home" element={<Home />} />
         <Route path="/mealboxes" element={<MealBoxes />} />
+        <Route path="/forum" element={<Forum />} />
       </Routes>
     </Router>
   );

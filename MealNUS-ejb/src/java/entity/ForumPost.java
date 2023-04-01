@@ -32,10 +32,12 @@ public class ForumPost implements Serializable {
     private String postDescription;
     private String[] postAttachments;
     private ForumCategory forumCategory;
+    private Integer numThumbsUp;
     public ForumPost() {
     }
 
     public ForumPost(Date postDate, String posTitle, String postDescription) {
+        this.numThumbsUp = 0;
         this.postDate = postDate;
         this.posTitle = posTitle;
         this.postDescription = postDescription;
@@ -97,6 +99,10 @@ public class ForumPost implements Serializable {
     public void setPostDate(Date postDate) {
         this.postDate = postDate;
     }
+    
+    public void addThumbUp() {
+        this.numThumbsUp++;
+    }
 
     /**
      * @return the posTitle
@@ -152,6 +158,20 @@ public class ForumPost implements Serializable {
      */
     public void setForumCategory(ForumCategory forumCategory) {
         this.forumCategory = forumCategory;
+    }
+
+    /**
+     * @return the numThumbsUp
+     */
+    public Integer getNumThumbsUp() {
+        return numThumbsUp;
+    }
+
+    /**
+     * @param numThumbsUp the numThumbsUp to set
+     */
+    public void setNumThumbsUp(Integer numThumbsUp) {
+        this.numThumbsUp = numThumbsUp;
     }
     
 }

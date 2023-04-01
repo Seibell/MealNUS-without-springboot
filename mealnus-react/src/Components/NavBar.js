@@ -79,7 +79,7 @@ const NavBar = () => {
         {/* <a href="/Home">Home</a> */}
         <Link to="/home">Home</Link>
         <Link to="/mealboxes">Order</Link>
-        <a href="">Forum</a>
+        <Link to="/forum">Forum</Link>
         <a href="">
           <BsCart2 className="navbar-cart-icon" />
         </a>
