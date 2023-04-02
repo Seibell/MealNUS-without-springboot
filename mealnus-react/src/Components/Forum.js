@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import NavBar from "./NavBar.js";
+import { Snackbar } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import {
   Container,
   Grid,
@@ -21,6 +23,7 @@ const Forum = () => {
   const [newPostTitle, setNewPostTitle] = useState("");
   const [newPostDescription, setNewPostDescription] = useState("");
   const [filter, setFilter] = React.useState("");
+  const [userLikes, setUserLikes] = useState({});
 
   useEffect(() => {
     fetchPosts();
@@ -56,11 +59,24 @@ const Forum = () => {
     setNewPostDescription("");
   };
 
+  const closeErrorSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setErrorMessage("");
+  };
+
   const handleThumbUp = async (postId) => {
-    // await axios.put(
-    //   `http://localhost:8080/MealNUS-war/rest/Forum/thumbsUpForumPost/${postId}`
-    // );
-    fetchPosts();
+    const currentLikes = userLikes[postId] || 0;
+    if (currentLikes < 5) {
+      await axios.put(
+        `http://localhost:8080/MealNUS-war/rest/Forum/thumbsUpForumPost/${postId}`
+      );
+      fetchPosts();
+      setUserLikes({ ...userLikes, [postId]: currentLikes + 1 });
+    } else {
+      setErrorMessage("You already liked this post.");
+    }
   };
 
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -91,38 +107,49 @@ const Forum = () => {
           style={{ height: "70vh", overflow: "auto" }}
         >
           {posts.forumPostEntities &&
-            posts.forumPostEntities.map((post) => (
-              <Grid item xs={12} key={post.postId}>
-                <Paper elevation={2} style={{ padding: 16, width: "90vw" }}>
-                  <Typography variant="h5">
-                    <strong>{post.postTitle}</strong>
-                  </Typography>
-                  <Typography variant="body1">
-                    {post.postDescription}
-                  </Typography>
-                  <div style={{ display: "flex", marginTop: 16 }}>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <IconButton
-                        aria-label="thumbs up"
-                        onClick={() => handleThumbUp(post.postId)}
-                      >
-                        <ThumbUp />
-                      </IconButton>
-                      <Typography>{post.numThumbsUp}</Typography>
-                    </div>
-                    <Typography style={{ marginLeft: "auto" }}>
-                      {new Date(
-                        post.postDate.replace("[UTC]", "")
-                      ).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
+            [...posts.forumPostEntities]
+              .sort((a, b) => {
+                if (filter === "time") {
+                  return (
+                    new Date(b.postDate.replace("[UTC]", "")) -
+                    new Date(a.postDate.replace("[UTC]", ""))
+                  );
+                } else {
+                  return b.numThumbsUp - a.numThumbsUp;
+                }
+              })
+              .map((post) => (
+                <Grid item xs={12} key={post.postId}>
+                  <Paper elevation={2} style={{ padding: 16, width: "90vw" }}>
+                    <Typography variant="h5">
+                      <strong>{post.posTitle}</strong>
                     </Typography>
-                  </div>
-                </Paper>
-              </Grid>
-            ))}
+                    <Typography variant="body1">
+                      {post.postDescription}
+                    </Typography>
+                    <div style={{ display: "flex", marginTop: 16 }}>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <IconButton
+                          aria-label="thumbs up"
+                          onClick={() => handleThumbUp(post.postId)}
+                        >
+                          <ThumbUp />
+                        </IconButton>
+                        <Typography>{post.numThumbsUp}</Typography>
+                      </div>
+                      <Typography style={{ marginLeft: "auto" }}>
+                        {new Date(
+                          post.postDate.replace("[UTC]", "")
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </Typography>
+                    </div>
+                  </Paper>
+                </Grid>
+              ))}
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h5" gutterBottom>
@@ -158,6 +185,17 @@ const Forum = () => {
           )}
         </Grid>
       </Grid>
+
+      <Snackbar
+        open={errorMessage !== ""}
+        autoHideDuration={5000}
+        onClose={closeErrorSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={closeErrorSnackbar} severity="error">
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

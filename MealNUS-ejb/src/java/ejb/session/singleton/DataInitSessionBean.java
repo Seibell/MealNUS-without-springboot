@@ -281,7 +281,7 @@ public class DataInitSessionBean {
         //TESTING PURPOSE
         if (forumSessionBean.retrieveAllForumPosts().isEmpty()) {
             Calendar calendar = Calendar.getInstance();
-            forumSessionBean.createForumPost(new ForumPost(new Date(calendar.getTime().getTime()), "Test", "Welcome to MealNUS Forum!"));
+            forumSessionBean.createForumPost(new ForumPost(new Date(calendar.getTime().getTime()), "Test", "Welcome to MealNUS Forum! Share your experience with the mealboxes anonymously here:)"));
         }
 
         //TESTING PURPOSE

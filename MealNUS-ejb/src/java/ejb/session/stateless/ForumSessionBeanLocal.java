@@ -28,5 +28,7 @@ public interface ForumSessionBeanLocal {
     public void deleteForumPost(ForumPost forumPost);
 
     public List<ForumPost> retrieveForumPostsByForumCategory(ForumCategory fc);
+
+    public ForumPost increaseThumbsUp(Long postId);
     
 }
