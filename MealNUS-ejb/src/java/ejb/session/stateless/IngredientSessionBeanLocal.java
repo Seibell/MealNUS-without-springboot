@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.Ingredient;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.IngredientNotFoundException;
 
 /**
  *
@@ -20,6 +21,12 @@ public interface IngredientSessionBeanLocal {
 
     public List<Ingredient> retrieveAllIngredients();
 
+    public void deleteIngredient(Ingredient i);
+
+    public Ingredient retrieveIngredientById(Long IngredientId) throws IngredientNotFoundException;
+
+    public Ingredient updateIngredient(Long id, Ingredient i);
+    
     public Ingredient retrieveIngredientByName(String ingredientName);
     
 }
