@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme();
 
 const AddAllergents = () => {
   const [allergenDescription, setallergenDescription] = useState('');
@@ -15,8 +18,8 @@ const AddAllergents = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    const Allergen = {allergenName , allergenDescription}
-    
+    const Allergen = { allergenName, allergenDescription }
+
     fetch('http://localhost:8080/MealNUS-war/rest/Allergen', {
       method: 'POST',
       headers: {
@@ -30,17 +33,22 @@ const AddAllergents = () => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit}>
-      <label>
-        Allergen Name:
-        <input type="text" value={allergenName} onChange={handleNameChange} />
-      </label>
-      <label>
-        Allergen Description
-        <input type="text" value={allergenDescription} onChange={handleDescChange} />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
+    <ThemeProvider theme={theme}>
+      <form onSubmit={handleFormSubmit}>
+        <label>
+          Allergen Name:
+          <input type="text" value={allergenName} onChange={handleNameChange} />
+        </label>
+        <label>
+          Allergen Description
+          <input type="text" value={allergenDescription} onChange={handleDescChange} />
+        </label>
+        <button type="submit">Submit</button>
+      </form>
+      <div>
+        <a href="/inventoryhome">Inventory Home</a>
+      </div>
+    </ThemeProvider>
   );
 };
 

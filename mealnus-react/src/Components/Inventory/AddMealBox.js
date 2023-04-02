@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { Navigate } from 'react-router-dom'
-
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // mealBoxSessionBean.createMealBox(new MealBox("Vegetable's Party Box", 001L, new BigDecimal(7), new BigDecimal(12), "This is a vegetable mealBox", 15));
 
+const theme = createTheme();
 
 const AddMealBox = () => {
 
@@ -18,7 +19,7 @@ const AddMealBox = () => {
 
   //ingredients
   const [availableIngredients, setAvaivableIngredients] = useState([]);
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [ingredients, setSelectedIngredients] = useState([]);
 
   const handleNameChange = (event) => {
     setitemName(event.target.value);
@@ -56,7 +57,7 @@ const AddMealBox = () => {
       itemPrice,
       itemDescription,
       quantityAvailable,
-      selectedIngredients
+      ingredients
     }; // i think u need to create some mapping for id == name or make name unique or smth so it can be called by the json
 
     console.log(Mealbox)
@@ -79,12 +80,12 @@ const AddMealBox = () => {
   const handleInputChange = (event, ingredient) => {
     if (event.target.checked) {
       setSelectedIngredients([
-        ...selectedIngredients,
-        { id: ingredient.ingredientId, name: ingredient.name },
+        ...ingredients,
+        { ingredientId: ingredient.ingredientId, name: ingredient.name, picture: ingredient.picture },
       ]);
-      console.log(selectedIngredients)
+      console.log(ingredients)
     } else {
-      setSelectedIngredients(selectedIngredients.filter((item) => item.id !== ingredient.ingredientId))
+      setSelectedIngredients(ingredients.filter((item) => item.ingredientId !== ingredient.ingredientId))
     }
   };
 
@@ -105,57 +106,60 @@ const AddMealBox = () => {
   }
 
   return (
-    <form onSubmit={handleFormSubmit}>
-      <div>
-        <label>
-          MealBox Name:
-          <input type="text" value={itemName} onChange={handleNameChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          ItemCode:
-          <input type="text" value={itemCode} onChange={handleCodeChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          ItemCost:
-          <input type="text" value={itemCost} onChange={handleCostChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          ItemPrice:
-          <input type="text" value={itemPrice} onChange={handlePriceChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Item Description:
-          <input type="text" value={itemDescription} onChange={handleDiscriptionChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Item Quantity:
-          <input type="text" value={quantityAvailable} onChange={handleQuantityChange} />
-        </label>
-      </div>
-      {availableIngredients.map((ingredient) => (
-        <div key={ingredient.ingredientId}>
+    <ThemeProvider theme={theme}>
+      <form onSubmit={handleFormSubmit}>
+        <div>
           <label>
-            <input
-              type="checkbox"
-              value={ingredient}
-              onChange={(event) => handleInputChange(event, ingredient)}
-            />
-            {ingredient.name}
+            MealBox Name:
+            <input type="text" value={itemName} onChange={handleNameChange} />
           </label>
         </div>
-      ))}
-      <button type="submit">Submit</button>
-    </form>
+        <div>
+          <label>
+            ItemCode:
+            <input type="text" value={itemCode} onChange={handleCodeChange} />
+          </label>
+        </div>
+        <div>
+          <label>
+            ItemCost:
+            <input type="text" value={itemCost} onChange={handleCostChange} />
+          </label>
+        </div>
+        <div>
+          <label>
+            ItemPrice:
+            <input type="text" value={itemPrice} onChange={handlePriceChange} />
+          </label>
+        </div>
+        <div>
+          <label>
+            Item Description:
+            <input type="text" value={itemDescription} onChange={handleDiscriptionChange} />
+          </label>
+        </div>
+        <div>
+          <label>
+            Item Quantity:
+            <input type="text" value={quantityAvailable} onChange={handleQuantityChange} />
+          </label>
+        </div>
+        {availableIngredients.map((ingredient) => (
+          <div key={ingredient.ingredientId}>
+            <label>
+              <input
+                type="checkbox"
+                value={ingredient}
+                onChange={(event) => handleInputChange(event, ingredient)}
+              />
+              {ingredient.name}
+            </label>
+          </div>
+        ))}
+        <button type="submit">Submit</button>
+      </form>
+      <a href="/inventoryhome">Inventory Home</a>
+    </ThemeProvider>
   );
 };
 export default AddMealBox; 

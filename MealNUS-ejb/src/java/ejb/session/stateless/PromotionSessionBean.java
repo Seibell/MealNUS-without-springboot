@@ -42,7 +42,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     @Override
     public List<MealBox> applyPromotionAcrossPlatform(String promotionCode) throws PromotionNotFoundException {
         Promotion promotionToBeApplied = retrievePromotionByPromotionCode(promotionCode);
-        BigDecimal discountToBeApplied = promotionToBeApplied.getDiscount();
+        BigDecimal discountToBeApplied = BigDecimal.ONE.subtract(promotionToBeApplied.getDiscount());
         //Neeed to insert a check that ensure that the promotion discount is between 0 and 1
         List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
         for (MealBox box : mealBoxesAcrossPlatform) {
@@ -50,29 +50,26 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
             BigDecimal updatedMealBoxPrice = mealBoxPrice.multiply(discountToBeApplied);
             box.setItemPrice(updatedMealBoxPrice);
         }
-        
+
         promotionToBeApplied.setIsApplied(true);
         return mealBoxesAcrossPlatform;
     }
-    
-@Override
-public List<MealBox> disablePromotion (String promotionCode) throws PromotionNotFoundException {
-    Promotion promotionToBeDisabled = retrievePromotionByPromotionCode(promotionCode);
-    
-    List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
-    BigDecimal discountToBeDisabled = promotionToBeDisabled.getDiscount();
-    if (discountToBeDisabled.compareTo(BigDecimal.ZERO) != 0) {
-        for (MealBox box : mealBoxesAcrossPlatform) {
-            BigDecimal mealBoxPrice = box.getItemPrice();
-            BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled, 2, RoundingMode.HALF_UP);
-            box.setItemPrice(updatedMealBoxPrice);
-        }
-    }
-    
-    promotionToBeDisabled.setIsApplied(false);
-    return mealBoxesAcrossPlatform;
-}
 
+    @Override
+    public List<MealBox> disablePromotion(String promotionCode) throws PromotionNotFoundException {
+        Promotion promotionToBeDisabled = retrievePromotionByPromotionCode(promotionCode);
+        List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
+        BigDecimal discountToBeDisabled = BigDecimal.ONE.subtract(promotionToBeDisabled.getDiscount());
+        if (discountToBeDisabled.compareTo(BigDecimal.ZERO) != 0) {
+            for (MealBox box : mealBoxesAcrossPlatform) {
+                BigDecimal mealBoxPrice = box.getItemPrice();
+                BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled, 2, RoundingMode.HALF_UP);
+                box.setItemPrice(updatedMealBoxPrice);
+            }
+        }
+        promotionToBeDisabled.setIsApplied(false);
+        return mealBoxesAcrossPlatform;
+    }
 
     @Override
     public void createPromotion(Promotion promotion) throws PromotionNotFoundException, UnknownPersistenceException {

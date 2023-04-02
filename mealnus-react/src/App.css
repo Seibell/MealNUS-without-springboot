@@ -430,3 +430,72 @@ nav {
     display: none;
   }
 }
+
+.healthy-food-background {
+  background-image: url('/src/Assets/healthy-food-background.png');
+  background-repeat: repeat;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(66, 58, 58, 1);
+}
+
+.grid-item-revenue {
+  position: relative;
+  z-index: 1;
+}
+
+.grid-item-revenue::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: url('/src/Assets/profit.jpg');
+  background-size: cover;
+  opacity: 0.4;
+  border-radius: 5px;
+  object-fit: contain;
+}
+
+.grid-item-count {
+  position: relative;
+  z-index: 1;
+}
+
+.grid-item-count::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: url('/src/Assets/recipe-box-image.avif');
+  background-size: cover;
+  opacity: 0.4;
+  transform: scaleX(-1);
+  border-radius: 5px;
+  object-fit: contain;
+}
+
+.grid-item-profit {
+  position: relative;
+  z-index: 1;
+}
+
+.grid-item-profit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: url('/src/Assets/revenue.png');
+  background-size: cover;
+  opacity: 0.4;
+  border-radius: 5px;
+  object-fit: contain;
+}

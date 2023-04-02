@@ -50,9 +50,8 @@ public class MealBoxResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createMealBox(MealBox m) {
-        Long id = mealBoxSessionBeanLocal.createMealBox(m);
-        List<Ingredient> i = m.getIngredients();
-        mealBoxSessionBeanLocal.addIngredientsToBox(id, i);
+        System.out.println("ingredients: " + m.getIngredients().toString());
+        mealBoxSessionBeanLocal.createMealBox(m);
         return Response.status(Status.OK).entity(m).build();
     } //end createCustomer 
     

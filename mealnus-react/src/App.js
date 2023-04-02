@@ -45,33 +45,50 @@ import UpdateQuantity from "./Components/Inventory/updateQuantity";
 import UpdateMealBox from "./Components/Inventory/UpdateMealBox";
 import UpdateIngred from "./Components/Inventory/UpdateIngred";
 
+//Admin
+import AdminDashboard from "./Components/AdminDashboard";
+import AdminDashboardOrderChart from "./Components/AdminDashboardOrderChart";
+import AdminTitle from "./Components/AdminTitle";
+import AdminOrderManagement from "./Components/AdminOrderManagement";
+import AdminPromotion from "./Components/AdminPromotion";
+import AddPromotion from "./Components/AddPromotion";
+import AdminSideBar from "./Components/AdminSideBar";
+
 function App() {
   return (
-<CartProvider>
-    <Router>
-      <Routes>
-        <Route path="/" element={<UserLogin />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/viewprofile" element={<ViewProfile />} />
-        <Route path="/editprofile" element={<EditProfile />} />
-        <Route path="/inventoryhome" element={<InventoryHome />} />
-        <Route path="/AddIngred" element={<AddIngred />} />
-        <Route path="/ViewAllIngred" element={<ViewAllIngred />} />
-        <Route path="/Orders" element={<Orders />} />
-        <Route path="/AddAllergens" element={<AddAllergents />} />
-        <Route path="/AddMealBox" element={<AddMealBox />} />
-        <Route path="/UpdateQuantity" element={<UpdateQuantity />} />
-        <Route path="/UpdateMealBox" element={<UpdateMealBox />} />
-        <Route path="/UpdateIngred" element={<UpdateIngred />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/mealboxes" element={<MealBoxes />} />
-        <Route path="/forum" element={<Forum />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-      </Routes>
-    </Router>
+    <CartProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<UserLogin />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/viewprofile" element={<ViewProfile />} />
+          <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/inventoryhome" element={<InventoryHome />} />
+          <Route path="/AddIngred" element={<AddIngred />} />
+          <Route path="/ViewAllIngred" element={<ViewAllIngred />} />
+          <Route path="/Orders" element={<Orders />} />
+          <Route path="/AddAllergens" element={<AddAllergents />} />
+          <Route path="/AddMealBox" element={<AddMealBox />} />
+          <Route path="/UpdateQuantity" element={<UpdateQuantity />} />
+          <Route path="/UpdateMealBox" element={<UpdateMealBox />} />
+          <Route path="/UpdateIngred" element={<UpdateIngred />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/mealboxes" element={<MealBoxes />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/stafflogin" element={<StaffLogin />} />
+          <Route path="/admindashboard" element={<AdminDashboard />} />
+          <Route path="/adminDashboardOrderChart" element={<AdminDashboardOrderChart />} />
+          <Route path="/adminSideBar" element={<AdminSideBar />} />
+          <Route path="/adminTitle" element={<AdminTitle />} />
+          <Route path="/adminordermanagement" element={<AdminOrderManagement />} />
+          <Route path="/adminpromotion" element={<AdminPromotion />} />
+          <Route path="/addpromotion" element={<AddPromotion />} />
+        </Routes>
+      </Router>
     </CartProvider>
   );
 }
