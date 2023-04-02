@@ -152,8 +152,8 @@ function EditProfile() {
                                         <CircularProgress
                                             sx={{
                                                 position: "absolute",
-                                                top: "48%",
-                                                left: "48%",
+                                                top: "42%",
+                                                left: "43%",
                                             }}
                                         />
                                     )}
