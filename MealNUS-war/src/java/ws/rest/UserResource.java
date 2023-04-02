@@ -81,6 +81,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(User user) {
         try {
+            user.setImageURL("https://i.imgur.com/Kvyecsm.png");
             userSessionBeanLocal.createUser(user);
             System.out.println("*** createuser(): User = " + user.getEmail() + " created via web service");
 
