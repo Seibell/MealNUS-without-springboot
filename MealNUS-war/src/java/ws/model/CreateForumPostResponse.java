@@ -5,11 +5,17 @@
  */
 package ws.model;
 
+import entity.ForumPost;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
+
 /**
  *
  * @author 60540
  */
-package ws.model;
 
 import java.util.Date;
 
