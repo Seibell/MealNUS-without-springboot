@@ -37,6 +37,18 @@ function SignUp() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
+    const [helperText, setHelperText] = useState('');
+
+    const validateEmail = (inputEmail) => {
+        const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+        if (inputEmail === '' || emailRegex.test(inputEmail)) {
+            setError(false);
+            setHelperText('');
+        } else {
+            setError(true);
+            setHelperText('Please enter a valid email address');
+        }
+    };
 
     const handleFirstNameChange = (event) => {
         setFirstName(event.target.value);
@@ -47,6 +59,7 @@ function SignUp() {
     };
 
     const handleEmailChange = (event) => {
+        validateEmail(event.target.value);
         setEmail(event.target.value);
     };
 
@@ -56,6 +69,11 @@ function SignUp() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        if (error) {
+            setError('Please enter a valid email address');
+            return;
+        }
 
         const newUser = {
             firstName,
@@ -137,10 +155,13 @@ function SignUp() {
                                 <TextField
                                     required
                                     fullWidth
+                                    error={error}
+                                    helperText={helperText}
                                     onChange={handleEmailChange}
                                     id="email"
                                     label="Email Address"
                                     name="email"
+                                    type="email"
                                     autoComplete="email"
                                 />
                             </Grid>
