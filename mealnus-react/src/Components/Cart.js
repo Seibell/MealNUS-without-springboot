@@ -18,11 +18,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import NavBar from "./NavBar.js";
 import { CartContext } from "../Context/CartContext.js";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./AuthContext.js";
 
 
 const Cart = () => {
   const [cart, setCart] = useContext(CartContext);
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const { currentUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -54,6 +57,10 @@ const Cart = () => {
   useEffect(() => {
     calculateTotal(cart);
   }, [cart]);
+
+  if (!currentUser) {
+    return <div>Error: User not found.</div>;
+  }
 
   return (
     <div>

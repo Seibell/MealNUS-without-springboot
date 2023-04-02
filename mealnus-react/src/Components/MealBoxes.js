@@ -32,6 +32,7 @@ import {
   Divider,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { AuthContext } from "./AuthContext";
 
 const MealBoxes = () => {
   const [mealBoxes, setMealBoxes] = useState([]);
@@ -41,6 +42,7 @@ const MealBoxes = () => {
   const history = useNavigate();
 
   const [cart, setCart] = useContext(CartContext);
+  const { currentUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -115,6 +117,11 @@ const MealBoxes = () => {
     setQuantity(0);
     handleClose();
   };
+
+  if (!currentUser) {
+    return <div>Error: User not found.</div>;
+  }
+  
   return (
     <div>
       <NavBar />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import NavBar from "./NavBar.js";
 import { Snackbar } from "@material-ui/core";
@@ -16,10 +16,10 @@ import {
   Select,
   MenuItem,
 } from "@material-ui/core";
-import { AuthContext } from './AuthContext';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
+import { AuthContext } from "./AuthContext.js";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme();
 
@@ -29,6 +29,7 @@ const Forum = () => {
   const [newPostDescription, setNewPostDescription] = useState("");
   const [filter, setFilter] = React.useState("");
   const [userLikes, setUserLikes] = useState({});
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     fetchPosts();
@@ -85,6 +86,10 @@ const Forum = () => {
   };
 
   const [errorMessage, setErrorMessage] = React.useState("");
+
+  if (!currentUser) {
+    return <div>Error: User not found.</div>;
+  }
 
   return (
     <ThemeProvider theme={theme}>

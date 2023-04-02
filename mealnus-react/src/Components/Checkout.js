@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { CartContext } from "../Context/CartContext";
 import NavBar from "./NavBar.js";
+import { AuthContext } from "./AuthContext.js";
 
 const Checkout = () => {
   const [cart] = useContext(CartContext);
@@ -16,11 +17,16 @@ const Checkout = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
+  const { currentUser } = useContext(AuthContext);
 
   const totalCost = cart.reduce(
     (accumulator, mealBox) => accumulator + mealBox.itemPrice * mealBox.quantity,
     0
   );
+
+  if (!currentUser) {
+    return <div>Error: User not found.</div>;
+  }
 
   return (
     <div>
