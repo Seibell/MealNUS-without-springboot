@@ -10,6 +10,7 @@ import {
   ListItemIcon,
   ListItemText,
   Avatar,
+  Badge,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import InfoIcon from "@mui/icons-material/Info";
@@ -22,6 +23,7 @@ import MealNUSLogo from "../Assets/MealNUSLogo-nobg.svg";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
+import { CartContext } from "../Context/CartContext";
 
 const NavBar = () => {
   const { currentUser } = useContext(AuthContext);
@@ -33,6 +35,8 @@ const NavBar = () => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  const [cart] = useContext(CartContext);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -80,9 +84,16 @@ const NavBar = () => {
         <Link to="/home">Home</Link>
         <Link to="/mealboxes">Order</Link>
         <Link to="/forum">Forum</Link>
-        <a href="">
-          <BsCart2 className="navbar-cart-icon" />
-        </a>
+        <Link to="/cart">
+          <IconButton>
+            <Badge
+              badgeContent={cart.reduce((acc, item) => acc + item.quantity, 0)}
+              color="error"
+            >
+              <BsCart2 className="navbar-cart-icon" />
+            </Badge>
+          </IconButton>
+        </Link>
         <IconButton
           color="inherit"
           aria-label="account of current user"

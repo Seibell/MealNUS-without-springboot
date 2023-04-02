@@ -19,6 +19,12 @@ import OldNavBar from "./Components/OldNavBar";
 //MealBoxes
 import MealBoxes from "./Components/MealBoxes";
 
+//Cart & CartProvider
+import Cart from "./Components/Cart";
+import { CartProvider } from "./Context/CartContext";
+
+//Checkout
+import Checkout from "./Components/Checkout";
 //Forum
 import Forum from "./Components/Forum";
 
@@ -38,8 +44,10 @@ import AddMealBox from "./Components/Inventory/AddMealBox";
 import UpdateQuantity from "./Components/Inventory/updateQuantity";
 import UpdateMealBox from "./Components/Inventory/UpdateMealBox";
 import UpdateIngred from "./Components/Inventory/UpdateIngred";
+
 function App() {
   return (
+<CartProvider>
     <Router>
       <Routes>
         <Route path="/" element={<UserLogin />} />
@@ -60,8 +68,11 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/mealboxes" element={<MealBoxes />} />
         <Route path="/forum" element={<Forum />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </Router>
+    </CartProvider>
   );
 }
 
