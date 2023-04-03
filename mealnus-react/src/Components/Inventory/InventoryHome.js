@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import MUILink from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -59,17 +61,12 @@ function Copyright(props) {
 }
 
 function handleClick(event) {
-    event.preventDefault();
-    const href = event.target.getAttribute('href');
-    console.info(`Navigating to ${href}`);
-    // const currentUrl = window.location.pathname;
-    // if (href !== currentUrl) {
-    //     const history = useHistory();
-    //     history.push(href);
-    window.location.href = href;
-    // const history = useHistory();
-    // history.push(href);
-    // }
+    if (event.target.tagName === 'A') {
+        event.preventDefault();
+        const href = event.target.getAttribute('href');
+        console.info(`Navigating to ${href}`);
+        window.location.href = href;
+    }
 }
 
 const drawerWidth = 240;
@@ -121,28 +118,28 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function AdminPromotions(props) {
-  const [value, setValue] = React.useState('1');
-  const [orders, setOrders] = useState([]);
-  const [query, setQuery] = useState('');
+    const [value, setValue] = React.useState('1');
+    const [orders, setOrders] = useState([]);
+    const [query, setQuery] = useState('');
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
-  useEffect(() => {
-    Axios.get(
-      "http://localhost:8080/MealNUS-war/rest/Mealbox/retrieveAllMealBoxes"
-    )
-      .then((response) => {
-        setOrders(response.data.mealBoxEntities);
-        console.log(response.data.mealBoxEntities);
+    useEffect(() => {
+        Axios.get(
+            "http://localhost:8080/MealNUS-war/rest/Mealbox/retrieveAllMealBoxes"
+        )
+            .then((response) => {
+                setOrders(response.data.mealBoxEntities);
+                console.log(response.data.mealBoxEntities);
 
-        console.log(orders.mealBoxEnt)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+                console.log(orders.mealBoxEnt)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
 
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
@@ -159,22 +156,22 @@ function AdminPromotions(props) {
     }, []);
 
 
-    const filteredData = useCallback(() => { 
-      return orders.filter((order) => {
-        return (order.itemName.toLowerCase().includes(query.toLowerCase())
-        );
-      });
+    const filteredData = useCallback(() => {
+        return orders.filter((order) => {
+            return (order.itemName.toLowerCase().includes(query.toLowerCase())
+            );
+        });
     }, [orders, query]);
 
 
     const navigate = useNavigate();
 
     const columns = [
-      { name: "Name of Meal Box", selector: "itemName", sortable: true },
-      { name: "Quantity Available", selector: "quantityAvailable", sortable: true },
-      { name: "Selling Price", selector: "itemPrice", sortable: true },
-      { name: "Cost Price", selector: "itemCost", sortable: true },
-      { name: "Status", selector: "itemCost", sortable: true },
+        { name: "Name of Meal Box", selector: "itemName", sortable: true },
+        { name: "Quantity Available", selector: "quantityAvailable", sortable: true },
+        { name: "Selling Price", selector: "itemPrice", sortable: true },
+        { name: "Cost Price", selector: "itemCost", sortable: true },
+        { name: "Status", selector: "itemCost", sortable: true },
         {
             name: "Update Meal Box",
             cell: (row) => (
@@ -187,16 +184,16 @@ function AdminPromotions(props) {
             ),
         },
         {
-          name: "Update Quantity",
-          cell: (row) => (
-            <Button
-            onClick={() => navigate('/UpdateQuantity/' + row.mealBoxId)}
-            variant="contained"
-            color="error">
-            Quantity
-        </Button>
-          ),
-      }
+            name: "Update Quantity",
+            cell: (row) => (
+                <Button
+                    onClick={() => navigate('/UpdateQuantity/' + row.mealBoxId)}
+                    variant="contained"
+                    color="error">
+                    Quantity
+                </Button>
+            ),
+        }
     ];
 
 
@@ -242,11 +239,11 @@ function AdminPromotions(props) {
                                 hour12: true,
                             })}
                         </Typography>
-                        <IconButton color="inherit">
+                        {/* <IconButton color="inherit">
                             <Badge badgeContent={''} color="secondary">
                                 <NotificationsIcon />
                             </Badge>
-                        </IconButton>
+                        </IconButton> */}
                         <Avatar sx={{ m: 1, bgcolor: 'white' }}>
                             <img src={mealNUSLogo} alt="MealNUS Logo" />
                         </Avatar>
@@ -296,64 +293,76 @@ function AdminPromotions(props) {
                                     separator={<NavigateNextIcon fontSize="small" />}
                                     aria-label="breadcrumb">
                                     {/* Dashboard */}
-                                    <Link
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/admindashboard"
+                                        component={RouterLink}
+                                        to="/admindashboard"
                                     >
                                         <DashboardIcon sx={{ mr: 0.5 }} fontSize="inherit" />
                                         Dashboard
-                                    </Link>
-                                    {/* Products */}
-                                    <Link
+                                    </MUILink>
+                                    {/* Inventory */}
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/admindashboard"
+                                        component={RouterLink}
+                                        to="/admindashboard"
                                     >
                                         <Inventory2TwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Products
-                                    </Link>
+                                        <b>Inventory</b>
+                                    </MUILink>
                                     {/* Orders */}
-                                    <Link
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/adminordermanagement"
+                                        component={RouterLink}
+                                        to="/adminordermanagement"
                                     >
                                         <ShoppingCartIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Products
-                                    </Link>
+                                        Orders
+                                    </MUILink>
                                     {/* Promotions */}
-                                   
+                                    <MUILink
+                                        underline="hover"
+                                        sx={{ display: 'flex', alignItems: 'center' }}
+                                        color="inherit"
+                                        component={RouterLink}
+                                        to="/adminpromotion"
+                                    >
+                                        <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                                        Promotions
+                                    </MUILink>
                                 </Breadcrumbs>
                             </div>
+
+
+                            <button onClick={() => navigate('/AddMealBox/')}
+                            >Add A MealBox
+                            </button>
+
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+
+                                <input
+                                    type="text"
+                                    placeholder="Search..."
+                                    value={query}
+                                    onChange={(event) => setQuery(event.target.value)}
+                                    style={{ height: '30px', marginRight: '5px' }}
+                                />
+                            </div>
+                            {
+                                <DataTable
+                                    columns={columns}
+                                    data={filteredData()}
+                                    pagination
+                                    highlightOnHover
+                                    striped
+                                />}
                         </div>
-
-                        <button onClick={() => navigate('/AddMealBox/')}
-                        >Add A MealBox
-                        </button>
-
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-                          
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                value={query}
-                                onChange={(event) => setQuery(event.target.value)}
-                                style={{ height: '30px', marginRight: '5px' }}
-                            />
-                        </div>
-{
-                        <DataTable
-                            columns={columns}
-                            data={filteredData()}
-                            pagination
-                            highlightOnHover
-                            striped
-                        /> }
-
                         <Copyright sx={{ pt: 4 }} />
                     </Container>
                 </Box>

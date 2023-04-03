@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import MUILink from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -14,7 +16,6 @@ import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -41,9 +42,9 @@ function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit">
-                MealNUS
-            </Link>{' '}
+            <RouterLink color="inherit" to="/admindashboard">
+                MealNUS 
+            </RouterLink>{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>
@@ -51,10 +52,12 @@ function Copyright(props) {
 }
 
 function handleClick(event) {
-    event.preventDefault();
-    const href = event.target.getAttribute('href');
-    console.info(`Navigating to ${href}`);
-    window.location.href = href;
+    if (event.target.tagName === 'A') {
+        event.preventDefault();
+        const href = event.target.getAttribute('href');
+        console.info(`Navigating to ${href}`);
+        window.location.href = href;
+    }
 }
 
 const drawerWidth = 240;
@@ -163,11 +166,11 @@ function DashboardContent() {
                                 hour12: true,
                             })}
                         </Typography>
-                        <IconButton color="inherit">
+                        {/* <IconButton color="inherit">
                             <Badge badgeContent={''} color="secondary">
                                 <NotificationsIcon />
                             </Badge>
-                        </IconButton>
+                        </IconButton> */}
                         <Avatar sx={{ m: 1, bgcolor: 'white' }}>
                             <img src={mealNUSLogo} alt="MealNUS Logo" />
                         </Avatar>
@@ -217,45 +220,49 @@ function DashboardContent() {
                                     separator={<NavigateNextIcon fontSize="small" />}
                                     aria-label="breadcrumb">
                                     {/* Dashboard */}
-                                    <Link
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/admindashboard"
+                                        component={RouterLink}
+                                        to="/admindashboard"
                                     >
                                         <DashboardIcon sx={{ mr: 0.5 }} fontSize="inherit" />
                                         <b>Dashboard</b>
-                                    </Link>
-                                    {/* Products */}
-                                    <Link
+                                    </MUILink>
+                                    {/* Inventory */}
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/admindashboard"
+                                        component={RouterLink}
+                                        to="/admindashboard"
                                     >
                                         <Inventory2TwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Products
-                                    </Link>
+                                        Inventory
+                                    </MUILink>
                                     {/* Orders */}
-                                    <Link
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/adminordermanagement"
+                                        component={RouterLink}
+                                        to="/adminordermanagement"
                                     >
                                         <ShoppingCartIcon sx={{ mr: 0.5 }} fontSize="inherit" />
                                         Orders
-                                    </Link>
+                                    </MUILink>
                                     {/* Promotions */}
-                                    <Link
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/adminpromotion"
+                                        component={RouterLink}
+                                        to="/adminpromotion"
                                     >
                                         <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
                                         Promotions
-                                    </Link>
+                                    </MUILink>
                                 </Breadcrumbs>
                             </div>
                             <Grid container spacing={2}>

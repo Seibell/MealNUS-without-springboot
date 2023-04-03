@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import MUILink from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -12,8 +14,8 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
+import Grid from '@mui/material/Grid';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -40,9 +42,9 @@ function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit">
+            <RouterLink color="inherit" to="/admindashboard">
                 MealNUS
-            </Link>{' '}
+            </RouterLink>{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>
@@ -50,18 +52,13 @@ function Copyright(props) {
 }
 
 function handleClick(event) {
-    event.preventDefault();
-    const href = event.target.getAttribute('href');
-    console.info(`Navigating to ${href}`);
-    // const currentUrl = window.location.pathname;
-    // if (href !== currentUrl) {
-    //     const history = useHistory();
-    //     history.push(href);
-    window.location.href = href;
-    // const history = useHistory();
-    // history.push(href);
-    // }
-}
+    if (event.target.tagName === 'A') {
+        event.preventDefault();
+        const href = event.target.getAttribute('href');
+        console.info(`Navigating to ${href}`);
+        window.location.href = href;
+    }
+  }
 
 const drawerWidth = 240;
 
@@ -318,11 +315,11 @@ function AdminPromotions() {
                                 hour12: true,
                             })}
                         </Typography>
-                        <IconButton color="inherit">
+                        {/* <IconButton color="inherit">
                             <Badge badgeContent={''} color="secondary">
                                 <NotificationsIcon />
                             </Badge>
-                        </IconButton>
+                        </IconButton> */}
                         <Avatar sx={{ m: 1, bgcolor: 'white' }}>
                             <img src={mealNUSLogo} alt="MealNUS Logo" />
                         </Avatar>
@@ -372,100 +369,114 @@ function AdminPromotions() {
                                     separator={<NavigateNextIcon fontSize="small" />}
                                     aria-label="breadcrumb">
                                     {/* Dashboard */}
-                                    <Link
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/admindashboard"
+                                        component={RouterLink}
+                                        to="/admindashboard"
                                     >
                                         <DashboardIcon sx={{ mr: 0.5 }} fontSize="inherit" />
                                         Dashboard
-                                    </Link>
-                                    {/* Products */}
-                                    <Link
+                                    </MUILink>
+                                    {/* Inventory */}
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/admindashboard"
+                                        component={RouterLink}
+                                        to="/admindashboard"
                                     >
                                         <Inventory2TwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Products
-                                    </Link>
+                                        Inventory
+                                    </MUILink>
                                     {/* Orders */}
-                                    <Link
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/adminordermanagement"
+                                        component={RouterLink}
+                                        to="/adminordermanagement"
                                     >
                                         <ShoppingCartIcon sx={{ mr: 0.5 }} fontSize="inherit" />
                                         Orders
-                                    </Link>
+                                    </MUILink>
                                     {/* Promotions */}
-                                    <Link
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/adminpromotion"
+                                        component={RouterLink}
+                                        to="/adminpromotion"
                                     >
                                         <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
                                         <b>Promotions</b>
-                                    </Link>
-                                    <Link
+                                    </MUILink>
+                                    {/* Add Promotion */}
+                                    <MUILink
                                         underline="hover"
                                         sx={{ display: 'flex', alignItems: 'center' }}
                                         color="inherit"
-                                        href="/addpromotion"
+                                        component={RouterLink}
+                                        to="/addpromotion"
                                     >
                                         <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
                                         Add Promotion
-                                    </Link>
+                                    </MUILink>
                                 </Breadcrumbs>
                             </div>
-                        </div>
-                        {showSuccessAlert && (
-                            <Alert severity="success" onClose={() => setShowSuccessAlert(false)}>
-                                The {appliedPromotionName} promotion was successfully applied!
-                            </Alert>
-                        )}
-                        {showDisableAlert && (
-                            <Alert severity="success" onClose={() => setShowDisableAlert(false)}>
-                                The {disabledPromotionName} promotion was successfully disabled!
-                            </Alert>
-                        )}
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                value={filterText}
-                                onChange={(e) => setFilterText(e.target.value)}
-                                style={{ height: '30px', marginRight: '5px' }}
-                            />
-                            <Link href="/addpromotion">
-                                <Box
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="center"
-                                    borderRadius="4px"
-                                    bgcolor="grey"
-                                    height="100%"
-                                    ml={1}
-                                    style={{ height: '30px', marginRight: '5px' }}
-                                >
-                                    <IconButton>
-                                        <AddCircle style={{ fill: "white" }} />
-                                    </IconButton>
-                                </Box>
-                            </Link>
-                        </div>
 
-                        <DataTable
-                            columns={columns}
-                            data={filteredData()}
-                            pagination
-                            highlightOnHover
-                            striped
-                        />
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    {showSuccessAlert && (
+                                        <Alert severity="success" onClose={() => setShowSuccessAlert(false)}>
+                                            The {appliedPromotionName} promotion was successfully applied!
+                                        </Alert>
+                                    )}
+                                    {showDisableAlert && (
+                                        <Alert severity="success" onClose={() => setShowDisableAlert(false)}>
+                                            The {disabledPromotionName} promotion was successfully disabled!
+                                        </Alert>
+                                    )}
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '10px' }}>
+                                        <input
+                                            type="text"
+                                            placeholder="Search..."
+                                            value={filterText}
+                                            onChange={(e) => setFilterText(e.target.value)}
+                                            style={{ height: '30px', marginRight: '5px'}}
+                                        />
+                                        <RouterLink to="/addpromotion">
+                                            <Box
+                                                display="flex"
+                                                alignItems="center"
+                                                justifyContent="center"
+                                                borderRadius="4px"
+                                                bgcolor="grey"
+                                                height="100%"
+                                                ml={1}
+                                                style={{ height: '30px', marginRight: '5px' }}
+                                            >
+                                                <IconButton>
+                                                    <AddCircle style={{ fill: "white" }} />
+                                                </IconButton>
+                                            </Box>
+                                        </RouterLink>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <DataTable
+                                        columns={columns}
+                                        data={filteredData()}
+                                        pagination
+                                        highlightOnHover
+                                        striped
+                                    />
+                                </Grid>
+                            </Grid>
+                        </div>
                         <Copyright sx={{ pt: 4 }} />
                     </Container>
                 </Box>
