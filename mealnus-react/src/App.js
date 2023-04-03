@@ -71,8 +71,8 @@ function App() {
           <Route path="/Orders" element={<Orders />} />
           <Route path="/AddAllergens" element={<AddAllergents />} />
           <Route path="/AddMealBox" element={<AddMealBox />} />
-          <Route path="/UpdateQuantity" element={<UpdateQuantity />} />
-          <Route path="/UpdateMealBox" element={<UpdateMealBox />} />
+          <Route path="/UpdateQuantity/:mealBoxId" element={<UpdateQuantity />} />
+          <Route path="/UpdateMealBox/:mealBoxId" element={<UpdateMealBox />} />
           <Route path="/UpdateIngred" element={<UpdateIngred />} />
           <Route path="/home" element={<Home />} />
           <Route path="/mealboxes" element={<MealBoxes />} />
