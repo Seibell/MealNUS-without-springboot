@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const UpdateQuantity = () => {
-  const [mealBoxId, setmealBoxId] = useState('');
+  const { mealBoxId } = useParams();
   const [quantityAvailable, setquantityAvailable] = useState(0);
-
-  const handlemealBoxIdChange = (event) => {
-    setmealBoxId(event.target.value);
-  };
 
   const handlequantityChange = (event) => {
     setquantityAvailable(event.target.value);
@@ -28,10 +25,6 @@ const UpdateQuantity = () => {
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <label>
-        MealBox Id:
-        <input type="text" value={mealBoxId} onChange={handlemealBoxIdChange} />
-      </label>
       <label>
         Quantity
         <input type="text" value={quantityAvailable} onChange={handlequantityChange} />
