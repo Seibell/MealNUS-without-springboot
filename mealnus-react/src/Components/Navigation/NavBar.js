@@ -1,5 +1,4 @@
 import React from "react";
-import Logo from "../Assets/Logo.svg";
 import { BsCart2 } from "react-icons/bs";
 import { HiOutlineBars3 } from "react-icons/hi2";
 import {
@@ -18,12 +17,12 @@ import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import PhoneRoudnedIcon from "@mui/icons-material/PhoneRounded";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import { Link } from "react-router-dom";
-import MealNUSLogo from "../Assets/MealNUSLogo-nobg.svg";
+import MealNUSLogo from "../../Assets/MealNUSLogo-nobg.svg";
 
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { useContext } from "react";
-import { AuthContext } from "./AuthContext";
-import { CartContext } from "../Context/CartContext";
+import { AuthContext } from "../../Context/AuthContext";
+import { CartContext } from "../../Context/CartContext";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme();

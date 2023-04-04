@@ -1,14 +1,14 @@
 // Dashboard.js
 import React from "react";
 import About from "./About.js";
-import NavBar from "./NavBar.js";
+import NavBar from "../Navigation/NavBar.js";
 import Work from "./Work.js";
 import Testimonial from "./Testimonial.js";
 import Contact from "./Contact.js";
 import Footer from "./Footer.js";
-import Home from "./Home.js";
+import Home from "../Customer/Home.js";
 
-import "../App.css";
+import "../../App.css";
 
 function Dashboard() {
   return (

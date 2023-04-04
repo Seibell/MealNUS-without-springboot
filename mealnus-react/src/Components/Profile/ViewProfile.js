@@ -5,8 +5,8 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
-import NavBar from './NavBar';
+import { AuthContext } from '../../Context/AuthContext';
+import NavBar from '../Navigation/NavBar';
 
 const theme = createTheme();
 

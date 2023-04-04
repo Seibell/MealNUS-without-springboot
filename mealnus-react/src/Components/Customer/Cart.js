@@ -15,10 +15,10 @@ import {
   Grid,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import NavBar from "./NavBar.js";
-import { CartContext } from "../Context/CartContext.js";
+import NavBar from "../Navigation/NavBar.js";
+import { CartContext } from "../../Context/CartContext.js";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./AuthContext.js";
+import { AuthContext } from "../../Context/AuthContext.js";
 
 
 const Cart = () => {

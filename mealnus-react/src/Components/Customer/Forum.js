@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import NavBar from "./NavBar.js";
+import NavBar from "../Navigation/NavBar.js";
 import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import {
@@ -19,7 +19,7 @@ import {
 } from "@material-ui/core";
 
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
-import { AuthContext } from "./AuthContext.js";
+import { AuthContext } from "../../Context/AuthContext.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme();

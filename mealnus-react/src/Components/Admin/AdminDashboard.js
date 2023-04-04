@@ -36,8 +36,8 @@ import AdminDashboardTopSelling from './AdminDashboardTopSelling';
 import AdminDashboardTodayOrderCount from './AdminDashboardTodayOrderCount';
 import AdminDashboardTodayRevenue from './AdminDashboardTodayRevenue';
 import Avatar from '@mui/material/Avatar';
-import mealNUSLogo from '../Assets/MealNUS-Logo.png';
-import { AdminAuthContext } from "./AdminAuthContext";
+import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
+import { AdminAuthContext } from "../../Context/AdminAuthContext";
 import { useContext } from "react";
 
 function Copyright(props) {

@@ -32,7 +32,7 @@ import moment from "moment";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-import { mainListItems, secondaryListItems } from '.././AdminSideBar';
+import { mainListItems, secondaryListItems } from '../Admin/AdminSideBar';
 import Avatar from '@mui/material/Avatar';
 import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 

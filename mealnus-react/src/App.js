@@ -1,37 +1,37 @@
 //Home Page Components
-import Home from "./Components/Home";
-import About from "./Components/About";
-import Work from "./Components/Work";
-import Testimonial from "./Components/Testimonial";
-import Contact from "./Components/Contact";
-import Footer from "./Components/Footer";
+import Home from "./Components/Customer/Home";
+import About from "./Components/HomePage/About";
+import Work from "./Components/HomePage/Work";
+import Testimonial from "./Components/HomePage/Testimonial";
+import Contact from "./Components/HomePage/Contact";
+import Footer from "./Components/HomePage/Footer";
 
 //Login/Functional Components
-import UserLogin from "./Components/UserLogin";
-import StaffLogin from "./Components/StaffLogin";
-import RetrieveAllUsers from "./Components/RetrieveAllUsers";
-import ViewProfile from "./Components/ViewProfile";
-import EditProfile from "./Components/EditProfile";
+import UserLogin from "./Components/Login/UserLogin";
+import StaffLogin from "./Components/Login/StaffLogin";
+import RetrieveAllUsers from "./Components/Login/RetrieveAllUsers";
+import ViewProfile from "./Components/Profile/ViewProfile";
+import EditProfile from "./Components/Profile/EditProfile";
 
 //OldNavBar
-import OldNavBar from "./Components/OldNavBar";
+import OldNavBar from "./Components/HomePage/OldNavBar";
 
 //MealBoxes
-import MealBoxes from "./Components/MealBoxes";
+import MealBoxes from "./Components/Customer/MealBoxes";
 
 //Cart & CartProvider
-import Cart from "./Components/Cart";
+import Cart from "./Components/Customer/Cart";
 import { CartProvider } from "./Context/CartContext";
 
 //Checkout
-import Checkout from "./Components/Checkout";
+import Checkout from "./Components/Customer/Checkout";
 //Forum
-import Forum from "./Components/Forum";
+import Forum from "./Components/Customer/Forum";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Dashboard from "./Components/Dashboard";
-import SignUp from "./Components/SignUp";
-import ForgotPassword from "./Components/ForgotPassword";
+import Dashboard from "./Components/HomePage/Dashboard";
+import SignUp from "./Components/Login/SignUp";
+import ForgotPassword from "./Components/Login/ForgotPassword";
 import React from "react";
 
 //inventory
@@ -46,13 +46,13 @@ import UpdateMealBox from "./Components/Inventory/UpdateMealBox";
 import UpdateIngred from "./Components/Inventory/UpdateIngred";
 
 //Admin
-import AdminDashboard from "./Components/AdminDashboard";
-import AdminDashboardOrderChart from "./Components/AdminDashboardOrderChart";
-import AdminTitle from "./Components/AdminTitle";
-import AdminOrderManagement from "./Components/AdminOrderManagement";
-import AdminPromotion from "./Components/AdminPromotion";
-import AddPromotion from "./Components/AddPromotion";
-import AdminSideBar from "./Components/AdminSideBar";
+import AdminDashboard from "./Components/Admin/AdminDashboard";
+import AdminDashboardOrderChart from "./Components/Admin/AdminDashboardOrderChart";
+import AdminTitle from "./Components/Admin/AdminTitle";
+import AdminOrderManagement from "./Components/Admin/AdminOrderManagement";
+import AdminPromotion from "./Components/Admin/AdminPromotion";
+import AddPromotion from "./Components/Admin/AddPromotion";
+import AdminSideBar from "./Components/Admin/AdminSideBar";
 
 function App() {
   return (

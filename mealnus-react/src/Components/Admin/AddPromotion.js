@@ -15,7 +15,6 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
-import Grid from '@mui/material/Grid';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -24,28 +23,28 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import LocalOfferTwoToneIcon from '@mui/icons-material/LocalOfferTwoTone';
-import { AdminAuthContext } from "./AdminAuthContext";
+import { AdminAuthContext } from "../../Context/AdminAuthContext";
 import { useContext } from "react";
 
-// Mehak's Promotion.js
+// Mehak's Add Promotion
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
-import DataTable from "react-data-table-component";
-import { Button, Switch } from "@mui/material";
-import { Alert } from '@mui/material';
-import { useCallback } from "react";
-import AddCircle from "@mui/icons-material/AddCircle";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 import { mainListItems, secondaryListItems } from './AdminSideBar';
 import Avatar from '@mui/material/Avatar';
-import mealNUSLogo from '../Assets/MealNUS-Logo.png';
+import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
             <RouterLink color="inherit" to="/admindashboard">
-                MealNUS
+                MealNUS 
             </RouterLink>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -110,9 +109,22 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-function AdminPromotions() {
-    const { currentStaff } = useContext(AdminAuthContext);
+const classes = {
+    root: "container",
+    form: "form",
+    input: "input",
+};
 
+function AddPromotion(props) {
+    const { currentStaff } = useContext(AdminAuthContext);
+    const { id: id = 0 } = props;
+    const [promotionName, setPromotionName] = useState("");
+    const [discount, setDiscount] = useState("");
+    const [startDate, setStartDate] = useState(moment().toDate());
+    const [endDate, setEndDate] = useState(moment().add(1, 'day').toDate());
+    const navigate = useNavigate();
+    const theme = createTheme();
+    const [error, setError] = useState('');
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -127,157 +139,85 @@ function AdminPromotions() {
         return () => clearInterval(intervalId);
     }, []);
 
-    const [promotions, setPromotions] = useState([]);
-    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-    const [showDisableAlert, setShowDisableAlert] = useState(false);
-    const [appliedPromotionName, setAppliedPromotionName] = useState("");
-    const [disabledPromotionName, setDisabledPromotionName] = useState("");
-    const [filterText, setFilterText] = useState("");
-
     useEffect(() => {
-        Axios.get(
-            "http://localhost:8080/MealNUS-war/rest/promotion/retrieveAllPromotions"
-        )
-            .then((response) => {
-                setPromotions(response.data.promotionEntities);
-                console.log(response.data.promotionEntities);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
-
-    const filteredData = useCallback(() => {
-        return promotions.filter((promotion) => {
-            const lowerCaseFilterText = filterText.toLowerCase();
-            const startDateString = moment(promotion.startDate, "YYYY-MM-DD").format("YYYY-MM-DD");
-            const endDateString = moment(promotion.endDate, "YYYY-MM-DD").format("YYYY-MM-DD");
-            const discountString = promotion.discount.toString();
-
-            return (
-                promotion.promotionName.toLowerCase().includes(lowerCaseFilterText) ||
-                promotion.promotionCode.toLowerCase().includes(lowerCaseFilterText) ||
-                startDateString.includes(lowerCaseFilterText) ||
-                endDateString.includes(lowerCaseFilterText) ||
-                discountString.includes(filterText)
-            );
-        });
-    }, [promotions, filterText]);
-
-
-
-    const handleDeletePromotion = (pId) => {
-        if (window.confirm(`Do you want to delete this promotion?`)) {
-            Axios.delete(`http://localhost:8080/MealNUS-war/rest/promotion/delete/${pId}`)
-                .then(() => {
-                    // Call the API again to fetch the updated data after deleting the promotion
-                    Axios.get("http://localhost:8080/MealNUS-war/rest/promotion/retrieveAllPromotions")
-                        .then((response) => {
-                            setPromotions(response.data.promotionEntities);
-                            console.log(response.data.promotionEntities);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                })
-                .catch((error) => {
-                    console.log(error);
+        if (id) {
+            Axios.get(
+                "http://localhost:8080/MealNUS-war/rest/promotion/" + id
+            )
+                .then((res) => res.json())
+                .then((promotion) => {
+                    const { promotionName, discount, startDate, endDate } = promotion;
+                    setPromotionName(promotionName);
+                    setDiscount(discount);
+                    setStartDate(moment(startDate, "YYYY-MM-DDTHH:mm:ssZ[UTC]").toDate());
+                    setEndDate(moment(endDate, "YYYY-MM-DDTHH:mm:ssZ[UTC]").toDate());
+                    console.log("Promotion:", promotion);
                 });
         }
+    }, [id]);
+
+    const validateData = () => {
+        return promotionName.trim().length > 0;
     };
 
+    const handleSubmit = (e) => {
+        //prevent the normal form submit
+        e.preventDefault();
 
-    const handleSwitchChange = (promotion) => {
-        const updatedPromotions = promotions.map((p) =>
-            p.promotionId === promotion.promotionId
-                ? { ...p, isApplied: !p.isApplied }
-                : p
-        );
-        setPromotions(updatedPromotions);
-
-        if (promotion.isApplied) {
-            // switch toggled off
-            handleToggleBack(promotion);
-        } else {
-            // switch toggled on
-            handleToggle(promotion);
+        if (id === 0) {
+            //create case
+            if (validateData()) {
+                const promotionData = {
+                    // replace with the relevant data for your use case
+                    promotionName,
+                    discount,
+                    startDate,
+                    endDate,
+                };
+                fetch('http://localhost:8080/MealNUS-war/rest/promotion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(promotionData),
+                })
+                    .then((response) => {
+                        navigate("/adminpromotion");
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else {
+                const promotionData = {
+                    // replace with the relevant data for your use case
+                    promotionName,
+                    discount,
+                    startDate,
+                    endDate,
+                };
+                fetch('http://localhost:8080/MealNUS-war/rest/promotion/update' + id, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(promotionData),
+                })
+                    .then((response) => {
+                        navigate("/adminpromotion");
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
         }
-    };
+    }
 
-    const handleToggle = (promotion) => {
-        Axios.get(`http://localhost:8080/MealNUS-war/rest/promotion/apply/` + promotion.promotionCode)
-            .then((response) => {
-                console.log(response.data);
-                setAppliedPromotionName(promotion.promotionName);
-                setShowSuccessAlert(true);
-                setTimeout(() => {
-                    setShowSuccessAlert(false);
-                }, 3000);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-
-
-    const handleToggleBack = (promotion) => {
-        Axios.get(`http://localhost:8080/MealNUS-war/rest/promotion/disable/` + promotion.promotionCode)
-            .then((response) => {
-                console.log(response.data);
-                setDisabledPromotionName(promotion.promotionName);
-                setShowDisableAlert(true);
-                setTimeout(() => {
-                    setShowDisableAlert(false);
-                }, 3000);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-
-
-    const columns = [
-        { name: "Name", selector: "promotionName", sortable: true },
-        { name: "Code", selector: "promotionCode", sortable: true },
-        { name: "Discount", selector: "discount", sortable: true },
-        {
-            name: "Start Date",
-            selector: (row) => row.startDate,
-            sortable: true,
-            format: (row) => moment(row.startDate, "YYYY-MM-DD").format("YYYY-MM-DD"),
-        },
-        {
-            name: "End Date",
-            selector: (row) => row.endDate,
-            sortable: true,
-            format: (row) => moment(row.endDate, "YYYY-MM-DD").format("YYYY-MM-DD"),
-        },
-        {
-            name: "Apply",
-            cell: (row) => (
-                <Switch
-                    checked={row.isApplied}
-                    onChange={() => handleSwitchChange(row)}
-                />
-            ),
-        },
-        {
-            name: "Action",
-            cell: (row) => (
-                <Button
-                    onClick={() => handleDeletePromotion(row.promotionId)}
-                    variant="contained"
-                    color="error"
-                >
-                    Delete
-                </Button>
-            ),
-        },
-    ];
+    const headerLabel = id === 0 ? "New Promotion" : "Edit Promotion";
 
     if (!currentStaff) {
         return <div>Error: Staff not found.</div>;
     }
+
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -348,7 +288,7 @@ function AdminPromotions() {
                         </IconButton>
                     </Toolbar>
                     <div style={{ paddingLeft: '20px' }}>
-                        <img src={mealNUSLogo} alt="MealNUS Logo" style={{ width: '80%', height: 'auto' }} />
+                        <img src={mealNUSLogo} alt="MealNUS Logo" style={{width: '80%', height: 'auto'}} />
                     </div>
                     <Divider />
                     <List component="nav">
@@ -416,7 +356,7 @@ function AdminPromotions() {
                                         to="/adminpromotion"
                                     >
                                         <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        <b>Promotions</b>
+                                        Promotions
                                     </MUILink>
                                     {/* Add Promotion */}
                                     <MUILink
@@ -427,62 +367,84 @@ function AdminPromotions() {
                                         to="/addpromotion"
                                     >
                                         <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Add Promotion
+                                        <b>Add Promotion</b>
                                     </MUILink>
                                 </Breadcrumbs>
                             </div>
-
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    {showSuccessAlert && (
-                                        <Alert severity="success" onClose={() => setShowSuccessAlert(false)}>
-                                            The {appliedPromotionName} promotion was successfully applied!
-                                        </Alert>
-                                    )}
-                                    {showDisableAlert && (
-                                        <Alert severity="success" onClose={() => setShowDisableAlert(false)}>
-                                            The {disabledPromotionName} promotion was successfully disabled!
-                                        </Alert>
-                                    )}
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-                                        <input
-                                            type="text"
-                                            placeholder="Search..."
-                                            value={filterText}
-                                            onChange={(e) => setFilterText(e.target.value)}
-                                            style={{ height: '30px', marginRight: '5px' }}
-                                        />
-                                        <RouterLink to="/addpromotion">
-                                            <Box
-                                                display="flex"
-                                                alignItems="center"
-                                                justifyContent="center"
-                                                borderRadius="4px"
-                                                bgcolor="grey"
-                                                height="100%"
-                                                ml={1}
-                                                style={{ height: '30px', marginRight: '5px' }}
-                                            >
-                                                <IconButton>
-                                                    <AddCircle style={{ fill: "white" }} />
-                                                </IconButton>
-                                            </Box>
-                                        </RouterLink>
-                                    </div>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <DataTable
-                                        columns={columns}
-                                        data={filteredData()}
-                                        pagination
-                                        highlightOnHover
-                                        striped
-                                    />
-                                </Grid>
-                            </Grid>
                         </div>
+                        {/* Insert your main body code here */}
+                        <section className="content" key="content">
+                            <div className="card card-primary">
+                                <div className="card-header text-center">
+                                    <h4 className="card-title">{headerLabel}</h4>
+                                </div>
+
+                                <form onSubmit={handleSubmit}>
+                                    <div className="card-body">
+                                        <div className="form-group">
+                                            <label htmlFor="inputName">Promotion Name</label>
+                                            <input
+                                                type="text"
+                                                id="inputName"
+                                                required
+                                                className="form-control"
+                                                value={promotionName}
+                                                onChange={(e) => setPromotionName(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="inputName">Discount</label>
+                                            <input
+                                                id="inputDiscount"
+                                                required
+                                                className="form-control"
+                                                value={discount}
+                                                onChange={(e) => setDiscount(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="inputName">Start Date(dd/mm/yyyy)</label>
+                                            <div className="input-group">
+                                                <DatePicker
+                                                    dateFormat="dd/MM/yyyy"
+                                                    selected={startDate}
+                                                    onChange={(startDate) => {
+                                                        console.log("#startDate: ", startDate);
+                                                        setStartDate(startDate);
+                                                    }}
+                                                    customInput={<input className="form-control" />}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="inputName">End Date(dd/mm/yyyy)</label>
+                                            <div className="input-group">
+                                                <DatePicker
+                                                    dateFormat="dd/MM/yyyy"
+                                                    selected={endDate}
+                                                    onChange={(endDate) => {
+                                                        console.log("#endDate: ", endDate);
+                                                        setEndDate(endDate);
+                                                    }}
+                                                    customInput={<input className="form-control" />}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-footer">
+                                        <RouterLink to="/adminpromotion">
+                                            <button className="btn btn-default" type="button">
+                                                Cancel
+                                            </button>
+                                        </RouterLink>
+                                        <button className="btn btn-primary float-right" type="submit" style={{ backgroundColor: "orange", border: "orange" }}>
+                                            Submit
+                                        </button>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
                         <Copyright sx={{ pt: 4 }} />
                     </Container>
                 </Box>
@@ -490,7 +452,6 @@ function AdminPromotions() {
         </ThemeProvider>
     );
 }
-
-export default function AdminPromotion() {
-    return <AdminPromotions />;
+export default function AdminPromotions() {
+    return <AddPromotion />;
 }

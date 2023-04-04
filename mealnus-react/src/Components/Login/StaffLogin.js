@@ -11,10 +11,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import mealNUSLogo from '../Assets/MealNUS-Logo.png';
+import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 import PersonIcon from '@mui/icons-material/Person';
-import '../App.css';
-import { AdminAuthContext } from "./AdminAuthContext";
+import '../../App.css';
+import { AdminAuthContext } from "../../Context/AdminAuthContext";
 
 const classes = {
   root: "container",
