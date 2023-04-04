@@ -23,7 +23,6 @@ import { AuthContext } from "./AuthContext.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme();
-const theme2 = createTheme();
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -152,9 +151,8 @@ const Forum = () => {
   }
 
   return (
-    <ThemeProvider theme={theme2}>
-      <NavBar />
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <NavBar/>
         <Container>
           <Typography variant="h4" gutterBottom>
             Forum
@@ -311,7 +309,6 @@ const Forum = () => {
           </Snackbar>
         </Container>
       </ThemeProvider>
-    </ThemeProvider>
   );
 };
 

@@ -24,6 +24,9 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import { CartContext } from "../Context/CartContext";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme();
 
 const NavBar = () => {
   const { currentUser } = useContext(AuthContext);
@@ -72,61 +75,63 @@ const NavBar = () => {
   ];
 
   return (
-    <nav>
-      <Link to="/home">
-        <div className="nav-logo-container">
-          <img src={MealNUSLogo} alt="" style={logoStyle} />
-        </div>
-      </Link>
-      <div
-        className="navbar-links-container"
-        style={{ display: "flex", alignItems: "center", paddingRight: "25px" }}
-      >
-        {/* <a href="/Home">Home</a> */}
-        <Link to="/home">Home</Link>
-        <Link to="/mealboxes">Order</Link>
-        <Link to="/forum">Forum</Link>
-        <Link to="/cart">
-          <IconButton>
-            <Badge
-              badgeContent={cart.reduce((acc, item) => acc + item.quantity, 0)}
-              color="error"
-            >
-              <BsCart2 className="navbar-cart-icon" />
-            </Badge>
-          </IconButton>
+    <ThemeProvider theme={theme}>
+      <nav>
+        <Link to="/home">
+          <div className="nav-logo-container">
+            <img src={MealNUSLogo} alt="" style={logoStyle} />
+          </div>
         </Link>
-        <IconButton
-          color="inherit"
-          aria-label="account of current user"
-          aria-controls="menu-appbar"
-          aria-haspopup="true"
-          onClick={handleMenu}
-          size="large"
+        <div
+          className="navbar-links-container"
+          style={{ display: "flex", alignItems: "center", paddingRight: "25px" }}
         >
-          <Avatar
-            src={currentUser.imageURL}
-            sx={{ m: 1, bgcolor: "primary.main" }}
-          ></Avatar>
-        </IconButton>
-        <Menu
-          id="menu-appbar"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleClose} component={Link} to="/viewprofile">
-            View Profile
-          </MenuItem>
-          <MenuItem onClick={handleClose} component={Link} to="/editprofile">
-            Edit Profile
-          </MenuItem>
-          <MenuItem onClick={handleClose} component={Link} to="/">
-            Logout
-          </MenuItem>
-        </Menu>
-      </div>
-    </nav>
+          {/* <a href="/Home">Home</a> */}
+          <Link to="/home">Home</Link>
+          <Link to="/mealboxes">Order</Link>
+          <Link to="/forum">Forum</Link>
+          <Link to="/cart">
+            <IconButton>
+              <Badge
+                badgeContent={cart.reduce((acc, item) => acc + item.quantity, 0)}
+                color="error"
+              >
+                <BsCart2 className="navbar-cart-icon" />
+              </Badge>
+            </IconButton>
+          </Link>
+          <IconButton
+            color="inherit"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            size="large"
+          >
+            <Avatar
+              src={currentUser.imageURL}
+              sx={{ m: 1, bgcolor: "primary.main" }}
+            ></Avatar>
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose} component={Link} to="/viewprofile">
+              View Profile
+            </MenuItem>
+            <MenuItem onClick={handleClose} component={Link} to="/editprofile">
+              Edit Profile
+            </MenuItem>
+            <MenuItem onClick={handleClose} component={Link} to="/">
+              Logout
+            </MenuItem>
+          </Menu>
+        </div>
+      </nav>
+    </ThemeProvider>
   );
 };
 
