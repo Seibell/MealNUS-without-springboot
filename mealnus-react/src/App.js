@@ -45,6 +45,7 @@ import AddMealBox from "./Components/Inventory/AddMealBox";
 import UpdateQuantity from "./Components/Inventory/updateQuantity";
 import UpdateMealBox from "./Components/Inventory/UpdateMealBox";
 import UpdateIngred from "./Components/Inventory/UpdateIngred";
+import UpdateOrder from "./Components/Inventory/UpdateOrder";
 
 //Admin
 import AdminDashboard from "./Components/Admin/AdminDashboard";
@@ -74,6 +75,7 @@ function App() {
           <Route path="/AddMealBox" element={<AddMealBox />} />
           <Route path="/UpdateQuantity/:mealBoxId" element={<UpdateQuantity />} />
           <Route path="/UpdateMealBox/:mealBoxId" element={<UpdateMealBox />} />
+          <Route path="/UpdateOrder/:orderId" element={<UpdateOrder />} />
           <Route path="/UpdateIngred" element={<UpdateIngred />} />
           <Route path="/home" element={<Home />} />
           <Route path="/mealboxes" element={<MealBoxes />} />
