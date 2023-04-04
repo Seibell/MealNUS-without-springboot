@@ -34,7 +34,7 @@ export default function AdminDashboardTodayCount() {
 
     return (
         <React.Fragment>
-            <div className="grid-container grid-item-count">
+            <div className="grid-container grid-item-today-count">
                 <AnimationTwoToneIcon />
                 <AdminTitle>Today's Orders</AdminTitle>
                 <div className="grid-item" style={{ overflow: 'hidden' }}>

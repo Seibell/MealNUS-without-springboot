@@ -13,7 +13,7 @@ import ForumIcon from '@mui/icons-material/Forum';
 
 export const mainListItems = (
     <React.Fragment>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: '10px'}}>
             {/* {Redirect to Dashboard (Main Page)} */}
             <Link to="/admindashboard" style={{ textDecoration: 'none' }}>
                 <ListItemButton>

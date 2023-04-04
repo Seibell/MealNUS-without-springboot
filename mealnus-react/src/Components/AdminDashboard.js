@@ -37,13 +37,15 @@ import AdminDashboardTodayOrderCount from './AdminDashboardTodayOrderCount';
 import AdminDashboardTodayRevenue from './AdminDashboardTodayRevenue';
 import Avatar from '@mui/material/Avatar';
 import mealNUSLogo from '../Assets/MealNUS-Logo.png';
+import { AdminAuthContext } from "./AdminAuthContext";
+import { useContext } from "react";
 
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
             <RouterLink color="inherit" to="/admindashboard">
-                MealNUS 
+                MealNUS
             </RouterLink>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -109,6 +111,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function DashboardContent() {
+    const { currentStaff } = useContext(AdminAuthContext);
+
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -123,6 +127,9 @@ function DashboardContent() {
         return () => clearInterval(intervalId);
     }, []);
 
+    if (!currentStaff) {
+        return <div>Error: Staff not found.</div>;
+    }
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -185,15 +192,15 @@ function DashboardContent() {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'flex-end',
-                            px: [1],
+                            px: [1]
                         }}
                     >
                         <IconButton onClick={toggleDrawer}>
                             <ChevronLeftIcon />
                         </IconButton>
                     </Toolbar>
-                    <div>
-                        <img src={mealNUSLogo} alt="MealNUS Logo" />
+                    <div style={{ paddingLeft: '20px' }}>
+                        <img src={mealNUSLogo} alt="MealNUS Logo" style={{width: '80%', height: 'auto'}} />
                     </div>
                     <Divider />
                     <List component="nav">
@@ -265,109 +272,52 @@ function DashboardContent() {
                                     </MUILink>
                                 </Breadcrumbs>
                             </div>
-                            <Grid container spacing={2}>
+                            <Grid container spacing={2} sx={{ overflowX: 'auto' }}>
                                 {/* Sales Overview :: Today's Orders*/}
-                                <Grid item xs={6}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 210,
-                                        }}
-                                    >
+                                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} sx={{ flexGrow: 1 }}>
+                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
                                         <AdminDashboardTodayOrderCount />
                                     </Paper>
                                 </Grid>
                                 {/* Sales Overview :: Today's Revenue*/}
-                                <Grid item xs={6}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 210,
-                                        }}
-                                    >
+                                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} sx={{ flexGrow: 1 }}>
+                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
                                         <AdminDashboardTodayRevenue />
                                     </Paper>
                                 </Grid>
                                 {/* MTD Sales Overview :: Order Count*/}
-                                <Grid item xs={3}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 210,
-                                        }}
-                                    >
+                                <Grid item xs={12} sm={3} md={3} lg={3} xl={3} sx={{ flexGrow: 1 }}>
+                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
                                         <AdminDashboardMtdCount />
                                     </Paper>
                                 </Grid>
                                 {/* MTD Sales Overview :: Revenue*/}
-
-                                <Grid item xs={3}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 210,
-                                        }}
-                                    >
+                                <Grid item xs={12} sm={3} md={3} lg={3} xl={3} sx={{ flexGrow: 1 }}>
+                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
                                         <AdminDashboardMtdRevenue />
                                     </Paper>
                                 </Grid>
                                 {/* MTD Sales Overview :: Profit*/}
-                                <Grid item xs={3}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 210,
-                                        }}
-                                    >
+                                <Grid item xs={12} sm={3} md={3} lg={3} xl={3} sx={{ flexGrow: 1 }}>
+                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
                                         <AdminDashboardMtdProfit />
                                     </Paper>
                                 </Grid>
                                 {/* MTD Sales Overview :: Cost*/}
-                                <Grid item xs={3}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 210,
-                                        }}
-                                    >
+                                <Grid item xs={12} sm={3} md={3} lg={3} xl={3} sx={{ flexGrow: 1 }}>
+                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
                                         <AdminDashboardMtdCost />
                                     </Paper>
                                 </Grid>
                                 {/* Order Summary Chart */}
-                                <Grid item xs={12}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 500,
-                                        }}
-                                    >
+                                <Grid item xs={12} sx={{ flexGrow: 1 }}>
+                                    <Paper sx={{ p: 2, height: 500, overflow: 'auto'  }}>
                                         <AdminOrderChart />
                                     </Paper>
                                 </Grid>
                                 {/* Top Selling Box */}
-                                <Grid item xs={12}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 500,
-                                        }}
-                                    >
+                                <Grid item xs={12} sx={{ flexGrow: 1 }}>
+                                    <Paper sx={{ p: 2, height: 400, overflow: 'auto' }}>
                                         <AdminDashboardTopSelling />
                                     </Paper>
                                 </Grid>

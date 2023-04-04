@@ -24,6 +24,8 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import LocalOfferTwoToneIcon from '@mui/icons-material/LocalOfferTwoTone';
+import { AdminAuthContext } from "./AdminAuthContext";
+import { useContext } from "react";
 
 // Mehak's Promotion.js
 import Axios from "axios";
@@ -58,7 +60,7 @@ function handleClick(event) {
         console.info(`Navigating to ${href}`);
         window.location.href = href;
     }
-  }
+}
 
 const drawerWidth = 240;
 
@@ -109,6 +111,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function AdminPromotions() {
+    const { currentStaff } = useContext(AdminAuthContext);
 
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
@@ -272,6 +275,9 @@ function AdminPromotions() {
         },
     ];
 
+    if (!currentStaff) {
+        return <div>Error: Staff not found.</div>;
+    }
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -341,8 +347,8 @@ function AdminPromotions() {
                             <ChevronLeftIcon />
                         </IconButton>
                     </Toolbar>
-                    <div>
-                        <img src={mealNUSLogo} alt="MealNUS Logo" />
+                    <div style={{ paddingLeft: '20px' }}>
+                        <img src={mealNUSLogo} alt="MealNUS Logo" style={{ width: '80%', height: 'auto' }} />
                     </div>
                     <Divider />
                     <List component="nav">
@@ -440,13 +446,13 @@ function AdminPromotions() {
                                     )}
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '10px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
                                         <input
                                             type="text"
                                             placeholder="Search..."
                                             value={filterText}
                                             onChange={(e) => setFilterText(e.target.value)}
-                                            style={{ height: '30px', marginRight: '5px'}}
+                                            style={{ height: '30px', marginRight: '5px' }}
                                         />
                                         <RouterLink to="/addpromotion">
                                             <Box

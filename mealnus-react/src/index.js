@@ -5,12 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './Components/AuthContext';
 import { HashRouter } from "react-router-dom";
+import { AdminAuthProvider } from './Components/AdminAuthContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <AdminAuthProvider>
+        <App />
+      </AdminAuthProvider>
     </AuthProvider>
   </React.StrictMode>
 );

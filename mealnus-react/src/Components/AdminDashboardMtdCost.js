@@ -30,19 +30,21 @@ export default function AdminDashboardMtdCost() {
 
     return (
         <React.Fragment>
-            <MonetizationOnTwoToneIcon />
-            <AdminTitle>MTD Cost</AdminTitle>
-            <div className="grid-item" style={{ overflow: 'hidden' }}>
-                <Typography component="p" variant="h4">
-                    <Typography variant="h6" style={{ fontSize: '18px', display: 'inline' }}>
-                        $
-                    </Typography>{' '}
-                    {data.toFixed(0)}
-                </Typography>
-                <Typography color="text.secondary" sx={{ flex: 1 }}>
-                    As of {currentDate}
-                </Typography>
-                <br/>
+            <div className="grid-container grid-item-mtd-cost">
+                <MonetizationOnTwoToneIcon />
+                <AdminTitle>MTD Cost</AdminTitle>
+                <div className="grid-item" style={{ overflow: 'hidden' }}>
+                    <Typography component="p" variant="h4">
+                        <Typography variant="h6" style={{ fontSize: '18px', display: 'inline' }}>
+                            $
+                        </Typography>{' '}
+                        {data.toFixed(0)}
+                    </Typography>
+                    <Typography color="text.secondary" sx={{ flex: 1 }}>
+                        As of {currentDate}
+                    </Typography>
+                    <br />
+                </div>
             </div>
         </React.Fragment>
     );
