@@ -34,6 +34,7 @@ public class MealBox implements Serializable {
     private BigDecimal itemPrice;
     private String itemDescription;
     private Integer quantityAvailable;
+    private boolean isPromotionApplied;
 
     @ManyToMany
     private List<Allergen> allergens;
@@ -298,6 +299,20 @@ public class MealBox implements Serializable {
      */
     public void setItemCost(BigDecimal itemCost) {
         this.itemCost = itemCost;
+    }
+
+    /**
+     * @return the isPromotionApplied
+     */
+    public boolean isIsPromotionApplied() {
+        return isPromotionApplied;
+    }
+
+    /**
+     * @param isPromotionApplied the isPromotionApplied to set
+     */
+    public void setIsPromotionApplied(boolean isPromotionApplied) {
+        this.isPromotionApplied = isPromotionApplied;
     }
 
 }

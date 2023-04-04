@@ -5,8 +5,10 @@
  */
 package ejb.session.stateless;
 
+import entity.Category;
 import entity.Ingredient;
 import entity.MealBox;
+import entity.Promotion;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Pair;
@@ -16,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.MealBoxNotFoundException;
+import util.exception.PromotionNotFoundException;
 
 /**
  *
@@ -68,6 +71,7 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
         Query query = em.createQuery("SELECT m FROM MealBox m", MealBox.class);
         return query.getResultList();
     }
+    
 
     @Override
     public List<Pair<String, Integer>> retrieveAllMealBoxesWithQty() {
@@ -79,6 +83,16 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
             resultList.add(new Pair<>(mealBoxName, qtyAvailable));
         }
         return resultList;
+    }
+    
+    @Override
+    public List<MealBox> retrieveMealboxByCategory(String category) throws MealBoxNotFoundException {
+        Category cat = em.createQuery("SELECT c FROM Category c WHERE c.name = :category", Category.class)
+                    .setParameter("category", category)
+                    .getSingleResult();
+        Query query = em.createQuery("SELECT DISTINCT m FROM MealBox m JOIN m.categories c WHERE c = :category", MealBox.class);
+        query.setParameter("category", cat);
+        return query.getResultList();
     }
 
     @Override
