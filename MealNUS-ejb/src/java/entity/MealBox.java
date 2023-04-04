@@ -100,6 +100,21 @@ public class MealBox implements Serializable {
         this.quantityAvailable = quantityAvailable;
         this.ingredients = ingredients;
     }
+
+    public MealBox(String itemName, Long ItemCode, String itemImage, BigDecimal itemCost, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable, List<Allergen> allergens, List<Ingredient> ingredients, List<Category> categories) {
+        this.itemName = itemName;
+        this.ItemCode = ItemCode;
+        this.itemImage = itemImage;
+        this.itemCost = itemCost;
+        this.itemPrice = itemPrice;
+        this.itemDescription = itemDescription;
+        this.quantityAvailable = quantityAvailable;
+        this.allergens = allergens;
+        this.ingredients = ingredients;
+        this.categories = categories;
+    }
+    
+    
     
     public Long getMealBoxId() {
         return mealBoxId;

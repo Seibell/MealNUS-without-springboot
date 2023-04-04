@@ -131,6 +131,7 @@ function UpdateMealBox(props) {
 
   const [query, setQuery] = useState('');
   const [cquery, setcQuery] = useState('');
+  const [aquery, setaQuery] = useState('');
 
   const [open, setOpen] = React.useState(true);
 
@@ -143,7 +144,12 @@ function UpdateMealBox(props) {
  
   //Category
   const [availableCategory, setavailableCategory] = useState([]);
-  const [Category, setCategory] = useState([]);
+  const [categories, setCategory] = useState([]);
+
+//Allergen
+const [availableAllergens, setavailableAllergens] = useState([]);
+const [allergens, setAllergens] = useState([]);
+  
 
   const navigate = useNavigate();
   const theme = createTheme();
@@ -192,6 +198,12 @@ function UpdateMealBox(props) {
     category.name.toLowerCase().includes(cquery.toLowerCase())
     //console.log(availableIngredients)
   );
+  //search filter
+  const filteredallergen = availableAllergens.filter(
+    (allergen) =>
+    allergen.allergenName.toLowerCase().includes(aquery.toLowerCase())
+    //console.log(availableIngredients)
+  );
 
 
   const handleInputChange = (event, ingredient) => {
@@ -218,6 +230,18 @@ function UpdateMealBox(props) {
     }
   };
 
+  const handleallergenChange = (event, allergen) => {
+    if (event.target.checked) {
+      setAllergens([
+        ...allergens,
+        { allergenId: allergen.allergenId, allergenName: allergen.allergenName, allergenDescription: allergen.allergenDescription },
+      ]);
+      console.log(allergens)
+    } else {
+      setAllergens(allergens.filter((item) => item.allergenId !== allergen.allergenId))
+    }
+  };
+
   const checkIfIngredientExisit = (ingredients, ingredient) => {
  
     for (let i = 0; i < ingredients.length; i++) {
@@ -226,6 +250,26 @@ function UpdateMealBox(props) {
       }
     }
     return false;
+}
+
+const checkIfcategoryExisit = (categories, category) => {
+ 
+  for (let i = 0; i < categories.length; i++) {
+    if (categories[i].categoryId == category.categoryId) {
+      return true;
+    }
+  }
+  return false;
+}
+
+const checkIfallergenExisit = (allergens, allergen) => {
+ 
+  for (let i = 0; i < allergens.length; i++) {
+    if (allergens[i].allergenId == allergen.allergenId) {
+      return true;
+    }
+  }
+  return false;
 }
 
   const handleFormSubmit = (event) => {
@@ -238,7 +282,9 @@ function UpdateMealBox(props) {
       itemPrice,
       itemDescription,
       quantityAvailable,
-      ingredients
+      allergens,
+      ingredients,
+      categories
     }; // i think u need to create some mapping for id == name or make name unique or smth so it can be called by the json
 
     //console.log(Mealbox)
@@ -275,13 +321,15 @@ function UpdateMealBox(props) {
       setitemDescription(retrieved.itemDescription);
       setquantityAvailable(retrieved.quantityAvailable);
       setSelectedIngredients(retrieved.ingredients);
+      setCategory(retrieved.categories);
+      setAllergens(retrieved.allergens);
     })
       .catch((err) => {
         console.log(err);
       });
     }, []);
 
-
+   console.log(categories);
 
   useEffect(() => {
     Axios.get(
@@ -301,6 +349,19 @@ function UpdateMealBox(props) {
     )
       .then((response) => {
         setavailableCategory(response.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  
+  useEffect(() => {
+    Axios.get(
+      "http://localhost:8080/MealNUS-war/rest/Allergen/retrieveAllAllergent"
+    )
+      .then((response) => {
+        setavailableAllergens(response.data)
       })
       .catch((err) => {
         console.log(err);
@@ -582,6 +643,58 @@ function UpdateMealBox(props) {
                                         </div>
                                       </div>
 
+
+                                      <div className="form-group">
+                                          <label htmlFor="inputName">Allergens</label>
+                                          <div>
+                                          <input
+                                            type="text"
+                                            placeholder="Search"
+                                            value={aquery}
+                                            onChange={(event) => setaQuery(event.target.value)}
+                                          />
+                                          <div style={{ maxHeight: '150px', maxWidth:'200px', overflowY: 'scroll' }}>
+                                            <table>
+                                              <thead>
+                                                <tr>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                              {filteredallergen.map((allergen) => (
+                                                  <tr  key={allergen.allergenId}>
+                                                    <td>
+                                                    <input
+                                                    type="checkbox"
+                                                    value={allergen}
+                                                    checked = {checkIfallergenExisit(allergens,allergen)}
+                                                    onChange={
+                                                      (e) => {
+                                                        console.log(allergens);
+                                                        if (e.target.checked) {
+                                                          setAllergens([
+                                                            ...allergens,
+                                                            { allergenId: allergen.allergenId, allergenName: allergen.allergenName, allergenDescription: allergen.allergenDescription },
+                                                          ]);
+                                                          console.log(allergens)
+                                                        } else {
+                                                          setAllergens(allergens.filter((item) => item.allergenId !== allergen.allergenId))
+                                                        }
+                                                      }    
+                                                    }/>
+                                                  {allergen.name}
+                                                    </td>
+                                                  </tr>
+                                                ))}
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+                                      </div>
+
+
+
+
+
                                       <div className="form-group">
                                           <label htmlFor="inputName">Categories</label>
                                           <div>
@@ -604,7 +717,20 @@ function UpdateMealBox(props) {
                                                     <input
                                                     type="checkbox"
                                                     value={category}
-                                                    onChange={(event) => handleCategoryChange(event, category)}/>
+                                                    checked = {checkIfcategoryExisit(categories,category)}
+                                                    onChange={
+                                                      (e) => {
+                                                        console.log(categories);
+                                                        if (e.target.checked) {
+                                                          setCategory([
+                                                            ...categories,
+                                                            { ingredientId: category.categoryId, name: category.name, picture: category.picture },
+                                                          ]);
+                                                        } else {
+                                                          setCategory(categories.filter((item) => item.categoryId !== category.categoryId))
+                                                        }
+                                                      }    
+                                                    }/>
                                                   {category.name}
                                                     </td>
                                                   </tr>
@@ -614,6 +740,9 @@ function UpdateMealBox(props) {
                                           </div>
                                         </div>
                                       </div>
+
+
+
                                     </div>
                                   <div className="card-footer">
                                       <Link to="/InventoryHome">

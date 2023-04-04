@@ -37,6 +37,8 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
     @Override
     public Long createMealBox(MealBox mealBox) {
         System.out.println("ingredients: " + mealBox.getIngredients().toString());
+        System.out.println("alergen: " + mealBox.getAllergens().toString());
+        System.out.println("category: " + mealBox.getCategories().toString());
         em.persist(mealBox);
         return mealBox.getMealBoxId();
     }
