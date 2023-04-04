@@ -314,6 +314,7 @@ public class DataInitSessionBean {
                 OrderStatus orderStatus = OrderStatus.PREPARING;
                 User user = new User("eric4", "tang4", "user4@gmail.com", "password");
                 orderSessionBean.createOrder(new OrderEntity(orderDate, orderDetails, priceList, costList, deliveryDate, address, orderStatus, user));
+                
 
                 Date orderDate2 = new Date();
                 MealBox mealBox2 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
@@ -333,6 +334,42 @@ public class DataInitSessionBean {
                 OrderStatus orderStatus2 = OrderStatus.PAID;
                 User user2 = new User("eric5", "tang5", "user5@gmail.com", "password");
                 OrderEntity newOrder2 = orderSessionBean.createOrder(new OrderEntity(orderDate2, orderDetails2, priceList2, costList2, deliveryDate2, address2, orderStatus2, user2));
+                
+                Date orderDate3 = new Date();
+                MealBox mealBox3 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box 2", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
+                Integer qty3 = 23;
+                List<Pair<MealBox, Integer>> orderDetails3 = new ArrayList<>();
+                orderDetails3.add(new Pair<>(mealBox3, qty3));
+                List<BigDecimal> priceList3 = new ArrayList<>();
+                priceList3.add(mealBox3.getItemPrice());
+                List<BigDecimal> costList3 = new ArrayList<>();
+                costList3.add(mealBox3.getItemCost());
+                Date deliveryDate3 = new Date();
+                Calendar calEnd3 = Calendar.getInstance();
+                calEnd3.setTime(deliveryDate3);
+                calEnd3.add(Calendar.DAY_OF_MONTH, 3);
+                deliveryDate3 = calEnd3.getTime();
+                AddressEnum address3 = AddressEnum.UTOWN_RESIDENCES;
+                OrderStatus orderStatus3 = OrderStatus.PREPARING;
+                OrderEntity newOrder3 = orderSessionBean.createOrder(new OrderEntity(orderDate3, orderDetails3, priceList3, costList3, deliveryDate3, address3, orderStatus3, user2));
+                
+                Date orderDate4 = new Date();
+                MealBox mealBox4 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box 3", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
+                Integer qty4 = 23;
+                List<Pair<MealBox, Integer>> orderDetails4 = new ArrayList<>();
+                orderDetails4.add(new Pair<>(mealBox4, qty4));
+                List<BigDecimal> priceList4 = new ArrayList<>();
+                priceList2.add(mealBox4.getItemPrice());
+                List<BigDecimal> costList4 = new ArrayList<>();
+                costList4.add(mealBox4.getItemCost());
+                Date deliveryDate4 = new Date();
+                Calendar calEnd4 = Calendar.getInstance();
+                calEnd4.setTime(deliveryDate4);
+                calEnd4.add(Calendar.DAY_OF_MONTH, 3);
+                deliveryDate4 = calEnd4.getTime();
+                AddressEnum address4 = AddressEnum.UTOWN_RESIDENCES;
+                OrderStatus orderStatus4 = OrderStatus.DELIVERING;
+                OrderEntity newOrder4 = orderSessionBean.createOrder(new OrderEntity(orderDate4, orderDetails4, priceList4, costList4, deliveryDate4, address4, orderStatus4, user2));
             } catch (OrderNotFoundException | UnknownPersistenceException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
