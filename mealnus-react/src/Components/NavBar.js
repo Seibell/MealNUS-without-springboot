@@ -73,9 +73,11 @@ const NavBar = () => {
 
   return (
     <nav>
-      <div className="nav-logo-container">
-        <img src={MealNUSLogo} alt="" style={logoStyle} />
-      </div>
+      <Link to="/home">
+        <div className="nav-logo-container">
+          <img src={MealNUSLogo} alt="" style={logoStyle} />
+        </div>
+      </Link>
       <div
         className="navbar-links-container"
         style={{ display: "flex", alignItems: "center", paddingRight: "25px" }}

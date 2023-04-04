@@ -23,6 +23,7 @@ import { AuthContext } from "./AuthContext.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme();
+const theme2 = createTheme();
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -151,163 +152,165 @@ const Forum = () => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme2}>
       <NavBar />
-      <Container>
-        <Typography variant="h4" gutterBottom>
-          Forum
-        </Typography>
-        <FormControl className={classes.formControl}>
-          <InputLabel id="filter-select-label">Filter By</InputLabel>
-          <Select
-            labelId="filter-select-label"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          >
-            <MenuItem value="time">Latest Posts</MenuItem>
-            <MenuItem value="popularityUp">ThumbUp: High to Low</MenuItem>
-            <MenuItem value="popularityDown">ThumbDown: High to Low</MenuItem>
-          </Select>
-        </FormControl>
-        <Grid container spacing={3}>
-          <Grid
-            container
-            spacing={2}
-            style={{ height: "70vh", overflow: "auto" }}
-          >
-            {posts.forumPostEntities &&
-              [...posts.forumPostEntities]
-                .sort((a, b) => {
-                  if (filter === "time") {
-                    return (
-                      new Date(b.postDate.replace("[UTC]", "")) -
-                      new Date(a.postDate.replace("[UTC]", ""))
-                    );
-                  } else if (filter === "popularityUp") {
-                    return b.numThumbsUp - a.numThumbsUp;
-                  } else {
-                    return b.numThumbsDown - a.numThumbsDown;
-                  }
-                })
-                .map((post) => (
-                  <Grid item xs={12} key={post.postId}>
-                    <Paper className={classes.paper} elevation={2}>
-                      <Typography variant="h5" gutterBottom>
-                        <strong>{post.posTitle}</strong>
-                      </Typography>
-                      <Typography variant="body1" gutterBottom>
-                        {post.postDescription}
-                      </Typography>
-                      <div className={classes.userContainer}>
-                        {post.user.imageURL && (
-                          <img
-                            src={post.user.imageURL}
-                            alt={`${post.user.firstName} ${post.user.lastName}`}
-                            className={classes.userImage}
-                          />
-                        )}
-                        <Typography variant="body2">
-                          Posted by {post.user.firstName} {post.user.lastName}
-                        </Typography>
-                      </div>
-                      <div className={classes.thumbContainer}>
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <IconButton
-                            aria-label="thumbs up"
-                            onClick={() => handleThumbUp(post.postId)}
-                          >
-                            <ThumbUp className={classes.thumbIcon} />
-                          </IconButton>
-                          <Typography className={classes.thumbCount}>
-                            {post.numThumbsUp}
-                          </Typography>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            marginLeft: 16,
-                          }}
-                        >
-                          <IconButton
-                            aria-label="thumbs down"
-                            onClick={() => handleThumbDown(post.postId)}
-                          >
-                            <ThumbDown className={classes.thumbIcon} />
-                          </IconButton>
-                          <Typography className={classes.thumbCount}>
-                            {post.numThumbsDown}
-                          </Typography>
-                        </div>
-                      </div>
-                      <Typography variant="body2" className={classes.time}>
-                        {new Date(
-                          post.postDate.replace("[UTC]", "")
-                        ).toLocaleString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "numeric",
-                          second: "numeric",
-                          hour12: false,
-                        })}
-                      </Typography>
-                    </Paper>
-                  </Grid>
-                ))}
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              Create New Post
-            </Typography>
-            <TextField
-              label="Title"
-              fullWidth
-              value={newPostTitle}
-              onChange={(e) => setNewPostTitle(e.target.value)}
-            />
-            <TextField
-              label="Description"
-              fullWidth
-              multiline
-              minRows={4}
-              value={newPostDescription}
-              onChange={(e) => setNewPostDescription(e.target.value)}
-              style={{ marginTop: 16 }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={createNewPost}
-              style={{ marginTop: 16 }}
+      <ThemeProvider theme={theme}>
+        <Container>
+          <Typography variant="h4" gutterBottom>
+            Forum
+          </Typography>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="filter-select-label">Filter By</InputLabel>
+            <Select
+              labelId="filter-select-label"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
             >
-              Create Post
-            </Button>
-            {errorMessage !== "" && (
-              <Typography
-                variant="body2"
-                style={{ color: "red", marginTop: 16 }}
-              >
-                {errorMessage}
+              <MenuItem value="time">Latest Posts</MenuItem>
+              <MenuItem value="popularityUp">ThumbUp: High to Low</MenuItem>
+              <MenuItem value="popularityDown">ThumbDown: High to Low</MenuItem>
+            </Select>
+          </FormControl>
+          <Grid container spacing={3}>
+            <Grid
+              container
+              spacing={2}
+              style={{ height: "70vh", overflow: "auto" }}
+            >
+              {posts.forumPostEntities &&
+                [...posts.forumPostEntities]
+                  .sort((a, b) => {
+                    if (filter === "time") {
+                      return (
+                        new Date(b.postDate.replace("[UTC]", "")) -
+                        new Date(a.postDate.replace("[UTC]", ""))
+                      );
+                    } else if (filter === "popularityUp") {
+                      return b.numThumbsUp - a.numThumbsUp;
+                    } else {
+                      return b.numThumbsDown - a.numThumbsDown;
+                    }
+                  })
+                  .map((post) => (
+                    <Grid item xs={12} key={post.postId}>
+                      <Paper className={classes.paper} elevation={2}>
+                        <Typography variant="h5" gutterBottom>
+                          <strong>{post.posTitle}</strong>
+                        </Typography>
+                        <Typography variant="body1" gutterBottom>
+                          {post.postDescription}
+                        </Typography>
+                        <div className={classes.userContainer}>
+                          {post.user.imageURL && (
+                            <img
+                              src={post.user.imageURL}
+                              alt={`${post.user.firstName} ${post.user.lastName}`}
+                              className={classes.userImage}
+                            />
+                          )}
+                          <Typography variant="body2">
+                            Posted by {post.user.firstName} {post.user.lastName}
+                          </Typography>
+                        </div>
+                        <div className={classes.thumbContainer}>
+                          <div
+                            style={{ display: "flex", flexDirection: "column" }}
+                          >
+                            <IconButton
+                              aria-label="thumbs up"
+                              onClick={() => handleThumbUp(post.postId)}
+                            >
+                              <ThumbUp className={classes.thumbIcon} />
+                            </IconButton>
+                            <Typography className={classes.thumbCount}>
+                              {post.numThumbsUp}
+                            </Typography>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              marginLeft: 16,
+                            }}
+                          >
+                            <IconButton
+                              aria-label="thumbs down"
+                              onClick={() => handleThumbDown(post.postId)}
+                            >
+                              <ThumbDown className={classes.thumbIcon} />
+                            </IconButton>
+                            <Typography className={classes.thumbCount}>
+                              {post.numThumbsDown}
+                            </Typography>
+                          </div>
+                        </div>
+                        <Typography variant="body2" className={classes.time}>
+                          {new Date(
+                            post.postDate.replace("[UTC]", "")
+                          ).toLocaleString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            second: "numeric",
+                            hour12: false,
+                          })}
+                        </Typography>
+                      </Paper>
+                    </Grid>
+                  ))}
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h5" gutterBottom>
+                Create New Post
               </Typography>
-            )}
+              <TextField
+                label="Title"
+                fullWidth
+                value={newPostTitle}
+                onChange={(e) => setNewPostTitle(e.target.value)}
+              />
+              <TextField
+                label="Description"
+                fullWidth
+                multiline
+                minRows={4}
+                value={newPostDescription}
+                onChange={(e) => setNewPostDescription(e.target.value)}
+                style={{ marginTop: 16 }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={createNewPost}
+                style={{ marginTop: 16 }}
+              >
+                Create Post
+              </Button>
+              {errorMessage !== "" && (
+                <Typography
+                  variant="body2"
+                  style={{ color: "red", marginTop: 16 }}
+                >
+                  {errorMessage}
+                </Typography>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
 
-        <Snackbar
-          open={errorMessage !== ""}
-          autoHideDuration={5000}
-          onClose={closeErrorSnackbar}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert onClose={closeErrorSnackbar} severity="error">
-            {errorMessage}
-          </Alert>
-        </Snackbar>
-      </Container>
+          <Snackbar
+            open={errorMessage !== ""}
+            autoHideDuration={5000}
+            onClose={closeErrorSnackbar}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert onClose={closeErrorSnackbar} severity="error">
+              {errorMessage}
+            </Alert>
+          </Snackbar>
+        </Container>
+      </ThemeProvider>
     </ThemeProvider>
   );
 };
