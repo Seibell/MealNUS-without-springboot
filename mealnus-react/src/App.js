@@ -12,6 +12,7 @@ import StaffLogin from "./Components/Login/StaffLogin";
 import RetrieveAllUsers from "./Components/Login/RetrieveAllUsers";
 import ViewProfile from "./Components/Profile/ViewProfile";
 import EditProfile from "./Components/Profile/EditProfile";
+import MyOrders from "./Components/Profile/MyOrders";
 
 //OldNavBar
 import OldNavBar from "./Components/HomePage/OldNavBar";
@@ -87,6 +88,7 @@ function App() {
           <Route path="/adminordermanagement" element={<AdminOrderManagement />} />
           <Route path="/adminpromotion" element={<AdminPromotion />} />
           <Route path="/addpromotion" element={<AddPromotion />} />
+          <Route path="/myorders" element={<MyOrders />} />
         </Routes>
       </Router>
     </CartProvider>

@@ -16,7 +16,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import PhoneRoudnedIcon from "@mui/icons-material/PhoneRounded";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import MealNUSLogo from "../../Assets/MealNUSLogo-nobg.svg";
 
 import { IconButton, Menu, MenuItem } from "@mui/material";
@@ -29,6 +29,7 @@ const theme = createTheme();
 
 const NavBar = () => {
   const { currentUser } = useContext(AuthContext);
+  const location = useLocation();
 
   const logoStyle = {
     width: "175px",
@@ -73,6 +74,19 @@ const NavBar = () => {
     },
   ];
 
+  const isActive = (path) => {
+    return location.pathname === path
+      ? {
+          color: "#007bff",
+          borderColor: "#007bff",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          borderRadius: "4px",
+          padding: "2px 4px",
+        }
+      : {};
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <nav>
@@ -86,10 +100,10 @@ const NavBar = () => {
           style={{ display: "flex", alignItems: "center", paddingRight: "25px" }}
         >
           {/* <a href="/Home">Home</a> */}
-          <Link to="/home">Home</Link>
-          <Link to="/mealboxes">Order</Link>
-          <Link to="/forum">Forum</Link>
-          <Link to="/cart">
+          <Link to="/home" style={isActive("/home")}>Home</Link>
+          <Link to="/mealboxes" style={isActive("/mealboxes")}>Order</Link>
+          <Link to="/forum" style={isActive("/forum")}>Forum</Link>
+          <Link to="/cart" style={isActive("/cart")}>
             <IconButton>
               <Badge
                 badgeContent={cart.reduce((acc, item) => acc + item.quantity, 0)}
@@ -123,6 +137,9 @@ const NavBar = () => {
             </MenuItem>
             <MenuItem onClick={handleClose} component={Link} to="/editprofile">
               Edit Profile
+            </MenuItem>
+            <MenuItem onClick={handleClose} component={Link} to="/myorders">
+              My Orders
             </MenuItem>
             <MenuItem onClick={handleClose} component={Link} to="/">
               Logout
