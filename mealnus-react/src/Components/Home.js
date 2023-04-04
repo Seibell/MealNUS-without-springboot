@@ -5,13 +5,20 @@ import BannerImage from "../Assets/home-banner-image.png";
 import NavBar from "./NavBar.js";
 import { FiArrowRight } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./AuthContext.js";
+import { useContext } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext);
 
   const handleOrderNowClick = () => {
     navigate("/mealboxes");
   };
+
+  if (!currentUser) {
+    return <div>Error: User not found.</div>;
+  }
 
   return (
     <div className="home-container">
@@ -20,7 +27,7 @@ const Home = () => {
         <div className="home-bannerImage-container">
           <img src={BannerBackground} alt="" />
         </div>
-        <div className="home-text-section">
+        <div className="home-text-section" style={{ paddingLeft: "25px" }}>
           <h1 className="primary-heading">
             Your Favourite Food Delivered Hot & Fresh
           </h1>

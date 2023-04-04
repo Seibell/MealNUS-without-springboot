@@ -84,9 +84,11 @@ function UserLogin() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <Link href='/stafflogin'>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+          </Link>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>

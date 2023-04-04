@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.Consumes;
@@ -50,9 +52,8 @@ public class MealBoxResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createMealBox(MealBox m) {
-        Long id = mealBoxSessionBeanLocal.createMealBox(m);
-        List<Ingredient> i = m.getIngredients();
-        mealBoxSessionBeanLocal.addIngredientsToBox(id, i);
+        System.out.println("ingredients: " + m.getIngredients().toString());
+        mealBoxSessionBeanLocal.createMealBox(m);
         return Response.status(Status.OK).entity(m).build();
     } //end createCustomer 
     
@@ -95,6 +96,29 @@ public class MealBoxResource {
         return Response.status(200).entity(
                 entity).type(MediaType.APPLICATION_JSON).build();
     }
+    
+    
+    // e.g. http://localhost:8080/MealNUS-war/rest/Mealbox/category/{Category Name}
+    @GET
+    @Path("/category/{categoryName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveMealBoxByCategory(@PathParam("categoryName") String categoryName) {
+        try {
+            List<MealBox> results = mealBoxSessionBeanLocal.retrieveMealboxByCategory(categoryName);
+
+            GenericEntity<List<MealBox>> entity
+                    = new GenericEntity<List<MealBox>>(results) {
+            };
+            return Response.status(200).entity(
+                    entity).build();
+        } catch (MealBoxNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .build();
+        } 
+    } //end retrieveMealBoxByCategory
 
     @GET
     @Path("/{mealBoxId}")

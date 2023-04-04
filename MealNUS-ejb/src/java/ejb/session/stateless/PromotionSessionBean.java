@@ -19,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import util.exception.PromotionAlreadyAppliedException;
 import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
 
@@ -40,39 +41,43 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     //Should we offer applying the promotion code across categories as well?
     //If so, should we ensure a check that a box is only in one category?
     @Override
-    public List<MealBox> applyPromotionAcrossPlatform(String promotionCode) throws PromotionNotFoundException {
+    public List<MealBox> applyPromotionAcrossPlatform(String promotionCode) throws PromotionNotFoundException, PromotionAlreadyAppliedException {
         Promotion promotionToBeApplied = retrievePromotionByPromotionCode(promotionCode);
-        BigDecimal discountToBeApplied = promotionToBeApplied.getDiscount();
+        BigDecimal discountToBeApplied = BigDecimal.ONE.subtract(promotionToBeApplied.getDiscount());
         //Neeed to insert a check that ensure that the promotion discount is between 0 and 1
         List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
         for (MealBox box : mealBoxesAcrossPlatform) {
-            BigDecimal mealBoxPrice = box.getItemPrice();
-            BigDecimal updatedMealBoxPrice = mealBoxPrice.multiply(discountToBeApplied);
-            box.setItemPrice(updatedMealBoxPrice);
+            if (box.isIsPromotionApplied() == false) {
+                BigDecimal mealBoxPrice = box.getItemPrice();
+                BigDecimal updatedMealBoxPrice = mealBoxPrice.multiply(discountToBeApplied);
+                box.setItemPrice(updatedMealBoxPrice);
+                box.setIsPromotionApplied(true);
+            } else {
+                throw new PromotionAlreadyAppliedException("The meal box: " + box.getItemName() + "already has a promotion applied to it");
+
+            }
         }
-        
+
         promotionToBeApplied.setIsApplied(true);
         return mealBoxesAcrossPlatform;
     }
-    
-@Override
-public List<MealBox> disablePromotion (String promotionCode) throws PromotionNotFoundException {
-    Promotion promotionToBeDisabled = retrievePromotionByPromotionCode(promotionCode);
-    
-    List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
-    BigDecimal discountToBeDisabled = promotionToBeDisabled.getDiscount();
-    if (discountToBeDisabled.compareTo(BigDecimal.ZERO) != 0) {
-        for (MealBox box : mealBoxesAcrossPlatform) {
-            BigDecimal mealBoxPrice = box.getItemPrice();
-            BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled, 2, RoundingMode.HALF_UP);
-            box.setItemPrice(updatedMealBoxPrice);
-        }
-    }
-    
-    promotionToBeDisabled.setIsApplied(false);
-    return mealBoxesAcrossPlatform;
-}
 
+    @Override
+    public List<MealBox> disablePromotion(String promotionCode) throws PromotionNotFoundException {
+        Promotion promotionToBeDisabled = retrievePromotionByPromotionCode(promotionCode);
+        List<MealBox> mealBoxesAcrossPlatform = mealBoxSessionBean.retrieveAllMealBoxes();
+        BigDecimal discountToBeDisabled = BigDecimal.ONE.subtract(promotionToBeDisabled.getDiscount());
+        if (discountToBeDisabled.compareTo(BigDecimal.ZERO) != 0) {
+            for (MealBox box : mealBoxesAcrossPlatform) {
+                BigDecimal mealBoxPrice = box.getItemPrice();
+                BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled, 2, RoundingMode.HALF_UP);
+                box.setItemPrice(updatedMealBoxPrice);
+                box.setIsPromotionApplied(false);
+            }
+        }
+        promotionToBeDisabled.setIsApplied(false);
+        return mealBoxesAcrossPlatform;
+    }
 
     @Override
     public void createPromotion(Promotion promotion) throws PromotionNotFoundException, UnknownPersistenceException {

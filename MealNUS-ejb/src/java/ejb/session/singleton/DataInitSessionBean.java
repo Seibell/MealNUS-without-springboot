@@ -210,6 +210,7 @@ public class DataInitSessionBean {
             categorySessionBean.createCategory(new Category("Vegan", "https://upload.wikimedia.org/wikipedia/commons/5/5b/Vegan_friendly_icon.svg"));
             categorySessionBean.createCategory(new Category("Seafood", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrbetFbGgrCRQjke31-z0y76TZM0-95gh1Bw&usqp=CAU"));
             categorySessionBean.createCategory(new Category("Meat", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMOKwvJ5oCa297do9pg_h0EA2OyXkevIA8Zg&usqp=CAU"));
+            categorySessionBean.createCategory(new Category("Site-Wide", "")); //For promotions
         }
         if (mealBoxSessionBean.retrieveAllMealBoxes().isEmpty()) {
             MealBox box1 = new MealBox("https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1660763547-veestro-best-vegan-meal-delivery-1643295633.jpg?crop=0.670xw:1.00xh;0.223xw,0&resize=980:*",

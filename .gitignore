@@ -53,3 +53,10 @@ MealNUS-war/dist/
 hs_err_pid*
 /MealNUS-ejb/nbproject/private/
 /MealNUS-war/nbproject/private/
+MealNUS-ejb/nbproject/project.properties
+MealNUS-ejb/nbproject/project.xml
+.gitignore
+MealNUS-war/nbproject/build-impl.xml
+MealNUS-war/nbproject/genfiles.properties
+MealNUS-war/nbproject/project.properties
+MealNUS-war/nbproject/project.xml

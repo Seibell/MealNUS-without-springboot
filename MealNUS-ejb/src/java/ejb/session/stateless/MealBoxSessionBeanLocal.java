@@ -36,5 +36,7 @@ public interface MealBoxSessionBeanLocal {
     public MealBox addNewQuantity(Long id, Integer quantity);
 
     public MealBox updateMealBox(Long id, MealBox mealbox);
+
+    public List<MealBox> retrieveMealboxByCategory(String category) throws MealBoxNotFoundException;
     
 }

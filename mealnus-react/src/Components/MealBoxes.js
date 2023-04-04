@@ -3,7 +3,9 @@ import "../MealBoxes.css";
 import Axios from "axios";
 import NavBar from "./NavBar.js";
 //import { parseISO, format } from "date-fns";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { CartContext } from "../Context/CartContext";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Grid,
@@ -30,11 +32,19 @@ import {
   Divider,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { AuthContext } from "./AuthContext";
 
 const MealBoxes = () => {
   const [mealBoxes, setMealBoxes] = useState([]);
   const [selectedMealBox, setSelectedMealBox] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+
+  const history = useNavigate();
+
+  const [cart, setCart] = useContext(CartContext);
+  const { currentUser } = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     Axios.get(
@@ -66,6 +76,52 @@ const MealBoxes = () => {
       return newQuantity < 0 ? 0 : newQuantity;
     });
   };
+
+  const handleOrderNow = (mealBox) => {
+    const newMealBox = { ...mealBox, quantity: 1 };
+    setCart((prevCart) => {
+      const existingMealBoxIndex = prevCart.findIndex(
+        (item) => item.mealBoxId === newMealBox.mealBoxId
+      );
+      if (existingMealBoxIndex >= 0) {
+        const updatedCart = [...prevCart];
+        updatedCart[existingMealBoxIndex].quantity += 1;
+        return updatedCart;
+      } else {
+        return [...prevCart, newMealBox];
+      }
+    });
+    navigate("/cart");
+  };
+
+  const handleAddToCart = (mealBox, quantity) => {
+    if (quantity <= 0) {
+      alert("Please select a quantity greater than 0");
+      return;
+    }
+
+    const newMealBox = { ...mealBox, quantity };
+    setCart((prevCart) => {
+      const existingMealBoxIndex = prevCart.findIndex(
+        (item) => item.mealBoxId === newMealBox.mealBoxId
+      );
+      if (existingMealBoxIndex >= 0) {
+        const updatedCart = [...prevCart];
+        updatedCart[existingMealBoxIndex].quantity += quantity;
+        return updatedCart;
+      } else {
+        return [...prevCart, newMealBox];
+      }
+    });
+
+    setQuantity(0);
+    handleClose();
+  };
+
+  if (!currentUser) {
+    return <div>Error: User not found.</div>;
+  }
+  
   return (
     <div>
       <NavBar />
@@ -101,7 +157,12 @@ const MealBoxes = () => {
                     </CardContent>
                   </CardActionArea>
                   <CardActions>
-                    <Button size="small" variant="contained" color="primary">
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleOrderNow(mealBox)}
+                    >
                       Order Now
                     </Button>
 
@@ -109,6 +170,7 @@ const MealBoxes = () => {
                       size="small"
                       variant="outlined"
                       startIcon={<ShoppingCartIcon />}
+                      onClick={() => handleAddToCart(mealBox, 1)}
                     >
                       Add to Cart
                     </Button>
@@ -213,7 +275,12 @@ const MealBoxes = () => {
               </ButtonGroup>
             </Grid>
             <Grid item>
-              <Button size="small" variant="contained" color="primary">
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={() => handleOrderNow(selectedMealBox)}
+              >
                 Order Now
               </Button>
             </Grid>
@@ -222,6 +289,7 @@ const MealBoxes = () => {
                 size="small"
                 variant="outlined"
                 startIcon={<ShoppingCartIcon />}
+                onClick={() => handleAddToCart(selectedMealBox, quantity)}
               >
                 Add to Cart
               </Button>

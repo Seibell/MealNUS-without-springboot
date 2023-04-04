@@ -24,17 +24,17 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
     public Category retrieveCategoryById(Long categoryId) {
         return em.find(Category.class, categoryId);
     }
-    
+
     @Override
     public Category retrieveCategoryByName(String categoryName) {
-    Query query = em.createQuery("SELECT c FROM Category c WHERE c.name = :categoryName");
-    query.setParameter("categoryName", categoryName);
-    try {
-        return (Category) query.getSingleResult();
-    } catch (NoResultException ex) {
-        return null;
+        Query query = em.createQuery("SELECT c FROM Category c WHERE c.name = :categoryName");
+        query.setParameter("categoryName", categoryName);
+        try {
+            return (Category) query.getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
-}
 
     @Override
     public List<Category> retrieveAllCategories() {
