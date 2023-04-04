@@ -261,20 +261,21 @@ function AdminOrders() {
                 </Breadcrumbs>
               </div>
               <Grid container spacing={2}>
-                Order Management System
-                <Grid item xs={12}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      height: 500,
-                    }}
-                  >
+                  Order Management System
+                  <Grid item xs={12}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: 500,
+                      }}
+                    >
                     <AdminOrderTable />
-                  </Paper>
+                      
+                    </Paper>
+                  </Grid>
                 </Grid>
-              </Grid>
             </div>
             <Copyright sx={{ pt: 4 }} />
           </Container>
