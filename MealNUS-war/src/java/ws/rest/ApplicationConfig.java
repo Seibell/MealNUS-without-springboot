@@ -33,6 +33,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) 
     {
         resources.add(ws.rest.AllergenResource.class);
+        resources.add(ws.rest.CategoryResponse.class);
         resources.add(ws.rest.CorsFilter.class);
         resources.add(ws.rest.ForumResource.class);
         resources.add(ws.rest.IngredientResource.class);
@@ -43,6 +44,5 @@ public class ApplicationConfig extends Application {
         resources.add(ws.rest.ReviewResource.class);
         resources.add(ws.rest.StaffResource.class);
         resources.add(ws.rest.UserResource.class);
-        resources.add(ws.rest.CategoryResponse.class);
     }    
 }

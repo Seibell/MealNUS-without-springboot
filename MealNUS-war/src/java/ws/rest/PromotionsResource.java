@@ -26,6 +26,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import util.exception.PromotionAlreadyAppliedException;
 import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
 import ws.model.RetrieveAllPromotionsResponse;
@@ -61,6 +62,12 @@ public class PromotionsResource {
         } catch (PromotionNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .build();
+        } catch (PromotionAlreadyAppliedException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Promotion already applied")
                     .build();
             return Response.status(404).entity(exception)
                     .build();

@@ -10,6 +10,7 @@ import entity.Promotion;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.PromotionAlreadyAppliedException;
 import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
 
@@ -36,7 +37,7 @@ public interface PromotionSessionBeanLocal {
 
     public void deletePromotion(Long promotionId);
 
-    public List<MealBox> applyPromotionAcrossPlatform(String promotionCode) throws PromotionNotFoundException;
+    public List<MealBox> applyPromotionAcrossPlatform(String promotionCode) throws PromotionNotFoundException, PromotionAlreadyAppliedException;
 
     public Promotion retrievePromotionByPromotionCode(String promotionCode) throws PromotionNotFoundException;
 
