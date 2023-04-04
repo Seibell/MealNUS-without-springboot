@@ -7,10 +7,13 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import util.enumeration.ForumCategory;
@@ -33,14 +36,31 @@ public class ForumPost implements Serializable {
     private String[] postAttachments;
     private ForumCategory forumCategory;
     private Integer numThumbsUp;
+    private Integer numThumbsDown;
+    
+    @OneToOne //unidirectional, such that forum can refer to user while user cannot refer to forum 
+    private User user;
+    
+    @OneToMany //unidirectional
+    private List<ForumPost> replies;
+    
+    
     public ForumPost() {
     }
 
     public ForumPost(Date postDate, String posTitle, String postDescription) {
         this.numThumbsUp = 0;
+        this.numThumbsDown = 0;
         this.postDate = postDate;
         this.posTitle = posTitle;
         this.postDescription = postDescription;
+    }
+
+    public ForumPost(Date postDate, String posTitle, String postDescription, User user) {
+        this.postDate = postDate;
+        this.posTitle = posTitle;
+        this.postDescription = postDescription;
+        this.user = user;
     }
 
     
@@ -172,6 +192,48 @@ public class ForumPost implements Serializable {
      */
     public void setNumThumbsUp(Integer numThumbsUp) {
         this.numThumbsUp = numThumbsUp;
+    }
+
+    /**
+     * @return the user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * @return the replies
+     */
+    public List<ForumPost> getReplies() {
+        return replies;
+    }
+
+    /**
+     * @param replies the replies to set
+     */
+    public void setReplies(List<ForumPost> replies) {
+        this.replies = replies;
+    }
+
+    /**
+     * @return the numThumbsDown
+     */
+    public Integer getNumThumbsDown() {
+        return numThumbsDown;
+    }
+
+    /**
+     * @param numThumbsDown the numThumbsDown to set
+     */
+    public void setNumThumbsDown(Integer numThumbsDown) {
+        this.numThumbsDown = numThumbsDown;
     }
     
 }

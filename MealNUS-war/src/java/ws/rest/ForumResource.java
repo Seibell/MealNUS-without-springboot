@@ -6,7 +6,9 @@
 package ws.rest;
 
 import ejb.session.stateless.ForumSessionBeanLocal;
+import ejb.session.stateless.UserSessionBeanLocal;
 import entity.ForumPost;
+import entity.User;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
@@ -23,6 +25,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
+import util.exception.UserNotFoundException;
 import ws.model.CreateForumPostResponse;
 import ws.model.RetrieveAllForumPostsResponse;
 
@@ -33,13 +36,18 @@ import ws.model.RetrieveAllForumPostsResponse;
 @Path("Forum")
 public class ForumResource {
 
+    private final UserSessionBeanLocal userSessionBeanLocal;
+
     @Context
     private UriInfo context;
 
     private final ForumSessionBeanLocal forumSessionBeanLocal;
+    
+    
 
     public ForumResource() {
         forumSessionBeanLocal = lookupForumSessionBeanLocal();
+        userSessionBeanLocal = lookupUserSessionBeanLocal();
     }
 
     @GET
@@ -52,15 +60,20 @@ public class ForumResource {
     }
 
     @POST
-    @Path("createNewForumPost")    //http://localhost:8080/MealNUS-war/rest/Forum/createNewForumPost
+    @Path("createNewForumPost")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createNewForumPost(CreateForumPostResponse createForumPostResponse) {
+    public Response createNewForumPost(CreateForumPostResponse createForumPostResponse) throws UserNotFoundException {
         ForumPost forumPost = new ForumPost(
                 createForumPostResponse.getPostDate(),
                 createForumPostResponse.getPostTitle(),
                 createForumPostResponse.getPostDescription()
         );
+
+        // Get the user's ID and associate it with the forum post
+        Long userId = createForumPostResponse.getUserId();
+        User user = userSessionBeanLocal.retrieveUserById(userId);
+        forumPost.setUser(user);
 
         ForumPost createdForumPost = forumSessionBeanLocal.createForumPost(forumPost);
 
@@ -76,10 +89,29 @@ public class ForumResource {
         return Response.status(Status.OK).build();
     }
 
+    @PUT
+    @Path("thumbsDownForumPost/{postId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response increaseThumbsDown(@PathParam("postId") Long postId) {
+        forumSessionBeanLocal.increaseThumbsDown(postId);
+        return Response.status(Status.OK).build();
+    }
+
     private ForumSessionBeanLocal lookupForumSessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
             return (ForumSessionBeanLocal) c.lookup("java:global/MealNUS/MealNUS-ejb/ForumSessionBean!ejb.session.stateless.ForumSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private UserSessionBeanLocal lookupUserSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (UserSessionBeanLocal) c.lookup("java:global/MealNUS/MealNUS-ejb/UserSessionBean!ejb.session.stateless.UserSessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

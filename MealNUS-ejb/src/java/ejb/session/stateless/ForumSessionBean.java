@@ -57,12 +57,19 @@ public class ForumSessionBean implements ForumSessionBeanLocal {
     public void deleteForumPost(ForumPost forumPost) {
         em.remove(forumPost);
     }
-    
-    
+
     @Override
     public ForumPost increaseThumbsUp(Long postId) {
         ForumPost post = em.find(ForumPost.class, postId);
         post.setNumThumbsUp(post.getNumThumbsUp() + 1);
+        em.persist(post);
+        return post;
+    }
+
+    @Override
+    public ForumPost increaseThumbsDown(Long postId) {
+        ForumPost post = em.find(ForumPost.class, postId);
+        post.setNumThumbsDown(post.getNumThumbsDown() + 1);
         em.persist(post);
         return post;
     }

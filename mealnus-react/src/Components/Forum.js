@@ -15,13 +15,56 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  makeStyles,
 } from "@material-ui/core";
 
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
 import { AuthContext } from "./AuthContext.js";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme();
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(8),
+    minWidth: 120,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    width: "90%",
+    margin: "auto",
+    marginBottom: theme.spacing(2),
+    backgroundColor: "#FFEFD5",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "column",
+  },
+  userImage: {
+    width: "50px",
+    height: "50px",
+    borderRadius: "50%",
+    marginRight: theme.spacing(1),
+  },
+  userContainer: {
+    display: "flex",
+    alignItems: "center",
+  },
+  thumbContainer: {
+    display: "flex",
+    alignItems: "center",
+  },
+  thumbIcon: {
+    fontSize: "25px",
+  },
+  thumbCount: {
+    marginLeft: theme.spacing(1),
+  },
+  time: {
+    marginTop: theme.spacing(1),
+  },
+}));
 
 const Forum = () => {
   const [posts, setPosts] = useState([]);
@@ -29,7 +72,9 @@ const Forum = () => {
   const [newPostDescription, setNewPostDescription] = useState("");
   const [filter, setFilter] = React.useState("");
   const [userLikes, setUserLikes] = useState({});
+  const [userDislikes, setUserDislikes] = useState({});
   const { currentUser } = useContext(AuthContext);
+  const classes = useStyles();
 
   useEffect(() => {
     fetchPosts();
@@ -54,6 +99,7 @@ const Forum = () => {
       postDate: new Date().toISOString(),
       postTitle: newPostTitle,
       postDescription: newPostDescription,
+      userId: currentUser.userId, // Assuming currentUser has an "id" field
     };
 
     await axios.post(
@@ -74,7 +120,7 @@ const Forum = () => {
 
   const handleThumbUp = async (postId) => {
     const currentLikes = userLikes[postId] || 0;
-    if (currentLikes < 5) {
+    if (currentLikes < 1) {
       await axios.put(
         `http://localhost:8080/MealNUS-war/rest/Forum/thumbsUpForumPost/${postId}`
       );
@@ -82,6 +128,19 @@ const Forum = () => {
       setUserLikes({ ...userLikes, [postId]: currentLikes + 1 });
     } else {
       setErrorMessage("You already liked this post.");
+    }
+  };
+
+  const handleThumbDown = async (postId) => {
+    const currentDislikes = userDislikes[postId] || 0;
+    if (currentDislikes < 1) {
+      await axios.put(
+        `http://localhost:8080/MealNUS-war/rest/Forum/thumbsDownForumPost/${postId}`
+      );
+      fetchPosts();
+      setUserDislikes({ ...userDislikes, [postId]: currentDislikes + 1 });
+    } else {
+      setErrorMessage("You can't dislike this post more.");
     }
   };
 
@@ -98,17 +157,16 @@ const Forum = () => {
         <Typography variant="h4" gutterBottom>
           Forum
         </Typography>
-        <FormControl style={{ marginTop: 15, marginBottom: 35 }}>
-          <InputLabel id="filter-select-label" style={{}}>
-            Filter By
-          </InputLabel>
+        <FormControl className={classes.formControl}>
+          <InputLabel id="filter-select-label">Filter By</InputLabel>
           <Select
             labelId="filter-select-label"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           >
-            <MenuItem value="popularity">Popularity(Desc)</MenuItem>
-            <MenuItem value="time">Time(Desc)</MenuItem>
+            <MenuItem value="time">Latest Posts</MenuItem>
+            <MenuItem value="popularityUp">ThumbUp: High to Low</MenuItem>
+            <MenuItem value="popularityDown">ThumbDown: High to Low</MenuItem>
           </Select>
         </FormControl>
         <Grid container spacing={3}>
@@ -125,39 +183,78 @@ const Forum = () => {
                       new Date(b.postDate.replace("[UTC]", "")) -
                       new Date(a.postDate.replace("[UTC]", ""))
                     );
-                  } else {
+                  } else if (filter === "popularityUp") {
                     return b.numThumbsUp - a.numThumbsUp;
+                  } else {
+                    return b.numThumbsDown - a.numThumbsDown;
                   }
                 })
                 .map((post) => (
                   <Grid item xs={12} key={post.postId}>
-                    <Paper elevation={2} style={{ padding: 16, width: "90vw" }}>
-                      <Typography variant="h5">
+                    <Paper className={classes.paper} elevation={2}>
+                      <Typography variant="h5" gutterBottom>
                         <strong>{post.posTitle}</strong>
                       </Typography>
-                      <Typography variant="body1">
+                      <Typography variant="body1" gutterBottom>
                         {post.postDescription}
                       </Typography>
-                      <div style={{ display: "flex", marginTop: 16 }}>
-                        <div style={{ display: "flex", flexDirection: "column" }}>
+                      <div className={classes.userContainer}>
+                        {post.user.imageURL && (
+                          <img
+                            src={post.user.imageURL}
+                            alt={`${post.user.firstName} ${post.user.lastName}`}
+                            className={classes.userImage}
+                          />
+                        )}
+                        <Typography variant="body2">
+                          Posted by {post.user.firstName} {post.user.lastName}
+                        </Typography>
+                      </div>
+                      <div className={classes.thumbContainer}>
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
                           <IconButton
                             aria-label="thumbs up"
                             onClick={() => handleThumbUp(post.postId)}
                           >
-                            <ThumbUp />
+                            <ThumbUp className={classes.thumbIcon} />
                           </IconButton>
-                          <Typography>{post.numThumbsUp}</Typography>
+                          <Typography className={classes.thumbCount}>
+                            {post.numThumbsUp}
+                          </Typography>
                         </div>
-                        <Typography style={{ marginLeft: "auto" }}>
-                          {new Date(
-                            post.postDate.replace("[UTC]", "")
-                          ).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
-                        </Typography>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            marginLeft: 16,
+                          }}
+                        >
+                          <IconButton
+                            aria-label="thumbs down"
+                            onClick={() => handleThumbDown(post.postId)}
+                          >
+                            <ThumbDown className={classes.thumbIcon} />
+                          </IconButton>
+                          <Typography className={classes.thumbCount}>
+                            {post.numThumbsDown}
+                          </Typography>
+                        </div>
                       </div>
+                      <Typography variant="body2" className={classes.time}>
+                        {new Date(
+                          post.postDate.replace("[UTC]", "")
+                        ).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                          second: "numeric",
+                          hour12: false,
+                        })}
+                      </Typography>
                     </Paper>
                   </Grid>
                 ))}
@@ -190,7 +287,10 @@ const Forum = () => {
               Create Post
             </Button>
             {errorMessage !== "" && (
-              <Typography variant="body2" style={{ color: "red", marginTop: 16 }}>
+              <Typography
+                variant="body2"
+                style={{ color: "red", marginTop: 16 }}
+              >
                 {errorMessage}
               </Typography>
             )}

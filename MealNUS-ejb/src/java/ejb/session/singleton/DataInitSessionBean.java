@@ -125,8 +125,8 @@ public class DataInitSessionBean {
         if (ingredientSessionBean.retrieveAllIngredients().isEmpty()) {
             ingredientSessionBean.createIngredient(new Ingredient("Rice",
                     "https://images.unsplash.com/photo-1516684732162-798a0062be99?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cmljZXxlbnwwfHwwfHw%3D&w=1000&q=80"));
-      
-        ingredientSessionBean.createIngredient(new Ingredient("Noodle",
+
+            ingredientSessionBean.createIngredient(new Ingredient("Noodle",
                     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Mama_instant_noodle_block.jpg/1200px-Mama_instant_noodle_block.jpg"));
 
             ingredientSessionBean.createIngredient(new Ingredient("Chicken",
@@ -245,8 +245,7 @@ public class DataInitSessionBean {
 
             Review r3 = reviewSessionBean.retrieveReviewById(4L);
             box3.addReview(r3);
-            
-            
+
             Category c1 = categorySessionBean.retrieveCategoryById(4L);
             Category c2 = categorySessionBean.retrieveCategoryById(1L);
             Category c3 = categorySessionBean.retrieveCategoryById(2L);
@@ -282,7 +281,14 @@ public class DataInitSessionBean {
         //TESTING PURPOSE
         if (forumSessionBean.retrieveAllForumPosts().isEmpty()) {
             Calendar calendar = Calendar.getInstance();
-            forumSessionBean.createForumPost(new ForumPost(new Date(calendar.getTime().getTime()), "Test", "Welcome to MealNUS Forum! Share your experience with the mealboxes anonymously here:)"));
+            ForumPost fp1 = new ForumPost(new Date(calendar.getTime().getTime()), "Test", "Welcome to MealNUS Forum! Share your experience with the mealboxes anonymously here:)");
+            try {
+                fp1.setUser(userSessionBean.retrieveUserByEmail("user@gmail.com"));
+            } catch (UserNotFoundException ex) {
+                Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            forumSessionBean.createForumPost(fp1);
+
         }
 
         //TESTING PURPOSE

@@ -63,4 +63,10 @@
         <local>ejb.session.stateless.CategorySessionBeanLocal</local>
         <ejb-link>MealNUS-ejb.jar#CategorySessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>UserSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.UserSessionBeanLocal</local>
+        <ejb-link>MealNUS-ejb.jar#UserSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
