@@ -7,9 +7,9 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { CartContext } from "../Context/CartContext";
-import NavBar from "./NavBar.js";
-import { AuthContext } from "./AuthContext.js";
+import { CartContext } from "../../Context/CartContext";
+import NavBar from "../Navigation/NavBar.js";
+import { AuthContext } from "../../Context/AuthContext.js";
 
 const Checkout = () => {
   const [cart] = useContext(CartContext);

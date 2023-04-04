@@ -29,7 +29,7 @@ import LocalOfferTwoToneIcon from '@mui/icons-material/LocalOfferTwoTone';
 import { mainListItems, secondaryListItems } from './AdminSideBar';
 import AdminOrderTable from './AdminOrderTable';
 import Avatar from '@mui/material/Avatar';
-import mealNUSLogo from '../Assets/MealNUS-Logo.png';
+import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 
 
 // PLS NOTE THIS IS PURELY A DRAFT FOR TESTING, ACTUAL ONE TO BE UPDATED HERE SHORTLY...

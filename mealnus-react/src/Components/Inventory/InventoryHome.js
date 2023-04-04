@@ -25,7 +25,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import LocalOfferTwoToneIcon from '@mui/icons-material/LocalOfferTwoTone';
 import { useNavigate } from 'react-router-dom';
-import { AdminAuthContext } from "../AdminAuthContext";
+import { AdminAuthContext } from "../../Context/AdminAuthContext";
 import { useContext } from "react";
 
 import Table from '@mui/material/Table';
@@ -45,7 +45,7 @@ import { Alert } from '@mui/material';
 import { useCallback } from "react";
 import AddCircle from "@mui/icons-material/AddCircle";
 
-import { mainListItems, secondaryListItems } from '.././AdminSideBar';
+import { mainListItems, secondaryListItems } from '../Admin/AdminSideBar';
 import Avatar from '@mui/material/Avatar';
 import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 

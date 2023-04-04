@@ -1,10 +1,10 @@
 ///this one is the current no working one
-import "../MealBoxes.css";
+import "./MealBoxes.css";
 import Axios from "axios";
-import NavBar from "./NavBar.js";
+import NavBar from "../Navigation/NavBar.js";
 //import { parseISO, format } from "date-fns";
 import { useState, useEffect, useContext } from "react";
-import { CartContext } from "../Context/CartContext";
+import { CartContext } from "../../Context/CartContext";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -32,7 +32,7 @@ import {
   Divider,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "../../Context/AuthContext";
 
 const MealBoxes = () => {
   const [mealBoxes, setMealBoxes] = useState([]);

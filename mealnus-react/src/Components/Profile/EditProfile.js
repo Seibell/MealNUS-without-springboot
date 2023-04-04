@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { TextField, Button, Grid, Box, Typography, CircularProgress } from "@mui/material";
-import { AuthContext } from './AuthContext';
-import NavBar from './NavBar';
+import { AuthContext } from '../../Context/AuthContext';
+import NavBar from '../Navigation/NavBar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Navigate } from 'react-router-dom';
 import { Alert } from '@mui/material';
