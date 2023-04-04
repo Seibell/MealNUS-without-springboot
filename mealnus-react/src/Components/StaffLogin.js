@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Alert } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -8,13 +8,13 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import mealNUSLogo from '../Assets/MealNUS-Logo.png';
 import PersonIcon from '@mui/icons-material/Person';
 import '../App.css';
+import { AdminAuthContext } from "./AdminAuthContext";
 
 const classes = {
   root: "container",
@@ -44,29 +44,44 @@ function StaffLogin() {
   const [staff, setStaff] = useState(null);
   const theme = createTheme();
 
-  const handleEmailChange = event => {
+  const { setCurrentStaff } = useContext(AdminAuthContext);
+
+  const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
 
-  const handlePasswordChange = event => {
+  const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    fetch(`http://localhost:8080/MealNUS-war/rest/Staff/staffLogin?email=${email}&password=${password}`)
-      .then(response => response.json())
-      .then(data => {
-        setLoggedIn(true);
-        setStaff(data);
+    fetch(
+      `http://localhost:8080/MealNUS-war/rest/Staff/staffLogin?email=${email}&password=${password}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          setLoggedIn(true);
+          setStaff(data);
+          setCurrentStaff(data);
+          console.log(data);
+        } else {
+          setError('Invalid email or password');
+        }
       })
-      .catch(error => {
+      .catch((error) => {
         setError('Invalid email or password');
       });
   };
 
+  // useEffect(() => {
+  //   if (currentStaff === null) {
+  //     setLoggedIn(false);
+  //   }
+  // }, [currentStaff]);
+
   if (loggedIn) {
-    // return <Navigate to="/dashboard" />;
     return <Navigate to="/admindashboard" />;
   }
 
@@ -82,14 +97,11 @@ function StaffLogin() {
               alignItems: 'center',
             }}
           >
-
-            <div style={{
-              'margin-bottom': '30px'
-            }}>
+            <div style={{ marginBottom: '30px' }}>
               <img src={mealNUSLogo} alt="MealNUS Logo" />
             </div>
 
-            <Link href='/'>
+            <Link href="/">
               <Avatar sx={{ m: 1, bgcolor: 'black' }}>
                 <div>
                   <PersonIcon />

@@ -34,25 +34,27 @@ export default function AdminDashboardMtdRevenue() {
 
     return (
         <React.Fragment>
-            <LocalAtmTwoToneIcon />
-            <AdminTitle>MTD Revenue</AdminTitle>
-            <div className="grid-item" style={{ overflow: 'hidden' }}>
-                <Typography component="p" variant="h4">
-                    <Typography variant="h6" style={{ fontSize: '18px', display: 'inline' }}>
-                        $
-                    </Typography>{' '}
-                    {data.toFixed(0)}
-                </Typography>
-                <Typography color="text.secondary" sx={{ flex: 1 }}>
-                    As of {currentDate}
-                </Typography>
-                <br />
-                <LinearProgress variant="determinate" value={data / targetRevenue * 100} sx={{ width: '100%' }} />
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Typography variant="caption" color="text.secondary">
-                        <b>{targetRevenue}</b>
+            <div className="grid-container grid-item-mtd-revenue">
+                <LocalAtmTwoToneIcon />
+                <AdminTitle>MTD Revenue</AdminTitle>
+                <div className="grid-item" style={{ overflow: 'hidden' }}>
+                    <Typography component="p" variant="h4">
+                        <Typography variant="h6" style={{ fontSize: '18px', display: 'inline' }}>
+                            $
+                        </Typography>{' '}
+                        {data.toFixed(0)}
                     </Typography>
-                </Box>
+                    <Typography color="text.secondary" sx={{ flex: 1 }}>
+                        As of {currentDate}
+                    </Typography>
+                    <br />
+                    <LinearProgress variant="determinate" value={data / targetRevenue * 100} sx={{ width: '100%' }} />
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Typography variant="caption" color="text.secondary">
+                            <b>{targetRevenue}</b>
+                        </Typography>
+                    </Box>
+                </div>
             </div>
 
         </React.Fragment>

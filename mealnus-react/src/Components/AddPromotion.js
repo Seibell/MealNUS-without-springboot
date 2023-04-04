@@ -23,6 +23,8 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import LocalOfferTwoToneIcon from '@mui/icons-material/LocalOfferTwoTone';
+import { AdminAuthContext } from "./AdminAuthContext";
+import { useContext } from "react";
 
 // Mehak's Add Promotion
 import Axios from "axios";
@@ -114,6 +116,7 @@ const classes = {
 };
 
 function AddPromotion(props) {
+    const { currentStaff } = useContext(AdminAuthContext);
     const { id: id = 0 } = props;
     const [promotionName, setPromotionName] = useState("");
     const [discount, setDiscount] = useState("");
@@ -211,6 +214,11 @@ function AddPromotion(props) {
 
     const headerLabel = id === 0 ? "New Promotion" : "Edit Promotion";
 
+    if (!currentStaff) {
+        return <div>Error: Staff not found.</div>;
+    }
+
+
     return (
         <ThemeProvider theme={mdTheme}>
             <Box sx={{ display: 'flex' }}>
@@ -279,8 +287,8 @@ function AddPromotion(props) {
                             <ChevronLeftIcon />
                         </IconButton>
                     </Toolbar>
-                    <div>
-                        <img src={mealNUSLogo} alt="MealNUS Logo" />
+                    <div style={{ paddingLeft: '20px' }}>
+                        <img src={mealNUSLogo} alt="MealNUS Logo" style={{width: '80%', height: 'auto'}} />
                     </div>
                     <Divider />
                     <List component="nav">

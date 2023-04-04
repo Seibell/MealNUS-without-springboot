@@ -34,22 +34,24 @@ export default function AdminDashboardMtdCount() {
 
     return (
         <React.Fragment>
-            <AnimationTwoToneIcon />
-            <AdminTitle>MTD Orders</AdminTitle>
-            <div className="grid-item" style={{ overflow: 'hidden' }}>
-                <Typography component="p" variant="h4">
-                {data}
-                </Typography>
-                <Typography color="text.secondary" sx={{ flex: 1 }}>
-                    As of {currentDate}
-                </Typography>
-                <br/>
-                <LinearProgress variant="determinate" value={data / targetCount * 100} sx={{ width: '100%' }}/>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Typography variant="caption" color="text.secondary">
-                    <b>{targetCount}</b>
-                </Typography>
-                </Box>
+            <div className="grid-container grid-item-mtd-count">
+                <AnimationTwoToneIcon />
+                <AdminTitle>MTD Orders</AdminTitle>
+                <div className="grid-item" style={{ overflow: 'hidden' }}>
+                    <Typography component="p" variant="h4">
+                        {data}
+                    </Typography>
+                    <Typography color="text.secondary" sx={{ flex: 1 }}>
+                        As of {currentDate}
+                    </Typography>
+                    <br />
+                    <LinearProgress variant="determinate" value={data / targetCount * 100} sx={{ width: '100%' }} />
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Typography variant="caption" color="text.secondary">
+                            <b>{targetCount}</b>
+                        </Typography>
+                    </Box>
+                </div>
             </div>
         </React.Fragment>
     );

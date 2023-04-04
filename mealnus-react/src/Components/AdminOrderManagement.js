@@ -48,10 +48,10 @@ function Copyright(props) {
 
 function handleClick(event) {
   if (event.target.tagName === 'A') {
-      event.preventDefault();
-      const href = event.target.getAttribute('href');
-      console.info(`Navigating to ${href}`);
-      window.location.href = href;
+    event.preventDefault();
+    const href = event.target.getAttribute('href');
+    console.info(`Navigating to ${href}`);
+    window.location.href = href;
   }
 }
 
@@ -187,8 +187,8 @@ function AdminOrders() {
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
-          <div>
-            <img src={mealNUSLogo} alt="MealNUS Logo" />
+          <div style={{ paddingLeft: '20px' }}>
+            <img src={mealNUSLogo} alt="MealNUS Logo" style={{ width: '80%', height: 'auto' }} />
           </div>
           <Divider />
           <List component="nav">
