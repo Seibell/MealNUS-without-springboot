@@ -113,6 +113,8 @@ const classes = {
   input: "input",
 };
 
+const API_KEY = '995621471943455';
+const default_image_url = 'https://i.imgur.com/Kvyecsm.png';
 
 
 function AddMealBox(props) {
@@ -123,9 +125,10 @@ function AddMealBox(props) {
   const [itemDescription, setitemDescription] = useState('');
   const [quantityAvailable, setquantityAvailable] = useState('');
   const [success, setSuccess] = useState(false);
-
+  const [itemImage, setitemImage] = useState('');
   const [query, setQuery] = useState('');
   const [cquery, setcQuery] = useState('');
+  const [aquery, setaQuery] = useState('');
 
   const [open, setOpen] = React.useState(true);
 
@@ -138,7 +141,12 @@ function AddMealBox(props) {
  
   //Category
   const [availableCategory, setavailableCategory] = useState([]);
-  const [Category, setCategory] = useState([]);
+  const [categories, setCategory] = useState([]);
+
+//Allergen
+const [availableAllergens, setavailableAllergens] = useState([]);
+const [allergens, setAllergens] = useState([]);
+  
 
   const navigate = useNavigate();
   const theme = createTheme();
@@ -154,6 +162,10 @@ function AddMealBox(props) {
 
   const handleCodeChange = (event) => {
     setitemCode(event.target.value);
+  };
+
+  const handleitemImage = (event) => {
+    setitemImage(event.target.value);
   };
 
   const handleCostChange = (event) => {
@@ -188,6 +200,12 @@ function AddMealBox(props) {
     //console.log(availableIngredients)
   );
 
+  //search filter
+  const filteredallergen = availableAllergens.filter(
+    (allergen) =>
+    allergen.allergenName.toLowerCase().includes(aquery.toLowerCase())
+    //console.log(availableIngredients)
+  );
 
   const handleInputChange = (event, ingredient) => {
     if (event.target.checked) {
@@ -204,12 +222,56 @@ function AddMealBox(props) {
     const handleCategoryChange = (event, category) => {
       if (event.target.checked) {
         setCategory([
-          ...category,
+          ...categories,
           { categoryId: category.categoryId, name: category.name, picture: category.picture },
         ]);
-        console.log(category)
+        console.log(categories)
       } else {
-        setCategory(category.filter((item) => item.categoryId !== category.categoryId))
+        setCategory(categories.filter((item) => item.categoryId !== category.categoryId))
+      }
+    };
+
+    const handleallergenChange = (event, allergen) => {
+      if (event.target.checked) {
+        setAllergens([
+          ...allergens,
+          { allergenId: allergen.allergenId, allergenName: allergen.allergenName, allergenDescription: allergen.allergenDescription },
+        ]);
+        console.log(allergens)
+      } else {
+        setAllergens(allergens.filter((item) => item.allergenId !== allergen.allergenId))
+      }
+    };
+
+    const [error, setError] = useState("");
+
+    const uploadImage = async (file) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'mealnus');
+      formData.append('api_key', API_KEY);
+  
+      try {
+        console.log(formData);
+        const response = await Axios.post('https://api.cloudinary.com/v1_1/drkpzjlro/image/upload', formData);
+        return response.data.secure_url;
+      } catch (error) {
+        console.error('Error uploading image:', error.response?.data?.error || error.message);
+        return null;
+      }
+    };
+
+    const handleFileChange = async (e) => {
+      if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        //setpicture(event.target.files[0]);
+        const uploadedImageURL = await uploadImage(file);
+  
+        if (uploadedImageURL) {
+          setitemImage(uploadedImageURL);
+        } else {
+          setError("Failed to upload image");
+        }
       }
     };
 
@@ -219,11 +281,14 @@ function AddMealBox(props) {
       const Mealbox = {
         itemName,
         itemCode,
+        itemImage,
         itemCost,
         itemPrice,
         itemDescription,
         quantityAvailable,
-        ingredients
+        allergens,
+        ingredients,
+        categories
       }; // i think u need to create some mapping for id == name or make name unique or smth so it can be called by the json
   
       console.log(Mealbox)
@@ -261,6 +326,18 @@ function AddMealBox(props) {
     )
       .then((response) => {
         setavailableCategory(response.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    Axios.get(
+      "http://localhost:8080/MealNUS-war/rest/Allergen/retrieveAllAllergent"
+    )
+      .then((response) => {
+        setavailableAllergens(response.data)
       })
       .catch((err) => {
         console.log(err);
@@ -493,6 +570,17 @@ function AddMealBox(props) {
                                       </div>
 
                                       <div className="form-group">
+                                          <label htmlFor="image">Upload Image</label>
+                                          <input
+                                              id="image"
+                                              required
+                                              className="form-control"
+                                              accept="image/*"
+                                              type="file" onChange={handleFileChange}
+                                          />
+                                      </div>
+
+                                      <div className="form-group">
                                         <label htmlFor="inputName">Ingredients</label>
                                           <div>
                                             <input
@@ -525,6 +613,43 @@ function AddMealBox(props) {
                                           </div>
                                         </div>
                                       </div>
+
+
+                                      <div className="form-group">
+                                        <label htmlFor="inputName">Allergens</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              placeholder="Search"
+                                              value={aquery}
+                                              onChange={(event) => setaQuery(event.target.value)}
+                                            />
+                                          <div style={{ maxHeight: '150px', maxWidth:'200px', overflowY: 'scroll' }}>
+                                            <table>
+                                              <thead>
+                                                <tr>
+                                                  
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                              {filteredallergen.map((allergen) => (
+                                                  <tr  key={allergen.allergenId}>
+                                                    <td>
+                                                    <input
+                                                    type="checkbox"
+                                                    value={allergen}
+                                                    onChange={(event) => handleallergenChange(event, allergen)}/>
+                                                  {allergen.allergenName}
+                                                    </td>
+                                                  </tr>
+                                                ))}
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+                                      </div>
+
+
 
                                       <div className="form-group">
                                           <label htmlFor="inputName">Categories</label>

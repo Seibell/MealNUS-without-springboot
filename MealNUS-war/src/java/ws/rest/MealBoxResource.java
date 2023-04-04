@@ -53,6 +53,8 @@ public class MealBoxResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createMealBox(MealBox m) {
         System.out.println("ingredients: " + m.getIngredients().toString());
+        System.out.println("a : retrieve: " + m.getAllergens().toString());
+        System.out.println("c : retrieve: " + m.getCategories().toString());
         mealBoxSessionBeanLocal.createMealBox(m);
         return Response.status(Status.OK).entity(m).build();
     } //end createCustomer 
