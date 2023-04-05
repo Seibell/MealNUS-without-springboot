@@ -16,6 +16,11 @@ import {
   Select,
   MenuItem,
   makeStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@material-ui/core";
 
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
@@ -40,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "column",
+    position: "relative",
   },
   userImage: {
     width: "50px",
@@ -48,12 +54,19 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   userContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
     display: "flex",
     alignItems: "center",
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(2),
   },
   thumbContainer: {
     display: "flex",
-    alignItems: "center",
+    justifyContent: "flex-end",
+    alignSelf: "flex-end",
+    // marginTop: "auto",
   },
   thumbIcon: {
     fontSize: "25px",
@@ -62,6 +75,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
   },
   time: {
+    justifyContent: "flex-end",
+    alignSelf: "flex-end",
     marginTop: theme.spacing(1),
   },
 }));
@@ -116,6 +131,15 @@ const Forum = () => {
       return;
     }
     setErrorMessage("");
+  };
+
+  const [openReplyDialog, setOpenReplyDialog] = useState(false);
+  const handleClickOpen = () => {
+    setOpenReplyDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenReplyDialog(false);
   };
 
   const handleThumbUp = async (postId, userId) => {
@@ -254,6 +278,14 @@ const Forum = () => {
                           </Typography>
                         </div>
                       </div>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleClickOpen}
+                        style={{ margin: "auto", backgroundColor: "orange" }}
+                      >
+                        View Reply
+                      </Button>
                       <Typography variant="body2" className={classes.time}>
                         {new Date(
                           post.postDate.replace("[UTC]", "")
@@ -268,45 +300,40 @@ const Forum = () => {
                         })}
                       </Typography>
                     </Paper>
+                    <Dialog
+                      open={openReplyDialog}
+                      onClose={handleClose}
+                      aria-labelledby="form-dialog-title"
+                    >
+                      <DialogTitle id="form-dialog-title">
+                        View Reply
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText>
+                          Write your reply to this post here.
+                        </DialogContentText>
+                        <TextField
+                          autoFocus
+                          margin="dense"
+                          id="reply"
+                          label="Reply"
+                          type="text"
+                          fullWidth
+                        />
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                          Cancel
+                        </Button>
+                        <Button onClick={handleClose} color="primary">
+                          Submit
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                   </Grid>
                 ))}
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              Create New Post
-            </Typography>
-            <TextField
-              label="Title"
-              fullWidth
-              value={newPostTitle}
-              onChange={(e) => setNewPostTitle(e.target.value)}
-            />
-            <TextField
-              label="Description"
-              fullWidth
-              multiline
-              minRows={4}
-              value={newPostDescription}
-              onChange={(e) => setNewPostDescription(e.target.value)}
-              style={{ marginTop: 16 }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={createNewPost}
-              style={{ marginTop: 16 }}
-            >
-              Create Post
-            </Button>
-            {/* {errorMessage !== "" && (
-              <Typography
-                variant="body2"
-                style={{ color: "red", marginTop: 16 }}
-              >
-                {errorMessage}
-              </Typography>
-            )} */}
-          </Grid>
+          {/* //add this line onwards about the codes for the second part */}
         </Grid>
 
         <Snackbar
