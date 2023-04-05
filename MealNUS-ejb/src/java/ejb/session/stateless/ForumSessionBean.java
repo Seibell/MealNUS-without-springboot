@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.ForumPost;
+import entity.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -59,18 +60,38 @@ public class ForumSessionBean implements ForumSessionBeanLocal {
     }
 
     @Override
-    public ForumPost increaseThumbsUp(Long postId) {
-        ForumPost post = em.find(ForumPost.class, postId);
+    public Boolean increaseThumbsUp(Long postId, Long userId) {
+        ForumPost post = retrieveForumPostById(postId);
+        //check if the user alr liked the post
+        for (User user : post.getLikedUsers()) {
+            if (user.getUserId() == userId) {
+                return false;
+            }
+        }
+        User currUser = em.find(User.class, userId);
         post.setNumThumbsUp(post.getNumThumbsUp() + 1);
+        List<User> likedUsers = post.getLikedUsers();
+        likedUsers.add(currUser);
+        post.setLikedUsers(likedUsers);
         em.persist(post);
-        return post;
+        return true;
     }
 
     @Override
-    public ForumPost increaseThumbsDown(Long postId) {
-        ForumPost post = em.find(ForumPost.class, postId);
+    public Boolean increaseThumbsDown(Long postId, Long userId) {
+        ForumPost post = retrieveForumPostById(postId);
+        //check if the user alr liked the post
+        for (User user : post.getDislikedUsers()) {
+            if (user.getUserId() == userId) {
+                return false;
+            }
+        }
+        User currUser = em.find(User.class, userId);
         post.setNumThumbsDown(post.getNumThumbsDown() + 1);
+        List<User> dislikedUsers = post.getDislikedUsers();
+        dislikedUsers.add(currUser);
+        post.setDislikedUsers(dislikedUsers);
         em.persist(post);
-        return post;
+        return true;
     }
 }

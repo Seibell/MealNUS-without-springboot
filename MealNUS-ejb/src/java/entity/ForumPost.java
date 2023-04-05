@@ -6,12 +6,14 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -37,15 +39,24 @@ public class ForumPost implements Serializable {
     private ForumCategory forumCategory;
     private Integer numThumbsUp;
     private Integer numThumbsDown;
-    
+
     @OneToOne //unidirectional, such that forum can refer to user while user cannot refer to forum 
     private User user;
-    
+
     @OneToMany //unidirectional
     private List<ForumPost> replies;
-    
-    
+
+    @OneToMany
+    @JoinColumn(nullable = true)
+    private List<User> likedUsers;
+
+    @OneToMany
+    @JoinColumn(nullable = true)
+    private List<User> dislikedUsers;
+
     public ForumPost() {
+        this.likedUsers = new ArrayList<>();
+        this.dislikedUsers = new ArrayList<>();
     }
 
     public ForumPost(Date postDate, String posTitle, String postDescription) {
@@ -54,6 +65,8 @@ public class ForumPost implements Serializable {
         this.postDate = postDate;
         this.posTitle = posTitle;
         this.postDescription = postDescription;
+        this.likedUsers = new ArrayList<>();
+        this.dislikedUsers = new ArrayList<>();
     }
 
     public ForumPost(Date postDate, String posTitle, String postDescription, User user) {
@@ -61,16 +74,18 @@ public class ForumPost implements Serializable {
         this.posTitle = posTitle;
         this.postDescription = postDescription;
         this.user = user;
+        this.likedUsers = new ArrayList<>();
+        this.dislikedUsers = new ArrayList<>();
     }
 
-    
-    
     public ForumPost(Date postDate, String posTitle, String postDescription, String[] postAttachments, ForumCategory forumCategory) {
         this.postDate = postDate;
         this.posTitle = posTitle;
         this.postDescription = postDescription;
         this.postAttachments = postAttachments;
         this.forumCategory = forumCategory;
+        this.likedUsers = new ArrayList<>();
+        this.dislikedUsers = new ArrayList<>();
     }
 
     public Long getPostId() {
@@ -119,7 +134,7 @@ public class ForumPost implements Serializable {
     public void setPostDate(Date postDate) {
         this.postDate = postDate;
     }
-    
+
     public void addThumbUp() {
         this.numThumbsUp++;
     }
@@ -235,5 +250,33 @@ public class ForumPost implements Serializable {
     public void setNumThumbsDown(Integer numThumbsDown) {
         this.numThumbsDown = numThumbsDown;
     }
-    
+
+    /**
+     * @return the likedUsers
+     */
+    public List<User> getLikedUsers() {
+        return likedUsers;
+    }
+
+    /**
+     * @param likedUsers the likedUsers to set
+     */
+    public void setLikedUsers(List<User> likedUsers) {
+        this.likedUsers = likedUsers;
+    }
+
+    /**
+     * @return the dislikedUsers
+     */
+    public List<User> getDislikedUsers() {
+        return dislikedUsers;
+    }
+
+    /**
+     * @param dislikedUsers the dislikedUsers to set
+     */
+    public void setDislikedUsers(List<User> dislikedUsers) {
+        this.dislikedUsers = dislikedUsers;
+    }
+
 }

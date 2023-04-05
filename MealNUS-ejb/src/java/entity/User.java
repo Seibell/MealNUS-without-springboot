@@ -45,7 +45,7 @@ public class User implements Serializable {
     private String password;
     
     private String imageURL;
-
+       
     @OneToMany
     private List<Review> reviews;
 
@@ -202,5 +202,48 @@ public class User implements Serializable {
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
+
+    /**
+     * @return the reviews
+     */
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    /**
+     * @param reviews the reviews to set
+     */
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    /**
+     * @return the orders
+     */
+    public List<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    /**
+     * @param orders the orders to set
+     */
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
+    }
+
+    /**
+     * @return the creditCards
+     */
+    public List<CreditCard> getCreditCards() {
+        return creditCards;
+    }
+
+    /**
+     * @param creditCards the creditCards to set
+     */
+    public void setCreditCards(List<CreditCard> creditCards) {
+        this.creditCards = creditCards;
+    }
+
 
 }

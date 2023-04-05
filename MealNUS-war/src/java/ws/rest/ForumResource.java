@@ -19,6 +19,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -42,8 +43,6 @@ public class ForumResource {
     private UriInfo context;
 
     private final ForumSessionBeanLocal forumSessionBeanLocal;
-    
-    
 
     public ForumResource() {
         forumSessionBeanLocal = lookupForumSessionBeanLocal();
@@ -84,20 +83,34 @@ public class ForumResource {
     @Path("thumbsUpForumPost/{postId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response increaseThumbsUp(@PathParam("postId") Long postId) {
-        forumSessionBeanLocal.increaseThumbsUp(postId);
-        return Response.status(Status.OK).build();
-    }
+    public Response increaseThumbsUp(@PathParam("postId") Long postId, @QueryParam("userId") Long userId) {
+        boolean success = forumSessionBeanLocal.increaseThumbsUp(postId, userId);
 
+        if (success) {
+            return Response.status(Status.OK).build();
+        } else {
+            String errorMessage = "You already liked this post!";
+            return Response.status(Status.BAD_REQUEST).entity(errorMessage).build();
+        }
+    }
+    
     @PUT
     @Path("thumbsDownForumPost/{postId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response increaseThumbsDown(@PathParam("postId") Long postId) {
-        forumSessionBeanLocal.increaseThumbsDown(postId);
-        return Response.status(Status.OK).build();
-    }
+    public Response increaseThumbsDown(@PathParam("postId") Long postId, @QueryParam("userId") Long userId) {
+        boolean success = forumSessionBeanLocal.increaseThumbsDown(postId, userId);
 
+        if (success) {
+            return Response.status(Status.OK).build();
+        } else {
+            String errorMessage = "You already disliked this post!";
+            return Response.status(Status.BAD_REQUEST).entity(errorMessage).build();
+        }
+    }
+    
+    
+    // havent implement increase ThumbsDown 
     private ForumSessionBeanLocal lookupForumSessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();

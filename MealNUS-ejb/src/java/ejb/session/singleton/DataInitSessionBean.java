@@ -315,7 +315,6 @@ public class DataInitSessionBean {
                 User user = new User("eric4", "tang4", "user4@gmail.com", "password");
                 orderSessionBean.createOrder(new OrderEntity(orderDate, orderDetails, priceList, costList, deliveryDate, address, orderStatus, user));
                 
-
                 Date orderDate2 = new Date();
                 MealBox mealBox2 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
                 Integer qty2 = 23;

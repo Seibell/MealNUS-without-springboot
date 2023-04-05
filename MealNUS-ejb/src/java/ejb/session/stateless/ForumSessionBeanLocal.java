@@ -29,8 +29,8 @@ public interface ForumSessionBeanLocal {
 
     public List<ForumPost> retrieveForumPostsByForumCategory(ForumCategory fc);
 
-    public ForumPost increaseThumbsUp(Long postId);
+    public Boolean increaseThumbsUp(Long postId, Long userId);
 
-    public ForumPost increaseThumbsDown(Long postId);
+    public Boolean increaseThumbsDown(Long postId, Long userId);
     
 }
