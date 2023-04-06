@@ -10,6 +10,7 @@ import entity.Promotion;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.MealBoxNotFoundException;
 import util.exception.PromotionAlreadyAppliedException;
 import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -42,5 +43,9 @@ public interface PromotionSessionBeanLocal {
     public Promotion retrievePromotionByPromotionCode(String promotionCode) throws PromotionNotFoundException;
 
     public List<MealBox> disablePromotion(String promotionCode) throws PromotionNotFoundException;
+
+    public List<MealBox> applyPromotionAcrossCategory(String promotionCode, String categoryName) throws PromotionNotFoundException, PromotionAlreadyAppliedException, MealBoxNotFoundException;
+
+    public List<MealBox> disablePromotionAcrossCategory(String promotionCode, String categoryName) throws PromotionNotFoundException, MealBoxNotFoundException;
 
 }

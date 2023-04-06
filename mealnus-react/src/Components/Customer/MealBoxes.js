@@ -121,7 +121,7 @@ const MealBoxes = () => {
   if (!currentUser) {
     return <div>Error: User not found.</div>;
   }
-  
+
   return (
     <div>
       <NavBar />
@@ -135,7 +135,12 @@ const MealBoxes = () => {
                   <CardActionArea onClick={() => handleClickOpen(mealBox)}>
                     <CardMedia
                       component="img"
-                      height="140"
+                      //height="140"
+                      style={{
+                        height: "300px",
+                        width: "300px",
+                        objectFit: "cover",
+                      }}
                       image={mealBox.itemImage}
                       alt={mealBox.itemName}
                     />
@@ -188,7 +193,8 @@ const MealBoxes = () => {
               <img
                 src={selectedMealBox?.itemImage}
                 alt={selectedMealBox?.itemName}
-                style={{ width: "100%", objectFit: "cover" }}
+                style={{ width: "88%", objectFit: "cover" }}
+                // style={{ width: "288px", height: "288px", objectFit: "cover" }}
               />
               <DialogContentText>
                 Price: ${selectedMealBox?.itemPrice}
