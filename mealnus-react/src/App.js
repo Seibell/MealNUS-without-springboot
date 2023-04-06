@@ -87,11 +87,13 @@ function App() {
           <Route path="/admindashboard" element={<AdminDashboard />} />
           <Route path="/adminmembers" element={<AdminMembers />} />
           <Route path="/adminpromotions" element={<AdminPromotions />} />
+          <Route path="/addpromotion" element={<AddPromotion />} />
           <Route path="/adminorders" element={<AdminOrders />} />
 
+          {/* Soon to be removed */}
           <Route path="/adminordermanagement" element={<AdminOrderManagement />} />
           <Route path="/adminpromotion" element={<AdminPromotion />} />
-          <Route path="/addpromotion" element={<AddPromotion />} />
+          
           <Route path="/myorders" element={<MyOrders />} />
         </Routes>
       </Router>

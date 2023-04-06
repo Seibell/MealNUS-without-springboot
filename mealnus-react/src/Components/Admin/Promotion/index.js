@@ -13,6 +13,9 @@ import { ColorModeContext, useMode } from "../Global/AdminTheme";
 import Topbar from "../../Admin/Global/Topbar";
 import Sidebar from "../../Admin/Global/Sidebar";
 
+import { AdminAuthContext } from "../../../Context/AdminAuthContext";
+import { useContext } from "react";
+
 import moment from "moment";
 import { Button, Switch } from "@mui/material";
 import { Alert } from '@mui/material';
@@ -37,6 +40,7 @@ function Copyright(props) {
 
 
 const Promotion = () => {
+    const { currentStaff } = useContext(AdminAuthContext);
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
     const colors = tokens(theme.palette.mode);
@@ -177,6 +181,10 @@ const Promotion = () => {
             )
         }
     ];
+
+    if (!currentStaff) {
+        return <div>Access Denied: Please login to access MealNUS Admin Portal...</div>;
+    }
 
     return (
         <ColorModeContext.Provider value={colorMode}>

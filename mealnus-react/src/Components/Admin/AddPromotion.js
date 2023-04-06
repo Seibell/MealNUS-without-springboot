@@ -64,7 +64,7 @@ const classes = {
 };
 
 function AddPromotion(props) {
-    // const { currentStaff } = useContext(AdminAuthContext);
+    const { currentStaff } = useContext(AdminAuthContext);
     const { id: id = 0 } = props;
     const [promotionName, setPromotionName] = useState("");
     const [discount, setDiscount] = useState("");
@@ -163,9 +163,9 @@ function AddPromotion(props) {
 
     const headerLabel = id === 0 ? "New Promotion" : "Edit Promotion";
 
-    // if (!currentStaff) {
-    //     return <div>Error: Staff not found.</div>;
-    // }
+    if (!currentStaff) {
+        return <div>Access Denied: Please login to access MealNUS Admin Portal...</div>;
+    }
 
 
     return (

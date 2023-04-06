@@ -28,6 +28,9 @@ import DailyOrderLineChart from "./Global/MonthlyOrderLineChart";
 import StatBox from "../Admin/Global/StatBox";
 import TopSellingMealboxes from "./Global/TopSellingMealboxes";
 
+import { AdminAuthContext } from "../../Context/AdminAuthContext";
+import { useContext } from "react";
+
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -42,6 +45,8 @@ function Copyright(props) {
 }
 
 const Dashboard = () => {
+    const { currentStaff } = useContext(AdminAuthContext);
+    
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
     const colors = tokens(theme.palette.mode);
@@ -330,6 +335,10 @@ const Dashboard = () => {
                 return "lightpink";
         }
     };
+
+    if (!currentStaff) {
+        return <div>Access Denied: Please login to access MealNUS Admin Portal...</div>;
+    }
 
     return (
         <ColorModeContext.Provider value={colorMode}>

@@ -14,6 +14,9 @@ import Topbar from "../../Admin/Global/Topbar";
 import Sidebar from "../../Admin/Global/Sidebar";
 import { Avatar } from "@material-ui/core";
 
+import { AdminAuthContext } from "../../../Context/AdminAuthContext";
+import { useContext } from "react";
+
 import visaLogo from "../../../Assets/visa-logo.png";
 import mastercardLogo from "../../../Assets/mastercard-Logo.png";
 
@@ -31,6 +34,7 @@ function Copyright(props) {
 }
 
 const Member = () => {
+    const { currentStaff } = useContext(AdminAuthContext);
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
 
@@ -102,38 +106,11 @@ const Member = () => {
                 }
             },
         },
-        // {
-        //     field: "accessLevel",
-        //     headerName: "Access Level",
-        //     flex: 1,
-        //     renderCell: ({ row: { access } }) => {
-        //         return (
-        //             <Box
-        //                 width="60%"
-        //                 m="0 auto"
-        //                 p="5px"
-        //                 display="flex"
-        //                 justifyContent="center"
-        //                 backgroundColor={
-        //                     access === "admin"
-        //                         ? colors.greenAccent[600]
-        //                         : access === "manager"
-        //                             ? colors.greenAccent[700]
-        //                             : colors.greenAccent[700]
-        //                 }
-        //                 borderRadius="4px"
-        //             >
-        //                 {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-        //                 {access === "manager" && <SecurityOutlinedIcon />}
-        //                 {access === "user" && <LockOpenOutlinedIcon />}
-        //                 <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-        //                     {access}
-        //                 </Typography>
-        //             </Box>
-        //         );
-        //     },
-        // },
     ];
+
+    if (!currentStaff) {
+        return <div>Access Denied: Please login to access MealNUS Admin Portal...</div>;
+    }
 
     return (
         <ColorModeContext.Provider value={colorMode}>
