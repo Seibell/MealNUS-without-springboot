@@ -34,17 +34,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-import { mainListItems, secondaryListItems } from './AdminSideBar';
-import Avatar from '@mui/material/Avatar';
-import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
-
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
             <RouterLink color="inherit" to="/admindashboard">
-                MealNUS 
+                MealNUS
             </RouterLink>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -61,53 +56,6 @@ function handleClick(event) {
     }
 }
 
-const drawerWidth = 240;
-
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
-        '& .MuiDrawer-paper': {
-            position: 'relative',
-            whiteSpace: 'nowrap',
-            width: drawerWidth,
-            transition: theme.transitions.create('width', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            boxSizing: 'border-box',
-            ...(!open && {
-                overflowX: 'hidden',
-                transition: theme.transitions.create('width', {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.leavingScreen,
-                }),
-                width: theme.spacing(7),
-                [theme.breakpoints.up('sm')]: {
-                    width: theme.spacing(9),
-                },
-            }),
-        },
-    }),
-);
-
-const mdTheme = createTheme();
 
 const classes = {
     root: "container",
@@ -116,7 +64,7 @@ const classes = {
 };
 
 function AddPromotion(props) {
-    const { currentStaff } = useContext(AdminAuthContext);
+    // const { currentStaff } = useContext(AdminAuthContext);
     const { id: id = 0 } = props;
     const [promotionName, setPromotionName] = useState("");
     const [discount, setDiscount] = useState("");
@@ -182,7 +130,8 @@ function AddPromotion(props) {
                     body: JSON.stringify(promotionData),
                 })
                     .then((response) => {
-                        navigate("/adminpromotion");
+                        window.opener.location.reload();
+                        navigate(window.close());
                     })
                     .catch((error) => {
                         console.error(error);
@@ -203,7 +152,7 @@ function AddPromotion(props) {
                     body: JSON.stringify(promotionData),
                 })
                     .then((response) => {
-                        navigate("/adminpromotion");
+                        navigate(window.close());
                     })
                     .catch((error) => {
                         console.error(error);
@@ -214,242 +163,84 @@ function AddPromotion(props) {
 
     const headerLabel = id === 0 ? "New Promotion" : "Edit Promotion";
 
-    if (!currentStaff) {
-        return <div>Error: Staff not found.</div>;
-    }
+    // if (!currentStaff) {
+    //     return <div>Error: Staff not found.</div>;
+    // }
 
 
     return (
-        <ThemeProvider theme={mdTheme}>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <AppBar position="absolute" open={open}>
-                    <Toolbar
-                        sx={{
-                            pr: '30px', // keep right padding when drawer closed
-                        }}
-                    >
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={toggleDrawer}
-                            sx={{
-                                marginRight: '36px',
-                                ...(open && { display: 'none' }),
-                            }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography
-                            component="h1"
-                            variant="h6"
-                            color="inherit"
-                            noWrap
-                            sx={{ flexGrow: 1 }}
-                        >
-                            MealNUS Admin Dashboard
-                        </Typography>
-                        <Typography color="inherit" sx={{ mr: 2 }}>
-                            {dateTime.toLocaleString('en-SG', {
-                                day: '2-digit',
-                                month: '2-digit',
-                                year: 'numeric',
-                                hour: 'numeric',
-                                minute: 'numeric',
-                                second: 'numeric',
-                                hour12: true,
-                            })}
-                        </Typography>
-                        {/* <IconButton color="inherit">
-                            <Badge badgeContent={''} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton> */}
-                        <Avatar sx={{ m: 1, bgcolor: 'white' }}>
-                            <img src={mealNUSLogo} alt="MealNUS Logo" />
-                        </Avatar>
-                        <List component="nav" sx={{ m: -2 }}>
-                            {secondaryListItems}
-                        </List>
-                    </Toolbar>
-                </AppBar>
-                <Drawer variant="permanent" open={open}>
-                    <Toolbar
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                            px: [1],
-                        }}
-                    >
-                        <IconButton onClick={toggleDrawer}>
-                            <ChevronLeftIcon />
-                        </IconButton>
-                    </Toolbar>
-                    <div style={{ paddingLeft: '20px' }}>
-                        <img src={mealNUSLogo} alt="MealNUS Logo" style={{width: '80%', height: 'auto'}} />
+        <div>
+            <section className="content" key="content">
+                <div className="card card-primary">
+                    <div className="card-header text-center">
+                        <h4 className="card-title">{headerLabel}</h4>
                     </div>
-                    <Divider />
-                    <List component="nav">
-                        {mainListItems}
-                    </List>
-                </Drawer>
-                <Box
-                    component="main"
-                    sx={{
-                        backgroundColor: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? theme.palette.grey[100]
-                                : theme.palette.grey[900],
-                        flexGrow: 1,
-                        height: '100vh',
-                        overflow: 'auto',
-                    }}
-                >
-                    <Toolbar />
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <div className='container'>
-                            <div role="presentation" onClick={handleClick}>
-                                <Breadcrumbs
-                                    separator={<NavigateNextIcon fontSize="small" />}
-                                    aria-label="breadcrumb">
-                                    {/* Dashboard */}
-                                    <MUILink
-                                        underline="hover"
-                                        sx={{ display: 'flex', alignItems: 'center' }}
-                                        color="inherit"
-                                        component={RouterLink}
-                                        to="/admindashboard"
-                                    >
-                                        <DashboardIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Dashboard
-                                    </MUILink>
-                                    {/* Inventory */}
-                                    <MUILink
-                                        underline="hover"
-                                        sx={{ display: 'flex', alignItems: 'center' }}
-                                        color="inherit"
-                                        component={RouterLink}
-                                        to="/admindashboard"
-                                    >
-                                        <Inventory2TwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Inventory
-                                    </MUILink>
-                                    {/* Orders */}
-                                    <MUILink
-                                        underline="hover"
-                                        sx={{ display: 'flex', alignItems: 'center' }}
-                                        color="inherit"
-                                        component={RouterLink}
-                                        to="/adminordermanagement"
-                                    >
-                                        <ShoppingCartIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Orders
-                                    </MUILink>
-                                    {/* Promotions */}
-                                    <MUILink
-                                        underline="hover"
-                                        sx={{ display: 'flex', alignItems: 'center' }}
-                                        color="inherit"
-                                        component={RouterLink}
-                                        to="/adminpromotion"
-                                    >
-                                        <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Promotions
-                                    </MUILink>
-                                    {/* Add Promotion */}
-                                    <MUILink
-                                        underline="hover"
-                                        sx={{ display: 'flex', alignItems: 'center' }}
-                                        color="inherit"
-                                        component={RouterLink}
-                                        to="/addpromotion"
-                                    >
-                                        <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        <b>Add Promotion</b>
-                                    </MUILink>
-                                </Breadcrumbs>
+
+                    <form onSubmit={handleSubmit}>
+                        <div className="card-body">
+                            <div className="form-group">
+                                <label htmlFor="inputName">Promotion Name</label>
+                                <input
+                                    type="text"
+                                    id="inputName"
+                                    required
+                                    className="form-control"
+                                    value={promotionName}
+                                    onChange={(e) => setPromotionName(e.target.value)}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="inputName">Discount</label>
+                                <input
+                                    id="inputDiscount"
+                                    required
+                                    className="form-control"
+                                    value={discount}
+                                    onChange={(e) => setDiscount(e.target.value)}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="inputName">Start Date(dd/mm/yyyy)</label>
+                                <div className="input-group">
+                                    <DatePicker
+                                        dateFormat="dd/MM/yyyy"
+                                        selected={startDate}
+                                        onChange={(startDate) => {
+                                            console.log("#startDate: ", startDate);
+                                            setStartDate(startDate);
+                                        }}
+                                        customInput={<input className="form-control" />}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="inputName">End Date(dd/mm/yyyy)</label>
+                                <div className="input-group">
+                                    <DatePicker
+                                        dateFormat="dd/MM/yyyy"
+                                        selected={endDate}
+                                        onChange={(endDate) => {
+                                            console.log("#endDate: ", endDate);
+                                            setEndDate(endDate);
+                                        }}
+                                        customInput={<input className="form-control" />}
+                                    />
+                                </div>
                             </div>
                         </div>
-                        {/* Insert your main body code here */}
-                        <section className="content" key="content">
-                            <div className="card card-primary">
-                                <div className="card-header text-center">
-                                    <h4 className="card-title">{headerLabel}</h4>
-                                </div>
-
-                                <form onSubmit={handleSubmit}>
-                                    <div className="card-body">
-                                        <div className="form-group">
-                                            <label htmlFor="inputName">Promotion Name</label>
-                                            <input
-                                                type="text"
-                                                id="inputName"
-                                                required
-                                                className="form-control"
-                                                value={promotionName}
-                                                onChange={(e) => setPromotionName(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="inputName">Discount</label>
-                                            <input
-                                                id="inputDiscount"
-                                                required
-                                                className="form-control"
-                                                value={discount}
-                                                onChange={(e) => setDiscount(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="inputName">Start Date(dd/mm/yyyy)</label>
-                                            <div className="input-group">
-                                                <DatePicker
-                                                    dateFormat="dd/MM/yyyy"
-                                                    selected={startDate}
-                                                    onChange={(startDate) => {
-                                                        console.log("#startDate: ", startDate);
-                                                        setStartDate(startDate);
-                                                    }}
-                                                    customInput={<input className="form-control" />}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="inputName">End Date(dd/mm/yyyy)</label>
-                                            <div className="input-group">
-                                                <DatePicker
-                                                    dateFormat="dd/MM/yyyy"
-                                                    selected={endDate}
-                                                    onChange={(endDate) => {
-                                                        console.log("#endDate: ", endDate);
-                                                        setEndDate(endDate);
-                                                    }}
-                                                    customInput={<input className="form-control" />}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card-footer">
-                                        <RouterLink to="/adminpromotion">
-                                            <button className="btn btn-default" type="button">
-                                                Cancel
-                                            </button>
-                                        </RouterLink>
-                                        <button className="btn btn-primary float-right" type="submit" style={{ backgroundColor: "orange", border: "orange" }}>
-                                            Submit
-                                        </button>
-
-                                    </div>
-                                </form>
-                            </div>
-                        </section>
-                        <Copyright sx={{ pt: 4 }} />
-                    </Container>
-                </Box>
-            </Box>
-        </ThemeProvider>
+                        <div className="card-footer">
+                            <RouterLink to="/adminpromotions" className="btn btn-default" onClick={(e) => window.close()}>
+                                Cancel
+                            </RouterLink>
+                            <button className="btn btn-primary float-right" type="submit" style={{ backgroundColor: "orange", border: "orange" }}>
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            <Copyright sx={{ pt: 4 }} />
+        </div>
     );
 }
 export default function AdminPromotions() {

@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.User;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.InvalidLoginException;
@@ -30,5 +31,7 @@ public interface UserSessionBeanLocal {
     public User editUser(Long id, String firstName, String lastName, String email, String password, String imageURL);
     
     public User retrieveUserById(Long userId) throws UserNotFoundException;
+
+    public List<User> retrieveNewUsersBySignupDate(Date queryDate);
     
 }

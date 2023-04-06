@@ -49,14 +49,15 @@ import UpdateOrder from "./Components/Inventory/UpdateOrder";
 
 //Admin
 import AdminDashboard from "./Components/Admin/AdminDashboard";
-import AdminDashboardOrderChart from "./Components/Admin/AdminDashboardOrderChart";
-import AdminTitle from "./Components/Admin/AdminTitle";
+import AdminMembers from "./Components/Admin/Member";
+import AdminPromotions from "./Components/Admin/Promotion";
+import AdminOrders from "./Components/Admin/Order";
 import AdminOrderManagement from "./Components/Admin/AdminOrderManagement";
 import AdminPromotion from "./Components/Admin/AdminPromotion";
 import AddPromotion from "./Components/Admin/AddPromotion";
-import AdminSideBar from "./Components/Admin/AdminSideBar";
 
 function App() {
+
   return (
     <CartProvider>
       <Router>
@@ -84,9 +85,10 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/stafflogin" element={<StaffLogin />} />
           <Route path="/admindashboard" element={<AdminDashboard />} />
-          <Route path="/adminDashboardOrderChart" element={<AdminDashboardOrderChart />} />
-          <Route path="/adminSideBar" element={<AdminSideBar />} />
-          <Route path="/adminTitle" element={<AdminTitle />} />
+          <Route path="/adminmembers" element={<AdminMembers />} />
+          <Route path="/adminpromotions" element={<AdminPromotions />} />
+          <Route path="/adminorders" element={<AdminOrders />} />
+
           <Route path="/adminordermanagement" element={<AdminOrderManagement />} />
           <Route path="/adminpromotion" element={<AdminPromotion />} />
           <Route path="/addpromotion" element={<AddPromotion />} />

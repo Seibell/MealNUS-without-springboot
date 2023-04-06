@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,25 +28,29 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-    
+
     @Column(nullable = false)
     @NotNull
     private String firstName;
-    
+
     @Column(nullable = false)
     @NotNull
     private String lastName;
-    
+
     @Column(nullable = false, unique = true)
     @NotNull
     private String email;
-    
+
     @Column(nullable = false)
     @NotNull
     private String password;
-    
+
+    @Column(nullable = false)
+    @NotNull
+    private Date signupDate;
+
     private String imageURL;
-       
+
     @OneToMany
     private List<Review> reviews;
 
@@ -58,7 +63,6 @@ public class User implements Serializable {
     // Added just in case we are still displaying product detail and the number of wishlists its in
 //    @OneToOne
 //    private WishList wishList;
-
     public User() {
     }
 
@@ -69,11 +73,12 @@ public class User implements Serializable {
         this.email = email;
         this.password = password;
         this.imageURL = "https://i.imgur.com/Kvyecsm.png"; //profs face :D
+        this.signupDate = new Date();
         this.reviews = new ArrayList<>();
         this.orders = new ArrayList<>();
         this.creditCards = new ArrayList<>();
     }
-    
+
     //Use this constructor for uploading image
     public User(String firstName, String lastName, String email, String password, String imageURL) {
         this.firstName = firstName;
@@ -188,7 +193,6 @@ public class User implements Serializable {
 //    public void setWishList(WishList wishList) {
 //        this.wishList = wishList;
 //    }
-
     /**
      * @return the imageURL
      */
@@ -245,5 +249,18 @@ public class User implements Serializable {
         this.creditCards = creditCards;
     }
 
+    /**
+     * @return the signupDate
+     */
+    public Date getSignupDate() {
+        return signupDate;
+    }
+
+    /**
+     * @param signupDate the signupDate to set
+     */
+    public void setSignupDate(Date signupDate) {
+        this.signupDate = signupDate;
+    }
 
 }

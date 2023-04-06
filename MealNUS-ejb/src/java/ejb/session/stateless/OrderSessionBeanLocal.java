@@ -65,4 +65,6 @@ public interface OrderSessionBeanLocal {
 
     public List<Pair<Date, Integer>> retrieveAllOrderCounts(Date queryDate) throws ParseException;
 
+    public BigDecimal getTotalRevenue();
+
 }

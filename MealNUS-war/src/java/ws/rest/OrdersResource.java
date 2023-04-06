@@ -311,6 +311,16 @@ public class OrdersResource {
         return Response.status(200).entity(
                 revenue).build();
     }
+    
+    // e.g. http://localhost:8080/MealNUS-war/rest/orders/totalRevenue/2023-03-22
+    @GET
+    @Path("/totalRevenue")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTotalRevenue() {
+        BigDecimal revenue = orderSessionBeanLocal.getTotalRevenue();
+        return Response.status(200).entity(
+                revenue).build();
+    }
 
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/mtdCost/2023-03-22
     @GET

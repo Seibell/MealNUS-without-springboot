@@ -1,338 +1,655 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import MUILink from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
-import LocalOfferTwoToneIcon from '@mui/icons-material/LocalOfferTwoTone';
+// Admin Dashboard Template Imports
+import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { ColorModeContext, useMode } from "./Global/AdminTheme";
+import Topbar from "../Admin/Global/Topbar";
+import Sidebar from "../Admin/Global/Sidebar";
 
-import { mainListItems, secondaryListItems } from './AdminSideBar';
-import AdminOrderChart from './AdminDashboardOrderChart';
-import AdminDashboardMtdCount from './AdminDashboardMtdCount';
-import AdminDashboardMtdRevenue from './AdminDashboardMtdRevenue';
-import AdminDashboardMtdCost from './AdminDashboardMtdCost';
-import AdminDashboardMtdProfit from './AdminDashboardMtdProfit';
-import AdminDashboardTopSelling from './AdminDashboardTopSelling';
-import AdminDashboardTodayOrderCount from './AdminDashboardTodayOrderCount';
-import AdminDashboardTodayRevenue from './AdminDashboardTodayRevenue';
-import Avatar from '@mui/material/Avatar';
-import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
-import { AdminAuthContext } from "../../Context/AdminAuthContext";
-import { useContext } from "react";
+import moment from 'moment-timezone';
+
+import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { tokens } from "./Global/AdminTheme";
+import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+import EmailIcon from "@mui/icons-material/Email";
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import TrafficIcon from "@mui/icons-material/Traffic";
+import LocalMallIcon from '@mui/icons-material/LocalMall';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import TollIcon from '@mui/icons-material/Toll';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+
+import Header from "../Admin/Global/Header";
+import DailyOrderLineChart from "./Global/MonthlyOrderLineChart";
+// import GeographyChart from "../../components/GeographyChart";
+// import BarChart from "../../components/BarChart";
+import StatBox from "../Admin/Global/StatBox";
+import TopSellingMealboxes from "./Global/TopSellingMealboxes";
 
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <RouterLink color="inherit" to="/admindashboard">
+            <Link color="inherit" to="/admindashboard">
                 MealNUS
-            </RouterLink>{' '}
+            </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>
     );
 }
 
-function handleClick(event) {
-    if (event.target.tagName === 'A') {
-        event.preventDefault();
-        const href = event.target.getAttribute('href');
-        console.info(`Navigating to ${href}`);
-        window.location.href = href;
-    }
-}
+const Dashboard = () => {
+    const [theme, colorMode] = useMode();
+    const [isSidebar, setIsSidebar] = useState(true);
+    const colors = tokens(theme.palette.mode);
 
-const drawerWidth = 240;
+    const [todayCountData, setTodayCountData] = useState(0);
+    const [yesterdayCountData, setYesterdayCountData] = useState(0);
+    const [todayRevenueData, setTodayRevenueData] = useState(0);
+    const [yesterdayRevenueData, setYesterdayRevenueData] = useState(0);
+    const [mtdCount, setMtdCount] = useState(0);
+    const [prevMtdCount, setPrevMtdCount] = useState(0);
+    const [mtdRevenue, setMtdRevenue] = useState(0);
+    const [prevMtdRevenue, setPrevMtdRevenue] = useState(0);
+    const [mtdProfit, setMtdProfit] = useState(0);
+    const [prevMtdProfit, setPrevMtdProfit] = useState(0);
+    const [mtdCost, setMtdCost] = useState(0);
+    const [prevMtdCost, setPrevMtdCost] = useState(0);
+    const [totalRevenue, setTotalRevenue] = useState(0);
+    const [orderData, setOrderData] = useState([]);
+    const [todayNewUserCount, setTodayNewUserCount] = useState(0);
+    const [yesterdayNewUserCount, setYesterdayNewUserCount] = useState(0);
 
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
-        '& .MuiDrawer-paper': {
-            position: 'relative',
-            whiteSpace: 'nowrap',
-            width: drawerWidth,
-            transition: theme.transitions.create('width', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            boxSizing: 'border-box',
-            ...(!open && {
-                overflowX: 'hidden',
-                transition: theme.transitions.create('width', {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.leavingScreen,
-                }),
-                width: theme.spacing(7),
-                [theme.breakpoints.up('sm')]: {
-                    width: theme.spacing(9),
-                },
-            }),
-        },
-    }),
-);
-
-const mdTheme = createTheme();
-
-function DashboardContent() {
-    const { currentStaff } = useContext(AdminAuthContext);
-
-    const [open, setOpen] = React.useState(true);
-    const toggleDrawer = () => {
-        setOpen(!open);
-    };
-
-    const [dateTime, setDateTime] = useState(new Date());
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            setDateTime(new Date());
-        }, 1000);
-        return () => clearInterval(intervalId);
+        const currentDate = new Date().toISOString().slice(0, 10);
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/currentDateOrderCount/${currentDate}`)
+            .then(response => response.json())
+            .then(todayCountData => setTodayCountData(todayCountData))
     }, []);
 
-    if (!currentStaff) {
-        return <div>Error: Staff not found.</div>;
+    const todayOrderCount = todayCountData;
+
+    useEffect(() => {
+        const currentDate = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/currentDateOrderCount/${currentDate}`)
+            .then(response => response.json())
+            .then(yesterdayCountData => setYesterdayCountData(yesterdayCountData))
+    }, []);
+
+    const yesterdayOrderCount = yesterdayCountData;
+
+    let todayOrderCountProgress;
+    if (yesterdayOrderCount <= 0) {
+        todayOrderCountProgress = '+100%';
+    } else if (todayOrderCount > yesterdayOrderCount) {
+        const orderCountDiff = todayOrderCount - yesterdayOrderCount;
+        todayOrderCountProgress = `+${Math.round(orderCountDiff / yesterdayOrderCount * 100)}%`;
+    } else if (todayOrderCount === yesterdayOrderCount) {
+        const orderCountDiff = yesterdayOrderCount - todayOrderCount;
+        todayOrderCountProgress = `${Math.round(orderCountDiff / yesterdayOrderCount * 100)}%`;
+    } else {
+        const orderCountDiff = yesterdayOrderCount - todayOrderCount;
+        todayOrderCountProgress = `-${Math.round(orderCountDiff / yesterdayOrderCount * 100)}%`;
     }
 
-    return (
-        <ThemeProvider theme={mdTheme}>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <AppBar position="absolute" open={open}>
-                    <Toolbar
-                        sx={{
-                            pr: '30px', // keep right padding when drawer closed
-                        }}
-                    >
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={toggleDrawer}
-                            sx={{
-                                marginRight: '36px',
-                                ...(open && { display: 'none' }),
-                            }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography
-                            component="h1"
-                            variant="h6"
-                            color="inherit"
-                            noWrap
-                            sx={{ flexGrow: 1 }}
-                        >
-                            MealNUS Admin Dashboard
-                        </Typography>
-                        <Typography color="inherit" sx={{ mr: 2 }}>
-                            {dateTime.toLocaleString('en-SG', {
-                                day: '2-digit',
-                                month: '2-digit',
-                                year: 'numeric',
-                                hour: 'numeric',
-                                minute: 'numeric',
-                                second: 'numeric',
-                                hour12: true,
-                            })}
-                        </Typography>
-                        {/* <IconButton color="inherit">
-                            <Badge badgeContent={''} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton> */}
-                        <Avatar sx={{ m: 1, bgcolor: 'white' }}>
-                            <img src={mealNUSLogo} alt="MealNUS Logo" />
-                        </Avatar>
-                        <List component="nav" sx={{ m: -2 }}>
-                            {secondaryListItems}
-                        </List>
-                    </Toolbar>
-                </AppBar>
-                <Drawer variant="permanent" open={open}>
-                    <Toolbar
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                            px: [1]
-                        }}
-                    >
-                        <IconButton onClick={toggleDrawer}>
-                            <ChevronLeftIcon />
-                        </IconButton>
-                    </Toolbar>
-                    <div style={{ paddingLeft: '20px' }}>
-                        <img src={mealNUSLogo} alt="MealNUS Logo" style={{width: '80%', height: 'auto'}} />
-                    </div>
-                    <Divider />
-                    <List component="nav">
-                        {mainListItems}
-                    </List>
-                </Drawer>
-                <Box
-                    component="main"
-                    sx={{
-                        backgroundColor: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? theme.palette.grey[100]
-                                : theme.palette.grey[900],
-                        flexGrow: 1,
-                        height: '100vh',
-                        overflow: 'auto',
-                    }}
-                >
-                    <Toolbar />
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <div className='container'>
-                            <div role="presentation" onClick={handleClick}>
-                                <Breadcrumbs
-                                    separator={<NavigateNextIcon fontSize="small" />}
-                                    aria-label="breadcrumb">
-                                    {/* Dashboard */}
-                                    <MUILink
-                                        underline="hover"
-                                        sx={{ display: 'flex', alignItems: 'center' }}
-                                        color="inherit"
-                                        component={RouterLink}
-                                        to="/admindashboard"
-                                    >
-                                        <DashboardIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        <b>Dashboard</b>
-                                    </MUILink>
-                                    {/* Inventory */}
-                                    <MUILink
-                                        underline="hover"
-                                        sx={{ display: 'flex', alignItems: 'center' }}
-                                        color="inherit"
-                                        component={RouterLink}
-                                        to="/admindashboard"
-                                    >
-                                        <Inventory2TwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Inventory
-                                    </MUILink>
-                                    {/* Orders */}
-                                    <MUILink
-                                        underline="hover"
-                                        sx={{ display: 'flex', alignItems: 'center' }}
-                                        color="inherit"
-                                        component={RouterLink}
-                                        to="/adminordermanagement"
-                                    >
-                                        <ShoppingCartIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Orders
-                                    </MUILink>
-                                    {/* Promotions */}
-                                    <MUILink
-                                        underline="hover"
-                                        sx={{ display: 'flex', alignItems: 'center' }}
-                                        color="inherit"
-                                        component={RouterLink}
-                                        to="/adminpromotion"
-                                    >
-                                        <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                                        Promotions
-                                    </MUILink>
-                                </Breadcrumbs>
-                            </div>
-                            <Grid container spacing={2} sx={{ overflowX: 'auto' }}>
-                                {/* Sales Overview :: Today's Orders*/}
-                                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} sx={{ flexGrow: 1 }}>
-                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
-                                        <AdminDashboardTodayOrderCount />
-                                    </Paper>
-                                </Grid>
-                                {/* Sales Overview :: Today's Revenue*/}
-                                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} sx={{ flexGrow: 1 }}>
-                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
-                                        <AdminDashboardTodayRevenue />
-                                    </Paper>
-                                </Grid>
-                                {/* MTD Sales Overview :: Order Count*/}
-                                <Grid item xs={12} sm={3} md={3} lg={3} xl={3} sx={{ flexGrow: 1 }}>
-                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
-                                        <AdminDashboardMtdCount />
-                                    </Paper>
-                                </Grid>
-                                {/* MTD Sales Overview :: Revenue*/}
-                                <Grid item xs={12} sm={3} md={3} lg={3} xl={3} sx={{ flexGrow: 1 }}>
-                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
-                                        <AdminDashboardMtdRevenue />
-                                    </Paper>
-                                </Grid>
-                                {/* MTD Sales Overview :: Profit*/}
-                                <Grid item xs={12} sm={3} md={3} lg={3} xl={3} sx={{ flexGrow: 1 }}>
-                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
-                                        <AdminDashboardMtdProfit />
-                                    </Paper>
-                                </Grid>
-                                {/* MTD Sales Overview :: Cost*/}
-                                <Grid item xs={12} sm={3} md={3} lg={3} xl={3} sx={{ flexGrow: 1 }}>
-                                    <Paper sx={{ p: 2, height: 210, overflow: 'auto'  }}>
-                                        <AdminDashboardMtdCost />
-                                    </Paper>
-                                </Grid>
-                                {/* Order Summary Chart */}
-                                <Grid item xs={12} sx={{ flexGrow: 1 }}>
-                                    <Paper sx={{ p: 2, height: 500, overflow: 'auto'  }}>
-                                        <AdminOrderChart />
-                                    </Paper>
-                                </Grid>
-                                {/* Top Selling Box */}
-                                <Grid item xs={12} sx={{ flexGrow: 1 }}>
-                                    <Paper sx={{ p: 2, height: 400, overflow: 'auto' }}>
-                                        <AdminDashboardTopSelling />
-                                    </Paper>
-                                </Grid>
-                            </Grid>
-                        </div>
-                        <br />
-                        * All current day and MTD figures will be refreshed at 08:00 daily.
-                        <Copyright sx={{ pt: 4 }} />
-                    </Container>
-                </Box>
-            </Box>
-        </ThemeProvider>
-    );
-}
+    useEffect(() => {
+        const currentDate = new Date().toISOString().slice(0, 10);
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/currentDateRevenue/${currentDate}`)
+            .then(response => response.json())
+            .then(todayRevenueData => setTodayRevenueData(todayRevenueData));
+    }, []);
 
-export default function AdminDashboard() {
-    return <DashboardContent />;
-}
+    const todayOrderRevenue = todayRevenueData;
+
+    useEffect(() => {
+        const currentDate = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/currentDateRevenue/${currentDate}`)
+            .then(response => response.json())
+            .then(yesterdayRevenueData => setYesterdayRevenueData(yesterdayRevenueData));
+    }, []);
+
+    const yesterdayOrderRevenue = yesterdayRevenueData;
+
+    let todayOrderRevenueProgress;
+    if (yesterdayOrderRevenue <= 0) {
+        todayOrderRevenueProgress = '+100%';
+    } else if (todayOrderRevenue > yesterdayOrderRevenue) {
+        const orderRevenueDiff = todayOrderRevenue - yesterdayOrderRevenue;
+        todayOrderRevenueProgress = `+${Math.round(orderRevenueDiff / yesterdayOrderRevenue * 100)}%`;
+    } else if (todayOrderRevenue === yesterdayOrderRevenue) {
+        const orderRevenueDiff = todayOrderRevenue - yesterdayOrderRevenue;
+        todayOrderRevenueProgress = `${Math.round(orderRevenueDiff / yesterdayOrderRevenue * 100)}%`;
+    } else {
+        const orderRevenueDiff = yesterdayOrderRevenue - todayOrderRevenue;
+        todayOrderRevenueProgress = `-${Math.round(orderRevenueDiff / yesterdayOrderRevenue * 100)}%`;
+    }
+
+    useEffect(() => {
+        const currentDate = moment.utc(new Date(), 'YYYY-MM-DD HH:mm:ss').tz('Asia/Singapore').format('YYYY-MM-DD');
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/mtdOrderCount/${currentDate}`)
+            .then(response => response.json())
+            .then(mtdCount => setMtdCount(mtdCount));
+    }, []);
+
+    const mtdOrderCount = mtdCount;
+
+    useEffect(() => {
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        const formattedDate = moment.utc(oneMonthAgo, 'YYYY-MM-DD HH:mm:ss').tz('Asia/Singapore').format('YYYY-MM-DD');
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/mtdOrderCount/${formattedDate}`)
+            .then(response => response.json())
+            .then(prevMtdCount => setPrevMtdCount(prevMtdCount));
+    }, []);
+
+    const prevMtdOrderCount = prevMtdCount;
+
+    let todayMtdCountProgress;
+    if (prevMtdOrderCount <= 0) {
+        todayMtdCountProgress = '+100%';
+    } else if (mtdOrderCount > prevMtdOrderCount) {
+        const mtdOrderCountDiff = mtdOrderCount - prevMtdOrderCount;
+        todayMtdCountProgress = `+${Math.round(mtdOrderCountDiff / prevMtdOrderCount * 100)}%`;
+    } else if (mtdOrderCount === prevMtdOrderCount) {
+        const mtdOrderCountDiff = mtdOrderCount - prevMtdOrderCount;
+        todayMtdCountProgress = `${Math.round(mtdOrderCountDiff / prevMtdOrderCount * 100)}%`;
+    } else {
+        const mtdOrderCountDiff = prevMtdOrderCount - mtdOrderCount;
+        todayMtdCountProgress = `-${Math.round(mtdOrderCountDiff / prevMtdOrderCount * 100)}%`;
+    }
+
+    useEffect(() => {
+        const currentDate = moment.utc(new Date(), 'YYYY-MM-DD HH:mm:ss').tz('Asia/Singapore').format('YYYY-MM-DD');
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/mtdRevenue/${currentDate}`)
+            .then(response => response.json())
+            .then(mtdRevenue => setMtdRevenue(mtdRevenue));
+    }, []);
+
+    const mtdOrderRevenue = mtdRevenue;
+
+    useEffect(() => {
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        const formattedDate = moment.utc(oneMonthAgo, 'YYYY-MM-DD HH:mm:ss').tz('Asia/Singapore').format('YYYY-MM-DD');
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/mtdRevenue/${formattedDate}`)
+            .then(response => response.json())
+            .then(prevMtdRevenue => setPrevMtdRevenue(prevMtdRevenue));
+    }, []);
+
+    const prevMtdOrderRevenue = prevMtdRevenue;
+
+    let todayMtdRevenueProgress;
+    if (prevMtdOrderRevenue <= 0) {
+        todayMtdRevenueProgress = '+100%';
+    } else if (mtdOrderRevenue > prevMtdOrderRevenue) {
+        const mtdOrderRevenueDiff = mtdOrderRevenue - prevMtdOrderRevenue;
+        todayMtdRevenueProgress = `+${Math.round(mtdOrderRevenueDiff / prevMtdOrderRevenue * 100)}%`;
+    } else if (mtdOrderRevenue === prevMtdOrderRevenue) {
+        const mtdOrderRevenueDiff = mtdOrderRevenue - prevMtdOrderRevenue;
+        todayMtdRevenueProgress = `${Math.round(mtdOrderRevenueDiff / prevMtdOrderRevenue * 100)}%`;
+    } else {
+        const mtdOrderRevenueDiff = prevMtdOrderRevenue - mtdOrderRevenue;
+        todayMtdRevenueProgress = `-${Math.round(mtdOrderRevenueDiff / prevMtdOrderRevenue * 100)}%`;
+    }
+
+    useEffect(() => {
+        const currentDate = moment.utc(new Date(), 'YYYY-MM-DD HH:mm:ss').tz('Asia/Singapore').format('YYYY-MM-DD');
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/mtdProfit/${currentDate}`)
+            .then(response => response.json())
+            .then(mtdProfit => setMtdProfit(mtdProfit));
+    }, []);
+
+    const mtdOrderProfit = mtdProfit;
+
+    useEffect(() => {
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        const formattedDate = moment.utc(oneMonthAgo, 'YYYY-MM-DD HH:mm:ss').tz('Asia/Singapore').format('YYYY-MM-DD');
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/mtdProfit/${formattedDate}`)
+            .then(response => response.json())
+            .then(prevMtdProfit => setPrevMtdProfit(prevMtdProfit));
+    }, []);
+
+    const prevMtdOrderProfit = prevMtdProfit;
+
+    let todayMtdProfitProgress;
+    if (prevMtdOrderProfit <= 0) {
+        todayMtdProfitProgress = '+100%';
+    } else if (mtdOrderProfit > prevMtdOrderProfit) {
+        const mtdOrderProfitDiff = mtdOrderProfit - prevMtdOrderProfit;
+        todayMtdProfitProgress = `+${Math.round(mtdOrderProfitDiff / prevMtdOrderProfit * 100)}%`;
+    } else if (mtdOrderProfit === prevMtdOrderProfit) {
+        const mtdOrderProfitDiff = mtdOrderProfit - prevMtdOrderProfit;
+        todayMtdProfitProgress = `${Math.round(mtdOrderProfitDiff / prevMtdOrderProfit * 100)}%`;
+    } else {
+        const mtdOrderProfitDiff = prevMtdOrderProfit - mtdOrderProfit;
+        todayMtdProfitProgress = `-${Math.round(mtdOrderProfitDiff / prevMtdOrderProfit * 100)}%`;
+    }
+
+    useEffect(() => {
+        const currentDate = moment.utc(new Date(), 'YYYY-MM-DD HH:mm:ss').tz('Asia/Singapore').format('YYYY-MM-DD');
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/mtdCost/${currentDate}`)
+            .then(response => response.json())
+            .then(mtdCost => setMtdCost(mtdCost));
+    }, []);
+
+    const mtdOrderCost = mtdCost;
+
+    useEffect(() => {
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        const formattedDate = moment.utc(oneMonthAgo, 'YYYY-MM-DD HH:mm:ss').tz('Asia/Singapore').format('YYYY-MM-DD');
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/mtdCost/${formattedDate}`)
+            .then(response => response.json())
+            .then(prevMtdCost => setPrevMtdCost(prevMtdCost));
+    }, []);
+
+    const prevMtdOrderCost = prevMtdCost;
+
+    let todayMtdCostProgress;
+    if (prevMtdOrderCost <= 0) {
+        todayMtdCostProgress = '+100%';
+    } else if (mtdOrderCost > prevMtdOrderCost) {
+        const mtdOrderCostDiff = mtdOrderCost - prevMtdOrderCost;
+        todayMtdCostProgress = `+${Math.round(mtdOrderCostDiff / prevMtdOrderCost * 100)}%`;
+    } else if (mtdOrderCost === prevMtdOrderCost) {
+        const mtdOrderCostDiff = mtdOrderCost - prevMtdOrderCost;
+        todayMtdCostProgress = `${Math.round(mtdOrderCostDiff / prevMtdOrderCost * 100)}%`;
+    } else {
+        const mtdOrderCostDiff = prevMtdOrderCost - mtdOrderCost;
+        todayMtdCostProgress = `-${Math.round(mtdOrderCostDiff / prevMtdOrderCost * 100)}%`;
+    }
+
+    useEffect(() => {
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/totalRevenue`)
+            .then(response => response.json())
+            .then(totalRevenue => setTotalRevenue(totalRevenue));
+    }, []);
+
+    const totalRev = totalRevenue;
+
+    useEffect(() => {
+        fetch('http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrders')
+            .then(response => response.json())
+            .then(data => setOrderData(data.orderEntities))
+            .catch(error => console.error(error));
+    }, []);
+
+
+    useEffect(() => {
+        const currentDate = moment.utc(new Date(), 'YYYY-MM-DD HH:mm:ss').tz('Asia/Singapore').format('YYYY-MM-DD');
+        // const currentDate = new Date().toISOString().slice(0, 10);
+        fetch(`http://localhost:8080/MealNUS-war/rest/User/numOfNewUsersBySignupDate/${currentDate}`)
+            .then(response => response.json())
+            .then(todayNewUserCount => setTodayNewUserCount(todayNewUserCount))
+    }, []);
+
+    const todayNewMemberCount = todayNewUserCount;
+
+    useEffect(() => {
+        const currentDate = moment.utc(new Date(Date.now() - 86400000), 'YYYY-MM-DD HH:mm:ss').tz('Asia/Singapore').format('YYYY-MM-DD');
+        // const currentDate = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+        fetch(`http://localhost:8080/MealNUS-war/rest/User/numOfNewUsersBySignupDate/${currentDate}`)
+            .then(response => response.json())
+            .then(yesterdayNewUserCount => setYesterdayNewUserCount(yesterdayNewUserCount))
+    }, []);
+
+    const yesterdayNewMemberCount = yesterdayNewUserCount;
+
+    let todayUserCountProgress;
+    if (yesterdayNewMemberCount <= 0) {
+        todayUserCountProgress = '+100%';
+    } else if (todayNewMemberCount > yesterdayNewMemberCount) {
+        const userCountDiff = todayNewMemberCount - yesterdayNewMemberCount;
+        todayUserCountProgress = `+${Math.round(userCountDiff / yesterdayNewMemberCount * 100)}%`;
+    } else if (todayNewMemberCount === yesterdayNewMemberCount) {
+        const userCountDiff = yesterdayNewMemberCount - todayNewMemberCount;
+        todayUserCountProgress = `${Math.round(userCountDiff / yesterdayNewMemberCount * 100)}%`;
+    } else {
+        const userCountDiff = yesterdayNewMemberCount - todayNewMemberCount;
+        todayUserCountProgress = `-${Math.round(userCountDiff / yesterdayNewMemberCount * 100)}%`;
+    }
+
+
+
+    const getOrderStatusColor = (orderStatus) => {
+        switch (orderStatus) {
+            case "PAID":
+                return "orange";
+            case "PREPARING":
+                return "green";
+            case "DELIVERING":
+                return "dodgerblue";
+            case "COMPLETED":
+                return "dimgray";
+            default:  //CREATED
+                return "lightpink";
+        }
+    };
+
+    return (
+        <ColorModeContext.Provider value={colorMode}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <div className="app">
+                    <Sidebar isSidebar={isSidebar} />
+                    <main className="content">
+                        <Topbar setIsSidebar={setIsSidebar} />
+
+                        {/* Main Code Body */}
+                        <Box m="20px">
+                            {/* HEADER */}
+                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                                <Header title="DASHBOARD" subtitle="Welcome back, Shalinda!" />
+                                {/* <Box>
+                                    <Button
+                                        sx={{
+                                            backgroundColor: colors.blueAccent[700],
+                                            color: colors.grey[100],
+                                            fontSize: "14px",
+                                            fontWeight: "bold",
+                                            padding: "10px 20px",
+                                        }}
+                                    >
+                                        <DownloadOutlinedIcon sx={{ mr: "10px" }} />
+                                        Export Reports
+                                    </Button>
+                                </Box> */}
+                            </Box>
+
+                            {/* GRID & CHARTS */}
+                            <Box
+                                display="grid"
+                                gridTemplateColumns="repeat(12, 1fr)"
+                                gridAutoRows="140px"
+                                gap="20px"
+                            >
+
+                                {/* ROW 1 */}
+                                <Box
+                                    gridColumn="span 6"
+                                    backgroundColor={colors.primary[400]}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <StatBox
+                                        title={todayOrderCount.toLocaleString('en-US')}
+                                        subtitle="Today's Orders"
+                                        progress={todayOrderCount > 0 ? (todayOrderCount / 5) : 0}
+                                        increase={todayOrderCountProgress}
+                                        icon={
+                                            <LocalMallIcon
+                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                            />
+                                        }
+                                    />
+                                </Box>
+                                <Box
+                                    gridColumn="span 6"
+                                    backgroundColor={colors.primary[400]}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <StatBox
+                                        title={<Typography variant="h4" fontWeight="bold">$ {todayOrderRevenue.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Typography>}
+                                        subtitle="Today's Revenue"
+                                        progress={todayOrderRevenue > 0 ? (todayOrderRevenue / 500) : 0}
+                                        increase={todayOrderRevenueProgress}
+                                        icon={
+                                            <PointOfSaleIcon
+                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                            />
+                                        }
+                                    />
+                                </Box>
+
+
+                                {/* ROW 2 */}
+                                <Box
+                                    gridColumn="span 3"
+                                    backgroundColor={colors.primary[400]}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <StatBox
+                                        title={mtdOrderCount.toLocaleString('en-US')}
+                                        subtitle="MTD Orders"
+                                        progress={mtdOrderCount > 0 ? (mtdOrderCount / 200) : 0}
+                                        increase={todayMtdCountProgress}
+                                        icon={
+                                            <LocalMallIcon
+                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                            />
+                                        }
+                                    />
+                                </Box>
+                                <Box
+                                    gridColumn="span 3"
+                                    backgroundColor={colors.primary[400]}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <StatBox
+                                        title={<Typography variant="h4" fontWeight="bold">$ {mtdOrderRevenue.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Typography>}
+                                        subtitle="MTD Revenue"
+                                        progress={mtdOrderRevenue > 0 ? (mtdOrderRevenue / 15000) : 0}
+                                        increase={todayMtdRevenueProgress}
+                                        icon={
+                                            <PointOfSaleIcon
+                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                            />
+                                        }
+                                    />
+                                </Box>
+                                <Box
+                                    gridColumn="span 3"
+                                    backgroundColor={colors.primary[400]}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <StatBox
+                                        title={<Typography variant="h4" fontWeight="bold">$ {mtdOrderProfit.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Typography>}
+                                        subtitle="MTD Profit"
+                                        progress={mtdOrderProfit > 0 ? (mtdOrderProfit / 5000) : 0}
+                                        increase={todayMtdProfitProgress}
+                                        icon={
+                                            <MonetizationOnIcon
+                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                            />
+                                        }
+                                    />
+                                </Box>
+                                <Box
+                                    gridColumn="span 3"
+                                    backgroundColor={colors.primary[400]}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <StatBox
+                                        title={<Typography variant="h4" fontWeight="bold">$ {mtdOrderCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Typography>}
+                                        subtitle="MTD Cost"
+                                        progress={mtdOrderCost > 0 ? (mtdOrderCost / 10000) : 0}
+                                        increase={todayMtdCostProgress}
+                                        icon={
+                                            <TollIcon
+                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                            />
+                                        }
+                                    />
+                                </Box>
+
+                                {/* ROW 3 */}
+                                <Box
+                                    gridColumn="span 12"
+                                    backgroundColor={colors.primary[400]}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <StatBox
+                                        title={<Typography variant="h4" fontWeight="bold">{todayNewMemberCount.toLocaleString('en-US')}</Typography>}
+                                        subtitle="New Signups"
+                                        progress={todayNewMemberCount > 0 ? (todayNewMemberCount / 10) : 0}
+                                        increase={todayUserCountProgress}
+                                        icon={
+                                            <PersonAddAlt1Icon
+                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                            />
+                                        }
+                                    />
+                                </Box>
+
+                                {/* ROW 4 */}
+                                <Box
+                                    gridColumn="span 8"
+                                    gridRow="span 2"
+                                    backgroundColor={colors.primary[400]}
+                                >
+                                    <Box
+                                        mt="20px"
+                                        p="0 30px"
+                                        display="flex "
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                    >
+                                        <Box>
+                                            <Typography
+                                                variant="h5"
+                                                fontWeight="600"
+                                                color={colors.grey[100]}
+                                            >
+                                                Total Revenue
+                                            </Typography>
+                                            <Typography
+                                                variant="h6"
+                                                fontWeight="bold"
+                                                color={colors.greenAccent[500]}
+                                                style={{ display: "inline" }}
+                                            >
+                                                SGD&nbsp;
+                                            </Typography>
+                                            <Typography
+                                                variant="h3"
+                                                fontWeight="bold"
+                                                color={colors.greenAccent[500]}
+                                                style={{ display: "inline" }}
+                                            >
+                                                {totalRev.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                    <Box height="250px" m="-20px 0 0 0">
+                                        <DailyOrderLineChart isDashboard={true} width="50%" />
+                                    </Box>
+                                </Box>
+                                <Box
+                                    gridColumn="span 4"
+                                    gridRow="span 2"
+                                    backgroundColor={colors.primary[400]}
+                                    overflow="auto"
+                                >
+                                    <Box
+                                        display="flex"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        borderBottom={`4px solid ${colors.primary[500]}`}
+                                        colors={colors.grey[100]}
+                                        p="15px"
+                                    >
+
+                                        <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
+                                            <ReceiptLongIcon />
+                                            {' '}Recent Orders
+
+                                        </Typography>
+                                    </Box>
+                                    {orderData.map((order, i) => (
+                                        <Box
+                                            key={`${order.orderId}-${i}`}
+                                            display="flex"
+                                            justifyContent="space-between"
+                                            alignItems="center"
+                                            borderBottom={`4px solid ${colors.primary[500]}`}
+                                            p="15px"
+                                            height="20%"
+                                        >
+                                            <Box textAlign="left">
+                                                <Typography
+                                                    color={colors.greenAccent[500]}
+                                                    variant="h5"
+                                                    fontWeight="600"
+                                                >
+                                                    {order.orderId}
+                                                </Typography>
+                                                <Typography color={colors.grey[100]}>
+                                                    {order.user.firstName}
+                                                </Typography>
+                                            </Box>
+                                            <Box textAlign="left" color={colors.grey[100]}>
+                                                {moment.utc(order.orderDate, 'YYYY-MM-DD HH:mm:ss')
+                                                    .tz('Asia/Singapore')
+                                                    .format('YYYY-MM-DD HH:mm:ss')}
+                                            </Box>
+                                            <Box
+                                                backgroundColor={getOrderStatusColor(order.orderStatus)}
+                                                p="5px 10px"
+                                                borderRadius="4px"
+                                            >
+                                                {order.orderStatus}
+                                            </Box>
+                                        </Box>
+                                    ))}
+                                </Box>
+
+                                {/* ROW 5 */}
+                                <Box
+                                    gridColumn="span 12"
+                                    gridRow="span 4"
+                                    backgroundColor={colors.primary[400]}
+                                >
+                                    <Box
+                                        mt="20px"
+                                        p="0 30px"
+                                        display="flex "
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                    >
+                                        <Typography
+                                            variant="h5"
+                                            fontWeight="600"
+                                            color={colors.grey[100]}
+                                        >
+                                            Total Selling MealBoxes
+                                        </Typography>
+                                    </Box>
+                                    <Box height="200px" m="-20px 0 0 0">
+                                        <TopSellingMealboxes />
+                                    </Box>
+                                </Box>
+
+
+
+                            </Box>
+                        </Box>
+                        {/* End of Main Code Body */}
+
+                        <Copyright sx={{ pt: 4 }} />
+                    </main>
+                </div>
+            </ThemeProvider>
+        </ColorModeContext.Provider>
+
+    );
+};
+
+export default Dashboard;

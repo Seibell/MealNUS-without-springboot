@@ -7,6 +7,10 @@ package ws.rest;
 
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.User;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
@@ -99,15 +103,26 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response editUser(@PathParam("userId") Long userId, User updatedUser) {
         updatedUser.setUserId(userId);
-        
+
         updatedUser = userSessionBeanLocal.editUser(userId, updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getEmail(), updatedUser.getPassword(), updatedUser.getImageURL());
-        
+
         if (updatedUser != null) {
             return Response.status(Response.Status.OK).entity(updatedUser).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
+    }
+
+    @Path("/numOfNewUsersBySignupDate/{queryDate}")
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response countNumOfNewUsersBySignupDate(@PathParam("queryDate") String date) throws ParseException {
+
+        Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        List<User> newUsers = userSessionBeanLocal.retrieveNewUsersBySignupDate(date1);
+        return Response.status(Response.Status.OK).entity(newUsers.size()).build();
     }
 
     private UserSessionBeanLocal lookupUserSessionBeanLocal() {
