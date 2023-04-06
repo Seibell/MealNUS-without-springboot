@@ -7,6 +7,8 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  ListItemAvatar,
+  Avatar,
   IconButton,
   Divider,
   Box,
@@ -75,6 +77,13 @@ const Cart = () => {
           {cart.map((mealBox, index) => (
             <React.Fragment key={mealBox.mealBoxId}>
               <ListItem>
+                <ListItemAvatar>
+                  <Avatar
+                    alt={mealBox.itemName}
+                    src={mealBox.itemImage}
+                    variant="square"
+                  />
+                </ListItemAvatar>
                 <ListItemText
                   primary={`${mealBox.itemName} (x${mealBox.quantity})`}
                   secondary={`Price: $${mealBox.itemPrice}`}

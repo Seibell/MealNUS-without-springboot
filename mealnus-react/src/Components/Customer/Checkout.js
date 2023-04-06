@@ -17,6 +17,7 @@ const Checkout = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const { currentUser } = useContext(AuthContext);
 
   const totalCost = cart.reduce(
@@ -27,6 +28,10 @@ const Checkout = () => {
   if (!currentUser) {
     return <div>Error: User not found.</div>;
   }
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
   return (
     <div>
@@ -44,17 +49,26 @@ const Checkout = () => {
             </Typography>
             {cart.map((mealBox) => (
               <Box key={mealBox.mealBoxId} mb={2}>
+              <img
+                src={mealBox.itemImage}
+                alt={mealBox.itemName}
+                width="100"
+                height="100"
+                style={{ marginRight: "16px" }}
+              />
+              <Box display="inline-block" verticalAlign="middle">
                 <Typography>{mealBox.itemName}</Typography>
                 <Typography>
                   Quantity: {mealBox.quantity} x ${mealBox.itemPrice}
                 </Typography>
               </Box>
+            </Box>
             ))}
             <Typography variant="h6" component="h2" gutterBottom>
               Total: ${totalCost.toFixed(2)}
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <Typography variant="h6" component="h2" gutterBottom>
               Payment Information
             </Typography>

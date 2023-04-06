@@ -77,15 +77,15 @@ const MealBoxes = () => {
     });
   };
 
-  const handleOrderNow = (mealBox) => {
-    const newMealBox = { ...mealBox, quantity: 1 };
+  const handleOrderNow = (mealBox, quantity) => {
+    const newMealBox = { ...mealBox, quantity };
     setCart((prevCart) => {
       const existingMealBoxIndex = prevCart.findIndex(
         (item) => item.mealBoxId === newMealBox.mealBoxId
       );
       if (existingMealBoxIndex >= 0) {
         const updatedCart = [...prevCart];
-        updatedCart[existingMealBoxIndex].quantity += 1;
+        updatedCart[existingMealBoxIndex].quantity += quantity;
         return updatedCart;
       } else {
         return [...prevCart, newMealBox];
@@ -121,7 +121,7 @@ const MealBoxes = () => {
   if (!currentUser) {
     return <div>Error: User not found.</div>;
   }
-  
+
   return (
     <div>
       <NavBar />
@@ -279,7 +279,7 @@ const MealBoxes = () => {
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={() => handleOrderNow(selectedMealBox)}
+                onClick={() => handleOrderNow(selectedMealBox, quantity)}
               >
                 Order Now
               </Button>
