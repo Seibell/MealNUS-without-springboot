@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.ForumPost;
 import entity.User;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,6 +32,16 @@ public class ForumSessionBean implements ForumSessionBeanLocal {
     }
 
     @Override
+    public ForumPost createReply(Long replyId, Long postId) {
+         ForumPost reply = retrieveForumPostById(replyId);
+         ForumPost post = retrieveForumPostById(postId);
+         List<ForumPost> list = post.getReplies();
+         list.add(reply);
+         post.setReplies(list);
+         return post;      
+    }
+
+    @Override
     public ForumPost retrieveForumPostById(Long id) {
         return em.find(ForumPost.class, id);
     }
@@ -44,8 +55,8 @@ public class ForumSessionBean implements ForumSessionBeanLocal {
     }
 
     @Override
-    public List<ForumPost> retrieveAllForumPosts() {
-        Query query = em.createQuery("SELECT f FROM ForumPost f", ForumPost.class);
+    public List<ForumPost> retrieveAllForumPosts() {//without reply 
+        Query query = em.createQuery("SELECT f FROM ForumPost f WHERE f.posTitle <> ''", ForumPost.class);
         return query.getResultList();
     }
 

@@ -27,6 +27,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import util.exception.UserNotFoundException;
+import ws.model.CreateForumPostReplyResponse;
 import ws.model.CreateForumPostResponse;
 import ws.model.RetrieveAllForumPostsResponse;
 
@@ -79,6 +80,25 @@ public class ForumResource {
         return Response.status(Status.OK).entity(createdForumPost).build();
     }
 
+    @POST
+    @Path("createNewForumPostReply")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createNewForumPostReply(CreateForumPostReplyResponse createForumPostReplyResponse) throws UserNotFoundException {
+        ForumPost forumPost = new ForumPost(
+                createForumPostReplyResponse.getPostDate(),
+                createForumPostReplyResponse.getPostTitle(),
+                createForumPostReplyResponse.getPostDescription()
+        );
+        // Get the user's ID and associate it with the forum post
+        Long userId = createForumPostReplyResponse.getUserId();
+        User user = userSessionBeanLocal.retrieveUserById(userId);
+        forumPost.setUser(user);
+        ForumPost createdForumPost = forumSessionBeanLocal.createForumPost(forumPost);
+        forumSessionBeanLocal.createReply(createdForumPost.getPostId(),createForumPostReplyResponse.getPostId());
+        return Response.status(Status.OK).entity(createForumPostReplyResponse).build();
+    }
+
     @PUT
     @Path("thumbsUpForumPost/{postId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -93,7 +113,7 @@ public class ForumResource {
             return Response.status(Status.BAD_REQUEST).entity(errorMessage).build();
         }
     }
-    
+
     @PUT
     @Path("thumbsDownForumPost/{postId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -108,8 +128,7 @@ public class ForumResource {
             return Response.status(Status.BAD_REQUEST).entity(errorMessage).build();
         }
     }
-    
-    
+
     // havent implement increase ThumbsDown 
     private ForumSessionBeanLocal lookupForumSessionBeanLocal() {
         try {
