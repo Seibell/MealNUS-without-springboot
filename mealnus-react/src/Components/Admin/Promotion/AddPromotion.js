@@ -1,3 +1,7 @@
+
+// // //------------------------------------------------------------------------------------------------------------------------
+
+
 // import * as React from 'react';
 // import { useState, useEffect } from 'react';
 // import MUILink from '@mui/material/Link';
@@ -76,6 +80,16 @@
 //     const theme = createTheme();
 //     const [error, setError] = useState(false);
 //     const [open, setOpen] = React.useState(true);
+//     const [selectedCategory, setSelectedCategory] = useState("");
+//     const handleCategoryChange = (event) => {
+//         setSelectedCategory(event.target.value);
+//     };
+//     const [categories, setCategories] = useState([]);
+//     useEffect(() => {
+//         Axios.get("http://localhost:8080/MealNUS-war/rest/Category/retrieveAllCategories")
+//             .then((response) => setCategories(response.data))
+//             .catch((error) => console.log(error));
+//     }, []);
 //     const toggleDrawer = () => {
 //         setOpen(!open);
 //     };
@@ -124,6 +138,7 @@
 //                 }
 //                 const promotionData = {
 //                     // replace with the relevant data for your use case
+//                     categoryName: selectedCategory,
 //                     promotionName,
 //                     discount,
 //                     startDate,
@@ -197,6 +212,17 @@
 //                                 />
 //                             </div>
 //                             <div className="form-group">
+//                                 <label htmlFor="my-dropdown">Select a category:</label>
+//                                 <select id="my-dropdown" value={selectedCategory} onChange={handleCategoryChange}>
+//                                     <option value="">--Select--</option>
+//                                     {categories.map((category) => (
+//                                         <option key={category.id} value={category.name}>
+//                                             {category.name}
+//                                         </option>
+//                                     ))}
+//                                 </select>
+//                             </div>
+//                             <div className="form-group">
 //                                 <label htmlFor="inputName">Discount</label>
 //                                 <input
 //                                     id="inputDiscount"
@@ -256,8 +282,10 @@
 //     return <AddPromotion />;
 // }
 
-//------------------------------------------------------------------------------------------------------------------------
 
+
+// //------------------------------------------------------------------------------------------------------------------------
+//Implementing searching within the categories selection
 
 import * as React from 'react';
 import { useState, useEffect } from 'react';
@@ -287,6 +315,10 @@ import LocalOfferTwoToneIcon from '@mui/icons-material/LocalOfferTwoTone';
 import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
 import Alert from '@mui/material/Alert';
+import Autocomplete from '@mui/material/Autocomplete';
+import ClearIcon from '@mui/icons-material/Clear';
+
+
 
 
 // Mehak's Add Promotion
@@ -470,15 +502,34 @@ function AddPromotion(props) {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="my-dropdown">Select a category:</label>
-                                <select id="my-dropdown" value={selectedCategory} onChange={handleCategoryChange}>
-                                    <option value="">--Select--</option>
-                                    {categories.map((category) => (
-                                        <option key={category.id} value={category.name}>
-                                            {category.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                <Autocomplete
+                                    id="my-dropdown"
+                                    options={categories}
+                                    getOptionLabel={(option) => option.name}
+                                    onChange={(event, newValue) => {
+                                        setSelectedCategory(newValue ? newValue.name : '');
+                                    }}
+                                    renderInput={(params) => (
+                                        <div ref={params.InputProps.ref} className="input-group">
+                                            <input
+                                                type="text"
+                                                {...params.inputProps}
+                                                className="form-control"
+                                                placeholder="Type to search"
+                                            />
+                                            <IconButton
+                                                onClick={() => {
+                                                    setSelectedCategory('');
+                                                    params.inputProps.onChange('');
+                                                }}
+                                            >
+                                                <ClearIcon />
+                                            </IconButton>
+                                        </div>
+                                    )}
+                                />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="inputName">Discount</label>
                                 <input
@@ -538,3 +589,5 @@ function AddPromotion(props) {
 export default function AdminPromotions() {
     return <AddPromotion />;
 }
+
+
