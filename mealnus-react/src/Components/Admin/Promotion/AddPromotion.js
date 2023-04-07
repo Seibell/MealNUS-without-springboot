@@ -23,7 +23,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 import LocalOfferTwoToneIcon from '@mui/icons-material/LocalOfferTwoTone';
-import { AdminAuthContext } from "../../Context/AdminAuthContext";
+import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
 
 // Mehak's Add Promotion

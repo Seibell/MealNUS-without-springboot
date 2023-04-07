@@ -54,7 +54,7 @@ import AdminPromotions from "./Components/Admin/Promotion";
 import AdminOrders from "./Components/Admin/Order";
 import AdminOrderManagement from "./Components/Admin/AdminOrderManagement";
 import AdminPromotion from "./Components/Admin/AdminPromotion";
-import AddPromotion from "./Components/Admin/AddPromotion";
+import AddPromotion from "./Components/Admin/Promotion/AddPromotion";
 
 function App() {
 
