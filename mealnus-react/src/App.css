@@ -92,7 +92,9 @@ nav {
   max-width: 600px;
   flex: 1;
 }
-
+.shadows-into-light {
+  font-family: "Shadows Into Light", cursive;
+}
 .home-text-section {
   flex: 1;
   display: flex;
@@ -503,7 +505,6 @@ nav {
 }
 
 @media (max-width: 600px) {
-
   .home-bannerImage-container,
   .about-background-image-container {
     display: none;
@@ -511,7 +512,7 @@ nav {
 }
 
 .healthy-food-background {
-  background-image: url('/src/Assets/f1c5aa00-6f88-11ea-bff9-d2cd5685c4bb.png');
+  background-image: url("/src/Assets/f1c5aa00-6f88-11ea-bff9-d2cd5685c4bb.png");
   background-repeat: repeat;
   background-size: cover;
   background-position: center;
@@ -531,7 +532,7 @@ nav {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-image: url('/src/Assets/revenue-background.png');
+  background-image: url("/src/Assets/revenue-background.png");
   background-size: cover;
   opacity: 0.4;
   border-radius: 5px;
@@ -551,7 +552,7 @@ nav {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-image: url('/src/Assets/mtd-profit-background.jpg');
+  background-image: url("/src/Assets/mtd-profit-background.jpg");
   background-size: cover;
   opacity: 0.4;
   border-radius: 5px;
@@ -571,7 +572,7 @@ nav {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-image: url('/src/Assets/recipe-box-image.jpg');
+  background-image: url("/src/Assets/recipe-box-image.jpg");
   background-size: cover;
   opacity: 0.4;
   transform: scaleX(-1);
@@ -592,7 +593,7 @@ nav {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-image: url('/src/Assets/mealbox-background.jpg');
+  background-image: url("/src/Assets/mealbox-background.jpg");
   background-size: cover;
   opacity: 0.4;
   border-radius: 5px;
@@ -612,7 +613,7 @@ nav {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-image: url('/src/Assets/mtd-revenue-background.jpg');
+  background-image: url("/src/Assets/mtd-revenue-background.jpg");
   background-size: cover;
   opacity: 0.3;
   border-radius: 5px;
@@ -632,7 +633,7 @@ nav {
   width: 100%;
   height: 115%;
   z-index: -1;
-  background-image: url('/src/Assets/cost-background.jpg');
+  background-image: url("/src/Assets/cost-background.jpg");
   background-size: cover;
   opacity: 0.4;
   border-radius: 5px;

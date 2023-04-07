@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import NavBar from "../Navigation/NavBar.js";
+import BannerBackground from "../../Assets/home-banner-background.png";
 import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import {
@@ -238,10 +239,13 @@ const Forum = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <div className="home-bannerImage-container">
+        <img src={BannerBackground} alt="" />
+      </div>
       <NavBar />
       <Container>
-        <Typography variant="h4" gutterBottom>
-          Forum
+        <Typography variant="h4" gutterBottom className="shadows-into-light">
+          Welcome to the Forum!
         </Typography>
         <FormControl className={classes.formControl}>
           <InputLabel id="filter-select-label">Filter By</InputLabel>

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import BannerBackground from "../../Assets/home-banner-background.png";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import {
@@ -157,6 +158,9 @@ const MealBoxes = () => {
 
   return (
     <div>
+      <div className="home-bannerImage-container">
+        <img src={BannerBackground} alt="" />
+      </div>
       <NavBar />
       <Container>
         <Box mt={4} mb={2}>
