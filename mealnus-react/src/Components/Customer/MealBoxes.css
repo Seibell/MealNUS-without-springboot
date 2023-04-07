@@ -13,6 +13,9 @@
     flex-wrap: wrap;
     justify-content: center;
   }
+  .textFieldOutline {
+    border-color: orange !important;
+  }
   
   .meal-box {
     background-color: #f8f8f8;

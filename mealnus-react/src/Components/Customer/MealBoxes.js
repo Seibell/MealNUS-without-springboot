@@ -149,14 +149,33 @@ const MealBoxes = () => {
                         gutterBottom
                         variant="h5"
                         component="div"
+                        style={{
+                          fontWeight: "bold",
+                          color: "#0077c2",
+                          textAlign: "center",
+                        }}
                         noWrap
                       >
                         {mealBox.itemName}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary" noWrap>
+                      <Typography
+                        variant="body2"
+                        style={{
+                          fontWeight: 500,
+                          fontSize: "1.2rem",
+                          color: "#FFA500",
+                          textAlign: "center",
+                        }}
+                        noWrap
+                      >
                         Price: ${mealBox.itemPrice}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary" noWrap>
+                      <Typography
+                        variant="body2"
+                        style={{ textAlign: "center" }}
+                        color="text.secondary"
+                        noWrap
+                      >
                         {mealBox.quantityAvailable} available
                       </Typography>
                     </CardContent>
