@@ -539,4 +539,15 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
             Logger.getLogger(OrderSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Override
+    public OrderEntity cancelOrder(Long orderId) {
+        OrderEntity order = em.find(OrderEntity.class, orderId);
+
+        if (order != null) {
+            order.setOrderStatus(OrderStatus.CANCELLED);
+            em.merge(order);
+        }
+        return order;
+    }
 }

@@ -7,6 +7,7 @@ package ejb.session.singleton;
 
 import ejb.session.stateless.AllergenSessionBeanLocal;
 import ejb.session.stateless.CategorySessionBeanLocal;
+import ejb.session.stateless.CreditCardSessionBeanLocal;
 import ejb.session.stateless.ForumSessionBeanLocal;
 import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.MealBoxSessionBeanLocal;
@@ -61,6 +62,9 @@ import util.exception.UserNotFoundException;
 @LocalBean
 @Startup
 public class DataInitSessionBean {
+
+    @EJB
+    private CreditCardSessionBeanLocal creditCardSessionBean;
 
     @EJB
     private CategorySessionBeanLocal categorySessionBean;
@@ -379,6 +383,15 @@ public class DataInitSessionBean {
                 OrderEntity newOrder4 = orderSessionBean.createOrder(new OrderEntity(orderDate4, orderDetails4, priceList4, costList4, deliveryDate4, address4, orderStatus4, user2));
             } catch (OrderNotFoundException | UnknownPersistenceException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (creditCardSessionBean.retrieveAllCreditCardsByUserId((long) 6).isEmpty()) {
+            try {
+                creditCardSessionBean.addNewCreditCard(new CreditCard("123", "123", "123", "123", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
+                creditCardSessionBean.addNewCreditCard(new CreditCard("1234", "1234", "1234", "1234", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
+                creditCardSessionBean.addNewCreditCard(new CreditCard("12345", "12345", "12345", "12345", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

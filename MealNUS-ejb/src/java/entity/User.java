@@ -57,7 +57,6 @@ public class User implements Serializable {
     @OneToMany
     private List<OrderEntity> orders;
 
-    @OneToMany
     private List<CreditCard> creditCards;
 
     // Added just in case we are still displaying product detail and the number of wishlists its in
