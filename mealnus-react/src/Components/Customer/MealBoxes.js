@@ -78,6 +78,10 @@ const MealBoxes = () => {
   };
 
   const handleOrderNow = (mealBox, quantity) => {
+    if (quantity <= 0) {
+      alert("Please select a quantity greater than 0");
+      return;
+    }
     const newMealBox = { ...mealBox, quantity };
     setCart((prevCart) => {
       const existingMealBoxIndex = prevCart.findIndex(
@@ -161,7 +165,7 @@ const MealBoxes = () => {
                       size="small"
                       variant="contained"
                       color="primary"
-                      onClick={() => handleOrderNow(mealBox)}
+                      onClick={() => handleOrderNow(mealBox, 1)}
                     >
                       Order Now
                     </Button>
