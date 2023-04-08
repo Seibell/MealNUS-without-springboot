@@ -83,7 +83,7 @@ function AdminOrderTable() {
                             </TableCell>
                             <TableCell >
                                 <button onClick={() => navigate('/UpdateOrder/' + order.orderId)}>
-                                    Add A MealBox
+                                    Update MealBox
                                 </button>
                             </TableCell>
                         </TableRow>

@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.Allergen;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.AllergenNotFound;
 
 /**
  *
@@ -19,5 +20,9 @@ public interface AllergenSessionBeanLocal {
     public List<Allergen> retrieveAllAllergens();
 
     public void createAllergen(Allergen allergen);
+
+    public Allergen retrieveAllergenById(Long AllergenId) throws AllergenNotFound;
+
+    public Allergen updateIngredient(Long id, Allergen a);
     
 }

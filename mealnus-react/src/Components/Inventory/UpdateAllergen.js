@@ -41,49 +41,20 @@ import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 import { withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
-
-const API_KEY = '995621471943455';
-const default_image_url = 'https://i.imgur.com/Kvyecsm.png';
 const theme = createTheme();
 
-const UpdateIngred = () => {
-  const { ingredientId } = useParams();
-  const [picture, setpicture] = useState(null);
-  const [name, setname] = useState('');
+const UpdateAllergen = () => {
+  const { allergenId } = useParams();
+  const [allergenName, setname] = useState('');
+  const [allergenDescription, setallergenDescription] = useState('');
   const [error, setError] = useState("");
 
   const handleNameChange = (event) => {
     setname(event.target.value);
   };
-
-  const uploadImage = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'mealnus');
-    formData.append('api_key', API_KEY);
-
-    try {
-      console.log(formData);
-      const response = await axios.post('https://api.cloudinary.com/v1_1/drkpzjlro/image/upload', formData);
-      return response.data.secure_url;
-    } catch (error) {
-      console.error('Error uploading image:', error.response?.data?.error || error.message);
-      return null;
-    }
-  };
-
-  const handleFileChange = async (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      //setpicture(event.target.files[0]);
-      const uploadedImageURL = await uploadImage(file);
-
-      if (uploadedImageURL) {
-        setpicture(uploadedImageURL);
-      } else {
-        setError("Failed to upload image");
-      }
-    }
+  
+  const handleDescChange = (event) => {
+    setallergenDescription(event.target.value);
   };
 
 
@@ -172,12 +143,13 @@ const UpdateIngred = () => {
   const [retrieved, setretrieved] = useState({});
   useEffect(() => {
     Axios.get(
-      "http://localhost:8080/MealNUS-war/rest/Ingredient/getIngredientById/" + ingredientId
+      "http://localhost:8080/MealNUS-war/rest/Allergen/getAllergenById/" + allergenId
     )
       .then((response) => {
         const retrieved = response.data;
         setretrieved(retrieved);
-        setname(retrieved.name);
+        setname(retrieved.allergenName);
+        setallergenDescription(retrieved.allergenDescription);
       })
       .catch((err) => {
         console.log(err);
@@ -189,22 +161,22 @@ const UpdateIngred = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    const Ingredient = { name, picture }
+    const Allergen = { allergenName, allergenDescription }
 
-    fetch('http://localhost:8080/MealNUS-war/rest/Ingredient/updateIngredient/' + ingredientId,
+    fetch('http://localhost:8080/MealNUS-war/rest/Allergen/updateAllergen/' + allergenId,
       {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(Ingredient)
+        body: JSON.stringify(Allergen)
       });
 
-    console.log(Ingredient);
-    window.location.href = '/ViewAllIngred';
-    //idk doesnt work 
+    console.log(Allergen);
+   // 
+    //idk doesnt work window.location.href = '/ViewAllAllergen';
     const history = createBrowserHistory({ forceRefresh: true });
-    history.push('/ViewAllIngred');
+    history.push('/ViewAllAllergen');
   };
 
   return (
@@ -365,34 +337,35 @@ const UpdateIngred = () => {
                   <div className="card-body">
 
                     <div className="form-group">
-                      <label htmlFor="inputName"> Ingredient Name:</label>
+                      <label htmlFor="inputName"> Allergen Name:</label>
                       <input
                         type="text"
                         id="inputName"
                         required
                         className="form-control"
-                        value={name}
+                        value={allergenName}
                         onChange={handleNameChange}
                       />
                     </div>
 
-
                     <div className="form-group">
-                      <label htmlFor="inputName">Upload an image:</label>
+                      <label htmlFor="inputName"> Allergen Description:</label>
                       <input
-                        accept="image/*"
-                        type="file" onChange={handleFileChange}
+                        type="text"
+                        id="inputName"
+                        required
+                        className="form-control"
+                        value={allergenDescription}
+                        onChange={handleDescChange}
                       />
                     </div>
-
-
 
 
 
                   </div>
                   <div className="card-footer">
                     <Link to="/InventoryHome">
-                      <button className="btn btn-default" type="button" onClick={() => navigate('/ViewAllIngred')}>
+                      <button className="btn btn-default" type="button" onClick={() => navigate('/ViewAllAllergen')}>
                         Cancel
                       </button>
                     </Link>
@@ -413,4 +386,4 @@ const UpdateIngred = () => {
 
 };
 
-export default UpdateIngred;
+export default UpdateAllergen;
