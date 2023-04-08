@@ -165,7 +165,7 @@ function PaymentMethodsPage() {
   return (
     <ThemeProvider theme={theme}>
       <NavBar />
-      <Box style={{ padding: "20px" }}>
+      <Box style={{paddingLeft: "20px", paddingRight: "20px"}}>
         <h1>Payment Methods</h1>
         <Button variant="contained" color="primary" onClick={handleClickOpen}>
           Add Credit Card
