@@ -37,13 +37,10 @@ nav {
   min-height: 90px;
 }
 
-.navbar-menu-container {
-  display: none;
-}
-
 .navbar-links-container a {
   margin-right: 3rem;
   text-decoration: none;
+  flex-direction: column;
   color: black;
   font-size: 1.1rem;
   font-weight: 600;
@@ -67,11 +64,6 @@ nav {
 
 .primary-button:hover {
   background-color: rgb(234, 234, 234);
-}
-
-.navbar-menu-container svg {
-  font-size: 1.5rem;
-  cursor: pointer;
 }
 
 .home-banner-container {
@@ -385,10 +377,6 @@ nav {
 
   .navbar-links-container {
     display: none;
-  }
-
-  .navbar-menu-container {
-    display: flex;
   }
 
   .home-bannerImage-container {

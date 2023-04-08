@@ -94,7 +94,7 @@ function App() {
           {/* Soon to be removed */}
           <Route path="/adminordermanagement" element={<AdminOrderManagement />} />
           <Route path="/adminpromotion" element={<AdminPromotion />} />
-          
+
           <Route path="/paymentmethodspage" element={<PaymentMethodsPage />} />
           <Route path="/myorders" element={<MyOrders />} />
         </Routes>

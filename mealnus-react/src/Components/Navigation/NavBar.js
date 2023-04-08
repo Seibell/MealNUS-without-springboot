@@ -77,13 +77,13 @@ const NavBar = () => {
   const isActive = (path) => {
     return location.pathname === path
       ? {
-          color: "#007bff",
-          borderColor: "#007bff",
-          borderWidth: "1px",
-          borderStyle: "solid",
-          borderRadius: "4px",
-          padding: "2px 4px",
-        }
+        color: "#007bff",
+        borderColor: "#007bff",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        borderRadius: "4px",
+        padding: "2px 4px",
+      }
       : {};
   };
 
@@ -124,7 +124,8 @@ const NavBar = () => {
             <Avatar
               src={currentUser.imageURL}
               sx={{ m: 1, bgcolor: "primary.main" }}
-            ></Avatar>
+            >
+            </Avatar>
           </IconButton>
           <Menu
             id="menu-appbar"
@@ -132,21 +133,23 @@ const NavBar = () => {
             open={open}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose} component={Link} to="/viewprofile">
-              View Profile
-            </MenuItem>
-            <MenuItem onClick={handleClose} component={Link} to="/editprofile">
-              Edit Profile
-            </MenuItem>
-            <MenuItem onClick={handleClose} component={Link} to="/myorders">
-              My Orders
-            </MenuItem>
-            <MenuItem onClick={handleClose} component={Link} to="/paymentmethodspage">
-              Payment Methods
-            </MenuItem>
-            <MenuItem onClick={handleClose} component={Link} to="/">
-              Logout
-            </MenuItem>
+            <Box display="flex" flexDirection="column">
+              <MenuItem onClick={handleClose} component={Link} to="/viewprofile">
+                View Profile
+              </MenuItem>
+              <MenuItem onClick={handleClose} component={Link} to="/editprofile">
+                Edit Profile
+              </MenuItem>
+              <MenuItem onClick={handleClose} component={Link} to="/myorders">
+                My Orders
+              </MenuItem>
+              <MenuItem onClick={handleClose} component={Link} to="/paymentmethodspage">
+                Payment Methods
+              </MenuItem>
+              <MenuItem onClick={handleClose} component={Link} to="/">
+                Logout
+              </MenuItem>
+            </Box>
           </Menu>
         </div>
       </nav>

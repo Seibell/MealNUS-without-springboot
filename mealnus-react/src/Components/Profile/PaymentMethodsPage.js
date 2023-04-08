@@ -1,9 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import {
   TextField,
+  Typography,
+  ThemeProvider,
+  createTheme,
+  useTheme,
   Button,
   IconButton,
-  makeStyles,
   CircularProgress,
   Snackbar,
   Dialog,
@@ -20,17 +23,16 @@ import {
   Paper,
   Box,
   Grid
-} from '@material-ui/core';
-import { Delete } from '@material-ui/icons';
-import MuiAlert from '@material-ui/lab/Alert';
+} from '@mui/material';
+import { Delete } from '@mui/icons-material';
+import MuiAlert from '@mui/lab/Alert';
 import axios from 'axios';
 import { AuthContext } from "../../Context/AuthContext";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import NavBar from '../Navigation/NavBar';
-import { Padding } from '@mui/icons-material';
 
 function PaymentMethodsPage() {
   const { currentUser } = useContext(AuthContext);
+  const theme = useTheme();
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -38,7 +40,6 @@ function PaymentMethodsPage() {
   const [openDialog, setOpenDialog] = useState(false);
   const [cardToRemove, setCardToRemove] = useState(null);
   const [formattedCreditCardNumber, setFormattedCreditCardNumber] = useState('');
-  const theme = createTheme();
 
   //validation state for ccNum/Date
   const [inputErrors, setInputErrors] = useState({
@@ -164,121 +165,123 @@ function PaymentMethodsPage() {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavBar />
-      <Box style={{paddingLeft: "20px", paddingRight: "20px"}}>
-        <h1>Payment Methods</h1>
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>
-          Add Credit Card
-        </Button>
-        <hr />
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <TableContainer component={Paper}>
-            <Table aria-label="credit cards table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Card ID</TableCell>
-                  <TableCell>Card Owner Name</TableCell>
-                  <TableCell>Credit Card Number</TableCell>
-                  <TableCell>CVV</TableCell>
-                  <TableCell>Expiry Date</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {cards.map((card, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{card.cardOwnerName}</TableCell>
-                    <TableCell>{card.creditCardNumber}</TableCell>
-                    <TableCell>{card.cvv}</TableCell>
-                    <TableCell>{card.expiryDate}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => handleRemoveCardDialog(card.creditCardId, index)}
-                        disabled={loading}
-                      >
-                        <Delete />
-                      </IconButton>
-                    </TableCell>
+      <div>
+        <NavBar />
+        <Box style={{ paddingLeft: "20px", paddingRight: "20px" }}>
+          <h1>Payment Methods</h1>
+          <Button variant="contained" color="primary" onClick={handleClickOpen}>
+            Add Credit Card
+          </Button>
+          <hr />
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <TableContainer component={Paper}>
+              <Table aria-label="credit cards table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Card ID</TableCell>
+                    <TableCell>Card Owner Name</TableCell>
+                    <TableCell>Credit Card Number</TableCell>
+                    <TableCell>CVV</TableCell>
+                    <TableCell>Expiry Date</TableCell>
+                    <TableCell>Action</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-        {error && <MuiAlert severity="error">{error}</MuiAlert>}
-        <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
-          <MuiAlert severity="success">Card successfully {error ? 'updated' : 'added'}!</MuiAlert>
-        </Snackbar>
-        <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Add Credit Card</DialogTitle>
-          <form onSubmit={handleSubmit}>
+                </TableHead>
+                <TableBody>
+                  {cards.map((card, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{card.cardOwnerName}</TableCell>
+                      <TableCell>{card.creditCardNumber}</TableCell>
+                      <TableCell>{card.cvv}</TableCell>
+                      <TableCell>{card.expiryDate}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => handleRemoveCardDialog(card.creditCardId, index)}
+                          disabled={loading}
+                        >
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+          {error && <MuiAlert severity="error">{error}</MuiAlert>}
+          <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+            <MuiAlert severity="success">Card successfully {error ? 'updated' : 'added'}!</MuiAlert>
+          </Snackbar>
+          <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Add Credit Card</DialogTitle>
+            <form onSubmit={handleSubmit}>
+              <DialogContent>
+                <Grid container direction="column" spacing={2}>
+                  <Grid item>
+                    <TextField label="Card Owner Name" name="cardOwnerName" fullWidth />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      label="Credit Card Number"
+                      name="creditCardNumber"
+                      value={formattedCreditCardNumber}
+                      onChange={handleCreditCardNumberChange}
+                      fullWidth
+                      error={inputErrors.creditCardNumber}
+                      helperText={inputErrors.creditCardNumber ? 'Invalid credit card number' : ''}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <TextField label="CVV" name="cvv" fullWidth />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      label="Expiry Date (MM/YYYY)"
+                      name="expiryDate"
+                      fullWidth
+                      error={inputErrors.expiryDate}
+                      helperText={inputErrors.expiryDate ? 'Invalid expiry date' : ''}
+                    />
+                  </Grid>
+                </Grid>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancel
+                </Button>
+                <Button type="submit" color="primary" disabled={loading}>
+                  Add Card
+                </Button>
+              </DialogActions>
+            </form>
+          </Dialog>
+          <Dialog
+            open={!!cardToRemove}
+            onClose={() => setCardToRemove(null)}
+            aria-labelledby="remove-card-dialog-title"
+          >
+            <DialogTitle id="remove-card-dialog-title">Remove Card</DialogTitle>
             <DialogContent>
-              <Grid container direction="column" spacing={2}>
-                <Grid item>
-                  <TextField label="Card Owner Name" name="cardOwnerName" fullWidth />
-                </Grid>
-                <Grid item>
-                  <TextField
-                    label="Credit Card Number"
-                    name="creditCardNumber"
-                    value={formattedCreditCardNumber}
-                    onChange={handleCreditCardNumberChange}
-                    fullWidth
-                    error={inputErrors.creditCardNumber}
-                    helperText={inputErrors.creditCardNumber ? 'Invalid credit card number' : ''}
-                  />
-                </Grid>
-                <Grid item>
-                  <TextField label="CVV" name="cvv" fullWidth />
-                </Grid>
-                <Grid item>
-                  <TextField
-                    label="Expiry Date (MM/YYYY)"
-                    name="expiryDate"
-                    fullWidth
-                    error={inputErrors.expiryDate}
-                    helperText={inputErrors.expiryDate ? 'Invalid expiry date' : ''}
-                  />
-                </Grid>
-              </Grid>
+              <DialogContentText>
+                Are you sure you want to remove this card?
+              </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
+              <Button onClick={() => setCardToRemove(null)} color="primary">
                 Cancel
               </Button>
-              <Button type="submit" color="primary" disabled={loading}>
-                Add Card
+              <Button onClick={handleRemoveCard} color="primary" autoFocus>
+                Remove
               </Button>
             </DialogActions>
-          </form>
-        </Dialog>
-        <Dialog
-          open={!!cardToRemove}
-          onClose={() => setCardToRemove(null)}
-          aria-labelledby="remove-card-dialog-title"
-        >
-          <DialogTitle id="remove-card-dialog-title">Remove Card</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Are you sure you want to remove this card?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setCardToRemove(null)} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleRemoveCard} color="primary" autoFocus>
-              Remove
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Box>
-    </ThemeProvider >
+          </Dialog>
+        </Box>
+      </div>
+    </ThemeProvider>
   );
 }
 
