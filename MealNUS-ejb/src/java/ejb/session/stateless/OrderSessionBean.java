@@ -254,9 +254,6 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         }
 
         Collections.sort(result, (p1, p2) -> p1.getKey().compareTo(p2.getKey()));
-        Collections.sort(result,
-                (Pair<Date, Integer> p1, Pair<Date, Integer> p2)
-                -> p1.getKey().compareTo(p2.getKey()));
 
         return result;
 
@@ -531,17 +528,6 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         updatedOrder.setOrderStatus(orderToUpdate.getOrderStatus());
         updatedOrder.setUser(orderToUpdate.getUser());
         em.merge(updatedOrder);
-    }
-
-    @Override
-    public OrderEntity cancelOrder(Long orderId) {
-        OrderEntity order = em.find(OrderEntity.class, orderId);
-
-        if (order != null) {
-            order.setOrderStatus(OrderStatus.CANCELLED);
-            em.merge(order);
-        }
-        return order;
     }
 
     @Override

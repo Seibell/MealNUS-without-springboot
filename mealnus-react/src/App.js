@@ -34,7 +34,6 @@ import Dashboard from "./Components/HomePage/Dashboard";
 import SignUp from "./Components/Login/SignUp";
 import ForgotPassword from "./Components/Login/ForgotPassword";
 import React from "react";
-import CreditCards from "./Components/Profile/CreditCards";
 
 //inventory
 import InventoryHome from "./Components/Inventory/InventoryHome";
@@ -91,12 +90,11 @@ function App() {
           <Route path="/addpromotion" element={<AddPromotion />} />
           <Route path="/adminorders" element={<AdminOrders />} />
 
-          {/* Soon to be removed ss*/}
+          {/* Soon to be removed */}
           <Route path="/adminordermanagement" element={<AdminOrderManagement />} />
           <Route path="/adminpromotion" element={<AdminPromotion />} />
           
           <Route path="/myorders" element={<MyOrders />} />
-          <Route path="/creditcards" element={<CreditCards />} />
         </Routes>
       </Router>
     </CartProvider>

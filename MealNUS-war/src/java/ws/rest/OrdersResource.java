@@ -383,19 +383,4 @@ public class OrdersResource {
         String deleteSuccessMessage = "Order with ID [" + orderId + "] has been deleted successfully!";
         return Response.status(200).entity(deleteSuccessMessage).build();
     } //end deleteOrder
-    
-    @PUT
-    @Path("cancel/{orderId}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response cancelOrder(@PathParam("orderId") Long orderId) throws OrderNotFoundException {
-        OrderEntity updatedOrder = orderSessionBeanLocal.cancelOrder(orderId);
-        
-        if (updatedOrder != null) {
-            return Response.status(Response.Status.OK).entity(updatedOrder).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-    }
 }

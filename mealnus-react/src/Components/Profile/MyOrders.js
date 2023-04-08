@@ -12,22 +12,16 @@ import {
   Paper,
 } from "@mui/material";
 import { tokens } from "../Statistics/theme";
+import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+import EmailIcon from "@mui/icons-material/Email";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import TrafficIcon from "@mui/icons-material/Traffic";
 import StatBox from "../Statistics/StatBox";
 import NavBar from "../Navigation/NavBar";
 import { AuthContext } from "../../Context/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import axios from 'axios';
-import { ResponsiveBar } from "@nivo/bar";
-import { ResponsivePie } from "@nivo/pie";
-import { Typography } from "@mui/material";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { Button } from "@mui/material";
 
 const MyOrders = () => {
   const { currentUser } = useContext(AuthContext);
@@ -43,7 +37,8 @@ const MyOrders = () => {
           const response = await axios.get(
             `http://localhost:8080/MealNUS-war/rest/orders/email/${currentUser.email}`
           );
-          setOrders(response.data);
+          const ordersWithNumber = response.data.map((order, index) => ({ ...order, orderNumber: index + 1 }));
+          setOrders(ordersWithNumber);
         } catch (error) {
           console.error('Error fetching orders:', error);
         }
@@ -52,72 +47,6 @@ const MyOrders = () => {
       fetchOrders();
     }
   }, [currentUser]);
-
-  const processDataForHistogram = (orders) => {
-    const filteredOrders = orders.filter(
-      order => order.orderStatus === "PREPARING" ||
-        order.orderStatus === "DELIVERING" ||
-        order.orderStatus === "PAID"
-    );
-    const dateCounts = filteredOrders.reduce((acc, order) => {
-      const deliveryDate = new Date(order.deliveryDate.replace('[UTC]', '')).toLocaleDateString();
-      acc[deliveryDate] = (acc[deliveryDate] || 0) + 1;
-      return acc;
-    }, {});
-
-    const sortedDates = Object.keys(dateCounts).sort(
-      (a, b) => new Date(a) - new Date(b)
-    );
-
-    const data = sortedDates.map((date) => ({
-      date,
-      "Number of Orders": dateCounts[date],
-    }));
-
-    return data;
-  };
-
-  const processDataForPieChart = (orders) => {
-    const statusCounts = orders.reduce((acc, order) => {
-      acc[order.orderStatus] = (acc[order.orderStatus] || 0) + 1;
-      return acc;
-    }, {});
-
-    return Object.keys(statusCounts).map((status) => ({
-      id: status,
-      label: status,
-      value: statusCounts[status],
-    }));
-  };
-
-  const statusCounts = [
-    { label: "Paid", value: orders.filter(order => order.orderStatus === "PAID").length },
-    { label: "Preparing", value: orders.filter(order => order.orderStatus === "PREPARING").length },
-    { label: "Delivering", value: orders.filter(order => order.orderStatus === "DELIVERING").length },
-    { label: "Completed", value: orders.filter(order => order.orderStatus === "COMPLETED").length },
-    { label: "Cancelled", value: orders.filter(order => order.orderStatus === "CANCELLED").length },
-  ];
-
-  const statusColors = ['#e8c1a0', '#f47560', '#f1e15b', '#e8a838', '#61cdbb'];
-
-  const handleCancelOrder = async (orderId) => {
-    const confirmed = window.confirm("Are you sure you want to cancel this order?");
-    if (confirmed) {
-      try {
-        await axios.put(
-          `http://localhost:8080/MealNUS-war/rest/orders/cancel/${orderId}`
-        );
-        alert("Order cancelled successfully");
-        // Refresh the order list
-        const response = await axios.get(
-          `http://localhost:8080/MealNUS-war/rest/orders/email/${currentUser.email}`
-        );
-        setOrders(response.data);
-      } catch (error) {
-        console.error('Error cancelling order:', error);
-      }
-    }
-  };
 
   if (!currentUser || !currentUser.email) {
     return <div>Loading...</div>;
@@ -160,6 +89,11 @@ const MyOrders = () => {
                 order.orderStatus === "PREPARING" ||
                 order.orderStatus === "DELIVERING").length}
               subtitle="Orders Pending"
+              icon={
+                <PointOfSaleIcon
+                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+                />
+              }
             />
           </Box>
           <Box
@@ -176,7 +110,7 @@ const MyOrders = () => {
               }, 0).toFixed(2)}
               subtitle="Total Spent"
               icon={
-                <PointOfSaleIcon
+                <PersonAddIcon
                   sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
                 />
               }
@@ -189,36 +123,26 @@ const MyOrders = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Order ID</TableCell>
+                <TableCell>Order Number</TableCell>
                 <TableCell>Item Name</TableCell>
                 <TableCell>Order Date</TableCell>
                 <TableCell>Delivery Date</TableCell>
                 <TableCell>Item Price</TableCell>
                 <TableCell>Item Quantity</TableCell>
                 <TableCell>Order Status</TableCell>
-                <TableCell>Cancel Order</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {orders.map((order) => (
                 order.orderDetails.map((orderDetail) => (
-                  <TableRow key={order.orderId}>
-                    <TableCell>{order.orderId}</TableCell>
+                  <TableRow key={order.orderNumber}>
+                    <TableCell>{order.orderNumber}</TableCell>
                     <TableCell>{orderDetail.key.itemName}</TableCell>
                     <TableCell>{new Date(order.orderDate.replace('[UTC]', '')).toLocaleDateString()}</TableCell>
                     <TableCell>{new Date(order.deliveryDate.replace('[UTC]', '')).toLocaleDateString()}</TableCell>
                     <TableCell>{parseFloat(orderDetail.key.itemPrice).toFixed(2)}</TableCell>
                     <TableCell>{orderDetail.value}</TableCell>
                     <TableCell>{order.orderStatus}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => handleCancelOrder(order.orderId)}
-                      >
-                        Cancel
-                      </Button>
-                    </TableCell>
                   </TableRow>
                 ))
               ))}
@@ -241,44 +165,9 @@ const MyOrders = () => {
             alignItems="center"
             justifyContent="center"
           >
-            <ResponsiveBar
-              data={processDataForHistogram(orders)}
-              keys={["Number of Orders"]}
-              indexBy="date"
-              margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-              padding={0.3}
-              valueScale={{ type: "linear" }}
-              indexScale={{ type: "band", round: true }}
-              colors={{ scheme: "nivo" }}
-              borderColor={{ from: "color", modifiers: [["darker", 1.6]] }}
-              axisTop={null}
-              axisRight={null}
-              axisBottom={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: "Delivery Date",
-                legendPosition: "middle",
-                legendOffset: 36,
-              }}
-              axisLeft={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: "Number of Orders",
-                legendPosition: "middle",
-                legendOffset: -40,
-                tickValues: Array.from(
-                  { length: Math.max(...processDataForHistogram(orders).map(item => item.y)) },
-                  (_, i) => i + 1
-                ), //this is broken but being broken its actually better, no axis kinda nice
-              }}
-              labelSkipWidth={12}
-              labelSkipHeight={12}
-              labelTextColor={{ from: "color", modifiers: [["darker", 1.6]] }}
-              animate={true}
-              motionStiffness={90}
-              motionDamping={15}
+            <StatBox
+              title="Some graph to show order histogram"
+              subtitle="?"
             />
           </Box>
           <Box
@@ -288,37 +177,10 @@ const MyOrders = () => {
             alignItems="center"
             justifyContent="center"
           >
-            <Typography variant="h6" gutterBottom align="center" style={{ width: '90%', wordBreak: 'break-all' }}>
-              Order Status Distribution
-            </Typography>
-            <ResponsivePie
-              data={processDataForPieChart(orders)}
-              margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-              innerRadius={0.5}
-              padAngle={0.7}
-              cornerRadius={3}
-              colors={{ scheme: 'nivo' }}
-              borderWidth={1}
-              borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
-              radialLabelsSkipAngle={10}
-              radialLabelsTextColor="#333333"
-              radialLabelsLinkColor={{ from: "color" }}
-              sliceLabelsSkipAngle={10}
-              sliceLabelsTextColor="#333333"
-              animate={true}
-              motionStiffness={90}
-              motionDamping={15}
+            <StatBox
+              title="Some calendar to show what dates orders are coming in"
+              subtitle="?"
             />
-            <List style={{ maxWidth: "600px", maxHeight: "600px", margin: "auto", whiteSpace: 'nowrap' }} dense={true}>
-              {statusCounts.map((status, index) => (
-                <ListItem key={status.label}>
-                  <ListItemIcon>
-                    <FiberManualRecordIcon style={{ color: statusColors[index] }} />
-                  </ListItemIcon>
-                  <ListItemText primary={`${status.label}: ${status.value}`} />
-                </ListItem>
-              ))}
-            </List>
           </Box>
         </Box>
       </Box>

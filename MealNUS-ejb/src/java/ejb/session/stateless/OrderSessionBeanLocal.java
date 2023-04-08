@@ -66,7 +66,5 @@ public interface OrderSessionBeanLocal {
     public BigDecimal getTotalRevenue();
 
     public void updateOrder(Long orderId, OrderEntity orderToUpdate);
-    
-    public OrderEntity cancelOrder(Long orderId);
 
 }
