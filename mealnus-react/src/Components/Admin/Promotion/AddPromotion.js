@@ -319,8 +319,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import ClearIcon from '@mui/icons-material/Clear';
 
 
-
-
 // Mehak's Add Promotion
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
