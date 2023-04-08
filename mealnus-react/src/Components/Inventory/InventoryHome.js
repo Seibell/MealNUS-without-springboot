@@ -166,6 +166,23 @@ function AdminPromotions(props) {
         });
     }, [orders, query]);
 
+    const handleSwitchChange = (promotion) => {
+        const updatedPromotions = promotions.map((p) =>
+            p.promotionId === promotion.promotionId
+                ? { ...p, isApplied: !p.isApplied }
+                : p
+        );
+        setPromotions(updatedPromotions);
+
+        if (promotion.isApplied) {
+            // switch toggled off
+            handleToggleBack(promotion);
+        } else {
+            // switch toggled on
+            handleToggle(promotion);
+        }
+    };
+
 
     const navigate = useNavigate();
 
