@@ -141,6 +141,9 @@ const NavBar = () => {
             <MenuItem onClick={handleClose} component={Link} to="/myorders">
               My Orders
             </MenuItem>
+            <MenuItem onClick={handleClose} component={Link} to="/creditcards">
+              My Credit Cards
+            </MenuItem>
             <MenuItem onClick={handleClose} component={Link} to="/">
               Logout
             </MenuItem>
