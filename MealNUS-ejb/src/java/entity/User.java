@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,7 +57,6 @@ public class User implements Serializable {
     @OneToMany
     private List<OrderEntity> orders;
 
-    @OneToMany(mappedBy = "user")
     private List<CreditCard> creditCards;
 
     // Added just in case we are still displaying product detail and the number of wishlists its in

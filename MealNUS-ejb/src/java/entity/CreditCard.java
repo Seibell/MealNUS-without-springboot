@@ -6,12 +6,11 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
  *
@@ -25,12 +24,14 @@ public class CreditCard implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long creditCardId;
     private String cardOwnerName;
+    
+    @Column(unique = true)
     private String creditCardNumber;
     private String cvv;
     private String expiryDate; //should this be date?
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    
+    //Reference userId instead to prevent cyclic reference problem
+    private Long userId;
     
     public CreditCard() {
     }
@@ -40,7 +41,7 @@ public class CreditCard implements Serializable {
         this.creditCardNumber = creditCardNumber;
         this.cvv = cvv;
         this.expiryDate = expiryDate;
-        this.user = user;
+        this.userId = user.getUserId();
     }
     
     public Long getCreditCardId() {
@@ -117,14 +118,6 @@ public class CreditCard implements Serializable {
     public void setCvv(String cvv) {
         this.cvv = cvv;
     }
-    
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     /**
      * @return the expiryDate
@@ -138,6 +131,20 @@ public class CreditCard implements Serializable {
      */
     public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    /**
+     * @return the userId
+     */
+    public Long getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
     
 }

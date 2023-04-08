@@ -7,10 +7,12 @@ package ejb.session.stateless;
 
 import entity.CreditCard;
 import entity.User;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import util.exception.UserNotFoundException;
 
 /**
@@ -27,35 +29,39 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
     private EntityManager em;
 
     @Override
-    public CreditCard addNewCreditCard(CreditCard creditCard, Long userId) throws UserNotFoundException {
-        User user = userSessionBean.retrieveUserById(userId);
+    public CreditCard addNewCreditCard(CreditCard creditCard, Long userId) {
         em.persist(creditCard);
-        creditCard.setUser(user);
-        em.flush();
         return creditCard;
     }
-    
+
     @Override
     public void updateCreditCard(CreditCard updatedCreditCard) {
         Long creditCardId = updatedCreditCard.getCreditCardId();
         CreditCard oldCreditCard = retrieveCreditCardById(creditCardId);
-        
+
         oldCreditCard.setCardOwnerName(updatedCreditCard.getCardOwnerName());
         oldCreditCard.setCreditCardNumber(updatedCreditCard.getCreditCardNumber());
         oldCreditCard.setCvv(updatedCreditCard.getCvv());
         oldCreditCard.setExpiryDate(updatedCreditCard.getExpiryDate());
     }
-    
+
     @Override
-    public void removeCreditCard(CreditCard creditCard) {
-        em.remove(creditCard);
+    public void removeCreditCard(Long cardId) {
+        CreditCard cc = em.find(CreditCard.class, cardId);
+        em.remove(cc);
     }
-    
+
     @Override
     public CreditCard retrieveCreditCardById(Long creditCardId) {
         CreditCard creditCard = em.find(CreditCard.class, creditCardId);
         return creditCard;
     }
-    
-    
+
+    @Override
+    public List<CreditCard> retrieveAllCreditCardsByUserId(Long userId) {
+        Query query = em.createQuery("SELECT c FROM CreditCard c WHERE c.userId = :userId");
+        query.setParameter("userId", userId);
+        return query.getResultList();
+    }
+
 }

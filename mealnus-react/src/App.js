@@ -13,6 +13,7 @@ import RetrieveAllUsers from "./Components/Login/RetrieveAllUsers";
 import ViewProfile from "./Components/Profile/ViewProfile";
 import EditProfile from "./Components/Profile/EditProfile";
 import MyOrders from "./Components/Profile/MyOrders";
+import PaymentMethodsPage from "./Components/Profile/PaymentMethodsPage";
 
 //OldNavBar
 import OldNavBar from "./Components/HomePage/OldNavBar";
@@ -94,6 +95,7 @@ function App() {
           <Route path="/adminordermanagement" element={<AdminOrderManagement />} />
           <Route path="/adminpromotion" element={<AdminPromotion />} />
           
+          <Route path="/paymentmethodspage" element={<PaymentMethodsPage />} />
           <Route path="/myorders" element={<MyOrders />} />
         </Routes>
       </Router>
