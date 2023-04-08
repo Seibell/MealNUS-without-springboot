@@ -102,7 +102,7 @@ const Topbar = () => {
                     open={open}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={handleMenuClose} component={Link} to="/">Sign In as Member</MenuItem>
+                    <MenuItem onClick={() => window.open('/home', 'Add Promotion', 'width=900,height=800')} component={Link}>View Customer Portal</MenuItem>
                     <MenuItem onClick={handleMenuClose} component={Link} to="/stafflogin">Logout</MenuItem>
                 </Menu>
             </Box>

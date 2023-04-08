@@ -87,22 +87,29 @@ const Member = () => {
         },
         {
             field: "creditCards",
-            headerName: "Default Credit Card",
+            headerName: "Primary Credit Card",
             flex: 1,
-            valueFormatter: (params) => {
+            renderCell: (params) => {
                 const firstCard = params.value[0];
                 if (firstCard) {
-                    const maskedNumber = `•••• •••• •••• ${firstCard.number.slice(-4)}`;
+                    const maskedNumber = `•••• •••• •••• ${firstCard.creditCardNumber.slice(-4)}`;
                     const cardType = firstCard.type;
-                    const cardLogo = firstCard.cardNumber.startsWith("4") ? visaLogo : mastercardLogo;
+                    const cardLogo = firstCard.creditCardNumber.startsWith("4") ? visaLogo : mastercardLogo;
                     return (
                         <div>
-                            <Avatar src={cardLogo} alt={cardType} />
+                            <img src={cardLogo} alt={cardType} />
                             {maskedNumber}
                         </div>
                     );
                 } else {
-                    return "N.A.";
+                    // "return N.A." will be used when cc confirmed
+                    return (
+                        <div>
+                            <img src={visaLogo} alt={"Card type"} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
+                            {"•••• •••• •••• 1234"}
+                        </div>
+                    )
+                    // return "N.A.";
                 }
             },
         },

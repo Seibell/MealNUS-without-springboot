@@ -333,9 +333,7 @@ function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <RouterLink color="inherit" to="/admindashboard">
-                MealNUS
-            </RouterLink>{' '}
+            MealNUS{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>
