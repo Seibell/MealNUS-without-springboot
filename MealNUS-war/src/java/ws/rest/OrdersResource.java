@@ -373,8 +373,9 @@ public class OrdersResource {
         String updateSuccessMessage = "Order with ID [" + orderId + "] has been updated successfully!";
         return Response.status(200).entity(updateSuccessMessage).build();
     }
-    
-    @Path("/update/{orderId}") 
+   
+    /*
+    @Path("/update2/{orderId}") 
     @Consumes(MediaType.APPLICATION_JSON) 
     @Produces(MediaType.APPLICATION_JSON) 
     public Response updateOrder2(@PathParam("orderId") Long orderId, OrderEntity orderEntity) throws OrderNotFoundException { 
@@ -384,7 +385,7 @@ public class OrdersResource {
         String updateSuccessMsg = "Order with ID [" + orderId + "] has been updated successfully!"; 
         return Response.status(200).entity(updateSuccessMsg).build(); 
     } //end editOrder
-
+*/
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/delete/1
     // success should show the success message
     @DELETE

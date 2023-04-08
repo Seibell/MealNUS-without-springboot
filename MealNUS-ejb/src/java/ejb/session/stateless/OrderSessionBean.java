@@ -530,6 +530,8 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         em.merge(updatedOrder);
     }
         
+    /*
+    @Override
     public void updateOrder(OrderEntity orderToUpdate) {
         try {
             OrderEntity updatedOrder = retrieveOrderById(orderToUpdate.getOrderId());
@@ -542,11 +544,12 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
             updatedOrder.setOrderStatus(orderToUpdate.getOrderStatus());
             //dont need this ba you cant be updating the user
             updatedOrder.setUser(orderToUpdate.getUser());
-            em.merge(updatedOrder);
+            em.merge(updatedOrder);      
         } catch (OrderNotFoundException ex) {
             Logger.getLogger(OrderSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        }       
+        }
     }
+*/
 
     @Override
     public void deleteOrder(Long oId) {
