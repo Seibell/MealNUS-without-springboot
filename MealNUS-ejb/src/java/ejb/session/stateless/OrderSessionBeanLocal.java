@@ -67,4 +67,6 @@ public interface OrderSessionBeanLocal {
 
     public void updateOrder(Long orderId, OrderEntity orderToUpdate);
 
+    public OrderEntity cancelOrder(Long orderId);
+
 }

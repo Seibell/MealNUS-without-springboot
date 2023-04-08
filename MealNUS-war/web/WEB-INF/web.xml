@@ -69,4 +69,16 @@
         <local>ejb.session.stateless.UserSessionBeanLocal</local>
         <ejb-link>MealNUS-ejb.jar#UserSessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>CreditCardSessionBeanLocal</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.CreditCardSessionBeanLocal</local>
+        <ejb-link>MealNUS-ejb.jar#CreditCardSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>CreditCardSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.CreditCardSessionBeanLocal</local>
+        <ejb-link>MealNUS-ejb.jar#CreditCardSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

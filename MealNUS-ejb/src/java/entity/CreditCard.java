@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public class CreditCard implements Serializable {
     private String cvv;
     private String expiryDate; //should this be date?
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
     
     public CreditCard() {
