@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import NavBar from "../Navigation/NavBar.js";
+import BannerBackground from "../../Assets/home-banner-background.png";
 import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import {
   Container,
   Grid,
+  Box,
   Paper,
   Typography,
   TextField,
@@ -21,6 +23,9 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Card,
+  CardContent,
+  CardActions,
 } from "@material-ui/core";
 
 import { ThumbUp, ThumbDown } from "@material-ui/icons";
@@ -46,6 +51,17 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
     flexDirection: "column",
     position: "relative",
+  },
+  replyCard: {
+    marginBottom: theme.spacing(2),
+  },
+  replyCardContent: {
+    paddingBottom: 0,
+  },
+  scrollableContainer: {
+    maxHeight: "300px", // Adjust this value based on the desired maximum height
+    overflowY: "auto",
+    marginBottom: theme.spacing(2),
   },
   userImage: {
     width: "50px",
@@ -90,6 +106,7 @@ const Forum = () => {
   const [userDislikes, setUserDislikes] = useState({});
   const { currentUser } = useContext(AuthContext);
   const classes = useStyles();
+  const [replyText, setReplyText] = useState("");
 
   useEffect(() => {
     fetchPosts();
@@ -100,6 +117,40 @@ const Forum = () => {
       "http://localhost:8080/MealNUS-war/rest/Forum/retrieveAllForumPosts"
     );
     setPosts(response.data);
+  };
+
+  const handleReplyChange = (event) => {
+    setReplyText(event.target.value);
+  };
+
+  const handleReplyButtonClick = async () => {
+    const data = {
+      postDate: new Date().toISOString(), // Current date and time
+      postDescription: replyText,
+      postId: selectedPost.postId,
+      postTitle: "",
+      userId: currentUser.userId,
+    };
+
+    await axios.post(
+      "http://localhost:8080/MealNUS-war/rest/Forum/createNewForumPostReply",
+      data
+    );
+
+    // Add the new reply to the replies state
+    const newReply = {
+      postDate: data.postDate,
+      postDescription: data.postDescription,
+      user: {
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+      },
+    };
+
+    setReplies((replies) => replies.concat(newReply));
+
+    setReplyText("");
+    fetchPosts();
   };
 
   const createNewPost = async () => {
@@ -134,7 +185,11 @@ const Forum = () => {
   };
 
   const [openReplyDialog, setOpenReplyDialog] = useState(false);
-  const handleClickOpen = () => {
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [replies, setReplies] = useState([]);
+  const handleClickOpen = (post) => {
+    setSelectedPost(post);
+    setReplies(post.replies);
     setOpenReplyDialog(true);
   };
 
@@ -184,10 +239,13 @@ const Forum = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <div className="home-bannerImage-container">
+        <img src={BannerBackground} alt="" />
+      </div>
       <NavBar />
       <Container>
-        <Typography variant="h4" gutterBottom>
-          Forum
+        <Typography variant="h4" gutterBottom className="shadows-into-light">
+          Welcome to the Forum!
         </Typography>
         <FormControl className={classes.formControl}>
           <InputLabel id="filter-select-label">Filter By</InputLabel>
@@ -281,7 +339,7 @@ const Forum = () => {
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={handleClickOpen}
+                        onClick={() => handleClickOpen(post)}
                         style={{ margin: "auto", backgroundColor: "orange" }}
                       >
                         View Reply
@@ -304,11 +362,66 @@ const Forum = () => {
                       open={openReplyDialog}
                       onClose={handleClose}
                       aria-labelledby="form-dialog-title"
+                      maxWidth="xl"
+                      maxHeight="xl"
+                      fullWidth
+                      //fullScreen
+                      PaperProps={{
+                        style: {
+                          maxHeight: "180vh",
+                        },
+                      }}
                     >
                       <DialogTitle id="form-dialog-title">
-                        View Reply
+                        Replies to the post
                       </DialogTitle>
                       <DialogContent>
+                        <Box className={classes.scrollableContainer}>
+                          {replies.map((reply, index) => (
+                            <Card key={index} className={classes.replyCard}>
+                              <CardContent className={classes.replyCardContent}>
+                                {/* <Typography
+                                  variant="subtitle1"
+                                  gutterBottom
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#FF8C00", // Dark orange color
+                                  }}
+                                >
+                                  {reply.posTitle}
+                                </Typography> */}
+                                <Typography variant="body1">
+                                  {reply.postDescription}
+                                </Typography>
+                              </CardContent>
+                              <CardActions>
+                                <Typography
+                                  variant="caption"
+                                  color="textSecondary"
+                                >
+                                  {new Date(
+                                    reply.postDate.replace("[UTC]", "")
+                                  ).toLocaleString("en-US", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                    hour: "numeric",
+                                    minute: "numeric",
+                                    second: "numeric",
+                                    hour12: false,
+                                  })}
+                                </Typography>
+                                <Typography
+                                  variant="caption"
+                                  color="textSecondary"
+                                >
+                                  Posted by {reply.user.firstName}{" "}
+                                  {reply.user.lastName}
+                                </Typography>
+                              </CardActions>
+                            </Card>
+                          ))}
+                        </Box>
                         <DialogContentText>
                           Write your reply to this post here.
                         </DialogContentText>
@@ -319,14 +432,29 @@ const Forum = () => {
                           label="Reply"
                           type="text"
                           fullWidth
+                          value={replyText}
+                          onChange={handleReplyChange}
                         />
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleReplyButtonClick}
+                          style={{
+                            margin: "auto",
+                            backgroundColor: "orange",
+                            //position: "absolute",
+                            bottom: "0",
+                            top: "5px",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                          }}
+                        >
+                          Reply to this post
+                        </Button>
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleClose} color="primary">
-                          Cancel
-                        </Button>
-                        <Button onClick={handleClose} color="primary">
-                          Submit
+                          Close
                         </Button>
                       </DialogActions>
                     </Dialog>
@@ -334,6 +462,34 @@ const Forum = () => {
                 ))}
           </Grid>
           {/* //add this line onwards about the codes for the second part */}
+          <Grid item xs={12}>
+            <Typography variant="h5" gutterBottom>
+              Create New Post
+            </Typography>
+            <TextField
+              label="Title"
+              fullWidth
+              value={newPostTitle}
+              onChange={(e) => setNewPostTitle(e.target.value)}
+            />
+            <TextField
+              label="Description"
+              fullWidth
+              multiline
+              minRows={4}
+              value={newPostDescription}
+              onChange={(e) => setNewPostDescription(e.target.value)}
+              style={{ marginTop: 16 }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={createNewPost}
+              style={{ marginTop: 16 }}
+            >
+              Create Post
+            </Button>
+          </Grid>
         </Grid>
 
         <Snackbar

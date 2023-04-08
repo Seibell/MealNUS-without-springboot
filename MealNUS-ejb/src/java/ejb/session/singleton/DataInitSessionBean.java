@@ -7,6 +7,7 @@ package ejb.session.singleton;
 
 import ejb.session.stateless.AllergenSessionBeanLocal;
 import ejb.session.stateless.CategorySessionBeanLocal;
+import ejb.session.stateless.CreditCardSessionBeanLocal;
 import ejb.session.stateless.ForumSessionBeanLocal;
 import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.MealBoxSessionBeanLocal;
@@ -18,6 +19,7 @@ import ejb.session.stateless.StaffSessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.Allergen;
 import entity.Category;
+import entity.CreditCard;
 import entity.ForumPost;
 import entity.Ingredient;
 import entity.MealBox;
@@ -60,6 +62,9 @@ import util.exception.UserNotFoundException;
 @LocalBean
 @Startup
 public class DataInitSessionBean {
+
+    @EJB
+    private CreditCardSessionBeanLocal creditCardSessionBean;
 
     @EJB
     private CategorySessionBeanLocal categorySessionBean;
@@ -271,7 +276,7 @@ public class DataInitSessionBean {
                 Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-03-11");
                 Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-04-05");
 
-                promotionSessionBean.createPromotion(new Promotion("Promotion 1", "https://cdn.hellofresh.com/us/lp/images/hellofresh-coupons-and-promos-30OFF.jpg", startDate, endDate, BigDecimal.valueOf(0.3)));
+                promotionSessionBean.createPromotion(new Promotion("Promotion 1", "https://cdn.hellofresh.com/us/lp/images/hellofresh-coupons-and-promos-30OFF.jpg", startDate, endDate, BigDecimal.valueOf(0.3), "Site-Wide"));
             } catch (PromotionNotFoundException | UnknownPersistenceException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
@@ -300,7 +305,10 @@ public class DataInitSessionBean {
         //TESTING PURPOSE
         if (orderSessionBean.retrieveAllOrders().isEmpty()) {
             try {
-                Date orderDate = new Date();
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(new Date());
+                cal.add(Calendar.DAY_OF_MONTH, -5);
+                Date orderDate = cal.getTime();
                 MealBox mealBox = new MealBox("https://assets.epicurious.com/photos/61ba94cc79b235be07f993e7/6:4/w_1600%2Cc_limit/gobble.png", "Supreme Meat Box", 004L, new BigDecimal(15), new BigDecimal(20), "This is a high quality meat mealBox", 10);
                 Integer qty = 4;
                 List<Pair<MealBox, Integer>> orderDetails = new ArrayList<>();
@@ -314,8 +322,10 @@ public class DataInitSessionBean {
                 OrderStatus orderStatus = OrderStatus.PREPARING;
                 User user = new User("eric4", "tang4", "user4@gmail.com", "password");
                 orderSessionBean.createOrder(new OrderEntity(orderDate, orderDetails, priceList, costList, deliveryDate, address, orderStatus, user));
-                
-                Date orderDate2 = new Date();
+
+                cal.setTime(new Date());
+                cal.add(Calendar.DAY_OF_MONTH, -2);
+                Date orderDate2 = cal.getTime();
                 MealBox mealBox2 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
                 Integer qty2 = 23;
                 List<Pair<MealBox, Integer>> orderDetails2 = new ArrayList<>();
@@ -333,8 +343,10 @@ public class DataInitSessionBean {
                 OrderStatus orderStatus2 = OrderStatus.PAID;
                 User user2 = new User("eric5", "tang5", "user5@gmail.com", "password");
                 OrderEntity newOrder2 = orderSessionBean.createOrder(new OrderEntity(orderDate2, orderDetails2, priceList2, costList2, deliveryDate2, address2, orderStatus2, user2));
-                
-                Date orderDate3 = new Date();
+
+                cal.setTime(new Date());
+                cal.add(Calendar.DAY_OF_MONTH, -1);
+                Date orderDate3 = cal.getTime();
                 MealBox mealBox3 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box 2", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
                 Integer qty3 = 23;
                 List<Pair<MealBox, Integer>> orderDetails3 = new ArrayList<>();
@@ -351,14 +363,14 @@ public class DataInitSessionBean {
                 AddressEnum address3 = AddressEnum.UTOWN_RESIDENCES;
                 OrderStatus orderStatus3 = OrderStatus.PREPARING;
                 OrderEntity newOrder3 = orderSessionBean.createOrder(new OrderEntity(orderDate3, orderDetails3, priceList3, costList3, deliveryDate3, address3, orderStatus3, user2));
-                
+
                 Date orderDate4 = new Date();
                 MealBox mealBox4 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box 3", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
                 Integer qty4 = 23;
                 List<Pair<MealBox, Integer>> orderDetails4 = new ArrayList<>();
                 orderDetails4.add(new Pair<>(mealBox4, qty4));
                 List<BigDecimal> priceList4 = new ArrayList<>();
-                priceList2.add(mealBox4.getItemPrice());
+                priceList4.add(mealBox4.getItemPrice());
                 List<BigDecimal> costList4 = new ArrayList<>();
                 costList4.add(mealBox4.getItemCost());
                 Date deliveryDate4 = new Date();
@@ -371,6 +383,15 @@ public class DataInitSessionBean {
                 OrderEntity newOrder4 = orderSessionBean.createOrder(new OrderEntity(orderDate4, orderDetails4, priceList4, costList4, deliveryDate4, address4, orderStatus4, user2));
             } catch (OrderNotFoundException | UnknownPersistenceException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (creditCardSessionBean.retrieveAllCreditCardsByUserId((long) 6).isEmpty()) {
+            try {
+                creditCardSessionBean.addNewCreditCard(new CreditCard("123", "123", "123", "123", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
+                creditCardSessionBean.addNewCreditCard(new CreditCard("1234", "1234", "1234", "1234", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
+                creditCardSessionBean.addNewCreditCard(new CreditCard("12345", "12345", "12345", "12345", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

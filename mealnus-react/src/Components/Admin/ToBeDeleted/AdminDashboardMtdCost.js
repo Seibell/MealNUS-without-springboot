@@ -1,19 +1,15 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
-import AnimationTwoToneIcon from '@mui/icons-material/AnimationTwoTone';
-import AdminTitle from './AdminTitle';
-import LinearProgress from '@mui/material/LinearProgress';
-import Box from '@mui/material/Box';
+import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
+import AdminTitle from '../AdminTitle';
 
 function preventDefault(event) {
     event.preventDefault();
 }
 
-export default function AdminDashboardTodayCount() {
+export default function AdminDashboardMtdCost() {
     const [data, setData] = useState(0);
-
-    const targetCount = 50;
 
     const currentDate = new Date().toLocaleDateString('en-SG', {
         day: 'numeric',
@@ -27,30 +23,27 @@ export default function AdminDashboardTodayCount() {
 
     useEffect(() => {
         const currentDate = new Date().toISOString().slice(0, 10);
-        fetch(`http://localhost:8080/MealNUS-war/rest/orders/currentDateOrderCount/${currentDate}`)
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/mtdCost/${currentDate}`)
             .then(response => response.json())
             .then(data => setData(data));
     }, []);
 
     return (
         <React.Fragment>
-            <div className="grid-container grid-item-today-count">
-                <AnimationTwoToneIcon />
-                <AdminTitle>Today's Orders</AdminTitle>
+            <div className="grid-container grid-item-mtd-cost">
+                <MonetizationOnTwoToneIcon />
+                <AdminTitle>MTD Cost</AdminTitle>
                 <div className="grid-item" style={{ overflow: 'hidden' }}>
                     <Typography component="p" variant="h4">
-                        <b>{data}</b>
+                        <Typography variant="h6" style={{ fontSize: '18px', display: 'inline' }}>
+                            $
+                        </Typography>{' '}
+                        {data.toFixed(0)}
                     </Typography>
                     <Typography color="text.secondary" sx={{ flex: 1 }}>
                         As of {currentDate}
                     </Typography>
                     <br />
-                    <LinearProgress variant="determinate" value={data / targetCount * 100} sx={{ width: '100%' }} />
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Typography variant="caption" color="text.secondary">
-                            <b>{targetCount}</b>
-                        </Typography>
-                    </Box>
                 </div>
             </div>
         </React.Fragment>

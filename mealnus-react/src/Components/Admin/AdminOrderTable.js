@@ -20,43 +20,45 @@ function AdminOrderTable() {
 
     console.log(query);
 
-     //search filter
+    //search filter
 
     const filteredData = orders.filter(
-        (order) => 
+        (order) =>
             order.user.firstName.toLowerCase().includes(query.toLowerCase()) ||
             order.orderId == query ||
             order.address.toLowerCase().includes(query.toLowerCase()) ||
             order.orderStatus.toLowerCase().includes(query.toLowerCase())
-     );
+    );
 
     const getOrderStatusColor = (orderStatus) => {
         switch (orderStatus) {
             case "PAID":
                 return "orange";
-            case "CREATED":
-                return "blue";
             case "PREPARING":
                 return "green";
-            default:
-                return "inherit";
+            case "DELIVERING":
+                return "dodgerblue";
+            case "COMPLETED":
+                return "dimgray";
+            default:  //CREATED
+                return "lightpink";
         }
     };
 
 
     return (
-        
-            <div>
-            <AdminTitle>Orders 
-            <div>
-                <input
-                type="text"
-                placeholder="Search..."
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                style={{ height: '30px', marginRight: '5px' }}
-                                />
-            </div>
+
+        <div>
+            <AdminTitle>Orders
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={query}
+                        onChange={(event) => setQuery(event.target.value)}
+                        style={{ height: '30px', marginRight: '5px' }}
+                    />
+                </div>
             </AdminTitle>
             <Table>
                 <TableHead>
@@ -80,16 +82,16 @@ function AdminOrderTable() {
                                 {order.orderStatus}
                             </TableCell>
                             <TableCell >
-                            <button onClick={() => navigate('/UpdateOrder/' + order.orderId)}>
-                                Add A MealBox
-                            </button>
+                                <button onClick={() => navigate('/UpdateOrder/' + order.orderId)}>
+                                    Add A MealBox
+                                </button>
                             </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-            </div>
-      
+        </div>
+
     );
 }
 

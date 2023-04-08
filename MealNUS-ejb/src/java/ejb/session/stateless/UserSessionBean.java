@@ -5,8 +5,10 @@
  */
 package ejb.session.stateless;
 
+import entity.OrderEntity;
 import entity.User;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -43,6 +45,25 @@ public class UserSessionBean implements UserSessionBeanLocal {
     @Override
     public List<User> retrieveAllUsers() {
         Query query = em.createQuery("SELECT u FROM User u");
+        return query.getResultList();
+    }
+    
+    @Override
+    public List<User> retrieveNewUsersBySignupDate(Date queryDate) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(queryDate);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date firstSecondOfDay = cal.getTime();
+        cal.add(Calendar.DATE, 1);
+        cal.add(Calendar.MILLISECOND, -1);
+        Date lastSecondOfDay = cal.getTime();
+
+        Query query = em.createQuery("SELECT u FROM User u WHERE u.signupDate >= :start AND u.signupDate <= :end", User.class);
+        query.setParameter("start", firstSecondOfDay);
+        query.setParameter("end", lastSecondOfDay);
         return query.getResultList();
     }
 

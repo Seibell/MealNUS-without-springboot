@@ -32,5 +32,7 @@ public interface ForumSessionBeanLocal {
     public Boolean increaseThumbsUp(Long postId, Long userId);
 
     public Boolean increaseThumbsDown(Long postId, Long userId);
+
+    public ForumPost createReply(Long replyId, Long postId);
     
 }

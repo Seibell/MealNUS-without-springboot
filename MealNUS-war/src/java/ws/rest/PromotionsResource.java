@@ -26,6 +26,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import util.exception.MealBoxNotFoundException;
 import util.exception.PromotionAlreadyAppliedException;
 import util.exception.PromotionNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -74,6 +75,41 @@ public class PromotionsResource {
         }
     } //end applyPromotionAcrossPlatform
     
+    
+    // e.g. http://localhost:8080/MealNUS-war/rest/promotion/apply/Vegan/{promo-code}
+    @GET
+    @Path("/apply/{categoryName}/{promotionCode}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response applyPromotionAcrossCategory(@PathParam("promotionCode") String promotionCode, @PathParam("categoryName") String categoryName) {
+        try {
+            List<MealBox> results = promotionSessionBeanLocal.applyPromotionAcrossCategory(promotionCode, categoryName);
+
+            GenericEntity<List<MealBox>> entity
+                    = new GenericEntity<List<MealBox>>(results) {
+            };
+            return Response.status(200).entity(
+                    entity).build();
+        } catch (PromotionNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .build();
+        } catch (PromotionAlreadyAppliedException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Promotion already applied")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .build();
+        } catch (MealBoxNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "MealBox cannot be found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .build();
+        }
+    } //end applyPromotionAcrossCategory
+    
         @GET
     @Path("/disable/{promotionCode}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -94,6 +130,35 @@ public class PromotionsResource {
                     .build();
         }
     } //end disablePromotionAcrossPlatform
+    
+    
+ @GET
+    @Path("/disable/{categoryName}/{promotionCode}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response disablePromotionAcrossCategory(@PathParam("promotionCode") String promotionCode, @PathParam("categoryName") String categoryName) {
+        try {
+            List<MealBox> results = promotionSessionBeanLocal.disablePromotionAcrossCategory(promotionCode, categoryName);
+
+            GenericEntity<List<MealBox>> entity
+                    = new GenericEntity<List<MealBox>>(results) {
+            };
+            return Response.status(200).entity(
+                    entity).build();
+        } catch (PromotionNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .build();
+        } catch (MealBoxNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .build();
+        }
+    } //end disablePromotionAcrossCategory
+
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

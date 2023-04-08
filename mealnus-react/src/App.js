@@ -13,6 +13,7 @@ import RetrieveAllUsers from "./Components/Login/RetrieveAllUsers";
 import ViewProfile from "./Components/Profile/ViewProfile";
 import EditProfile from "./Components/Profile/EditProfile";
 import MyOrders from "./Components/Profile/MyOrders";
+import PaymentMethodsPage from "./Components/Profile/PaymentMethodsPage";
 
 //OldNavBar
 import OldNavBar from "./Components/HomePage/OldNavBar";
@@ -48,15 +49,16 @@ import UpdateIngred from "./Components/Inventory/UpdateIngred";
 import UpdateOrder from "./Components/Inventory/UpdateOrder";
 
 //Admin
-import AdminDashboard from "./Components/Admin/AdminDashboard";
-import AdminDashboardOrderChart from "./Components/Admin/AdminDashboardOrderChart";
-import AdminTitle from "./Components/Admin/AdminTitle";
+import AdminDashboard from "./Components/Admin/Dashboard/AdminDashboard";
+import AdminMembers from "./Components/Admin/Member";
+import AdminPromotions from "./Components/Admin/Promotion";
+import AdminOrders from "./Components/Admin/Order";
 import AdminOrderManagement from "./Components/Admin/AdminOrderManagement";
 import AdminPromotion from "./Components/Admin/AdminPromotion";
-import AddPromotion from "./Components/Admin/AddPromotion";
-import AdminSideBar from "./Components/Admin/AdminSideBar";
+import AddPromotion from "./Components/Admin/Promotion/AddPromotion";
 
 function App() {
+
   return (
     <CartProvider>
       <Router>
@@ -84,12 +86,16 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/stafflogin" element={<StaffLogin />} />
           <Route path="/admindashboard" element={<AdminDashboard />} />
-          <Route path="/adminDashboardOrderChart" element={<AdminDashboardOrderChart />} />
-          <Route path="/adminSideBar" element={<AdminSideBar />} />
-          <Route path="/adminTitle" element={<AdminTitle />} />
+          <Route path="/adminmembers" element={<AdminMembers />} />
+          <Route path="/adminpromotions" element={<AdminPromotions />} />
+          <Route path="/addpromotion" element={<AddPromotion />} />
+          <Route path="/adminorders" element={<AdminOrders />} />
+
+          {/* Soon to be removed */}
           <Route path="/adminordermanagement" element={<AdminOrderManagement />} />
           <Route path="/adminpromotion" element={<AdminPromotion />} />
-          <Route path="/addpromotion" element={<AddPromotion />} />
+
+          <Route path="/paymentmethodspage" element={<PaymentMethodsPage />} />
           <Route path="/myorders" element={<MyOrders />} />
         </Routes>
       </Router>

@@ -174,6 +174,42 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 
     @Override
     public List<Pair<Date, Integer>> retrieveAllOrderCounts(Date queryDate) throws ParseException {
+//        List<OrderEntity> allOrders = retrieveAllOrders();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        String date1 = sdf.format(allOrders.get(0).getOrderDate());
+//        String date2 = sdf.format(queryDate);
+//        Date dateFirst = sdf.parse(date1);
+//        Date dateLast = sdf.parse(date2);
+//
+//        Date referenceDate = dateFirst;
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(referenceDate);
+//
+//        Calendar calEnd = Calendar.getInstance();
+//        calEnd.setTime(dateLast);
+//        calEnd.add(Calendar.DAY_OF_MONTH, 2);
+//        Date endDate = calEnd.getTime();
+//
+//        Map<Date, Integer> orderCountByDate = new HashMap<>();
+//
+//        while (referenceDate.before(endDate)) {
+//            List<OrderEntity> currentDateOrders = retrieveOrdersByOrderDate(referenceDate);
+//            Integer currentDateOrderCount = currentDateOrders.size();
+//            orderCountByDate.put(referenceDate, currentDateOrderCount);
+//            cal.add(Calendar.DAY_OF_MONTH, 1);
+//            referenceDate = cal.getTime();
+//        }
+//
+//        List<Pair<Date, Integer>> result = new ArrayList<>();
+//        for (Map.Entry<Date, Integer> entry : orderCountByDate.entrySet()) {
+//            result.add(new Pair<>(entry.getKey(), entry.getValue()));
+//        }
+//        
+//         Collections.sort(result, 
+//                 (Pair<Date, Integer> p1, Pair<Date, Integer> p2) -> 
+//                         p1.getKey().compareTo(p2.getKey()));
+//
+//        return result;
         List<OrderEntity> allOrders = retrieveAllOrders();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date1 = sdf.format(allOrders.get(0).getOrderDate());
@@ -190,24 +226,34 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         calEnd.add(Calendar.DAY_OF_MONTH, 2);
         Date endDate = calEnd.getTime();
 
-        Map<Date, Integer> orderCountByDate = new HashMap<>();
+        Map<Date, Integer> orderCountByMonth = new HashMap<>();
 
         while (referenceDate.before(endDate)) {
             List<OrderEntity> currentDateOrders = retrieveOrdersByOrderDate(referenceDate);
             Integer currentDateOrderCount = currentDateOrders.size();
-            orderCountByDate.put(referenceDate, currentDateOrderCount);
+
+            Calendar currentCal = Calendar.getInstance();
+            currentCal.setTime(referenceDate);
+            currentCal.set(Calendar.DAY_OF_MONTH, 1); // set to first day of month
+            Date currentMonth = currentCal.getTime();
+
+            Integer currentMonthOrderCount = orderCountByMonth.get(currentMonth);
+            if (currentMonthOrderCount == null) {
+                currentMonthOrderCount = 0;
+            }
+            currentMonthOrderCount += currentDateOrderCount;
+            orderCountByMonth.put(currentMonth, currentMonthOrderCount);
+
             cal.add(Calendar.DAY_OF_MONTH, 1);
             referenceDate = cal.getTime();
         }
 
         List<Pair<Date, Integer>> result = new ArrayList<>();
-        for (Map.Entry<Date, Integer> entry : orderCountByDate.entrySet()) {
+        for (Map.Entry<Date, Integer> entry : orderCountByMonth.entrySet()) {
             result.add(new Pair<>(entry.getKey(), entry.getValue()));
         }
-        
-         Collections.sort(result, 
-                 (Pair<Date, Integer> p1, Pair<Date, Integer> p2) -> 
-                         p1.getKey().compareTo(p2.getKey()));
+
+        Collections.sort(result, (p1, p2) -> p1.getKey().compareTo(p2.getKey()));
 
         return result;
 
@@ -263,12 +309,12 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     // Dashboard :: MTD Sales Overview :: OrderEntity
     @Override
     public int getMtdOrderCount(Date queryDate) {
-        
+
         List<OrderEntity> orders = retrieveAllOrders();
         if (queryDate.before(orders.get(0).getOrderDate())) {
             return 0;
         }
-        
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(queryDate);
         cal.add(Calendar.MONTH, -1);
@@ -278,7 +324,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         int mtdNumOfOrders = 0;
 
         Calendar calEnd = Calendar.getInstance();
-        calEnd.setTime( queryDate);
+        calEnd.setTime(queryDate);
         calEnd.add(Calendar.DAY_OF_MONTH, 1);
         Date endDate = calEnd.getTime();
 
@@ -317,6 +363,29 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         }
 
         return mtdOrderRevenue.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    @Override
+    public BigDecimal getTotalRevenue() {
+        List<OrderEntity> orderList = retrieveAllOrders();
+
+        if (orderList.isEmpty()) {
+            return BigDecimal.ZERO; // no orders means no revenue
+        }
+
+        BigDecimal revenue = BigDecimal.ZERO;
+        for (OrderEntity order : orderList) {
+            List<Pair<MealBox, Integer>> orderDetails = order.getOrderDetails();
+            int i = 0;
+            for (Pair<MealBox, Integer> orderLineItem : orderDetails) {
+                BigDecimal mealBoxPrice = order.getPriceList().get(i);
+                Integer quantity = orderLineItem.getValue();
+                BigDecimal orderLineItemValue = mealBoxPrice.multiply(BigDecimal.valueOf(quantity));
+                revenue = revenue.add(orderLineItemValue);
+                i++;
+            }
+        }
+        return revenue.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     // Dashboard :: MTD Sales Overview :: Cost
@@ -447,21 +516,18 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     }
 
     @Override
-    public void updateOrder(OrderEntity orderToUpdate) {
-        try {
-            OrderEntity updatedOrder = retrieveOrderById(orderToUpdate.getOrderId());
-            updatedOrder.setOrderDate(orderToUpdate.getOrderDate());
-            updatedOrder.setOrderDetails(orderToUpdate.getOrderDetails());
-            updatedOrder.setPriceList(orderToUpdate.getPriceList());
-            updatedOrder.setCostList(orderToUpdate.getCostList());
-            updatedOrder.setDeliveryDate(orderToUpdate.getDeliveryDate());
-            updatedOrder.setAddress(orderToUpdate.getAddress());
-            updatedOrder.setOrderStatus(orderToUpdate.getOrderStatus());
-            updatedOrder.setUser(orderToUpdate.getUser());
-//        em.merge(updatedOrder);
-        } catch (OrderNotFoundException ex) {
-            Logger.getLogger(OrderSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void updateOrder(Long orderId, OrderEntity orderToUpdate) {
+
+        OrderEntity updatedOrder = em.find(OrderEntity.class, orderId);
+        updatedOrder.setOrderDate(orderToUpdate.getOrderDate());
+        updatedOrder.setOrderDetails(orderToUpdate.getOrderDetails());
+        updatedOrder.setPriceList(orderToUpdate.getPriceList());
+        updatedOrder.setCostList(orderToUpdate.getCostList());
+        updatedOrder.setDeliveryDate(orderToUpdate.getDeliveryDate());
+        updatedOrder.setAddress(orderToUpdate.getAddress());
+        updatedOrder.setOrderStatus(orderToUpdate.getOrderStatus());
+        updatedOrder.setUser(orderToUpdate.getUser());
+        em.merge(updatedOrder);
     }
 
     @Override
@@ -472,5 +538,16 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         } catch (OrderNotFoundException ex) {
             Logger.getLogger(OrderSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public OrderEntity cancelOrder(Long orderId) {
+        OrderEntity order = em.find(OrderEntity.class, orderId);
+
+        if (order != null) {
+            order.setOrderStatus(OrderStatus.CANCELLED);
+            em.merge(order);
+        }
+        return order;
     }
 }
