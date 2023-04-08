@@ -6,6 +6,12 @@ import NavBar from "../Navigation/NavBar.js";
 import { useState, useEffect, useContext } from "react";
 import { CartContext } from "../../Context/CartContext";
 import { useNavigate } from "react-router-dom";
+import TextField from "@mui/material/TextField";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import BannerBackground from "../../Assets/home-banner-background.png";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import {
   Container,
   Grid,
@@ -35,10 +41,11 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { AuthContext } from "../../Context/AuthContext";
 
 const MealBoxes = () => {
-  const [mealBoxes, setMealBoxes] = useState([]);
+  const [mealBoxes, setMealBoxes] = useState({ mealBoxEntities: [] });
   const [selectedMealBox, setSelectedMealBox] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const history = useNavigate();
 
   const [cart, setCart] = useContext(CartContext);
@@ -58,6 +65,33 @@ const MealBoxes = () => {
         console.log(err);
       });
   }, []);
+
+  // Function to get unique categories from mealBoxes.mealBoxEntities
+  const getUniqueCategories = () => {
+    const allCategories = mealBoxes.mealBoxEntities.flatMap(
+      (mealBox) => mealBox.categories
+    );
+    const uniqueCategories = Array.from(
+      new Set(allCategories.map((category) => category.name))
+    ).map((name) => {
+      return allCategories.find((category) => category.name === name);
+    });
+    return uniqueCategories;
+  };
+
+  const getFilteredMealBoxes = () => {
+    return mealBoxes.mealBoxEntities.filter((mealBox) => {
+      const isNameMatch = mealBox.itemName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const isCategoryMatch = selectedCategory
+        ? mealBox.categories.some(
+            (category) => category.name === selectedCategory
+          )
+        : true;
+      return isNameMatch && isCategoryMatch;
+    });
+  };
 
   const handleClickOpen = (mealBox) => {
     setSelectedMealBox(mealBox);
@@ -124,12 +158,64 @@ const MealBoxes = () => {
 
   return (
     <div>
+      <div className="home-bannerImage-container">
+        <img src={BannerBackground} alt="" />
+      </div>
       <NavBar />
       <Container>
-        <Box mt={4} mb={2}></Box>
+        <Box mt={4} mb={2}>
+          {/* Add a search bar */}
+          <TextField
+            label="Search by Name"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              marginRight: "1rem",
+              width: "80%", // Increase the width
+            }}
+            InputProps={{
+              style: {
+                borderColor: "orange",
+              },
+              // Change the border color
+              classes: {
+                notchedOutline: "textFieldOutline",
+              },
+            }}
+            InputLabelProps={{
+              // Update the label color
+              style: { color: "orange" },
+            }}
+          />
+          {/* Add a category filter */}
+          <FormControl variant="outlined" style={{ minWidth: "13.1rem" }}>
+            {/* Increase the width */}
+            <InputLabel style={{ color: "#003865" }}>
+              Filter by Category
+            </InputLabel>{" "}
+            {/* Change the title and color */}
+            <Select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              label="Filter by Category"
+              style={{ color: "#003865" }} // Change the color
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {/* Add unique categories here */}
+              {getUniqueCategories().map((category) => (
+                <MenuItem key={category.id} value={category.name}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
         <Grid container spacing={3}>
-          {Array.isArray(mealBoxes.mealBoxEntities) &&
-            mealBoxes.mealBoxEntities.map((mealBox) => (
+          {Array.isArray(getFilteredMealBoxes()) &&
+            getFilteredMealBoxes().map((mealBox) => (
               <Grid item key={mealBox.mealBoxId} xs={12} sm={6} md={4} lg={3}>
                 <Card>
                   <CardActionArea onClick={() => handleClickOpen(mealBox)}>
@@ -149,14 +235,33 @@ const MealBoxes = () => {
                         gutterBottom
                         variant="h5"
                         component="div"
+                        style={{
+                          fontWeight: "bold",
+                          color: "#0077c2",
+                          textAlign: "center",
+                        }}
                         noWrap
                       >
                         {mealBox.itemName}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary" noWrap>
+                      <Typography
+                        variant="body2"
+                        style={{
+                          fontWeight: 500,
+                          fontSize: "1.2rem",
+                          color: "#FFA500",
+                          textAlign: "center",
+                        }}
+                        noWrap
+                      >
                         Price: ${mealBox.itemPrice}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary" noWrap>
+                      <Typography
+                        variant="body2"
+                        style={{ textAlign: "center" }}
+                        color="text.secondary"
+                        noWrap
+                      >
                         {mealBox.quantityAvailable} available
                       </Typography>
                     </CardContent>
