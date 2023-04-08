@@ -35,6 +35,7 @@ public class MealBox implements Serializable {
     private String itemDescription;
     private Integer quantityAvailable;
     private boolean isPromotionApplied;
+    private boolean StatusAvail;
 
     @ManyToMany
     private List<Allergen> allergens;
@@ -66,6 +67,7 @@ public class MealBox implements Serializable {
         this.ingredients = new ArrayList<>();
         this.categories = new ArrayList<>();
         this.reviews = new ArrayList<>();
+        this.StatusAvail = true;
     }
     
     public MealBox(String itemName, Long ItemCode, BigDecimal itemCost, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable) {
@@ -75,6 +77,7 @@ public class MealBox implements Serializable {
         this.itemPrice = itemPrice;
         this.itemDescription = itemDescription;
         this.quantityAvailable = quantityAvailable;
+        this.StatusAvail = true;
     }
     
     
@@ -89,6 +92,7 @@ public class MealBox implements Serializable {
         this.allergens = new ArrayList<>();
         this.ingredients = new ArrayList<>();
         this.categories = new ArrayList<>();
+        this.StatusAvail = true;
     }
 
     public MealBox(String itemName, Long ItemCode, String itemImage, BigDecimal itemCost, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable, List<Ingredient> ingredients) {
@@ -100,6 +104,7 @@ public class MealBox implements Serializable {
         this.itemDescription = itemDescription;
         this.quantityAvailable = quantityAvailable;
         this.ingredients = ingredients;
+        this.StatusAvail = true;
     }
 
     public MealBox(String itemName, Long ItemCode, String itemImage, BigDecimal itemCost, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable, List<Allergen> allergens, List<Ingredient> ingredients, List<Category> categories) {
@@ -113,6 +118,7 @@ public class MealBox implements Serializable {
         this.allergens = allergens;
         this.ingredients = ingredients;
         this.categories = categories;
+        this.StatusAvail = true;
     }
     
     
@@ -330,4 +336,13 @@ public class MealBox implements Serializable {
         this.isPromotionApplied = isPromotionApplied;
     }
 
+    public boolean isStatusAvail() {
+        return StatusAvail;
+    }
+
+    public void setStatusAvail(boolean StatusAvail) {
+        this.StatusAvail = StatusAvail;
+    }
+
+    
 }
