@@ -66,7 +66,7 @@ public class OrdersResource {
         RetrieveAllOrdersResponse retrieveAllOrdersResponse = new RetrieveAllOrdersResponse(orderSessionBeanLocal.retrieveAllOrders());
         return Response.status(Status.OK).entity(retrieveAllOrdersResponse).build();
     }
-    
+
     @GET
     @Path("/retrieveAllOrderCounts/{queryDate}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -79,31 +79,7 @@ public class OrdersResource {
         return Response.status(200).entity(
                 entity).type(MediaType.APPLICATION_JSON).build();
     }
-
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<OrderEntity> getAllOrders() {
-//        return orderSessionBeanLocal.retrieveAllOrders();
-//    } //end 
-//    @GET
-//    @Path("/{orderId}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getOrderById(@PathParam("id") Long oId) throws OrderNotFoundException {
-//        try {
-//            OrderEntity o = orderSessionBeanLocal.retrieveOrderById(oId);
-//            return Response.status(200).entity(
-//                    o).type(MediaType.APPLICATION_JSON).build();
-//        } catch (OrderNotFoundException e) {
-//            JsonObject exception = Json.createObjectBuilder()
-//                    .add("error", "Not found")
-//                    .build();
-//
-//            return Response.status(404).entity(exception)
-//                    .type(MediaType.APPLICATION_JSON).build();
-//        }
-//    } //end
-    // http://localhost:8080/MealNUS-war/rest/orders/{id}
-    // e.g. http://localhost:8080/MealNUS-war/rest/orders/1
+    
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -250,7 +226,7 @@ public class OrdersResource {
         return Response.status(200).entity(
                 entity).build();
     }
-    
+
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/currentDateOrderCount/2023-03-22
     @GET
     @Path("/currentDateOrderCount/{queryDate}")
@@ -311,7 +287,7 @@ public class OrdersResource {
         return Response.status(200).entity(
                 revenue).build();
     }
-    
+
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/totalRevenue/2023-03-22
     @GET
     @Path("/totalRevenue")
@@ -391,12 +367,11 @@ public class OrdersResource {
     @Path("/update/{orderId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateOrder(@PathParam("orderId") Long orderId) throws OrderNotFoundException {
-        OrderEntity order = orderSessionBeanLocal.retrieveOrderById(orderId);
-        orderSessionBeanLocal.updateOrder(order);
-        String updateSuccessMsg = "Order with ID [" + order.getOrderId() + "] has been updated successfully!";
-        return Response.status(200).entity(updateSuccessMsg).build();
-    } //end editCustomer 
+    public Response updateOrder(@PathParam("orderId") Long orderId, OrderEntity orderToUpdate) {
+        orderSessionBeanLocal.updateOrder(orderId, orderToUpdate);
+        String updateSuccessMessage = "Order with ID [" + orderId + "] has been updated successfully!";
+        return Response.status(200).entity(updateSuccessMessage).build();
+    } //end editOrder
 
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/delete/1
     // success should show the success message
@@ -405,7 +380,7 @@ public class OrdersResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteOrder(@PathParam("orderId") Long orderId) throws OrderNotFoundException {
         orderSessionBeanLocal.deleteOrder(orderId);
-        String deleteSuccessMsg = "Order with ID [" + orderId + "] has been deleted successfully!";
-        return Response.status(200).entity(deleteSuccessMsg).build();
+        String deleteSuccessMessage = "Order with ID [" + orderId + "] has been deleted successfully!";
+        return Response.status(200).entity(deleteSuccessMessage).build();
     } //end deleteOrder
 }

@@ -123,35 +123,6 @@ function AdminDashboardTopSelling() {
     }, [rows, filterText]);
 
     return (
-        // <React.Fragment>
-        //     <AdminTitle>Top Selling MealBoxes</AdminTitle>
-        //     <DataTable>
-        //         <TableHead>
-        //             <TableRow>
-        //                 <TableCell>Rank</TableCell>
-        //                 <TableCell>MealBox</TableCell>
-        //                 <TableCell><b>Sold Quantity</b></TableCell>
-        //                 <TableCell>Available Quantity</TableCell>
-        //                 <TableCell>Stock Level</TableCell>
-        //             </TableRow>
-        //         </TableHead>
-        //         <TableBody>
-        //             {rows.map((row, index) => (
-        //                 <TableRow key={row.key}>
-        //                     <TableCell component="th" scope="row">{index + 1}</TableCell>
-        //                     <TableCell component="th" scope="row">{row.key}</TableCell>
-        //                     <TableCell>{row.value}</TableCell>
-        //                     <TableCell>{row.stock}</TableCell>
-        //                     <TableCell style={{ textAlign: 'right' }}>
-        //                         <LinearProgress variant="determinate" value={row.fraction * 100} classes={{ bar: colorClass(row.fraction * 100) }} />
-        //                         {/* {`${(row.maxStock)}`} */}
-        //                     </TableCell>
-        //                 </TableRow>
-        //             ))}
-        //         </TableBody>
-        //     </DataTable>
-        // </React.Fragment>
-
         <React.Fragment>
             <AdminTitle>Top Selling MealBoxes</AdminTitle>
             <input

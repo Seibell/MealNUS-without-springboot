@@ -516,21 +516,18 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     }
 
     @Override
-    public void updateOrder(OrderEntity orderToUpdate) {
-        try {
-            OrderEntity updatedOrder = retrieveOrderById(orderToUpdate.getOrderId());
-            updatedOrder.setOrderDate(orderToUpdate.getOrderDate());
-            updatedOrder.setOrderDetails(orderToUpdate.getOrderDetails());
-            updatedOrder.setPriceList(orderToUpdate.getPriceList());
-            updatedOrder.setCostList(orderToUpdate.getCostList());
-            updatedOrder.setDeliveryDate(orderToUpdate.getDeliveryDate());
-            updatedOrder.setAddress(orderToUpdate.getAddress());
-            updatedOrder.setOrderStatus(orderToUpdate.getOrderStatus());
-            updatedOrder.setUser(orderToUpdate.getUser());
-//        em.merge(updatedOrder);
-        } catch (OrderNotFoundException ex) {
-            Logger.getLogger(OrderSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void updateOrder(Long orderId, OrderEntity orderToUpdate) {
+
+        OrderEntity updatedOrder = em.find(OrderEntity.class, orderId);
+        updatedOrder.setOrderDate(orderToUpdate.getOrderDate());
+        updatedOrder.setOrderDetails(orderToUpdate.getOrderDetails());
+        updatedOrder.setPriceList(orderToUpdate.getPriceList());
+        updatedOrder.setCostList(orderToUpdate.getCostList());
+        updatedOrder.setDeliveryDate(orderToUpdate.getDeliveryDate());
+        updatedOrder.setAddress(orderToUpdate.getAddress());
+        updatedOrder.setOrderStatus(orderToUpdate.getOrderStatus());
+        updatedOrder.setUser(orderToUpdate.getUser());
+        em.merge(updatedOrder);
     }
 
     @Override

@@ -55,8 +55,6 @@ public interface OrderSessionBeanLocal {
 
     public BigDecimal geMealBoxTotalTurnover(String mealBoxNameToCheck, Date queryDate);
 
-    public void updateOrder(OrderEntity orderToUpdate);
-
     public void deleteOrder(Long oId);
 
     public List<OrderEntity> retrieveOrdersByMealBoxNameAndDate(String mealBoxNameToCheck, Date queryDate);
@@ -66,5 +64,7 @@ public interface OrderSessionBeanLocal {
     public List<Pair<Date, Integer>> retrieveAllOrderCounts(Date queryDate) throws ParseException;
 
     public BigDecimal getTotalRevenue();
+
+    public void updateOrder(Long orderId, OrderEntity orderToUpdate);
 
 }

@@ -8,7 +8,7 @@ import Sidebar from "../Admin/Global/Sidebar";
 
 import moment from 'moment-timezone';
 
-import { Box,Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "./Global/AdminTheme";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
@@ -19,8 +19,6 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
 import Header from "../Admin/Global/Header";
 import DailyOrderLineChart from "./Global/MonthlyOrderLineChart";
-// import GeographyChart from "../../components/GeographyChart";
-// import BarChart from "../../components/BarChart";
 import StatBox from "../Admin/Global/StatBox";
 import TopSellingMealboxes from "./Global/TopSellingMealboxes";
 
@@ -42,7 +40,7 @@ function Copyright(props) {
 
 const Dashboard = () => {
     const { currentStaff } = useContext(AdminAuthContext);
-    
+
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
     const colors = tokens(theme.palette.mode);
@@ -376,7 +374,7 @@ const Dashboard = () => {
 
                                 {/* ROW 1 */}
                                 <Box
-                                    gridColumn="span 6"
+                                    gridColumn="span 4"
                                     backgroundColor={colors.primary[400]}
                                     display="flex"
                                     alignItems="center"
@@ -395,7 +393,7 @@ const Dashboard = () => {
                                     />
                                 </Box>
                                 <Box
-                                    gridColumn="span 6"
+                                    gridColumn="span 4"
                                     backgroundColor={colors.primary[400]}
                                     display="flex"
                                     alignItems="center"
@@ -408,6 +406,25 @@ const Dashboard = () => {
                                         increase={todayOrderRevenueProgress}
                                         icon={
                                             <PointOfSaleIcon
+                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                            />
+                                        }
+                                    />
+                                </Box>
+                                <Box
+                                    gridColumn="span 4"
+                                    backgroundColor={colors.primary[400]}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <StatBox
+                                        title={<Typography variant="h4" fontWeight="bold">{todayNewMemberCount.toLocaleString('en-US')}</Typography>}
+                                        subtitle="New Signups"
+                                        progress={todayNewMemberCount > 0 ? (todayNewMemberCount / 10) : 0}
+                                        increase={todayUserCountProgress}
+                                        icon={
+                                            <PersonAddAlt1Icon
                                                 sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
                                             />
                                         }
@@ -493,28 +510,9 @@ const Dashboard = () => {
                                     />
                                 </Box>
 
-                                {/* ROW 3 */}
-                                <Box
-                                    gridColumn="span 12"
-                                    backgroundColor={colors.primary[400]}
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="center"
-                                >
-                                    <StatBox
-                                        title={<Typography variant="h4" fontWeight="bold">{todayNewMemberCount.toLocaleString('en-US')}</Typography>}
-                                        subtitle="New Signups"
-                                        progress={todayNewMemberCount > 0 ? (todayNewMemberCount / 10) : 0}
-                                        increase={todayUserCountProgress}
-                                        icon={
-                                            <PersonAddAlt1Icon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
-                                            />
-                                        }
-                                    />
-                                </Box>
+                                
 
-                                {/* ROW 4 */}
+                                {/* ROW 3 */}
                                 <Box
                                     gridColumn="span 8"
                                     gridRow="span 2"
@@ -603,7 +601,7 @@ const Dashboard = () => {
                                             <Box textAlign="left" color={colors.grey[100]}>
                                                 {moment.utc(order.orderDate, 'YYYY-MM-DD HH:mm:ss')
                                                     .tz('Asia/Singapore')
-                                                    .format('YYYY-MM-DD HH:mm:ss')}
+                                                    .format('DD/MM/YYYY HH:mm')}
                                             </Box>
                                             <Box
                                                 backgroundColor={getOrderStatusColor(order.orderStatus)}
@@ -616,7 +614,7 @@ const Dashboard = () => {
                                     ))}
                                 </Box>
 
-                                {/* ROW 5 */}
+                                {/* ROW 4 */}
                                 <Box
                                     gridColumn="span 12"
                                     gridRow="span 4"
@@ -634,14 +632,13 @@ const Dashboard = () => {
                                             fontWeight="600"
                                             color={colors.grey[100]}
                                         >
-                                            Total Selling MealBoxes
+                                            Top Ranking MealBoxes
                                         </Typography>
                                     </Box>
                                     <Box height="200px" m="-20px 0 0 0">
                                         <TopSellingMealboxes />
                                     </Box>
                                 </Box>
-
 
 
                             </Box>

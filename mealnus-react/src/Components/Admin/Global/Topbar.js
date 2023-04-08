@@ -1,9 +1,10 @@
 
 import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { ColorModeContext, tokens } from "./AdminTheme";
 import Typography from '@mui/material/Typography';
 
-import { Box, IconButton, useTheme } from "@mui/material";
+import { Box, IconButton, Menu, MenuItem, useTheme, Avatar } from "@mui/material";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -15,6 +16,8 @@ import SignalWifi3BarOutlinedIcon from '@mui/icons-material/SignalWifi3BarOutlin
 import FiveGOutlinedIcon from '@mui/icons-material/FiveGOutlined';
 import SignalCellular3BarOutlinedIcon from '@mui/icons-material/SignalCellular3BarOutlined';
 import BluetoothOutlinedIcon from '@mui/icons-material/BluetoothOutlined';
+
+import ProfShalinda from "../../../Assets/shalinda.jpg";
 
 
 const Topbar = () => {
@@ -36,7 +39,18 @@ const Topbar = () => {
         setIsRotating(true);
         theme.palette.mode === 'dark' ? theme.palette.mode = 'light' : theme.palette.mode = 'dark';
         setTimeout(() => setIsRotating(false), 1000);
-      };
+    };
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <Box display="flex" justifyContent="space-between" p={2}>
@@ -76,9 +90,23 @@ const Topbar = () => {
                 <SignalWifi3BarOutlinedIcon />
                 <FiveGOutlinedIcon />
                 <SignalCellular3BarOutlinedIcon />
-                
+                <IconButton onClick={handleMenuOpen}>
+                    <Avatar
+                        src={ProfShalinda}
+                        alt="Staff Image"
+                        style={{ width: '30px', height: '30px' }}
+                    />
+                </IconButton>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleMenuClose}
+                >
+                    <MenuItem onClick={handleMenuClose} component={Link} to="/">Sign In as Member</MenuItem>
+                    <MenuItem onClick={handleMenuClose} component={Link} to="/stafflogin">Logout</MenuItem>
+                </Menu>
             </Box>
-        </Box>
+        </Box >
     );
 };
 
