@@ -319,8 +319,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import ClearIcon from '@mui/icons-material/Clear';
 
 
-
-
 // Mehak's Add Promotion
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -333,9 +331,7 @@ function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <RouterLink color="inherit" to="/admindashboard">
-                MealNUS
-            </RouterLink>{' '}
+            MealNUS{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>

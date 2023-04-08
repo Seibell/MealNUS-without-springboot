@@ -49,7 +49,7 @@ import UpdateIngred from "./Components/Inventory/UpdateIngred";
 import UpdateOrder from "./Components/Inventory/UpdateOrder";
 
 //Admin
-import AdminDashboard from "./Components/Admin/AdminDashboard";
+import AdminDashboard from "./Components/Admin/Dashboard/AdminDashboard";
 import AdminMembers from "./Components/Admin/Member";
 import AdminPromotions from "./Components/Admin/Promotion";
 import AdminOrders from "./Components/Admin/Order";

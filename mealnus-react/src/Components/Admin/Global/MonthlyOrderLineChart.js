@@ -13,7 +13,6 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
 
     useEffect(() => {
         const currentDate = new Date().toISOString().slice(0, 10);
-        // const currentDate = new Date().toLocaleString("en-US", { timeZone: "Asia/Singapore" }).slice(0, 10);
         Axios.get(`http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrderCounts/${currentDate}`)
             .then(response => {
                 console.log(response.data);
@@ -69,7 +68,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 },
             }}
             colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
-            margin={{ top: 40, right: 130, bottom: 40, left: 50 }}
+            margin={{ top: 40, right: 140, bottom: 40, left: 45 }}
             xScale={{ type: "point" }}
             yScale={{
                 type: "linear",
@@ -118,16 +117,16 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                     translateY: 0,
                     itemsSpacing: 0,
                     itemDirection: "left-to-right",
-                    itemWidth: 125,
+                    itemWidth: 90,
                     itemHeight: 20,
-                    itemOpacity: 0.8,
-                    symbolSize: 10,
+                    itemOpacity: 0.7,
+                    symbolSize: 6,
                     symbolShape: "circle",
                     symbolBorderColor: "rgba(0, 0, 0, .5)",
                     data: [
                         {
                             id: "Monthly Order Count",
-                            label: "Monthly Order Count",
+                            label: "Num of Orders/Month",
                             color: "#FFA500"
                         }
                     ],

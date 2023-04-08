@@ -2,27 +2,35 @@
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { ColorModeContext, useMode } from "./Global/AdminTheme";
-import Topbar from "../Admin/Global/Topbar";
-import Sidebar from "../Admin/Global/Sidebar";
+import { ColorModeContext, useMode } from "../Global/AdminTheme";
+import Topbar from "../Global/Topbar";
+import Sidebar from "../Global/Sidebar";
 
 import moment from 'moment-timezone';
 
 import { Box, Typography, useTheme } from "@mui/material";
-import { tokens } from "./Global/AdminTheme";
+import { Button } from '@material-ui/core';
+import { IconButton } from '@mui/material';
+import { tokens } from "../Global/AdminTheme";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import TollIcon from '@mui/icons-material/Toll';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 
-import Header from "../Admin/Global/Header";
-import DailyOrderLineChart from "./Global/MonthlyOrderLineChart";
-import StatBox from "../Admin/Global/StatBox";
-import TopSellingMealboxes from "./Global/TopSellingMealboxes";
+import Header from "../Global/Header";
+import MonthlyOrderLineChart from "../Global/MonthlyOrderLineChart";
+import OrderStatusPieChart from "../Global/OrderStatusPieChart";
+import StatBox from "../Global/StatBox";
+import TopSellingMealboxes from "../Global/TopSellingMealboxes";
 
-import { AdminAuthContext } from "../../Context/AdminAuthContext";
+import mastercardLogo from "../../../Assets/mastercard-Logo.png";
+import visaLogo from "../../../Assets/visa-logo.png";
+
+import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
 
 function Copyright(props) {
@@ -61,6 +69,12 @@ const Dashboard = () => {
     const [orderData, setOrderData] = useState([]);
     const [todayNewUserCount, setTodayNewUserCount] = useState(0);
     const [yesterdayNewUserCount, setYesterdayNewUserCount] = useState(0);
+
+    const [showAll, setShowAll] = useState(false);
+
+    const handleClick = () => {
+        setShowAll(!showAll);
+    };
 
 
     useEffect(() => {
@@ -274,7 +288,14 @@ const Dashboard = () => {
     useEffect(() => {
         fetch('http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrders')
             .then(response => response.json())
-            .then(data => setOrderData(data.orderEntities))
+            .then(data => {
+                const sortedData = data.orderEntities.sort((a, b) => {
+                    const aDate = moment.utc(a.orderDate, 'YYYY-MM-DD HH:mm:ss');
+                    const bDate = moment.utc(b.orderDate, 'YYYY-MM-DD HH:mm:ss');
+                    return bDate.diff(aDate);
+                });
+                setOrderData(sortedData);
+            })
             .catch(error => console.error(error));
     }, []);
 
@@ -379,6 +400,7 @@ const Dashboard = () => {
                                     display="flex"
                                     alignItems="center"
                                     justifyContent="center"
+                                    overflow="auto"
                                 >
                                     <StatBox
                                         title={todayOrderCount.toLocaleString('en-US')}
@@ -398,6 +420,7 @@ const Dashboard = () => {
                                     display="flex"
                                     alignItems="center"
                                     justifyContent="center"
+                                    overflow="auto"
                                 >
                                     <StatBox
                                         title={<Typography variant="h4" fontWeight="bold">$ {todayOrderRevenue.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Typography>}
@@ -417,6 +440,7 @@ const Dashboard = () => {
                                     display="flex"
                                     alignItems="center"
                                     justifyContent="center"
+                                    overflow="auto"
                                 >
                                     <StatBox
                                         title={<Typography variant="h4" fontWeight="bold">{todayNewMemberCount.toLocaleString('en-US')}</Typography>}
@@ -439,6 +463,7 @@ const Dashboard = () => {
                                     display="flex"
                                     alignItems="center"
                                     justifyContent="center"
+                                    overflow="auto"
                                 >
                                     <StatBox
                                         title={mtdOrderCount.toLocaleString('en-US')}
@@ -458,6 +483,7 @@ const Dashboard = () => {
                                     display="flex"
                                     alignItems="center"
                                     justifyContent="center"
+                                    overflow="auto"
                                 >
                                     <StatBox
                                         title={<Typography variant="h4" fontWeight="bold">$ {mtdOrderRevenue.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Typography>}
@@ -477,6 +503,7 @@ const Dashboard = () => {
                                     display="flex"
                                     alignItems="center"
                                     justifyContent="center"
+                                    overflow="auto"
                                 >
                                     <StatBox
                                         title={<Typography variant="h4" fontWeight="bold">$ {mtdOrderProfit.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Typography>}
@@ -496,6 +523,7 @@ const Dashboard = () => {
                                     display="flex"
                                     alignItems="center"
                                     justifyContent="center"
+                                    overflow="auto"
                                 >
                                     <StatBox
                                         title={<Typography variant="h4" fontWeight="bold">$ {mtdOrderCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Typography>}
@@ -510,11 +538,11 @@ const Dashboard = () => {
                                     />
                                 </Box>
 
-                                
+
 
                                 {/* ROW 3 */}
                                 <Box
-                                    gridColumn="span 8"
+                                    gridColumn="span 7"
                                     gridRow="span 2"
                                     backgroundColor={colors.primary[400]}
                                 >
@@ -524,6 +552,7 @@ const Dashboard = () => {
                                         display="flex "
                                         justifyContent="space-between"
                                         alignItems="center"
+                                        overflow="auto"
                                     >
                                         <Box>
                                             <Typography
@@ -536,7 +565,7 @@ const Dashboard = () => {
                                             <Typography
                                                 variant="h6"
                                                 fontWeight="bold"
-                                                color={colors.greenAccent[500]}
+                                                color={colors.grey[100]}
                                                 style={{ display: "inline" }}
                                             >
                                                 SGD&nbsp;
@@ -552,14 +581,32 @@ const Dashboard = () => {
                                         </Box>
                                     </Box>
                                     <Box height="250px" m="-20px 0 0 0">
-                                        <DailyOrderLineChart isDashboard={true} width="50%" />
+                                        <MonthlyOrderLineChart isDashboard={true} width="50%" />
                                     </Box>
                                 </Box>
                                 <Box
-                                    gridColumn="span 4"
+                                    gridColumn="span 5"
                                     gridRow="span 2"
                                     backgroundColor={colors.primary[400]}
+                                    p="30px"
+                                >
+                                    <Typography variant="h5" fontWeight="600">
+                                        Order Breakdown
+                                    </Typography>
+                                    <Box height="250px" m="-20px 0 0 0">
+                                        <OrderStatusPieChart />
+                                    </Box>
+                                </Box>
+
+
+
+                                {/* ROW 4 */}
+                                <Box
+                                    gridColumn="span 8"
+                                    gridRow="span 3"
+                                    backgroundColor={colors.primary[400]}
                                     overflow="auto"
+
                                 >
                                     <Box
                                         display="flex"
@@ -567,7 +614,8 @@ const Dashboard = () => {
                                         alignItems="center"
                                         borderBottom={`4px solid ${colors.primary[500]}`}
                                         colors={colors.grey[100]}
-                                        p="15px"
+                                        p="30px"
+                                        height="20%"
                                     >
 
                                         <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
@@ -576,49 +624,112 @@ const Dashboard = () => {
 
                                         </Typography>
                                     </Box>
-                                    {orderData.map((order, i) => (
+                                    {orderData.slice(0, showAll ? orderData.length : 3).map((order, i) => (
                                         <Box
                                             key={`${order.orderId}-${i}`}
                                             display="flex"
                                             justifyContent="space-between"
                                             alignItems="center"
                                             borderBottom={`4px solid ${colors.primary[500]}`}
-                                            p="15px"
+                                            p="30px"
                                             height="20%"
                                         >
-                                            <Box textAlign="left">
-                                                <Typography
-                                                    color={colors.greenAccent[500]}
-                                                    variant="h5"
-                                                    fontWeight="600"
-                                                >
-                                                    {order.orderId}
+                                            <Box textAlign="left" width="100px">
+                                                <Typography color={colors.blueAccent[500]} variant="h5" fontWeight="600">
+                                                    {i + 1}
                                                 </Typography>
-                                                <Typography color={colors.grey[100]}>
-                                                    {order.user.firstName}
-                                                </Typography>
+                                                <Typography color={colors.grey[100]}>{order.user.firstName}</Typography>
                                             </Box>
-                                            <Box textAlign="left" color={colors.grey[100]}>
-                                                {moment.utc(order.orderDate, 'YYYY-MM-DD HH:mm:ss')
+                                            <Box textAlign="left" color={colors.grey[100]} width="100px">
+                                                {moment
+                                                    .utc(order.orderDate, 'YYYY-MM-DD HH:mm:ss')
                                                     .tz('Asia/Singapore')
-                                                    .format('DD/MM/YYYY HH:mm')}
+                                                    .format('DD/MM/YYYY HH:mm:ss')}
                                             </Box>
+                                            <Box textAlign="left" color={colors.grey[100]} width="100px">
+                                                {order.address.replace(/_/g, ' ')
+                                                    .split(' ')
+                                                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                                                    .join(' ')}
+                                            </Box>
+                                            <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px">
+                                                <img src={mastercardLogo} alt={"Card type"} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
+                                                SGD&nbsp;
+                                                <Typography>{order.orderDetails.map(detail => detail.key.itemPrice * detail.value).reduce((total, price) => total + price, 0)}</Typography>
+                                            </Box>
+                                            {/* Above cc logo display method to be replaced by below once confirmed */}
+                                            {/* <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px">
+                                                <img
+                                                    src={
+                                                        order.user.creditCards.get(0).charAt(0) === "4"
+                                                            ? visaLogo
+                                                            : order.user.creditCards.get(0).charAt(0) === "5"
+                                                                ? mastercardLogo
+                                                                : ""
+                                                    }
+                                                    alt={"Card type"}
+                                                    style={{
+                                                        maxWidth: "24px",
+                                                        maxHeight: "30px",
+                                                        marginRight: "8px",
+                                                        width: "auto",
+                                                        height: "auto",
+                                                    }}
+                                                />
+                                                <Typography>
+                                                    {order.orderDetails
+                                                        .map((detail) => detail.key.itemPrice * detail.value)
+                                                        .reduce((total, price) => total + price, 0)}
+                                                </Typography>
+                                            </Box> */}
                                             <Box
+                                                textAlign="center"
                                                 backgroundColor={getOrderStatusColor(order.orderStatus)}
                                                 p="5px 10px"
-                                                borderRadius="4px"
+                                                borderRadius="15px"
+                                                width="100px"
                                             >
-                                                {order.orderStatus}
+                                                <b>{order.orderStatus}</b>
                                             </Box>
                                         </Box>
                                     ))}
+                                    {!showAll && (
+                                        <Box display="flex" justifyContent="center" my="20px">
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="medium"
+                                                onClick={handleClick}
+                                                style={{ borderRadius: 20 }}
+                                                startIcon={<UnfoldMoreIcon />}
+                                            >
+                                                View All
+                                            </Button>
+                                        </Box>
+                                    )}
+                                    {showAll && (
+                                        <Box display="flex" justifyContent="center" my="20px">
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="medium"
+                                                onClick={handleClick}
+                                                style={{ borderRadius: 20 }}
+                                                startIcon={<UnfoldLessIcon />}
+                                            >
+                                                View Less
+                                            </Button>
+                                        </Box>
+                                    )}
                                 </Box>
 
-                                {/* ROW 4 */}
+
+                                {/* ROW 5 */}
                                 <Box
                                     gridColumn="span 12"
                                     gridRow="span 4"
                                     backgroundColor={colors.primary[400]}
+                                    overflow="auto"
                                 >
                                     <Box
                                         mt="20px"
@@ -635,7 +746,7 @@ const Dashboard = () => {
                                             Top Ranking MealBoxes
                                         </Typography>
                                     </Box>
-                                    <Box height="200px" m="-20px 0 0 0">
+                                    <Box height="180px" m="-20px 0 0 0">
                                         <TopSellingMealboxes />
                                     </Box>
                                 </Box>
@@ -649,7 +760,7 @@ const Dashboard = () => {
                     </main>
                 </div>
             </ThemeProvider>
-        </ColorModeContext.Provider>
+        </ColorModeContext.Provider >
 
     );
 };
