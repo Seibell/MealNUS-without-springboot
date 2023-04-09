@@ -301,16 +301,27 @@ const MealBoxes = () => {
                 style={{ width: "88%", objectFit: "cover" }}
                 // style={{ width: "288px", height: "288px", objectFit: "cover" }}
               />
-              <DialogContentText>
-                Price: ${selectedMealBox?.itemPrice}
-              </DialogContentText>
-              <DialogContentText>
-                {selectedMealBox?.quantityAvailable} available
-              </DialogContentText>
-              <DialogContentText>
-                Description: {selectedMealBox?.itemDescription}
-              </DialogContentText>
-              <DialogContentText>Ingredients:</DialogContentText>
+              <Typography
+                variant="subtitle1"
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                <b>Price: </b>&nbsp;${selectedMealBox?.itemPrice}
+                <Box sx={{ flexGrow: 1 }} />
+                <span>{selectedMealBox?.quantityAvailable}</span>
+                <Box sx={{ width: 4 }} />
+                <Typography
+                  variant="subtitle1"
+                  sx={{ color: "green", marginRight: 6.5 }}
+                >
+                  <b>available</b>
+                </Typography>
+              </Typography>
+              <Typography variant="subtitle1">
+                <b>Description:</b> {selectedMealBox?.itemDescription}
+              </Typography>
+              <Typography variant="subtitle1">
+                <b>Ingredients:</b>
+              </Typography>
               <div>
                 {selectedMealBox?.ingredients?.map((ingredient) => (
                   <Chip
@@ -323,7 +334,9 @@ const MealBoxes = () => {
                   />
                 ))}
               </div>
-              <DialogContentText>Category:</DialogContentText>
+              <Typography variant="subtitle1">
+                <b>Category:</b>
+              </Typography>
               <div>
                 {selectedMealBox?.categories?.map((category) => (
                   <Chip
@@ -336,7 +349,9 @@ const MealBoxes = () => {
                   />
                 ))}
               </div>
-              <DialogContentText>Allergens:</DialogContentText>
+              <Typography variant="subtitle1">
+                <b>Allergens:</b>
+              </Typography>
               <div>
                 {selectedMealBox?.allergens?.length ? (
                   selectedMealBox?.allergens?.map((allergen) => (
