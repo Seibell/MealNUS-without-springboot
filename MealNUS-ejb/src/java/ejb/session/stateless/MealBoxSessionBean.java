@@ -128,10 +128,10 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
     public void deleteMealBox(MealBox mealBox) {
         em.remove(mealBox);
     }
-
-    public void setStatusAvailability(Long id, Boolean status) {
+    
+    public void setStatusAvailability(Long id, MealBox meal) { 
         MealBox m = em.find(MealBox.class, id);
-        m.setStatusAvail(status);
+        m.setStatusAvail(meal.isStatusAvail());
         em.merge(m);
     }
 }

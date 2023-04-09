@@ -512,7 +512,7 @@ function AddMealBox(props) {
                 <form onSubmit={handleFormSubmit}>
                   <div className="card-body">
                     <div className="form-group">
-                      <label htmlFor="inputName">MealBox</label>
+                      <label htmlFor="inputName">MealBox Name</label>
                       <input
                         type="text"
                         id="inputName"
