@@ -50,7 +50,7 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
         try {
             MealBox m = retrieveMealBoxById(mealboxId);
             List<Ingredient> mealboxList = m.getIngredients();
-            
+
             for (Ingredient i : ingredients) {
                 System.out.println("************** " + i);
                 mealboxList.add(i);
@@ -70,10 +70,9 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
 
     @Override
     public List<MealBox> retrieveAllMealBoxes() {
-        Query query = em.createQuery("SELECT m FROM MealBox m", MealBox.class);
+        Query query = em.createQuery("SELECT m FROM MealBox m WHERE m.StatusAvail != false", MealBox.class);
         return query.getResultList();
     }
-    
 
     @Override
     public List<Pair<String, Integer>> retrieveAllMealBoxesWithQty() {
@@ -86,12 +85,12 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
         }
         return resultList;
     }
-    
+
     @Override
     public List<MealBox> retrieveMealboxByCategory(String category) throws MealBoxNotFoundException {
         Category cat = em.createQuery("SELECT c FROM Category c WHERE c.name = :category", Category.class)
-                    .setParameter("category", category)
-                    .getSingleResult();
+                .setParameter("category", category)
+                .getSingleResult();
         Query query = em.createQuery("SELECT DISTINCT m FROM MealBox m JOIN m.categories c WHERE c = :category", MealBox.class);
         query.setParameter("category", cat);
         return query.getResultList();
@@ -129,8 +128,8 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
     public void deleteMealBox(MealBox mealBox) {
         em.remove(mealBox);
     }
-    
-    public void setStatusAvailability(Long id, Boolean status) { 
+
+    public void setStatusAvailability(Long id, Boolean status) {
         MealBox m = em.find(MealBox.class, id);
         m.setStatusAvail(status);
         em.merge(m);

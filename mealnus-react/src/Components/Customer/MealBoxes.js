@@ -336,6 +336,21 @@ const MealBoxes = () => {
                   />
                 ))}
               </div>
+              <DialogContentText>Allergens:</DialogContentText>
+              <div>
+                {selectedMealBox?.allergens?.length ? (
+                  selectedMealBox?.allergens?.map((allergen) => (
+                    <Chip
+                      key={allergen.allergenId}
+                      avatar={<Avatar alt={allergen.allergenName} />}
+                      label={allergen.allergenName}
+                      style={{ margin: "0 5px 5px 0" }}
+                    />
+                  ))
+                ) : (
+                  <DialogContentText>N.A.</DialogContentText>
+                )}
+              </div>
             </Grid>
             <Grid item xs={12} md={6}>
               <Typography variant="h6" gutterBottom>

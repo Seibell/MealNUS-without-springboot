@@ -53,6 +53,7 @@ public class MealBox implements Serializable {
         this.allergens = new ArrayList<>();
         this.ingredients = new ArrayList<>();
         this.categories = new ArrayList<>();
+        this.StatusAvail = true;
     }
 
     public MealBox(String itemImage, String itemName, Long ItemCode, BigDecimal itemCost, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable) {
