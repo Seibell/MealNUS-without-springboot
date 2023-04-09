@@ -286,7 +286,7 @@ public class DataInitSessionBean {
         //TESTING PURPOSE
         if (forumSessionBean.retrieveAllForumPosts().isEmpty()) {
             Calendar calendar = Calendar.getInstance();
-            ForumPost fp1 = new ForumPost(new Date(calendar.getTime().getTime()), "Test", "Welcome to MealNUS Forum! Share your experience with the mealboxes anonymously here:)");
+            ForumPost fp1 = new ForumPost(new Date(calendar.getTime().getTime()), "Test", "Welcome to MealNUS Forum! Share your experience with the mealboxes here:)");
             try {
                 fp1.setUser(userSessionBean.retrieveUserByEmail("user@gmail.com"));
             } catch (UserNotFoundException ex) {
