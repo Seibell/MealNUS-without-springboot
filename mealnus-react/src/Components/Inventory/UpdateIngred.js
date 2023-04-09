@@ -47,7 +47,7 @@ const default_image_url = 'https://i.imgur.com/Kvyecsm.png';
 const theme = createTheme();
 
 const UpdateIngred = () => {
-  const { ingredientId } = useParams();
+  const {ingredientId } = useParams();
   const [picture, setpicture] = useState(null);
   const [name, setname] = useState('');
   const [error, setError] = useState("");
@@ -73,6 +73,7 @@ const UpdateIngred = () => {
   };
 
   const handleFileChange = async (e) => {
+
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       //setpicture(event.target.files[0]);
@@ -80,6 +81,7 @@ const UpdateIngred = () => {
 
       if (uploadedImageURL) {
         setpicture(uploadedImageURL);
+        setpicture(picture);
       } else {
         setError("Failed to upload image");
       }
@@ -178,6 +180,7 @@ const UpdateIngred = () => {
         const retrieved = response.data;
         setretrieved(retrieved);
         setname(retrieved.name);
+        setpicture(retrieved.picture);
       })
       .catch((err) => {
         console.log(err);
@@ -384,10 +387,6 @@ const UpdateIngred = () => {
                         type="file" onChange={handleFileChange}
                       />
                     </div>
-
-
-
-
 
                   </div>
                   <div className="card-footer">

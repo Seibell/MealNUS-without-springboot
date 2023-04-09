@@ -133,7 +133,7 @@ const Ingredient = () => {
 
   useEffect(() => {
     Axios.get(
-      " http://localhost:8080/MealNUS-war/rest/Ingredient/retrieveAllIngredient"
+      "http://localhost:8080/MealNUS-war/rest/Ingredient/retrieveAllIngredient"
     )
       .then((response) => {
         setIngred(response.data);
