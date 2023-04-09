@@ -695,11 +695,9 @@ function AddMealBox(props) {
                     </div>
                   </div>
                   <div className="card-footer">
-                    <Link to="/InventoryHome">
-                      <button className="btn btn-default" type="button">
+                      <button className="btn btn-default" type="button" onClick={() => navigate('/InventoryHome')}>
                         Cancel
                       </button>
-                    </Link>
                     <button className="btn btn-primary float-right" type="submit" style={{ backgroundColor: "orange", border: "orange" }}>
                       Submit
                     </button>

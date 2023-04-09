@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.exception.AllergenNotFound;
 
 /**
  *
@@ -35,5 +36,25 @@ public class AllergenSessionBean implements AllergenSessionBeanLocal {
     public List<Allergen> retrieveAllAllergens() {
         Query query = em.createQuery("SELECT a FROM Allergen a");
         return query.getResultList();
+    }
+    
+    @Override
+      public Allergen retrieveAllergenById(Long AllergenId) throws AllergenNotFound {
+        Allergen a = em.find(Allergen.class, AllergenId);
+
+        if (a != null) {
+            return a;
+        } else {
+            throw new AllergenNotFound("Allergen not found in system!");
+        }
+    }
+      
+    public Allergen updateIngredient(Long id, Allergen a){
+        
+        Allergen allergen = em.find(Allergen.class, id);
+        allergen.setAllergenName(a.getAllergenName());
+        allergen.setAllergenDescription(a.getAllergenDescription());
+        em.merge(allergen);
+        return allergen;
     }
 }

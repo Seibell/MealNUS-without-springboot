@@ -158,9 +158,9 @@ const MealBoxes = () => {
 
   return (
     <div>
-      <div className="home-bannerImage-container">
+      {/* <div className="home-bannerImage-container">
         <img src={BannerBackground} alt="" />
-      </div>
+      </div> */}
       <NavBar />
       <Container>
         <Box mt={4} mb={2}>
@@ -335,6 +335,21 @@ const MealBoxes = () => {
                     style={{ margin: "0 5px 5px 0" }}
                   />
                 ))}
+              </div>
+              <DialogContentText>Allergens:</DialogContentText>
+              <div>
+                {selectedMealBox?.allergens?.length ? (
+                  selectedMealBox?.allergens?.map((allergen) => (
+                    <Chip
+                      key={allergen.allergenId}
+                      avatar={<Avatar alt={allergen.allergenName} />}
+                      label={allergen.allergenName}
+                      style={{ margin: "0 5px 5px 0" }}
+                    />
+                  ))
+                ) : (
+                  <DialogContentText>N.A.</DialogContentText>
+                )}
               </div>
             </Grid>
             <Grid item xs={12} md={6}>

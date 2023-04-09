@@ -123,8 +123,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 const Ingredient = () => {
-  const [ingred, setIngred] = useState([]);
   const { currentStaff } = useContext(AdminAuthContext);
+  const [allergen, setallergen] = useState([]);
+  const [query, setQuery] = useState('');
 
   const [dateTime, setDateTime] = useState(new Date());
 
@@ -133,21 +134,44 @@ const Ingredient = () => {
 
   useEffect(() => {
     Axios.get(
-      " http://localhost:8080/MealNUS-war/rest/Ingredient/retrieveAllIngredient"
+      "http://localhost:8080/MealNUS-war/rest/Allergen/retrieveAllAllergent"
     )
       .then((response) => {
-        setIngred(response.data);
+        setallergen(response.data);
         console.log(response.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-
+  console.log(allergen);
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const filteredData = useCallback(() => {
+    return allergen.filter((allergen) => {
+        return (allergen.allergenName.toLowerCase().includes(query.toLowerCase())
+        );
+    });
+}, [allergen, query]);
+  
+  const columns = [
+    { name: "Allergen Name", selector: "allergenName", sortable: true },
+    { name: "Allergen Description", selector: "allergenDescription", sortable: true },
+    {
+        name: "Update Allergen",
+        cell: (row) => (
+            <Button
+                onClick={() => navigate('/UpdateAllergen/' + row.allergenId)}
+                variant="contained"
+                color="error">
+                Update
+            </Button>
+        ),
+    }
+];
 
   if (!currentStaff) {
     return <div>Error: Staff not found.</div>;
@@ -297,39 +321,21 @@ const Ingredient = () => {
               </div>
 
 
-              <button onClick={() => navigate('/AddIngred')}
-              >Add A Ingredient
+              <button onClick={() => navigate('/AddAllergen')}
+              >Add An Allergen
               </button>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
               </div>
               <div>
                 {
-                  <ImageList sx={{ width: '900px', height: '400px' }}>
-                    {ingred.map((item) => (
-                      <a key={item.picture} href={`/UpdateIngred/${item.ingredientId}`} style={{ color: 'black' }}>
-                      <ImageListItem key={item.ingredientId}>
-                        <img
-                          src={`${item.picture}?w=248&fit=crop&auto=format`}
-                          srcSet={`${item.picture}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                          alt={item.name}
-                          loading="lazy"
-                          style={{ borderRadius: '50%', width: '250px', height: '250px' }}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = questionmark;
-                          }}
-                        />
-                        <ImageListItemBar
-                          title={<span style={{ fontWeight: 'bold' }}> {item.name}</span>}
-                          subtitle={<span>Ingredient ID: {item.ingredientId}</span>}
-                          position="below"
-                          sx={{ fontSize: '40px' }}
-                        />
-                      </ImageListItem>
-                      </a>
-                    ))}
-                  </ImageList>
+                  <DataTable
+                  columns={columns}
+                  data={filteredData()}
+                  pagination
+                  highlightOnHover
+                  striped
+              />
                 }
 
               </div>

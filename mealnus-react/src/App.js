@@ -41,13 +41,14 @@ import InventoryHome from "./Components/Inventory/InventoryHome";
 import AddIngred from "./Components/Inventory/AddIngred";
 import ViewAllIngred from "./Components/Inventory/ViewAllIngred";
 import Orders from "./Components/Inventory/Orders";
-import AddAllergents from "./Components/Inventory/AddAllergents";
+import AddAllergen from "./Components/Inventory/AddAllergents";
 import AddMealBox from "./Components/Inventory/AddMealBox";
 import UpdateQuantity from "./Components/Inventory/updateQuantity";
 import UpdateMealBox from "./Components/Inventory/UpdateMealBox";
 import UpdateIngred from "./Components/Inventory/UpdateIngred";
 import UpdateOrder from "./Components/Inventory/UpdateOrder";
-
+import ViewAllAllergen from "./Components/Inventory/ViewAllAllergen";
+import UpdateAllergen from "./Components/Inventory/UpdateAllergen";
 //Admin
 import AdminDashboard from "./Components/Admin/Dashboard/AdminDashboard";
 import AdminMembers from "./Components/Admin/Member";
@@ -73,12 +74,12 @@ function App() {
           <Route path="/AddIngred" element={<AddIngred />} />
           <Route path="/ViewAllIngred" element={<ViewAllIngred />} />
           <Route path="/Orders" element={<Orders />} />
-          <Route path="/AddAllergens" element={<AddAllergents />} />
+          <Route path="/AddAllergen" element={<AddAllergen />} />
           <Route path="/AddMealBox" element={<AddMealBox />} />
           <Route path="/UpdateQuantity/:mealBoxId" element={<UpdateQuantity />} />
           <Route path="/UpdateMealBox/:mealBoxId" element={<UpdateMealBox />} />
           <Route path="/UpdateOrder/:orderId" element={<UpdateOrder />} />
-          <Route path="/UpdateIngred" element={<UpdateIngred />} />
+          <Route path="/UpdateIngred/:ingredientId" element={<UpdateIngred />} />
           <Route path="/home" element={<Home />} />
           <Route path="/mealboxes" element={<MealBoxes />} />
           <Route path="/forum" element={<Forum />} />
@@ -90,6 +91,8 @@ function App() {
           <Route path="/adminpromotions" element={<AdminPromotions />} />
           <Route path="/addpromotion" element={<AddPromotion />} />
           <Route path="/adminorders" element={<AdminOrders />} />
+          <Route path="/ViewAllAllergen" element={<ViewAllAllergen />} />
+          <Route path="/UpdateAllergen/:allergenId" element={<UpdateAllergen />} />
 
           {/* Soon to be removed */}
           <Route path="/adminordermanagement" element={<AdminOrderManagement />} />

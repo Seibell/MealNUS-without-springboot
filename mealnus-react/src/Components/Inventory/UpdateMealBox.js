@@ -746,7 +746,7 @@ const checkIfallergenExisit = (allergens, allergen) => {
                                     </div>
                                   <div className="card-footer">
                                       <Link to="/InventoryHome">
-                                          <button className="btn btn-default" type="button">
+                                          <button className="btn btn-default" type="button" onClick={() => navigate('/InventoryHome')}>
                                               Cancel
                                           </button>
                                       </Link>

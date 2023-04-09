@@ -71,4 +71,7 @@ public interface OrderSessionBeanLocal {
     
     public List<List<Double>> retrieveAllOrderLocations();
 
+   // public void updateOrder(OrderEntity orderToUpdate);
+
+
 }

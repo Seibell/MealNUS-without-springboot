@@ -28,12 +28,14 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Button } from "@mui/material";
+import { makeStyles } from '@material-ui/core/styles';
 
 const MyOrders = () => {
   const { currentUser } = useContext(AuthContext);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [orders, setOrders] = useState([]);
+
   useEffect(() => {
     console.log("currentUser: ", currentUser);
     if (currentUser && currentUser.email) {
@@ -282,15 +284,27 @@ const MyOrders = () => {
             gridColumn="span 6"
             backgroundColor={colors.primary[400]}
             display="flex"
+            flexDirection="column"
+            padding="16px"
             alignItems="center"
             justifyContent="center"
           >
-            <Typography variant="h6" gutterBottom align="center" style={{ width: '90%', wordBreak: 'break-all' }}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              align="left"
+              style={{
+                marginBottom: '8px',
+                fontSize: '1rem',
+                whiteSpace: 'nowrap',
+                fontWeight: 'bold'
+              }}
+            >
               Order Status Distribution
             </Typography>
             <ResponsivePie
               data={processDataForPieChart(orders)}
-              margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+              margin={{ top: 5, right: 20, bottom: 20, left: 20 }}
               innerRadius={0.5}
               padAngle={0.7}
               cornerRadius={3}
@@ -306,16 +320,29 @@ const MyOrders = () => {
               motionStiffness={90}
               motionDamping={15}
             />
-            <List style={{ maxWidth: "600px", maxHeight: "600px", margin: "auto", whiteSpace: 'nowrap' }} dense={true}>
-              {statusCounts.map((status, index) => (
-                <ListItem key={status.label}>
-                  <ListItemIcon>
-                    <FiberManualRecordIcon style={{ color: statusColors[index] }} />
-                  </ListItemIcon>
-                  <ListItemText primary={`${status.label}: ${status.value}`} />
-                </ListItem>
+            <div
+              style={{
+                marginTop: 'auto',
+                display: 'flex',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+              }}
+            >
+              {processDataForPieChart(orders).map((status, index) => (
+                <div
+                  key={status.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '4px',
+                    fontSize: '0.8rem',
+                  }}
+                >
+                  <FiberManualRecordIcon style={{ color: statusColors[index] }} />
+                  <span>{status.label}</span>
+                </div>
               ))}
-            </List>
+            </div>
           </Box>
         </Box>
       </Box>

@@ -38,5 +38,7 @@ public interface MealBoxSessionBeanLocal {
     public MealBox updateMealBox(Long id, MealBox mealbox);
 
     public List<MealBox> retrieveMealboxByCategory(String category) throws MealBoxNotFoundException;
+
+    public void setStatusAvailability(Long id, Boolean status);
     
 }
