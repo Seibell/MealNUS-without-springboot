@@ -117,7 +117,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                     translateY: 0,
                     itemsSpacing: 0,
                     itemDirection: "left-to-right",
-                    itemWidth: 90,
+                    itemWidth: 100,
                     itemHeight: 20,
                     itemOpacity: 0.7,
                     symbolSize: 6,

@@ -90,14 +90,15 @@ const Member = () => {
             headerName: "Primary Credit Card",
             flex: 1,
             renderCell: (params) => {
-                const firstCard = params.value[0];
+                const creditCardsList = params.value;
+                const firstCard = creditCardsList.length > 0 ? creditCardsList[0] : null;
                 if (firstCard) {
                     const maskedNumber = `•••• •••• •••• ${firstCard.creditCardNumber.slice(-4)}`;
-                    const cardType = firstCard.type;
+                    const cardType = firstCard.creditCardNumber.startsWith("4") ? "VISA" : "Mastercard";
                     const cardLogo = firstCard.creditCardNumber.startsWith("4") ? visaLogo : mastercardLogo;
                     return (
                         <div>
-                            <img src={cardLogo} alt={cardType} />
+                            <img src={cardLogo} alt={cardType} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
                             {maskedNumber}
                         </div>
                     );

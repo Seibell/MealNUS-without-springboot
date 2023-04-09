@@ -60,10 +60,10 @@ const Topbar = () => {
                 backgroundColor={colors.primary[400]}
                 borderRadius="3px"
             >
-                <InputBase sx={{ ml: 2, flex: 1 }} placeholder="SearchBar coming soon..." />
+                {/* <InputBase sx={{ ml: 2, flex: 1 }} placeholder="SearchBar coming soon..." />
                 <IconButton type="button" sx={{ p: 1 }}>
                     <SearchIcon />
-                </IconButton>
+                </IconButton> */}
             </Box>
 
             {/* ICONS */}
@@ -102,7 +102,7 @@ const Topbar = () => {
                     open={open}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={() => window.open('/home', 'Add Promotion', 'width=900,height=800')} component={Link}>View Customer Portal</MenuItem>
+                    <MenuItem onClick={() => window.open('/', 'Add Promotion', 'width=900,height=800')} component={Link}>View Customer Portal</MenuItem>
                     <MenuItem onClick={handleMenuClose} component={Link} to="/stafflogin">Logout</MenuItem>
                 </Menu>
             </Box>

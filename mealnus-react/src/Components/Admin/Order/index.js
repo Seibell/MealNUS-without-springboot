@@ -110,9 +110,15 @@ const Order = () => {
             headerName: "Status",
             flex: 1,
             renderCell: (params) => (
-                <span style={{ color: getOrderStatusColor(params.value) }}>
-                    {params.value}
-                </span>
+                <Box
+                    textAlign="center"
+                    backgroundColor={getOrderStatusColor(params.value)}
+                    p="5px 10px"
+                    borderRadius="15px"
+                    width="100px"
+                >
+                    <b>{params.value}</b>
+                </Box>
             ),
         },
         {

@@ -361,6 +361,19 @@ public class OrdersResource {
                 revenue).build();
     }
 
+    // e.g. http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrderLocations
+    @GET
+    @Path("/retrieveAllOrderLocations")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllOrderLocations() {
+        List<List<Double>> orderLocations = orderSessionBeanLocal.retrieveAllOrderLocations();
+        GenericEntity<List<List<Double>>> entity
+                = new GenericEntity<List<List<Double>>>(orderLocations) {
+        };
+        return Response.status(200).entity(
+                entity).build();
+    }
+
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/update/1
     // success should show the success message
     @PUT

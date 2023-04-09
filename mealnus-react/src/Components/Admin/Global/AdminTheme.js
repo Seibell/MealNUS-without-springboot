@@ -38,17 +38,6 @@ export const tokens = (mode) => ({
                 800: "#1e5245",
                 900: "#0f2922",
             },
-            redAccent: {
-                100: "#f8dcdb",
-                200: "#f1b9b7",
-                300: "#e99592",
-                400: "#e2726e",
-                500: "#db4f4a",
-                600: "#af3f3b",
-                700: "#832f2c",
-                800: "#58201e",
-                900: "#2c100f",
-            },
             blueAccent: {
                 100: "#c1d2ff",
                 200: "#95b5ff",
@@ -71,6 +60,7 @@ export const tokens = (mode) => ({
                 800: "#ffe5b7",
                 900: "#fff6e5",
             },
+            mealNUSBlue: "#2751DC",
         }
         : {
             grey: {
@@ -105,17 +95,6 @@ export const tokens = (mode) => ({
                 700: "#94e2cd",
                 800: "#b7ebde",
                 900: "#dbf5ee",
-            },
-            redAccent: {
-                100: "#2c100f",
-                200: "#58201e",
-                300: "#832f2c",
-                400: "#af3f3b",
-                500: "#db4f4a",
-                600: "#e2726e",
-                700: "#e99592",
-                800: "#f1b9b7",
-                900: "#f8dcdb",
             },
             blueAccent: {
                 100: "#151632",

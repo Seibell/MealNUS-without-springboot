@@ -174,42 +174,6 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 
     @Override
     public List<Pair<Date, Integer>> retrieveAllOrderCounts(Date queryDate) throws ParseException {
-//        List<OrderEntity> allOrders = retrieveAllOrders();
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        String date1 = sdf.format(allOrders.get(0).getOrderDate());
-//        String date2 = sdf.format(queryDate);
-//        Date dateFirst = sdf.parse(date1);
-//        Date dateLast = sdf.parse(date2);
-//
-//        Date referenceDate = dateFirst;
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(referenceDate);
-//
-//        Calendar calEnd = Calendar.getInstance();
-//        calEnd.setTime(dateLast);
-//        calEnd.add(Calendar.DAY_OF_MONTH, 2);
-//        Date endDate = calEnd.getTime();
-//
-//        Map<Date, Integer> orderCountByDate = new HashMap<>();
-//
-//        while (referenceDate.before(endDate)) {
-//            List<OrderEntity> currentDateOrders = retrieveOrdersByOrderDate(referenceDate);
-//            Integer currentDateOrderCount = currentDateOrders.size();
-//            orderCountByDate.put(referenceDate, currentDateOrderCount);
-//            cal.add(Calendar.DAY_OF_MONTH, 1);
-//            referenceDate = cal.getTime();
-//        }
-//
-//        List<Pair<Date, Integer>> result = new ArrayList<>();
-//        for (Map.Entry<Date, Integer> entry : orderCountByDate.entrySet()) {
-//            result.add(new Pair<>(entry.getKey(), entry.getValue()));
-//        }
-//        
-//         Collections.sort(result, 
-//                 (Pair<Date, Integer> p1, Pair<Date, Integer> p2) -> 
-//                         p1.getKey().compareTo(p2.getKey()));
-//
-//        return result;
         List<OrderEntity> allOrders = retrieveAllOrders();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date1 = sdf.format(allOrders.get(0).getOrderDate());
@@ -257,6 +221,40 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 
         return result;
 
+    }
+
+    @Override
+    public List<List<Double>> retrieveAllOrderLocations() {
+        HashMap<String, Pair<Double, Double>> locationMap = new HashMap<>();
+        locationMap.put("EUSOFF_HALL", new Pair<>(1.294546, 103.772899));
+        locationMap.put("UTOWN_RESIDENCES", new Pair<>(1.305786, 103.774228));
+        locationMap.put("TEMBUSU_COLLEGE", new Pair<>(1.298481, 103.773604));
+        locationMap.put("RESIDENTIAL_COLLEGE_FOUR", new Pair<>(1.299888, 103.770930));
+        locationMap.put("PRINCE_GEORGE_PARK_RESIDENCE", new Pair<>(1.291369, 103.778046));
+        locationMap.put("RIDGE_VIEW_RESIDENTIAL_COLLEGE", new Pair<>(1.294967, 103.774687));
+        locationMap.put("RAFFLES_HALL", new Pair<>(1.294356, 103.773645));
+        locationMap.put("TEMASEK_HALL", new Pair<>(1.294121, 103.772654));
+        locationMap.put("KENT_RIDGE_HALL", new Pair<>(1.292138, 103.774123));
+        locationMap.put("SHEARES_HALL", new Pair<>(1.293299, 103.772815));
+        locationMap.put("KING_EDWARD_VII_HALL", new Pair<>(1.294776, 103.774031));
+        locationMap.put("KENT_VALE", new Pair<>(1.295276, 103.782169));
+        locationMap.put("UNIVERSITY_HALL", new Pair<>(1.297121, 103.772783));
+        locationMap.put("EUSOFF_HALL", new Pair<>(1.294546, 103.772899));
+
+        List<OrderEntity> orders = retrieveAllOrders();
+        List<List<Double>> locationList = new ArrayList<>();
+
+        for (OrderEntity order : orders) {
+            String address = order.getAddress().toString();
+            Pair<Double, Double> coordinates = locationMap.get(address);
+            if (coordinates != null) {
+                List<Double> location = new ArrayList<>();
+                location.add(coordinates.getKey());
+                location.add(coordinates.getValue());
+                locationList.add(location);
+            }
+        }
+        return locationList;
     }
 
     // Note: Revenue calculation inaccurate if need to consider refunds/returns
@@ -416,7 +414,8 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 
     // Dashboard :: MTD Sales Overview :: Profit
     @Override
-    public BigDecimal getMtdProfit(Date queryDate) {
+    public BigDecimal getMtdProfit(Date queryDate
+    ) {
         return getMtdRevenue(queryDate).subtract(getMtdCost(queryDate)).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
