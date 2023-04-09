@@ -183,6 +183,15 @@ const Forum = () => {
     }
     setErrorMessage("");
   };
+  const [openCreatePostDialog, setOpenCreatePostDialog] = useState(false);
+
+  const handleOpenCreatePostDialog = () => {
+    setOpenCreatePostDialog(true);
+  };
+
+  const handleCloseCreatePostDialog = () => {
+    setOpenCreatePostDialog(false);
+  };
 
   const [openReplyDialog, setOpenReplyDialog] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -244,22 +253,51 @@ const Forum = () => {
       </div>
       <NavBar />
       <Container>
-        <Typography variant="h4" gutterBottom className="shadows-into-light">
+        <Typography
+          variant="h4"
+          gutterBottom
+          style={{ fontFamily: "Poppinsdi" }}
+        >
           Welcome to the Forum!
         </Typography>
-        <FormControl className={classes.formControl}>
-          <InputLabel id="filter-select-label">Filter By</InputLabel>
-          <Select
-            labelId="filter-select-label"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+        {/* Create New Post Button */}
+        <Grid
+          item
+          xs={12}
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <FormControl className={classes.formControl}>
+            <InputLabel id="filter-select-label">Filter By</InputLabel>
+            <Select
+              labelId="filter-select-label"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <MenuItem value="time">Latest Posts</MenuItem>
+              <MenuItem value="popularityUp">ThumbUp: High to Low</MenuItem>
+              <MenuItem value="popularityDown">ThumbDown: High to Low</MenuItem>
+            </Select>
+          </FormControl>
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleOpenCreatePostDialog}
+            style={{
+              marginLeft: 280,
+              marginBottom: 20,
+              backgroundColor: "#FF8C00", // NUS orange color
+              borderRadius: 25,
+            }}
           >
-            <MenuItem value="time">Latest Posts</MenuItem>
-            <MenuItem value="popularityUp">ThumbUp: High to Low</MenuItem>
-            <MenuItem value="popularityDown">ThumbDown: High to Low</MenuItem>
-          </Select>
-        </FormControl>
-        <Grid container spacing={3}>
+            Create New Post
+          </Button>
+        </Grid>
+        <Grid item xs={12} style={{}}>
+          <Grid container spacing={3}></Grid>
           <Grid
             container
             spacing={2}
@@ -461,37 +499,67 @@ const Forum = () => {
                   </Grid>
                 ))}
           </Grid>
-          {/* //add this line onwards about the codes for the second part */}
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
+          <Dialog
+            open={openCreatePostDialog}
+            onClose={handleCloseCreatePostDialog}
+            aria-labelledby="create-post-dialog-title"
+            maxWidth="md"
+            fullWidth
+          >
+            <DialogTitle id="create-post-dialog-title">
               Create New Post
-            </Typography>
-            <TextField
-              label="Title"
-              fullWidth
-              value={newPostTitle}
-              onChange={(e) => setNewPostTitle(e.target.value)}
-            />
-            <TextField
-              label="Description"
-              fullWidth
-              multiline
-              minRows={4}
-              value={newPostDescription}
-              onChange={(e) => setNewPostDescription(e.target.value)}
-              style={{ marginTop: 16 }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={createNewPost}
-              style={{ marginTop: 16 }}
-            >
-              Create Post
-            </Button>
-          </Grid>
+            </DialogTitle>
+            <DialogContent>
+              <TextField
+                label="Title"
+                fullWidth
+                value={newPostTitle}
+                onChange={(e) => setNewPostTitle(e.target.value)}
+              />
+              <TextField
+                label="Description"
+                fullWidth
+                multiline
+                minRows={4}
+                value={newPostDescription}
+                onChange={(e) => setNewPostDescription(e.target.value)}
+                style={{ marginTop: 16 }}
+              />
+            </DialogContent>
+            <DialogActions>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      createNewPost();
+                      handleCloseCreatePostDialog();
+                    }}
+                    style={{ marginTop: 16 }}
+                  >
+                    Create Post
+                  </Button>
+                </div>
+              </div>
+              <Button onClick={handleCloseCreatePostDialog} color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Grid>
-
         <Snackbar
           open={errorMessage !== ""}
           autoHideDuration={5000}

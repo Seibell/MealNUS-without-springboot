@@ -1,10 +1,14 @@
+@font-face {
+  font-family: "Poppins";
+  src: url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500&family=Poppins:ital@1&display=swap");
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Reem Kufi", sans-serif !important;
+  font-family: "Poppins";
 }
-
 img {
   max-width: 100%;
   height: auto;

@@ -158,9 +158,9 @@ const MealBoxes = () => {
 
   return (
     <div>
-      <div className="home-bannerImage-container">
+      {/* <div className="home-bannerImage-container">
         <img src={BannerBackground} alt="" />
-      </div>
+      </div> */}
       <NavBar />
       <Container>
         <Box mt={4} mb={2}>
