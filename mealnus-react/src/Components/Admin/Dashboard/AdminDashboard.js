@@ -339,6 +339,8 @@ const Dashboard = () => {
 
     const getOrderStatusColor = (orderStatus) => {
         switch (orderStatus) {
+            case "CREATED":
+                return "lightpink";
             case "PAID":
                 return "orange";
             case "PREPARING":
@@ -347,8 +349,8 @@ const Dashboard = () => {
                 return "dodgerblue";
             case "COMPLETED":
                 return "dimgray";
-            default:  //CREATED
-                return "lightpink";
+            default:  //CANCELLED
+                return "tomato";
         }
     };
 
@@ -409,7 +411,7 @@ const Dashboard = () => {
                                         increase={todayOrderCountProgress}
                                         icon={
                                             <LocalMallIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -429,7 +431,7 @@ const Dashboard = () => {
                                         increase={todayOrderRevenueProgress}
                                         icon={
                                             <PointOfSaleIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -449,7 +451,7 @@ const Dashboard = () => {
                                         increase={todayUserCountProgress}
                                         icon={
                                             <PersonAddAlt1Icon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -472,7 +474,7 @@ const Dashboard = () => {
                                         increase={todayMtdCountProgress}
                                         icon={
                                             <LocalMallIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -492,7 +494,7 @@ const Dashboard = () => {
                                         increase={todayMtdRevenueProgress}
                                         icon={
                                             <PointOfSaleIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -512,7 +514,7 @@ const Dashboard = () => {
                                         increase={todayMtdProfitProgress}
                                         icon={
                                             <MonetizationOnIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -532,7 +534,7 @@ const Dashboard = () => {
                                         increase={todayMtdCostProgress}
                                         icon={
                                             <TollIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -557,22 +559,22 @@ const Dashboard = () => {
                                             <Typography
                                                 variant="h5"
                                                 fontWeight="600"
-                                                color={colors.grey[100]}
+                                                color={colors.mealNUSBlue[100]}
                                             >
-                                                Total Revenue
+                                                Monthly Order Summary
                                             </Typography>
                                             <Typography
                                                 variant="h6"
                                                 fontWeight="bold"
-                                                color={colors.grey[100]}
+                                                color={colors.mealNUSBlue[100]}
                                                 style={{ display: "inline" }}
                                             >
-                                                SGD&nbsp;
+                                                Total Revenue: SGD&nbsp;
                                             </Typography>
                                             <Typography
                                                 variant="h3"
                                                 fontWeight="bold"
-                                                color={colors.greenAccent[500]}
+                                                color={colors.grey[100]}
                                                 style={{ display: "inline" }}
                                             >
                                                 {totalRev.toLocaleString('en-US', { maximumFractionDigits: 0 })}
@@ -589,7 +591,7 @@ const Dashboard = () => {
                                     backgroundColor={colors.primary[400]}
                                     p="30px"
                                 >
-                                    <Typography variant="h5" fontWeight="600">
+                                    <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
                                         Order Breakdown
                                     </Typography>
                                     <Box height="250px" m="-20px 0 0 0">
@@ -605,13 +607,13 @@ const Dashboard = () => {
                                     gridRow="span 2"
                                     backgroundColor={colors.primary[400]}
                                     overflow="auto"
-                                    
 
-                                    // gridColumn="span 3"
-                                    // backgroundColor={colors.primary[400]}
-                                    // display="flex"
-                                    // alignItems="center"
-                                    // justifyContent="center"
+
+                                // gridColumn="span 3"
+                                // backgroundColor={colors.primary[400]}
+                                // display="flex"
+                                // alignItems="center"
+                                // justifyContent="center"
 
                                 >
                                     <Box
@@ -624,8 +626,8 @@ const Dashboard = () => {
                                         height="20%"
                                     >
 
-                                        <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
-                                            <ReceiptLongIcon />
+                                        <Typography color={colors.mealNUSBlue[100]} variant="h5" fontWeight="600">
+                                            <ReceiptLongIcon sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }} />
                                             {' '}Recent Orders
 
                                         </Typography>
@@ -644,7 +646,7 @@ const Dashboard = () => {
                                                     overflow-x="auto"
                                                 >
                                                     <Box textAlign="left" width="100px">
-                                                        <Typography color={colors.blueAccent[500]} variant="h5" fontWeight="600">
+                                                        <Typography color={colors.mealNUSBlue[100]} variant="h5" fontWeight="600">
                                                             {i + 1}
                                                         </Typography>
                                                         <Typography color={colors.grey[100]}>{order.user.firstName}</Typography>
@@ -712,13 +714,15 @@ const Dashboard = () => {
                                                     onClick={handleClick}
                                                     style={{ borderRadius: 20 }}
                                                     startIcon={<UnfoldMoreIcon />}
+                                                    sx={{
+                                                        backgroundColor: colors.mealNUSBlue[100],
+                                                    }}
                                                 >
                                                     View All
                                                 </Button>
 
                                             )}
                                             {showAll && (
-
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
@@ -726,6 +730,9 @@ const Dashboard = () => {
                                                     onClick={handleClick}
                                                     style={{ borderRadius: 20 }}
                                                     startIcon={<UnfoldLessIcon />}
+                                                    sx={{
+                                                        backgroundColor: colors.mealNUSOrange[100],
+                                                    }}
                                                 >
                                                     View Less
                                                 </Button>
@@ -746,6 +753,7 @@ const Dashboard = () => {
                                         variant="h5"
                                         fontWeight="600"
                                         sx={{ marginBottom: "15px" }}
+                                        color={colors.mealNUSBlue[100]}
                                     >
                                         More chart(s) coming soon...
                                     </Typography>
@@ -773,7 +781,7 @@ const Dashboard = () => {
                                         <Typography
                                             variant="h5"
                                             fontWeight="600"
-                                            color={colors.grey[100]}
+                                            color={colors.mealNUSBlue[100]}
                                         >
                                             Top Ranking MealBoxes
                                         </Typography>

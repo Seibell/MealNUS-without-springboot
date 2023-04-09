@@ -63,6 +63,8 @@ const Order = () => {
 
     const getOrderStatusColor = (orderStatus) => {
         switch (orderStatus) {
+            case "CREATED":
+                return "lightpink";
             case "PAID":
                 return "orange";
             case "PREPARING":
@@ -71,8 +73,8 @@ const Order = () => {
                 return "dodgerblue";
             case "COMPLETED":
                 return "dimgray";
-            default:  //CREATED
-                return "lightpink";
+            default:  //CANCELLED
+                return "tomato";
         }
     };
 
@@ -81,11 +83,13 @@ const Order = () => {
             field: "orderId",
             headerName: "Order ID",
             flex: 1,
+            headerClassName: "headerName",
         },
         {
             field: "orderDate",
             headerName: "Order Date",
             flex: 1,
+            headerClassName: "headerName",
             valueFormatter: (params) => {
                 const utcTime = moment.utc(params.value, 'YYYY-MM-DD HH:mm:ss');
                 const singaporeTime = utcTime.tz('Asia/Singapore');
@@ -97,6 +101,7 @@ const Order = () => {
             field: "firstName",
             headerName: "First Name",
             flex: 1,
+            headerClassName: "headerName",
             cellClassName: "name-column--cell",
             valueGetter: (params) => params.row.user.firstName
         },
@@ -104,11 +109,13 @@ const Order = () => {
             field: "address",
             headerName: "Address",
             flex: 1,
+            headerClassName: "headerName",
         },
         {
             field: "orderStatus",
             headerName: "Status",
             flex: 1,
+            headerClassName: "headerName",
             renderCell: (params) => (
                 <Box
                     textAlign="center"
@@ -125,6 +132,7 @@ const Order = () => {
             field: "updateOrder",
             headerName: "Update Order",
             flex: 1,
+            headerClassName: "headerName",
             renderCell: (params) => (
                 <button onClick={() => navigate('/UpdateOrder/' + params.row.orderId)}>
                     Add A MealBox
@@ -160,10 +168,10 @@ const Order = () => {
                                         borderBottom: "none",
                                     },
                                     "& .name-column--cell": {
-                                        color: colors.greenAccent[300],
+                                        color: colors.mealNUSBlue[100],
                                     },
                                     "& .MuiDataGrid-columnHeaders": {
-                                        backgroundColor: colors.blueAccent[700],
+                                        backgroundColor: colors.mealNUSBlue[100],
                                         borderBottom: "none",
                                     },
                                     "& .MuiDataGrid-virtualScroller": {
@@ -171,13 +179,16 @@ const Order = () => {
                                     },
                                     "& .MuiDataGrid-footerContainer": {
                                         borderTop: "none",
-                                        backgroundColor: colors.blueAccent[700],
+                                        backgroundColor: colors.mealNUSOrange[100],
                                     },
                                     "& .MuiCheckbox-root": {
                                         color: `${colors.greenAccent[200]} !important`,
                                     },
                                     "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                                         color: `${colors.grey[100]} !important`,
+                                    },
+                                    "& .headerName": {
+                                        color: colors.white[100],
                                     },
                                 }}
                             >

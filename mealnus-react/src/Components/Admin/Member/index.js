@@ -57,28 +57,33 @@ const Member = () => {
         {
             field: "userId",
             headerName: "ID",
+            headerClassName: "headerName",
         },
         {
             field: "firstName",
             headerName: "First Name",
             flex: 1,
             cellClassName: "name-column--cell",
+            headerClassName: "headerName",
         },
         {
             field: "lastName",
             headerName: "Last Name",
             flex: 1,
             cellClassName: "name-column--cell",
+            headerClassName: "headerName",
         },
         {
             field: "email",
             headerName: "Email",
             flex: 1,
+            headerClassName: "headerName",
         },
         {
             field: "password",
             headerName: "Password",
             flex: 1,
+            headerClassName: "headerName",
             renderCell: (params) => (
                 <span>
                     {params.value ? `${params.value.substring(0, 2)}${"*".repeat(params.value.length - 2)}` : ""}
@@ -89,6 +94,7 @@ const Member = () => {
             field: "creditCards",
             headerName: "Primary Credit Card",
             flex: 1,
+            headerClassName: "headerName",
             renderCell: (params) => {
                 const creditCardsList = params.value;
                 const firstCard = creditCardsList.length > 0 ? creditCardsList[0] : null;
@@ -143,10 +149,10 @@ const Member = () => {
                                         borderBottom: "none",
                                     },
                                     "& .name-column--cell": {
-                                        color: colors.greenAccent[300],
+                                        color: colors.mealNUSBlue[100],
                                     },
                                     "& .MuiDataGrid-columnHeaders": {
-                                        backgroundColor: colors.blueAccent[700],
+                                        backgroundColor: colors.mealNUSBlue[100],
                                         borderBottom: "none",
                                     },
                                     "& .MuiDataGrid-virtualScroller": {
@@ -154,13 +160,16 @@ const Member = () => {
                                     },
                                     "& .MuiDataGrid-footerContainer": {
                                         borderTop: "none",
-                                        backgroundColor: colors.blueAccent[700],
+                                        backgroundColor: colors.mealNUSOrange[100],
                                     },
                                     "& .MuiCheckbox-root": {
                                         color: `${colors.greenAccent[200]} !important`,
                                     },
                                     "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                                         color: `${colors.grey[100]} !important`,
+                                    },
+                                    "& .headerName": {
+                                        color: colors.white[100],
                                     },
                                 }}
                             >

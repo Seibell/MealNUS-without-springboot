@@ -844,32 +844,39 @@ const Promotion = () => {
             field: "promotionName",
             headerName: "Name",
             cellClassName: "name-column--cell",
+            headerClassName: "headerName",
         },
         {
             field: "promotionCode",
             headerName: "Code",
+            headerClassName: "headerName",
         },
         {
             field: "categoryName",
             headerName: "Category",
+            headerClassName: "headerName",
         },
         {
             field: "discount",
             headerName: "Discount",
+            headerClassName: "headerName",
         },
         {
             field: "startDate",
             headerName: "Start Date",
+            headerClassName: "headerName",
             valueFormatter: (params) => moment(params.value, "YYYY-MM-DD").format("YYYY-MM-DD")
         },
         {
             field: "endDate",
             headerName: "End Date",
+            headerClassName: "headerName",
             valueFormatter: (params) => moment(params.value, "YYYY-MM-DD").format("YYYY-MM-DD")
         },
         {
             field: "isApplied",
             headerName: "Apply",
+            headerClassName: "headerName",
             renderCell: (params) => (
                 <Switch
                     checked={params.value}
@@ -880,6 +887,7 @@ const Promotion = () => {
         {
             field: "promotionId",
             headerName: "Action",
+            headerClassName: "headerName",
             renderCell: (params) => (
                 <Button
                     onClick={() => handleDeletePromotion(params.value)}
@@ -937,7 +945,7 @@ const Promotion = () => {
                                     <IconButton>
                                         <AddCircle style={{ fill: "black" }} />
                                     </IconButton>
-                                    <Typography variant="body1" style={{ whiteSpace: "nowrap" }}>ADD NEW PROMOTION</Typography>
+                                    <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>ADD NEW PROMOTION</Typography>
                                 </Box>
                             </Link>
                             <Box
@@ -951,10 +959,10 @@ const Promotion = () => {
                                         borderBottom: "none",
                                     },
                                     "& .name-column--cell": {
-                                        color: colors.greenAccent[300],
+                                        color: colors.mealNUSBlue[100],
                                     },
                                     "& .MuiDataGrid-columnHeaders": {
-                                        backgroundColor: colors.blueAccent[700],
+                                        backgroundColor: colors.mealNUSBlue[100],
                                         borderBottom: "none",
                                     },
                                     "& .MuiDataGrid-virtualScroller": {
@@ -962,13 +970,16 @@ const Promotion = () => {
                                     },
                                     "& .MuiDataGrid-footerContainer": {
                                         borderTop: "none",
-                                        backgroundColor: colors.blueAccent[700],
+                                        backgroundColor: colors.mealNUSOrange[100],
                                     },
                                     "& .MuiCheckbox-root": {
                                         color: `${colors.greenAccent[200]} !important`,
                                     },
                                     "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                                         color: `${colors.grey[100]} !important`,
+                                    },
+                                    "& .headerName": {
+                                        color: colors.white[100],
                                     },
                                 }}
                             >

@@ -16,6 +16,9 @@ export const tokens = (mode) => ({
                 800: "#292929",
                 900: "#141414",
             },
+            white: {
+                100: "#0a0a0a",
+            },
             primary: {
                 100: "#d0d1d5",
                 200: "#a1a4ab",
@@ -60,7 +63,12 @@ export const tokens = (mode) => ({
                 800: "#ffe5b7",
                 900: "#fff6e5",
             },
-            mealNUSBlue: "#2751DC",
+            mealNUSBlue: {
+                100: "#edf4ff",
+            },
+            mealNUSOrange: {
+                100: "#f7e8d7",
+            },
         }
         : {
             grey: {
@@ -73,6 +81,9 @@ export const tokens = (mode) => ({
                 700: "#a3a3a3",
                 800: "#c2c2c2",
                 900: "#e0e0e0",
+            },
+            white: {
+                100: "#fafafa",
             },
             primary: {
                 100: "#040509",
@@ -117,6 +128,12 @@ export const tokens = (mode) => ({
                 700: "#a16b18",
                 800: "#714710",
                 900: "#40280c",
+            },
+            mealNUSBlue: {
+                100: "#084896",
+            },
+            mealNUSOrange: {
+                100: "#ed8b1c",
             },
         }),
 });

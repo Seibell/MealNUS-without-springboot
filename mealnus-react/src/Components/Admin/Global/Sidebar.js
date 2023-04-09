@@ -33,7 +33,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
         <MenuItem
             active={selected === title}
             style={{
-                color: colors.blueAccent[100],
+                color: colors.mealNUSBlue[100],
             }}
             onClick={() => setSelected(title)}
             icon={icon}
@@ -63,10 +63,10 @@ const Sidebar = () => {
                     padding: "5px 40px 3px 30px !important",
                 },
                 "& .pro-inner-item:hover": {
-                    color: "#868dfb !important",
+                    color: "#d47313 !important",
                 },
                 "& .pro-menu-item.active": {
-                    color: "#6870fa !important",
+                    color: "#d97818 !important",
                 },
                 height: "1773px"
             }}
@@ -79,7 +79,7 @@ const Sidebar = () => {
                         icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
                         style={{
                             margin: "0px 0 20px -5px",
-                            color: colors.blueAccent[100],
+                            color: colors.mealNUSBlue[100],
                         }}
                     >
                         {!isCollapsed && (
@@ -116,13 +116,13 @@ const Sidebar = () => {
                             <Box textAlign="center">
                                 <Typography
                                     variant="h2"
-                                    color={colors.blueAccent[100]}
+                                    color={colors.mealNUSBlue[100]}
                                     fontWeight="bold"
                                     sx={{ m: "10px 0 0 0" }}
                                 >
                                     Shalinda
                                 </Typography>
-                                <Typography variant="h5" color={colors.orangeAccent[600]}>
+                                <Typography variant="h5" color={colors.mealNUSOrange[100]}>
                                     Head, Regional Operations
                                     <br />
                                     MealNUS Asia
@@ -142,7 +142,7 @@ const Sidebar = () => {
 
                         <Typography
                             variant="h6"
-                            color={colors.blueAccent[500]}
+                            color={colors.mealNUSBlue[100]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
                             Members
@@ -157,7 +157,7 @@ const Sidebar = () => {
 
                         <Typography
                             variant="h6"
-                            color={colors.blueAccent[500]}
+                            color={colors.mealNUSBlue[100]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
                             Orders
@@ -172,7 +172,7 @@ const Sidebar = () => {
 
                         <Typography
                             variant="h6"
-                            color={colors.blueAccent[500]}
+                            color={colors.mealNUSBlue[100]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
                             Inventory
@@ -208,7 +208,7 @@ const Sidebar = () => {
 
                         <Typography
                             variant="h6"
-                            color={colors.blueAccent[500]}
+                            color={colors.mealNUSBlue[100]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
                             Promotions

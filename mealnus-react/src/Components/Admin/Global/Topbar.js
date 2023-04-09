@@ -68,7 +68,7 @@ const Topbar = () => {
 
             {/* ICONS */}
             <Box display="flex" alignItems="center">
-                <Typography color="inherit" sx={{ mr: 2 }}>
+                <Typography color={colors.mealNUSBlue[100]} sx={{ mr: 2 }}>
                     {dateTime.toLocaleString('en-SG', {
                         day: '2-digit',
                         month: '2-digit',
