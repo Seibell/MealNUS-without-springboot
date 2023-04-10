@@ -122,7 +122,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-const Ingredient = () => {
+const Allergen = () => {
   const { currentStaff } = useContext(AdminAuthContext);
   const [allergen, setallergen] = useState([]);
   const [query, setQuery] = useState('');
@@ -326,6 +326,13 @@ const Ingredient = () => {
               </button>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+              <input
+                                    type="text"
+                                    placeholder="Search..."
+                                    value={query}
+                                    onChange={(event) => setQuery(event.target.value)}
+                                    style={{ height: '30px', marginRight: '5px' }}
+                                />
               </div>
               <div>
                 {
@@ -348,4 +355,4 @@ const Ingredient = () => {
   );
 }
 
-export default Ingredient;
+export default Allergen;

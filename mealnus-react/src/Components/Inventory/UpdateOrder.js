@@ -178,6 +178,12 @@ function UpdateOrder(props) {
     setSelectedOptionaddress(event.target.value);
   };
 
+  const formatted = orderDate.replace('Z[UTC]', '');
+  const newOrderDate = moment.utc(formatted).tz('Asia/Singapore').format('DD/MM/YYYY');
+
+  const formatted2 = deliveryDate.replace('Z[UTC]', '');
+  const newDeliveryDate = moment.utc(formatted2).tz('Asia/Singapore').format('DD/MM/YYYY');
+
   const handleFormSubmit = (event) => {
     event.preventDefault();
 
@@ -478,7 +484,7 @@ function UpdateOrder(props) {
                         id="inputName"
                         readOnly
                         className="form-control"
-                        value={orderDate}
+                        value={newOrderDate}
                         onChange={handleorderDate}
                       />
                     </div>
@@ -498,7 +504,7 @@ function UpdateOrder(props) {
                         id="inputCost"
                         required
                         className="form-control"
-                        value={deliveryDate}
+                        value={newDeliveryDate}
                         onChange={handleDeliverydateChange}
                       />
                     </div>
