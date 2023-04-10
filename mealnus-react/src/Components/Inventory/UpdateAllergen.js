@@ -330,7 +330,7 @@ const UpdateAllergen = () => {
             <section className="content" key="content">
               <div className="card card-primary">
                 <div className="card-header text-center">
-                  <h4 className="card-title">Update Ingredient</h4>
+                  <h4 className="card-title">Update Allergen</h4>
                 </div>
 
                 <form onSubmit={handleFormSubmit}>
