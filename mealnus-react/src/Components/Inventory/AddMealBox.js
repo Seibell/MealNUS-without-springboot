@@ -36,6 +36,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { mainListItems, secondaryListItems } from '../Admin/AdminSideBar';
 import Avatar from '@mui/material/Avatar';
 import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
+import { CircularProgress } from "@mui/material";
 
 // mealBoxSessionBean.createMealBox(new MealBox("Vegetable's Party Box", 001L, new BigDecimal(7), new BigDecimal(12), "This is a vegetable mealBox", 15));
 
@@ -119,6 +120,7 @@ const default_image_url = 'https://i.imgur.com/Kvyecsm.png';
 
 
 function AddMealBox(props) {
+  const [uploading, setUploading] = useState(false);
   const [itemName, setitemName] = useState('');
   const [itemCode, setitemCode] = useState(''); //Why is this capital? :/ i just copied the one in mealbox... is like this de
   const [itemCost, setitemCost] = useState('');
@@ -247,6 +249,7 @@ function AddMealBox(props) {
   const [error, setError] = useState("");
 
   const uploadImage = async (file) => {
+    setUploading(true);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'mealnus');
@@ -255,9 +258,11 @@ function AddMealBox(props) {
     try {
       console.log(formData);
       const response = await Axios.post('https://api.cloudinary.com/v1_1/drkpzjlro/image/upload', formData);
+      setUploading(false);
       return response.data.secure_url;
     } catch (error) {
       setError('Error uploading image:', error.response?.data?.error || error.message);
+      setUploading(false);
       return null;
     }
   };
@@ -588,6 +593,15 @@ function AddMealBox(props) {
                         accept="image/*"
                         type="file" onChange={handleFileChange}
                       />
+                      {uploading && (
+                          <CircularProgress
+                            sx={{
+                              position: "absolute",
+                              top: "42%",
+                              left: "43%",
+                            }}
+                          />
+                        )}
                     </div>
 
                     <div className="form-group">
