@@ -40,6 +40,7 @@ import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 
 import { withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import { CircularProgress } from "@mui/material";
 
 
 const API_KEY = '995621471943455';
@@ -118,20 +119,22 @@ const UploadForm = () => {
   const [picture, setpicture] = useState(null);
   const [name, setname] = useState('');
   const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  
+
   const [dateTime, setDateTime] = useState(new Date());
-  
+
   const handleNameChange = (event) => {
     setname(event.target.value);
   };
 
   const uploadImage = async (file) => {
+    setUploading(true);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'mealnus');
@@ -140,9 +143,11 @@ const UploadForm = () => {
     try {
       console.log(formData);
       const response = await axios.post('https://api.cloudinary.com/v1_1/drkpzjlro/image/upload', formData);
+      setUploading(false);
       return response.data.secure_url;
     } catch (error) {
       console.error('Error uploading image:', error.response?.data?.error || error.message);
+      setUploading(false);
       return null;
     }
   };
@@ -186,207 +191,231 @@ const UploadForm = () => {
   return (
 
     <ThemeProvider theme={theme}>
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="absolute" open={open}>
-        <Toolbar
-          sx={{
-            pr: '30px', // keep right padding when drawer closed
-          }}
-        >
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer}
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <AppBar position="absolute" open={open}>
+          <Toolbar
             sx={{
-              marginRight: '36px',
-              ...(open && { display: 'none' }),
+              pr: '30px', // keep right padding when drawer closed
             }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            sx={{ flexGrow: 1 }}
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{
+                marginRight: '36px',
+                ...(open && { display: 'none' }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              MealNUS Admin Dashboard
+            </Typography>
+            <Typography color="inherit" sx={{ mr: 2 }}>
+              {dateTime.toLocaleString('en-SG', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                hour12: true,
+              })}
+            </Typography>
+            <IconButton color="inherit">
+              <Badge badgeContent={''} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <Avatar sx={{ m: 1, bgcolor: 'white' }}>
+              <img src={mealNUSLogo} alt="MealNUS Logo" />
+            </Avatar>
+            <List component="nav" sx={{ m: -2 }}>
+              {secondaryListItems}
+            </List>
+          </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open}>
+          <Toolbar
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              px: [1],
+            }}
           >
-            MealNUS Admin Dashboard
-          </Typography>
-          <Typography color="inherit" sx={{ mr: 2 }}>
-            {dateTime.toLocaleString('en-SG', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: 'numeric',
-              minute: 'numeric',
-              second: 'numeric',
-              hour12: true,
-            })}
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={''} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <Avatar sx={{ m: 1, bgcolor: 'white' }}>
+            <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </Toolbar>
+          <div>
             <img src={mealNUSLogo} alt="MealNUS Logo" />
-          </Avatar>
-          <List component="nav" sx={{ m: -2 }}>
-            {secondaryListItems}
+          </div>
+          <Divider />
+          <List component="nav">
+            {mainListItems}
           </List>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <Toolbar
+        </Drawer>
+        <Box
+          component="main"
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            px: [1],
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'light'
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
           }}
         >
-          <IconButton onClick={toggleDrawer}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </Toolbar>
-        <div>
-          <img src={mealNUSLogo} alt="MealNUS Logo" />
-        </div>
-        <Divider />
-        <List component="nav">
-          {mainListItems}
-        </List>
-      </Drawer>
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'light'
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
-          flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
-        }}
-      >
-        <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <div className='container'>
-            <div role="presentation" onClick={handleClick}>
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
-                aria-label="breadcrumb">
-                {/* Dashboard */}
-                <Link
-                  underline="hover"
-                  sx={{ display: 'flex', alignItems: 'center' }}
-                  color="inherit"
-                  href="/admindashboard"
-                >
-                  <DashboardIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                  Dashboard
-                </Link>
-                {/* Products */}
-                <Link
-                  underline="hover"
-                  sx={{ display: 'flex', alignItems: 'center' }}
-                  color="inherit"
-                  href="/admindashboard"
-                >
-                  <Inventory2TwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                  Products
-                </Link>
-                {/* Orders */}
-                <Link
-                  underline="hover"
-                  sx={{ display: 'flex', alignItems: 'center' }}
-                  color="inherit"
-                  href="/adminordermanagement"
-                >
-                  <ShoppingCartIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                  Orders
-                </Link>
-                {/* Promotions */}
-                <Link
-                  underline="hover"
-                  sx={{ display: 'flex', alignItems: 'center' }}
-                  color="inherit"
-                  href="/adminpromotion"
-                >
-                  <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                  Promotions
-                </Link>
-                <Link
-                  underline="hover"
-                  sx={{ display: 'flex', alignItems: 'center' }}
-                  color="inherit"
-                  href="/addpromotion"
-                >
-                  <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                  <b>Add Promotion</b>
-                </Link>
-              </Breadcrumbs>
-            </div>
-          </div>
-          {/* Insert your main body code here */}
-          <section className="content" key="content">
-            <div className="card card-primary">
-              <div className="card-header text-center">
-                <h4 className="card-title">Add a Ingredient</h4>
-              </div>
-
-              <form onSubmit={handleFormSubmit}>
-                <div className="card-body">
-
-                  <div className="form-group">
-                    <label htmlFor="inputName"> Ingredient Name:</label>
-                    <input
-                      type="text"
-                      id="inputName"
-                      required
-                      className="form-control"
-                      value={name}
-                      onChange={handleNameChange}
-                    />
-                  </div>
-
-
-                  <div className="form-group">
-                    <label htmlFor="inputName">Upload an image:</label>
-                    <input
-                      accept="image/*"
-                      type="file" onChange={handleFileChange}
-                    />
-                  </div>
-
-
-
-
-
-                </div>
-                <div className="card-footer">
-                  <Link to="/InventoryHome">
-                    <button className="btn btn-default" type="button" onClick={() => navigate('/ViewAllIngred')}>
-                      Cancel
-                    </button>
+          <Toolbar />
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <div className='container'>
+              <div role="presentation" onClick={handleClick}>
+                <Breadcrumbs
+                  separator={<NavigateNextIcon fontSize="small" />}
+                  aria-label="breadcrumb">
+                  {/* Dashboard */}
+                  <Link
+                    underline="hover"
+                    sx={{ display: 'flex', alignItems: 'center' }}
+                    color="inherit"
+                    href="/admindashboard"
+                  >
+                    <DashboardIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                    Dashboard
                   </Link>
-                  <button className="btn btn-primary float-right" type="submit" style={{ backgroundColor: "orange", border: "orange" }}>
-                    Submit
-                  </button>
-
-                </div>
-              </form>
+                  {/* Products */}
+                  <Link
+                    underline="hover"
+                    sx={{ display: 'flex', alignItems: 'center' }}
+                    color="inherit"
+                    href="/admindashboard"
+                  >
+                    <Inventory2TwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                    Products
+                  </Link>
+                  {/* Orders */}
+                  <Link
+                    underline="hover"
+                    sx={{ display: 'flex', alignItems: 'center' }}
+                    color="inherit"
+                    href="/adminordermanagement"
+                  >
+                    <ShoppingCartIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                    Orders
+                  </Link>
+                  {/* Promotions */}
+                  <Link
+                    underline="hover"
+                    sx={{ display: 'flex', alignItems: 'center' }}
+                    color="inherit"
+                    href="/adminpromotion"
+                  >
+                    <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                    Promotions
+                  </Link>
+                  <Link
+                    underline="hover"
+                    sx={{ display: 'flex', alignItems: 'center' }}
+                    color="inherit"
+                    href="/addpromotion"
+                  >
+                    <LocalOfferTwoToneIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                    <b>Add Promotion</b>
+                  </Link>
+                </Breadcrumbs>
+              </div>
             </div>
-          </section>
-          <Copyright sx={{ pt: 4 }} />
-        </Container>
+            {/* Insert your main body code here */}
+            <section className="content" key="content">
+              <div className="card card-primary">
+                <div className="card-header text-center">
+                  <h4 className="card-title">Add a Ingredient</h4>
+                </div>
+
+                <form onSubmit={handleFormSubmit}>
+                  <div className="card-body">
+
+                    <div className="form-group">
+                      <label htmlFor="inputName"> Ingredient Name:</label>
+                      <input
+                        type="text"
+                        id="inputName"
+                        required
+                        className="form-control"
+                        value={name}
+                        onChange={handleNameChange}
+                      />
+                    </div>
+
+
+                    <div className="form-group">
+                      <label htmlFor="inputName">Upload an image:</label>
+                      <input
+                        accept="image/*"
+                        type="file" onChange={handleFileChange}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <Box
+                        sx={{
+                          width: 250,
+                          height: 250,
+                        }}>
+                        <img
+                          src={picture}
+                          sx={{
+                            bgcolor: "primary.main",
+                            width: "100px",
+                            height: "100px",
+                          }}
+                        />
+                        {uploading && (
+                          <CircularProgress
+                            sx={{
+                              position: "absolute",
+                              top: "42%",
+                              left: "43%",
+                            }}
+                          />
+                        )}
+                      </Box>
+                    </div>
+
+
+
+                  </div>
+                  <div className="card-footer">
+                    <Link to="/InventoryHome">
+                      <button className="btn btn-default" type="button" onClick={() => navigate('/ViewAllIngred')}>
+                        Cancel
+                      </button>
+                    </Link>
+                    <button className="btn btn-primary float-right" type="submit" style={{ backgroundColor: "orange", border: "orange" }}>
+                      Submit
+                    </button>
+
+                  </div>
+                </form>
+              </div>
+            </section>
+            <Copyright sx={{ pt: 4 }} />
+          </Container>
+        </Box>
       </Box>
-    </Box>
-  </ThemeProvider>
-);
+    </ThemeProvider>
+  );
 
 };
 

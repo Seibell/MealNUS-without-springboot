@@ -40,6 +40,7 @@ import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 
 import { withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import { CircularProgress } from "@mui/material";
 
 
 const API_KEY = '995621471943455';
@@ -51,12 +52,14 @@ const UpdateIngred = () => {
   const [picture, setpicture] = useState(null);
   const [name, setname] = useState('');
   const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const handleNameChange = (event) => {
     setname(event.target.value);
   };
 
   const uploadImage = async (file) => {
+    setUploading(true);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'mealnus');
@@ -65,9 +68,11 @@ const UpdateIngred = () => {
     try {
       console.log(formData);
       const response = await axios.post('https://api.cloudinary.com/v1_1/drkpzjlro/image/upload', formData);
+      setUploading(false);
       return response.data.secure_url;
     } catch (error) {
       console.error('Error uploading image:', error.response?.data?.error || error.message);
+      setUploading(false);
       return null;
     }
   };
@@ -386,6 +391,32 @@ const UpdateIngred = () => {
                         accept="image/*"
                         type="file" onChange={handleFileChange}
                       />
+                    </div>
+
+                    <div className="form-group">
+                      <Box
+                        sx={{
+                          width: 250,
+                          height: 250,
+                        }}>
+                        <img
+                          src={picture}
+                          sx={{
+                            objectFit: "contain",
+                            bgcolor: "primary.main",
+                            width: "100",
+                            height: "100",
+                          }}
+                        />
+                        {uploading && (
+                          <CircularProgress
+                            sx={{
+                              top: "42%",
+                              left: "43%",
+                            }}
+                          />
+                        )}
+                      </Box>
                     </div>
 
                   </div>
