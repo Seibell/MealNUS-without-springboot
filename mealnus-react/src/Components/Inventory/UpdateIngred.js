@@ -40,6 +40,7 @@ import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 
 import { withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import { CircularProgress } from "@mui/material";
 
 
 const API_KEY = '995621471943455';
@@ -47,16 +48,18 @@ const default_image_url = 'https://i.imgur.com/Kvyecsm.png';
 const theme = createTheme();
 
 const UpdateIngred = () => {
-  const { ingredientId } = useParams();
+  const {ingredientId } = useParams();
   const [picture, setpicture] = useState(null);
   const [name, setname] = useState('');
   const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const handleNameChange = (event) => {
     setname(event.target.value);
   };
 
   const uploadImage = async (file) => {
+    setUploading(true);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'mealnus');
@@ -65,14 +68,17 @@ const UpdateIngred = () => {
     try {
       console.log(formData);
       const response = await axios.post('https://api.cloudinary.com/v1_1/drkpzjlro/image/upload', formData);
+      setUploading(false);
       return response.data.secure_url;
     } catch (error) {
       console.error('Error uploading image:', error.response?.data?.error || error.message);
+      setUploading(false);
       return null;
     }
   };
 
   const handleFileChange = async (e) => {
+
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       //setpicture(event.target.files[0]);
@@ -80,6 +86,7 @@ const UpdateIngred = () => {
 
       if (uploadedImageURL) {
         setpicture(uploadedImageURL);
+        setpicture(picture);
       } else {
         setError("Failed to upload image");
       }
@@ -178,6 +185,7 @@ const UpdateIngred = () => {
         const retrieved = response.data;
         setretrieved(retrieved);
         setname(retrieved.name);
+        setpicture(retrieved.picture);
       })
       .catch((err) => {
         console.log(err);
@@ -385,9 +393,31 @@ const UpdateIngred = () => {
                       />
                     </div>
 
-
-
-
+                    <div className="form-group">
+                      <Box
+                        sx={{
+                          width: 250,
+                          height: 250,
+                        }}>
+                        <img
+                          src={picture}
+                          sx={{
+                            objectFit: "contain",
+                            bgcolor: "primary.main",
+                            width: "100",
+                            height: "100",
+                          }}
+                        />
+                        {uploading && (
+                          <CircularProgress
+                            sx={{
+                              top: "42%",
+                              left: "43%",
+                            }}
+                          />
+                        )}
+                      </Box>
+                    </div>
 
                   </div>
                   <div className="card-footer">

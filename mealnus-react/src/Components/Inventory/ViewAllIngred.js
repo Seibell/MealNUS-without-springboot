@@ -51,6 +51,7 @@ import { mainListItems, secondaryListItems } from '../Admin/AdminSideBar';
 import Avatar from '@mui/material/Avatar';
 import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 import questionmark from '../../Assets/default-question-mark-image-url.jpg';
+import { ContentPasteOffOutlined } from '@mui/icons-material';
 
 function Copyright(props) {
   return (
@@ -127,13 +128,25 @@ const Ingredient = () => {
   const { currentStaff } = useContext(AdminAuthContext);
 
   const [dateTime, setDateTime] = useState(new Date());
+  const [query, setQuery] = useState("");
 
+  console.log("QUERY: " + query);
+  console.log("ingred: ", ingred);
+
+  console.log("HELLO" + ingred[0]);
+
+  const filteredData = ingred.filter(
+    (ing) => 
+      ing.name.toLowerCase().includes(query.toLowerCase())
+  );
+
+  console.log("filtered: " + filteredData);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     Axios.get(
-      " http://localhost:8080/MealNUS-war/rest/Ingredient/retrieveAllIngredient"
+      "http://localhost:8080/MealNUS-war/rest/Ingredient/retrieveAllIngredient"
     )
       .then((response) => {
         setIngred(response.data);
@@ -302,31 +315,38 @@ const Ingredient = () => {
               </button>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  style={{ height: '30px', marginRight: '5px' }}
+                />
               </div>
               <div>
                 {
                   <ImageList sx={{ width: '900px', height: '400px' }}>
-                    {ingred.map((item) => (
-                      <a key={item.picture} href={`/UpdateIngred/${item.ingredientId}`} style={{ color: 'black' }}>
-                      <ImageListItem key={item.ingredientId}>
-                        <img
-                          src={`${item.picture}?w=248&fit=crop&auto=format`}
-                          srcSet={`${item.picture}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                          alt={item.name}
-                          loading="lazy"
-                          style={{ borderRadius: '50%', width: '250px', height: '250px' }}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = questionmark;
-                          }}
-                        />
-                        <ImageListItemBar
-                          title={<span style={{ fontWeight: 'bold' }}> {item.name}</span>}
-                          subtitle={<span>Ingredient ID: {item.ingredientId}</span>}
-                          position="below"
-                          sx={{ fontSize: '40px' }}
-                        />
-                      </ImageListItem>
+                    {filteredData.map((item) => (
+                      <a key={item.ingredientId} href={`/UpdateIngred/${item.ingredientId}`} style={{ color: 'black' }}>
+                        <ImageListItem key={item.ingredientId}>
+                          <img
+                            src={`${item.picture}?w=248&fit=crop&auto=format`}
+                            srcSet={`${item.picture}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                            alt={item.name}
+                            loading="lazy"
+                            style={{ borderRadius: '50%', width: '250px', height: '250px' }}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = questionmark;
+                            }}
+                          />
+                          <ImageListItemBar
+                            title={<span style={{ fontWeight: 'bold' }}> {item.name}</span>}
+                            subtitle={<span>Ingredient ID: {item.ingredientId}</span>}
+                            position="below"
+                            sx={{ fontSize: '40px' }}
+                          />
+                        </ImageListItem>
                       </a>
                     ))}
                   </ImageList>

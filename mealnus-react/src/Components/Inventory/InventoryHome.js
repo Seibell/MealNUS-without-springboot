@@ -136,9 +136,9 @@ function AdminPromotions(props) {
         )
             .then((response) => {
                 setOrders(response.data.mealBoxEntities);
-                console.log(response.data.mealBoxEntities);
-
-                console.log(orders.mealBoxEnt)
+                //console.log(response.data.mealBoxEntities);
+                //setIsToggled(response.data.mealBoxEntities.statusAvail);
+                //console.log(orders.mealBoxEnt)
             })
             .catch((err) => {
                 console.log(err);
@@ -167,6 +167,49 @@ function AdminPromotions(props) {
         });
     }, [orders, query]);
 
+    // const handleSwitchChange = (mealbox) => {
+    //     const updated = orders.map((m) =>
+    //         m.mealBoxId === mealbox.mealBoxId
+    //             ? { ...m, statusAvail: !m.statusAvail }
+    //             : m
+    //     );
+    //     console.log(updated.mealBoxId + " toggle " + updated.statusAvail);
+    //     console.log("updated" + updated);
+    //     fetch('http://localhost:8080/MealNUS-war/rest/Mealbox/setStatusAvailability/' +mealbox.mealBoxId , {
+    //         method: 'PUT',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(updated)
+    //       }).then((response) => {
+    //         if (response.ok) {
+    //         } 
+    //       }).catch((error) => {
+
+    //       });
+    //     };
+
+    const handleSwitchChange =  (mealbox) => {
+        const updated = orders.find( (m) => m.mealBoxId === mealbox.mealBoxId);
+        console.log(updated.statusAvail);
+        updated.statusAvail = !updated.statusAvail;
+        console.log(updated);
+        console.log(updated[0]);
+        fetch('http://localhost:8080/MealNUS-war/rest/Mealbox/setStatusAvailability/' + updated.mealBoxId , {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updated)
+      }).then((response) => {
+        if (response.ok) {
+        } 
+      }).catch((error) => {
+
+      });
+    };
+
+
 
     const navigate = useNavigate();
 
@@ -185,6 +228,15 @@ function AdminPromotions(props) {
                     color="error">
                     Update
                 </Button>
+            ),
+        },
+        {
+            name: "Set Availability",
+            cell: (row) => (
+                <Switch
+                    checked={row.statusAvail}
+                    onChange={() => handleSwitchChange(row)}
+                />
             ),
         },
         {

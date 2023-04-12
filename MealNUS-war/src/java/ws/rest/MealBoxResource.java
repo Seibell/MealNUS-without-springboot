@@ -136,8 +136,8 @@ public class MealBoxResource {
     @Path("/setStatusAvailability/{mealBoxId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response setStatusAvailability(@PathParam("mealBoxId") Long Id, Boolean status){
-        mealBoxSessionBeanLocal.setStatusAvailability(Id, status);
+    public Response setStatusAvailability(@PathParam("mealBoxId") Long Id, MealBox m){
+        mealBoxSessionBeanLocal.setStatusAvailability(Id, m);
         String updateSuccessMessage = "Order with ID [" + Id + "] has been updated successfully!";
         return Response.status(200).entity(updateSuccessMessage).build();
     }  
