@@ -59,6 +59,7 @@ import AdminOrderManagement from "./Components/Admin/AdminOrderManagement";
 import AdminPromotion from "./Components/Admin/AdminPromotion";
 import AddPromotion from "./Components/Admin/Promotion/AddPromotion";
 import AdminCharts from "./Components/Admin/Charts";
+import UpdatePromotion from "./Components/Admin/Promotion/UpdatePromotion";
 
 function App() {
 
@@ -96,6 +97,7 @@ function App() {
           <Route path="/admincharts" element={<AdminCharts />} />
           <Route path="/ViewAllAllergen" element={<ViewAllAllergen />} />
           <Route path="/UpdateAllergen/:allergenId" element={<UpdateAllergen />} />
+          <Route path="/updatepromotion/:id" element={<UpdatePromotion />} />
 
           {/* Soon to be removed */}
           <Route path="/adminordermanagement" element={<AdminOrderManagement />} />

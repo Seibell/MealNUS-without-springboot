@@ -183,17 +183,17 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     }
 
     @Override
-    public void updatePromotion(Promotion promotion) throws PromotionNotFoundException {
+    public void updatePromotion(Long promoId, Promotion promotion) throws PromotionNotFoundException {
         //Potentially could change it to have each attribute changed using the set method
         //It is possible to let the user choose which fields to change the same way a book was edited in the assignment
-        Promotion oldPromo = retrievePromotionById(promotion.getPromotionId());
-        oldPromo.setDiscount(promotion.getDiscount());
-        oldPromo.setPromotionName(promotion.getPromotionName());
-        oldPromo.setStartDate(promotion.getStartDate());
-        oldPromo.setEndDate(promotion.getEndDate());
-        oldPromo.setPicture(promotion.getPicture());
-        oldPromo.setPromotionCode(promotion.getPromotionCode());
-        //Should allow the picture to be changed too
+        Promotion updatedPromo = em.find(Promotion.class, promoId);
+        updatedPromo.setCategoryName(promotion.getCategoryName());
+        updatedPromo.setDiscount(promotion.getDiscount());
+        updatedPromo.setEndDate(promotion.getEndDate());
+        updatedPromo.setStartDate(promotion.getStartDate());
+        updatedPromo.setIsApplied(promotion.getIsApplied());
+        updatedPromo.setPromotionCode(promotion.getPromotionCode());
+        updatedPromo.setPromotionName(promotion.getPromotionName());
     }
 
     @Override
