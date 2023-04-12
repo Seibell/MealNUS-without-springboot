@@ -14,6 +14,7 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Collapse,
 } from "@mui/material";
 import React from "react";
 import { tokens } from "../Statistics/theme";
@@ -48,6 +49,8 @@ const MyOrders = () => {
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
   const [currentOrderId, setCurrentOrderId] = useState(null);
   const [submittedReviews, setSubmittedReviews] = useState([]);
+  const [expandedRows, setExpandedRows] = useState([]);
+
 
 
   useEffect(() => {
@@ -152,6 +155,19 @@ const MyOrders = () => {
         console.error("Error cancelling order:", error);
       }
     }
+  };
+
+  const handleRowClick = (orderId) => {
+    const currentIndex = expandedRows.indexOf(orderId);
+    const newExpandedRows = [...expandedRows];
+  
+    if (currentIndex === -1) {
+      newExpandedRows.push(orderId);
+    } else {
+      newExpandedRows.splice(currentIndex, 1);
+    }
+  
+    setExpandedRows(newExpandedRows);
   };
 
   const openReviewDialog = (orderId) => {
@@ -276,28 +292,49 @@ const MyOrders = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) =>
-                order.orderDetails.map((orderDetail) => (
-                  <TableRow key={order.orderId}>
-                    <TableCell>{order.orderId}</TableCell>
+  {orders.map((order, orderIndex) => (
+    <>
+      <TableRow
+        key={order.orderId}
+        onClick={() => handleRowClick(order.orderId)}
+        style={{ cursor: 'pointer' }}
+      >
+        <TableCell>{order.orderId}</TableCell>
+        <TableCell>
+          {order.orderDetails.length} Item{order.orderDetails.length > 1 ? 's' : ''}
+        </TableCell>
+        <TableCell>
+          {new Date(order.orderDate.replace('[UTC]', '')).toLocaleDateString()}
+        </TableCell>
+        <TableCell>
+          {new Date(order.deliveryDate.replace('[UTC]', '')).toLocaleDateString()}
+        </TableCell>
+        <TableCell colSpan={3} />
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+          <Collapse in={expandedRows.includes(order.orderId)} timeout="auto" unmountOnExit>
+            <Table size="small" aria-label="expanded-details">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Item Name</TableCell>
+                  <TableCell>Item Price</TableCell>
+                  <TableCell>Item Quantity</TableCell>
+                  <TableCell>Order Status</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {order.orderDetails.map((orderDetail) => (
+                  <TableRow key={`${order.orderId}-${orderDetail.key.itemName}`}>
                     <TableCell>{orderDetail.key.itemName}</TableCell>
-                    <TableCell>
-                      {new Date(
-                        order.orderDate.replace("[UTC]", "")
-                      ).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(
-                        order.deliveryDate.replace("[UTC]", "")
-                      ).toLocaleDateString()}
-                    </TableCell>
                     <TableCell>
                       {parseFloat(orderDetail.key.itemPrice).toFixed(2)}
                     </TableCell>
                     <TableCell>{orderDetail.value}</TableCell>
                     <TableCell>{order.orderStatus}</TableCell>
                     <TableCell>
-                      {order.orderStatus === "COMPLETED" ? (
+                      {order.orderStatus === 'COMPLETED' ? (
                         submittedReviews.includes(order.orderId) ? (
                           <Typography variant="body2" color="textSecondary">
                             Reviewed
@@ -317,9 +354,9 @@ const MyOrders = () => {
                           color="error"
                           onClick={() => handleCancelOrder(order.orderId)}
                           disabled={
-                            order.orderStatus !== "PAID" &&
-                            order.orderStatus !== "PREPARING" &&
-                            order.orderStatus !== "DELIVERING"
+                            order.orderStatus !== 'PAID' &&
+                            order.orderStatus !== 'PREPARING' &&
+                            order.orderStatus !== 'DELIVERING'
                           }
                         >
                           Cancel
@@ -327,9 +364,15 @@ const MyOrders = () => {
                       )}
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
+                ))}
+              </TableBody>
+            </Table>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
+  ))}
+</TableBody>
           </Table>
         </TableContainer>
       </div>

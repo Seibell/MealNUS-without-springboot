@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 import {
   Container,
   Box,
@@ -33,11 +34,12 @@ import NavBar from "../Navigation/NavBar.js";
 import { AuthContext } from "../../Context/AuthContext.js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { addDays } from "date-fns";
 import axios from "axios";
 
 const Checkout = () => {
-  const [cart] = useContext(CartContext);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [cart, setCart] = useContext(CartContext);
+  const [selectedDate, setSelectedDate] = useState(addDays(new Date(), 1));
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const { currentUser } = useContext(AuthContext);
   const [cards, setCards] = useState([]);
@@ -52,6 +54,8 @@ const Checkout = () => {
     useState("");
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser && currentUser.userId) {
@@ -75,6 +79,12 @@ const Checkout = () => {
   function handleClose() {
     setOpenDialog(false);
   }
+
+  const handleCloseDialog = () => {
+    setSuccessDialogOpen(false);
+    setCart([]);
+    navigate("/myorders");
+  };
 
   // Custom validation function for credit card number
   function validateCreditCardNumber(number) {
@@ -217,18 +227,15 @@ const Checkout = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(orderData),
-    })
-      .then((response) => {
-        if (response.ok) {
-          setSuccess(true);
-          setError("");
-        } else {
-          throw new Error("Something went wrong");
-        }
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+    }).then((response) => {
+      if (response.ok) {
+        setSuccess(true);
+        setError("");
+        setSuccessDialogOpen(true);
+      } else {
+        throw new Error("Something went wrong");
+      }
+    });
   };
 
   return (
@@ -494,6 +501,25 @@ const Checkout = () => {
                           onClick={() => setErrorDialogOpen(false)}
                           color="primary"
                         >
+                          Ok
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                    <Dialog
+                      open={successDialogOpen}
+                      onClose={handleCloseDialog}
+                      aria-labelledby="success-dialog-title"
+                    >
+                      <DialogTitle id="success-dialog-title">
+                        Success
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText>
+                          Your order has been successfully created!
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleCloseDialog} color="primary">
                           Ok
                         </Button>
                       </DialogActions>
