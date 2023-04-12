@@ -201,7 +201,7 @@ function UpdateOrder(props) {
     };
     console.log(orders);
 
-    fetch(`http://localhost:8080/MealNUS-war/rest/orders/update/` + orderId , {
+    fetch(`http://localhost:8080/MealNUS-war/rest/orders/update/` + orderId  +"/" + deliveryDate +"/" + orderStatus +"/" + address, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -215,6 +215,7 @@ function UpdateOrder(props) {
       }
     });
   };
+  console.log("http://localhost:8080/MealNUS-war/rest/orders/update/` + orderId  +"/" + deliveryDate +"/" + orderStatus +"/" + address")
 
   //RETRIEVE MEALBOX BY ID
   //console.log("MID" + mealBoxId);

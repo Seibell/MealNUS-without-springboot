@@ -4,7 +4,7 @@ import { tokens } from "./AdminTheme";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import moment from "moment-timezone";
-import { scaleLinear } from "d3";
+import { scaleLinear } from 'd3-scale';
 
 const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
     const theme = useTheme();
