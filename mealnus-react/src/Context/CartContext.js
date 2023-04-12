@@ -1,9 +1,10 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
+import usePersistedState from "./usePersistedState";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = usePersistedState("cart", []);
 
   return (
     <CartContext.Provider value={[cart, setCart]}>

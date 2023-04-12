@@ -7,7 +7,6 @@ package ws.rest;
 
 import entity.OrderEntity;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -19,12 +18,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import ejb.session.stateless.OrderSessionBeanLocal;
+import ejb.session.stateless.UserSessionBeanLocal;
 import entity.MealBox;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.util.Pair;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
@@ -34,6 +40,7 @@ import util.enumeration.OrderStatus;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response.Status;
 import util.exception.UserNotFoundException;
+import ws.model.CreateOrderResponse;
 import ws.model.RetrieveAllOrdersResponse;
 
 /**
@@ -44,18 +51,40 @@ import ws.model.RetrieveAllOrdersResponse;
 @Path("orders")
 public class OrdersResource {
 
-    @EJB
-    private OrderSessionBeanLocal orderSessionBeanLocal;
+    private final OrderSessionBeanLocal orderSessionBeanLocal;
+
+    private final UserSessionBeanLocal userSessionBeanLocal;
 
     public OrdersResource() {
+        orderSessionBeanLocal = lookupOrderSessionBeanLocal();
+        userSessionBeanLocal = lookupUserSessionBeanLocal();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public OrderEntity createOrder(OrderEntity o) throws OrderNotFoundException, UnknownPersistenceException, UnknownPersistenceException {
-        orderSessionBeanLocal.createOrder(o);
-        return o;
+    public Response createOrder(CreateOrderResponse createOrderResponse) throws OrderNotFoundException, UserNotFoundException, UnknownPersistenceException {
+        List<Pair<MealBox, Integer>> orderDetails = new ArrayList<>();
+        MealBox[] mealboxes = createOrderResponse.getMealboxes();
+        Integer[] quantities = createOrderResponse.getQuantities();
+
+        for (int i = 0; i < mealboxes.length; i++) {
+            orderDetails.add(new Pair<>(mealboxes[i], quantities[i]));
+        }
+
+        OrderEntity order = new OrderEntity(
+                createOrderResponse.getOrderDate(),
+                orderDetails,
+                createOrderResponse.getDeliveryDate(),
+                createOrderResponse.getAddress(),
+                createOrderResponse.getOrderStatus(),
+                userSessionBeanLocal.retrieveUserById(createOrderResponse.getUserId())
+        );
+
+        orderSessionBeanLocal.createOrder(order);
+
+        return Response.status(Status.OK).entity(order).build();
+
     } //end createCustomer 
 
     // http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrders
@@ -397,5 +426,25 @@ public class OrdersResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
+    }
+
+    private UserSessionBeanLocal lookupUserSessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (UserSessionBeanLocal) c.lookup("java:global/MealNUS/MealNUS-ejb/UserSessionBean!ejb.session.stateless.UserSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private OrderSessionBeanLocal lookupOrderSessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (OrderSessionBeanLocal) c.lookup("java:global/MealNUS/MealNUS-ejb/OrderSessionBean!ejb.session.stateless.OrderSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
 }

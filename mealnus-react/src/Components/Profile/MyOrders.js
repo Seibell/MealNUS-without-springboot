@@ -10,7 +10,12 @@ import {
   TableRow,
   TableSortLabel,
   Paper,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
 } from "@mui/material";
+import React from "react";
 import { tokens } from "../Statistics/theme";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -18,7 +23,7 @@ import StatBox from "../Statistics/StatBox";
 import NavBar from "../Navigation/NavBar";
 import { AuthContext } from "../../Context/AuthContext";
 import { useContext, useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { ResponsiveBar } from "@nivo/bar";
 import { ResponsivePie } from "@nivo/pie";
 import { Typography } from "@mui/material";
@@ -34,6 +39,15 @@ const MyOrders = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [orders, setOrders] = useState([]);
+  const [reviewFormOpen, setReviewFormOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [newPostTitle, setNewPostTitle] = useState("");
+  const [newPostDescription, setNewPostDescription] = useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
+  const [currentOrderId, setCurrentOrderId] = useState(null);
+  const [submittedReviews, setSubmittedReviews] = useState([]);
+
   useEffect(() => {
     console.log("currentUser: ", currentUser);
     if (currentUser && currentUser.email) {
@@ -44,7 +58,7 @@ const MyOrders = () => {
           );
           setOrders(response.data);
         } catch (error) {
-          console.error('Error fetching orders:', error);
+          console.error("Error fetching orders:", error);
         }
       };
       fetchOrders();
@@ -53,12 +67,15 @@ const MyOrders = () => {
 
   const processDataForHistogram = (orders) => {
     const filteredOrders = orders.filter(
-      order => order.orderStatus === "PREPARING" ||
+      (order) =>
+        order.orderStatus === "PREPARING" ||
         order.orderStatus === "DELIVERING" ||
         order.orderStatus === "PAID"
     );
     const dateCounts = filteredOrders.reduce((acc, order) => {
-      const deliveryDate = new Date(order.deliveryDate.replace('[UTC]', '')).toLocaleDateString();
+      const deliveryDate = new Date(
+        order.deliveryDate.replace("[UTC]", "")
+      ).toLocaleDateString();
       acc[deliveryDate] = (acc[deliveryDate] || 0) + 1;
       return acc;
     }, {});
@@ -89,17 +106,35 @@ const MyOrders = () => {
   };
 
   const statusCounts = [
-    { label: "Paid", value: orders.filter(order => order.orderStatus === "PAID").length },
-    { label: "Preparing", value: orders.filter(order => order.orderStatus === "PREPARING").length },
-    { label: "Delivering", value: orders.filter(order => order.orderStatus === "DELIVERING").length },
-    { label: "Completed", value: orders.filter(order => order.orderStatus === "COMPLETED").length },
-    { label: "Cancelled", value: orders.filter(order => order.orderStatus === "CANCELLED").length },
+    {
+      label: "Paid",
+      value: orders.filter((order) => order.orderStatus === "PAID").length,
+    },
+    {
+      label: "Preparing",
+      value: orders.filter((order) => order.orderStatus === "PREPARING").length,
+    },
+    {
+      label: "Delivering",
+      value: orders.filter((order) => order.orderStatus === "DELIVERING")
+        .length,
+    },
+    {
+      label: "Completed",
+      value: orders.filter((order) => order.orderStatus === "COMPLETED").length,
+    },
+    {
+      label: "Cancelled",
+      value: orders.filter((order) => order.orderStatus === "CANCELLED").length,
+    },
   ];
 
-  const statusColors = ['#e8c1a0', '#f47560', '#f1e15b', '#e8a838', '#61cdbb'];
+  const statusColors = ["#e8c1a0", "#f47560", "#f1e15b", "#e8a838", "#61cdbb"];
 
   const handleCancelOrder = async (orderId) => {
-    const confirmed = window.confirm("Are you sure you want to cancel this order?");
+    const confirmed = window.confirm(
+      "Are you sure you want to cancel this order?"
+    );
     if (confirmed) {
       try {
         await axios.put(
@@ -112,9 +147,41 @@ const MyOrders = () => {
         );
         setOrders(response.data);
       } catch (error) {
-        console.error('Error cancelling order:', error);
+        console.error("Error cancelling order:", error);
       }
     }
+  };
+
+  const openReviewDialog = (orderId) => {
+    setCurrentOrderId(orderId);
+    setReviewDialogOpen(true);
+  };
+
+  const handleReviewSubmit = async (orderId) => {
+    if (newPostTitle === "" || newPostDescription === "") {
+      setErrorMessage("Please enter both the title and description.");
+      return;
+    }
+
+    setErrorMessage("");
+
+    const postData = {
+      postDate: new Date().toISOString(),
+      postTitle: newPostTitle,
+      postDescription: newPostDescription,
+      userId: currentUser.userId, // Assuming currentUser has an "id" field
+    };
+
+    await axios.post(
+      "http://localhost:8080/MealNUS-war/rest/Forum/createNewForumPost",
+      postData
+    );
+
+    setSubmittedReviews([...submittedReviews, currentOrderId]);
+
+    setNewPostTitle("");
+    setNewPostDescription("");
+    setReviewDialogOpen(false);
   };
 
   if (!currentUser || !currentUser.email) {
@@ -140,10 +207,7 @@ const MyOrders = () => {
             alignItems="center"
             justifyContent="center"
           >
-            <StatBox
-              title={orders.length}
-              subtitle="Total Orders"
-            />
+            <StatBox title={orders.length} subtitle="Total Orders" />
           </Box>
           <Box
             gridColumn="span 4"
@@ -153,9 +217,14 @@ const MyOrders = () => {
             justifyContent="center"
           >
             <StatBox
-              title={orders.filter(order => order.orderStatus === "PAID" ||
-                order.orderStatus === "PREPARING" ||
-                order.orderStatus === "DELIVERING").length}
+              title={
+                orders.filter(
+                  (order) =>
+                    order.orderStatus === "PAID" ||
+                    order.orderStatus === "PREPARING" ||
+                    order.orderStatus === "DELIVERING"
+                ).length
+              }
               subtitle="Orders Pending"
             />
           </Box>
@@ -167,10 +236,17 @@ const MyOrders = () => {
             justifyContent="center"
           >
             <StatBox
-              title={"S$" + orders.reduce((total, order) => {
-                const orderTotal = order.orderDetails.map(detail => detail.key.itemPrice * detail.value).reduce((total, price) => total + price, 0);
-                return total + orderTotal;
-              }, 0).toFixed(2)}
+              title={
+                "S$" +
+                orders
+                  .reduce((total, order) => {
+                    const orderTotal = order.orderDetails
+                      .map((detail) => detail.key.itemPrice * detail.value)
+                      .reduce((total, price) => total + price, 0);
+                    return total + orderTotal;
+                  }, 0)
+                  .toFixed(2)
+              }
               subtitle="Total Spent"
               icon={
                 <PointOfSaleIcon
@@ -181,7 +257,7 @@ const MyOrders = () => {
           </Box>
         </Box>
       </Box>
-      <div style={{ paddingLeft: '20px', paddingRight: '20px' }}>
+      <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -193,36 +269,110 @@ const MyOrders = () => {
                 <TableCell>Item Price</TableCell>
                 <TableCell>Item Quantity</TableCell>
                 <TableCell>Order Status</TableCell>
-                <TableCell>Cancel Order</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) => (
+              {orders.map((order) =>
                 order.orderDetails.map((orderDetail) => (
                   <TableRow key={order.orderId}>
                     <TableCell>{order.orderId}</TableCell>
                     <TableCell>{orderDetail.key.itemName}</TableCell>
-                    <TableCell>{new Date(order.orderDate.replace('[UTC]', '')).toLocaleDateString()}</TableCell>
-                    <TableCell>{new Date(order.deliveryDate.replace('[UTC]', '')).toLocaleDateString()}</TableCell>
-                    <TableCell>{parseFloat(orderDetail.key.itemPrice).toFixed(2)}</TableCell>
+                    <TableCell>
+                      {new Date(
+                        order.orderDate.replace("[UTC]", "")
+                      ).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      {new Date(
+                        order.deliveryDate.replace("[UTC]", "")
+                      ).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      {parseFloat(orderDetail.key.itemPrice).toFixed(2)}
+                    </TableCell>
                     <TableCell>{orderDetail.value}</TableCell>
                     <TableCell>{order.orderStatus}</TableCell>
                     <TableCell>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => handleCancelOrder(order.orderId)}
-                      >
-                        Cancel
-                      </Button>
+                      {order.orderStatus === "COMPLETED" ? (
+                        submittedReviews.includes(order.orderId) ? (
+                          <Typography variant="body2" color="textSecondary">
+                            Reviewed
+                          </Typography>
+                        ) : (
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => openReviewDialog(order.orderId)}
+                          >
+                            Leave Review
+                          </Button>
+                        )
+                      ) : (
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleCancelOrder(order.orderId)}
+                          disabled={
+                            order.orderStatus !== "PAID" &&
+                            order.orderStatus !== "PREPARING" &&
+                            order.orderStatus !== "DELIVERING"
+                          }
+                        >
+                          Cancel
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))
-              ))}
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </div>
+      <Dialog
+        open={reviewDialogOpen}
+        onClose={() => setReviewDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Leave a Review</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Title"
+            fullWidth
+            margin="normal"
+            value={newPostTitle}
+            onChange={(e) => setNewPostTitle(e.target.value)}
+          />
+          <TextField
+            label="Description"
+            fullWidth
+            multiline
+            rows={4}
+            margin="normal"
+            value={newPostDescription}
+            onChange={(e) => setNewPostDescription(e.target.value)}
+          />
+          <Box display="flex" justifyContent="flex-end" marginTop="16px">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleReviewSubmit}
+              style={{ marginRight: "8px" }}
+            >
+              Submit Review
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => setReviewDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </DialogContent>
+      </Dialog>
       <Box m="20px">
         {/* GRID & CHARTS */}
         <Box
@@ -266,7 +416,11 @@ const MyOrders = () => {
                 legendPosition: "middle",
                 legendOffset: -40,
                 tickValues: Array.from(
-                  { length: Math.max(...processDataForHistogram(orders).map(item => item.y)) },
+                  {
+                    length: Math.max(
+                      ...processDataForHistogram(orders).map((item) => item.y)
+                    ),
+                  },
                   (_, i) => i + 1
                 ), //this is broken but being broken its actually better, no axis kinda nice
               }}
@@ -282,19 +436,31 @@ const MyOrders = () => {
             gridColumn="span 6"
             backgroundColor={colors.primary[400]}
             display="flex"
+            flexDirection="column"
+            padding="16px"
             alignItems="center"
             justifyContent="center"
           >
-            <Typography variant="h6" gutterBottom align="center" style={{ width: '90%', wordBreak: 'break-all' }}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              align="left"
+              style={{
+                marginBottom: "8px",
+                fontSize: "1rem",
+                whiteSpace: "nowrap",
+                fontWeight: "bold",
+              }}
+            >
               Order Status Distribution
             </Typography>
             <ResponsivePie
               data={processDataForPieChart(orders)}
-              margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+              margin={{ top: 5, right: 20, bottom: 20, left: 20 }}
               innerRadius={0.5}
               padAngle={0.7}
               cornerRadius={3}
-              colors={{ scheme: 'nivo' }}
+              colors={{ scheme: "nivo" }}
               borderWidth={1}
               borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
               radialLabelsSkipAngle={10}
@@ -306,20 +472,35 @@ const MyOrders = () => {
               motionStiffness={90}
               motionDamping={15}
             />
-            <List style={{ maxWidth: "600px", maxHeight: "600px", margin: "auto", whiteSpace: 'nowrap' }} dense={true}>
-              {statusCounts.map((status, index) => (
-                <ListItem key={status.label}>
-                  <ListItemIcon>
-                    <FiberManualRecordIcon style={{ color: statusColors[index] }} />
-                  </ListItemIcon>
-                  <ListItemText primary={`${status.label}: ${status.value}`} />
-                </ListItem>
+            <div
+              style={{
+                marginTop: "auto",
+                display: "flex",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              {processDataForPieChart(orders).map((status, index) => (
+                <div
+                  key={status.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "4px",
+                    fontSize: "0.8rem",
+                  }}
+                >
+                  <FiberManualRecordIcon
+                    style={{ color: statusColors[index] }}
+                  />
+                  <span>{status.label}</span>
+                </div>
               ))}
-            </List>
+            </div>
           </Box>
         </Box>
       </Box>
-    </ThemeProvider >
+    </ThemeProvider>
   );
 };
 export default MyOrders;

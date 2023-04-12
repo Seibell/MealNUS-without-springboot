@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Container,
   Box,
@@ -17,25 +17,87 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+  Card,
+  CardContent,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
 } from "@mui/material";
 import { CartContext } from "../../Context/CartContext";
 import NavBar from "../Navigation/NavBar.js";
 import { AuthContext } from "../../Context/AuthContext.js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
 
 const Checkout = () => {
   const [cart] = useContext(CartContext);
-  const [cardName, setCardName] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
-  const [cvv, setCvv] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const { currentUser } = useContext(AuthContext);
+  const [cards, setCards] = useState([]);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [inputErrors, setInputErrors] = useState({
+    creditCardNumber: false,
+    expiryDate: false,
+  });
+  const [openDialog, setOpenDialog] = useState(false);
+  const [formattedCreditCardNumber, setFormattedCreditCardNumber] =
+    useState("");
+  const [selectedCardIndex, setSelectedCardIndex] = useState(0);
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
+  useEffect(() => {
+    if (currentUser && currentUser.userId) {
+      axios
+        .get(
+          `http://localhost:8080/MealNUS-war/rest/User/${currentUser.userId}/cards`
+        )
+        .then((response) => {
+          setCards(response.data);
+        })
+        .catch((error) => {
+          setError(error.message);
+        });
+    }
+  }, [currentUser]);
+
+  function handleClickOpen() {
+    setOpenDialog(true);
+  }
+
+  function handleClose() {
+    setOpenDialog(false);
+  }
+
+  // Custom validation function for credit card number
+  function validateCreditCardNumber(number) {
+    const regex = /^(\d{4}\s){3}\d{4}$/; // 16-digit credit card number in XXXX XXXX XXXX XXXX format
+    return regex.test(number);
+  }
+
+  // Custom validation function for expiry date
+  function validateExpiryDate(date) {
+    const regex = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/; // MM/YY or MM/YYYY format
+    return regex.test(date);
+  }
+
+  // Function to handle changes in the credit card number input field
+  function handleCreditCardNumberChange(e) {
+    const value = e.target.value.replace(/\s+/g, "");
+    const formattedValue =
+      value
+        .match(/.{1,4}/g)
+        ?.join(" ")
+        .substr(0, 19) || "";
+    setFormattedCreditCardNumber(formattedValue);
+  }
 
   const totalCost = cart.reduce(
     (accumulator, mealBox) =>
@@ -50,6 +112,49 @@ const Checkout = () => {
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const cardOwnerName = event.target.cardOwnerName.value;
+    const creditCardNumber = event.target.creditCardNumber.value;
+    const cvv = event.target.cvv.value;
+    const expiryDate = event.target.expiryDate.value;
+    const newCard = {
+      cardOwnerName,
+      creditCardNumber,
+      cvv,
+      expiryDate,
+      userId: currentUser.userId,
+    };
+
+    // Validate input before sending request
+    const isCardNumberValid = validateCreditCardNumber(creditCardNumber);
+    const isExpiryDateValid = validateExpiryDate(expiryDate);
+
+    setInputErrors({
+      creditCardNumber: !isCardNumberValid,
+      expiryDate: !isExpiryDateValid,
+    });
+
+    if (!isCardNumberValid || !isExpiryDateValid) {
+      return;
+    }
+
+    axios
+      .post(
+        `http://localhost:8080/MealNUS-war/rest/User/${currentUser.userId}/cards`,
+        newCard
+      )
+      .then((response) => {
+        setCards([...cards, response.data]);
+        setFormattedCreditCardNumber("");
+        handleClose();
+      })
+      .catch((error) => {
+        setError("Card Number already exists!");
+      });
+    event.target.reset();
+  }
 
   function Copyright(props) {
     return (
@@ -66,43 +171,48 @@ const Checkout = () => {
     );
   }
 
+  const isFutureDate = (date) => {
+    const today = new Date();
+    const inputDate = new Date(date);
+    return inputDate.setHours(0, 0, 0, 0) > today.setHours(0, 0, 0, 0);
+  };
+
   const createOrder = async () => {
-    // Prepare the order details
-    const orderDetails = cart.map((mealBox) => ({
-      mealBox: mealBox,
-      quantity: mealBox.quantity,
-    }));
+    if (!cards[selectedCardIndex]) {
+      setError("Please add a credit card.");
+      setErrorDialogOpen(true);
+      return;
+    }
+
+    if (!isFutureDate(selectedDate)) {
+      setError("Please select a future delivery date.");
+      setErrorDialogOpen(true);
+      return;
+    }
+
+    if (!deliveryLocation) {
+      setError("Please select a delivery location.");
+      setErrorDialogOpen(true);
+      return;
+    }
+
+    const mealBoxes = cart.map((mealBox) => mealBox);
+    const quantities = cart.map((mealBox) => mealBox.quantity);
 
     const orderData = {
-      orderDate: new Date(),
-      orderDetails: orderDetails,
+      orderDate: new Date().toISOString(),
+      mealBoxes: mealBoxes,
+      quantities: quantities,
       deliveryDate: selectedDate,
       address: deliveryLocation,
-      orderStatus: "PENDING",
-      user: currentUser.uid, // Assuming the user object has a uid property
+      orderStatus: "PAID",
+      userId: currentUser.userId,
     };
 
     console.log(JSON.stringify(orderData));
 
-    // Send a POST request with the order data
-    fetch("http://localhost:8080/MealNUS-war/rest/orders/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(orderData),
-    })
-      .then((response) => {
-        if (response.ok) {
-          setSuccess(true);
-          setError("");
-        } else {
-          throw new Error("Something went wrong");
-        }
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+    await axios.post("http://localhost:8080/MealNUS-war/rest/Order", orderData);
+
   };
 
   return (
@@ -233,39 +343,117 @@ const Checkout = () => {
               </Box>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="h6" component="h2" gutterBottom>
-                Payment Information
-              </Typography>
-              <TextField
-                fullWidth
-                label="Cardholder Name"
-                variant="outlined"
-                style={{ marginBottom: "16px" }}
-              />
-              <TextField
-                fullWidth
-                label="Card Number"
-                variant="outlined"
-                style={{ marginBottom: "16px" }}
-              />
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    label="Expiry Date"
-                    variant="outlined"
-                    placeholder="MM/YY"
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                mb={2}
+              >
+                <Typography variant="h6" component="h2" gutterBottom>
+                  Payment Information
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleClickOpen}
+                >
+                  Add Credit Card
+                </Button>
+              </Box>
+              <RadioGroup
+                value={selectedCardIndex}
+                onChange={(e) => setSelectedCardIndex(Number(e.target.value))}
+              >
+                {cards.map((card, index) => (
+                  <FormControlLabel
+                    key={index}
+                    value={index}
+                    control={<Radio />}
+                    label={
+                      <Card
+                        variant="outlined"
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "flex-start",
+                          padding: "8px",
+                          width: "530px",
+                          height: "80px",
+                        }}
+                      >
+                        <CardContent style={{ marginTop: "10px" }}>
+                          <Typography style={{ marginBottom: "8px" }}>
+                            Credit Card Number: {card.creditCardNumber}
+                          </Typography>
+                          <Typography>
+                            Expiry Date: {card.expiryDate}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    }
                   />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    label="CVV"
-                    variant="outlined"
-                    inputProps={{ maxLength: 3 }}
-                  />
-                </Grid>
-              </Grid>
+                ))}
+              </RadioGroup>
+              <Dialog
+                open={openDialog}
+                onClose={handleClose}
+                aria-labelledby="form-dialog-title"
+              >
+                <DialogTitle id="form-dialog-title">
+                  Add Credit Card
+                </DialogTitle>
+                <form onSubmit={handleSubmit}>
+                  <DialogContent>
+                    <Grid container direction="column" spacing={2}>
+                      <Grid item>
+                        <TextField
+                          label="Card Owner Name"
+                          name="cardOwnerName"
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          label="Credit Card Number"
+                          name="creditCardNumber"
+                          value={formattedCreditCardNumber}
+                          onChange={handleCreditCardNumberChange}
+                          fullWidth
+                          error={inputErrors.creditCardNumber}
+                          helperText={
+                            inputErrors.creditCardNumber
+                              ? "Invalid credit card number"
+                              : ""
+                          }
+                        />
+                      </Grid>
+                      <Grid item>
+                        <TextField label="CVV" name="cvv" fullWidth />
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          label="Expiry Date (MM/YYYY)"
+                          name="expiryDate"
+                          fullWidth
+                          error={inputErrors.expiryDate}
+                          helperText={
+                            inputErrors.expiryDate ? "Invalid expiry date" : ""
+                          }
+                        />
+                      </Grid>
+                    </Grid>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                      Cancel
+                    </Button>
+                    <Button type="submit" color="primary">
+                      Add Card
+                    </Button>
+                  </DialogActions>
+                </form>
+              </Dialog>
               <Grid container justifyContent="flex-end">
                 <Grid item>
                   <Box mt={2} mb={2}>
@@ -276,6 +464,24 @@ const Checkout = () => {
                     >
                       Confirm Order
                     </Button>
+                    <Dialog
+                      open={errorDialogOpen}
+                      onClose={() => setErrorDialogOpen(false)}
+                      aria-labelledby="error-dialog-title"
+                    >
+                      <DialogTitle id="error-dialog-title">Error</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText>{error}</DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          onClick={() => setErrorDialogOpen(false)}
+                          color="primary"
+                        >
+                          Ok
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                   </Box>
                 </Grid>
               </Grid>
