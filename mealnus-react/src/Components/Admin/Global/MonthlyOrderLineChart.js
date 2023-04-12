@@ -4,6 +4,7 @@ import { tokens } from "./AdminTheme";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import moment from "moment-timezone";
+import { scaleLinear } from "d3";
 
 const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
     const theme = useTheme();
@@ -30,6 +31,10 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 console.log(error);
             });
     }, []);
+
+    const yMax = Math.max(...orderCountData.map(d => d.value));
+    const yScale = scaleLinear().domain([0, yMax]).nice();
+    const tickValues = yScale.ticks(10);
 
     return (
         <ResponsiveLine
@@ -77,7 +82,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 stacked: true,
                 reverse: false,
             }}
-            yFormat=".0f"
+            yFormat="d"
             curve="catmullRom"
             axisTop={null}
             axisRight={null}
@@ -92,7 +97,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
             }}
             axisLeft={{
                 orient: "left",
-                tickValues: 5,
+                tickValues: {tickValues},
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
@@ -100,7 +105,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 legendOffset: -40,
                 legendPosition: "middle",
             }}
-            yAxisTickCount={10}
+            yAxisTickCount={undefined}
             enableGridX={false}
             enableGridY={false}
             pointSize={10}
