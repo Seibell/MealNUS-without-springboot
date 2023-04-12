@@ -4,7 +4,7 @@ import axios from "axios";
 import { Box, Typography, useTheme } from "@mui/material";
 
 import IconButton from '@mui/material/IconButton';
-import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../Global/AdminTheme";
@@ -84,12 +84,8 @@ const Allergen = () => {
             flex: 1,
             headerClassName: "headerName",
             renderCell: (params) => (
-                <IconButton
-                    onClick={() => window.open('/updateallergen/' + params.row.allergenId, 'Update Allergen', 'width=600,height=400')}
-                    variant="contained"
-                    color="primary"
-                >
-                    <ModeEditOutlinedIcon />
+                <IconButton>
+                    <EditIcon onClick={() => window.open('/updateallergen/' + params.row.allergenId, 'Update Allergen', 'width=600,height=400')} />
                 </IconButton>
             ),
         },

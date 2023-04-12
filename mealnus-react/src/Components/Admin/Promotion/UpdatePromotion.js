@@ -1,5 +1,3 @@
-
-
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import MUILink from '@mui/material/Link';
@@ -65,28 +63,41 @@ function UpdatePromotion(props) {
     }, []);
 
 
-//Issue with pre-loading the data
+    //Issue with pre-loading the data
 
-// useEffect(() => {
-//     Axios.get(
-//       "http://localhost:8080/MealNUS-war/rest/promotion/" + id
-//     )
-//       .then((response) => {
-//         const promotion = response.data;
-//         setPromotionName(promotion.promotionName);
-//         setDiscount(promotion.discount);
-//         setCategoryName(promotion.categoryName);
-//         setStartDate(moment(promotion.startDate).toDate());
-//         setEndDate(moment(promotion.endDate).toDate());
-//         setSelectedCategory(promotion.categoryName);
-//         setLoading(false); 
-//         console.log(promotion);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   }, []);
-      
+    useEffect(() => {
+        Axios.get(
+            "http://localhost:8080/MealNUS-war/rest/promotion/" + id
+        )
+            .then((response) => {
+                const promotion = response.data;
+                setPromotionName(promotion.promotionName);
+                setDiscount(promotion.discount);
+                // setCategoryName(promotion.categoryName);
+                // setStartDate(moment(promotion.startDate).toDate());
+                // setEndDate(moment(promotion.endDate).toDate());
+                setSelectedCategory(promotion.categoryName);
+                setLoading(false);
+                console.log(promotion);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
+    function Copyright(props) {
+        return (
+            <Typography variant="body2" color="text.secondary" align="center" {...props}>
+                {'Copyright © '}
+                MealNUS
+                {' '}
+                {new Date().getFullYear()}
+                {' (UEN: 54231804G).'} All rights reserved.
+                <p>Computing 1 (COM1), 13 Computing Drive. Singapore 117417</p>
+            </Typography>
+        );
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
         if (discount < 0 || discount > 1) {
@@ -124,100 +135,107 @@ function UpdatePromotion(props) {
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div className="card-body">
-                    <div className="form-group">
-                        <label htmlFor="inputName">Promotion Name</label>
-                        <input
-                            type="text"
-                            id="inputName"
-                            required
-                            className="form-control"
-                            value={promotionName}
-                            onChange={(e) => setPromotionName(e.target.value)}
-                        />
+            <section className="content" key="content">
+                <div className="card card-primary">
+                    <div className="card-header text-center">
+                        <h4 className="card-title">Update Promotion</h4>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="my-dropdown">Select a category:</label>
-                        <Autocomplete
-                            id="my-dropdown"
-                            options={categories}
-                            getOptionLabel={(option) => option.name}
-                            onChange={(event, newValue) => {
-                                setSelectedCategory(newValue ? newValue.name : '');
-                            }}
-                            renderInput={(params) => (
-                                <div ref={params.InputProps.ref} className="input-group">
-                                    <input
-                                        type="text"
-                                        {...params.inputProps}
-                                        className="form-control"
-                                        placeholder="Type to search"
-                                    />
-                                    <IconButton
-                                        onClick={() => {
-                                            setSelectedCategory('');
-                                            params.inputProps.onChange('');
+                    <form onSubmit={handleSubmit}>
+                        <div className="card-body">
+                            <div className="form-group">
+                                <label htmlFor="inputName">Promotion Name</label>
+                                <input
+                                    type="text"
+                                    id="inputName"
+                                    required
+                                    className="form-control"
+                                    value={promotionName}
+                                    onChange={(e) => setPromotionName(e.target.value)}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="my-dropdown">Select a category:</label>
+                                <Autocomplete
+                                    id="my-dropdown"
+                                    options={categories}
+                                    getOptionLabel={(option) => option.name}
+                                    onChange={(event, newValue) => {
+                                        setSelectedCategory(newValue ? newValue.name : '');
+                                    }}
+                                    renderInput={(params) => (
+                                        <div ref={params.InputProps.ref} className="input-group">
+                                            <input
+                                                type="text"
+                                                {...params.inputProps}
+                                                className="form-control"
+                                                placeholder="Type to search"
+                                            />
+                                            <IconButton
+                                                onClick={() => {
+                                                    setSelectedCategory('');
+                                                    params.inputProps.onChange('');
+                                                }}
+                                            >
+                                                <ClearIcon />
+                                            </IconButton>
+                                        </div>
+                                    )}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="inputName">Discount</label>
+                                <input
+                                    id="inputDiscount"
+                                    required
+                                    className="form-control"
+                                    value={discount}
+                                    onChange={(e) => setDiscount(e.target.value)}
+
+                                />
+                                {error}
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="inputName">Start Date(dd/mm/yyyy)</label>
+                                <div className="input-group">
+                                    <DatePicker
+                                        dateFormat="dd/MM/yyyy"
+                                        selected={startDate}
+                                        onChange={(startDate) => {
+                                            console.log("#startDate: ", startDate);
+                                            setStartDate(startDate);
                                         }}
-                                    >
-                                        <ClearIcon />
-                                    </IconButton>
+                                        customInput={<input className="form-control" />}
+                                    />
                                 </div>
-                            )}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="inputName">Discount</label>
-                        <input
-                            id="inputDiscount"
-                            required
-                            className="form-control"
-                            value={discount}
-                            onChange={(e) => setDiscount(e.target.value)}
-
-                        />
-                        {error}
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="inputName">Start Date(dd/mm/yyyy)</label>
-                        <div className="input-group">
-                            <DatePicker
-                                dateFormat="dd/MM/yyyy"
-                                selected={startDate}
-                                onChange={(startDate) => {
-                                    console.log("#startDate: ", startDate);
-                                    setStartDate(startDate);
-                                }}
-                                customInput={<input className="form-control" />}
-                            />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="inputName">End Date(dd/mm/yyyy)</label>
+                                <div className="input-group">
+                                    <DatePicker
+                                        dateFormat="dd/MM/yyyy"
+                                        selected={endDate}
+                                        onChange={(endDate) => {
+                                            console.log("#endDate: ", endDate);
+                                            setEndDate(endDate);
+                                        }}
+                                        customInput={<input className="form-control" />}
+                                    />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="inputName">End Date(dd/mm/yyyy)</label>
-                        <div className="input-group">
-                            <DatePicker
-                                dateFormat="dd/MM/yyyy"
-                                selected={endDate}
-                                onChange={(endDate) => {
-                                    console.log("#endDate: ", endDate);
-                                    setEndDate(endDate);
-                                }}
-                                customInput={<input className="form-control" />}
-                            />
+                        <div className="card-footer">
+                            <RouterLink to="/adminpromotions" className="btn btn-default" onClick={(e) => window.close()}>
+                                Cancel
+                            </RouterLink>
+                            <button className="btn btn-primary float-right" type="submit" style={{ backgroundColor: "orange", border: "orange" }}>
+                                Submit
+                            </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
-                <div className="card-footer">
-                    <RouterLink to="/adminpromotions" className="btn btn-default" onClick={(e) => window.close()}>
-                        Cancel
-                    </RouterLink>
-                    <button className="btn btn-primary float-right" type="submit" style={{ backgroundColor: "orange", border: "orange" }}>
-                        Submit
-                    </button>
-                </div>
-            </form>
-
+            </section>
+            <Copyright sx={{ pt: 4 }} />
         </div>
     );
 }

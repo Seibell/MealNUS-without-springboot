@@ -173,7 +173,7 @@ const Sidebar = () => {
                         </Typography>
                         <Item
                             title="Manage MealBoxes"
-                            to="/inventoryHome"
+                            to="/adminmealboxes"
                             icon={<TakeoutDiningOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}

@@ -8,6 +8,7 @@ import Topbar from "../../Admin/Global/Topbar";
 import Sidebar from "../../Admin/Global/Sidebar";
 
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../Global/AdminTheme";
@@ -84,7 +85,6 @@ const Order = () => {
         {
             field: "orderId",
             headerName: "Order ID",
-            flex: 1,
             headerClassName: "headerName",
         },
         {
@@ -137,10 +137,16 @@ const Order = () => {
             headerClassName: "headerName",
             renderCell: (params) => (
                 <IconButton
-                    onClick={() => navigate('/UpdateOrder/' + params.row.orderId)}
-                    color="primary"
+                    onClick={() =>
+                        window.open(
+                            '/updateorder/' + params.row.orderId,
+                            'Update Order',
+                            'width=600,height=500'
+                        )
+                    }
+                    variant="contained"
                 >
-                    <ModeEditOutlinedIcon />
+                    <EditIcon />
                 </IconButton>
             ),
         },

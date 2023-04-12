@@ -18,7 +18,7 @@ import Sidebar from "../../Admin/Global/Sidebar";
 import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
 
-import moment from "moment";
+import moment from "moment-timezone";
 import { Button, Switch } from "@mui/material";
 import { Alert } from '@mui/material';
 import Grid from '@mui/material/Grid';
@@ -88,11 +88,11 @@ const Promotion = () => {
         const interval = setInterval(() => {
             applyPromotionsAutomatically();
         }, timeUntilMidnight);
-    
+
         return () => clearInterval(interval);
     }, []);
-    
-    
+
+
 
     const applyPromotionsAutomatically = () => {
         const today = moment();
@@ -216,10 +216,11 @@ const Promotion = () => {
         {
             field: "edit",
             headerName: "Edit",
+            headerClassName: 'headerName',
             renderCell: (params) => (
                 <IconButton>
-                    <EditIcon 
-                    onClick={() => window.open('/updatepromotion/' + params.row.promotionId, 'Update Promotion', 'width=600,height=400')}
+                    <EditIcon
+                        onClick={() => window.open('/updatepromotion/' + params.row.promotionId, 'Update Promotion', 'width=600,height=480')}
                     />
                 </IconButton>
 
@@ -229,32 +230,39 @@ const Promotion = () => {
             field: "promotionName",
             headerName: "Name",
             cellClassName: "name-column--cell",
+            headerClassName: 'headerName',
         },
         {
             field: "promotionCode",
             headerName: "Code",
+            headerClassName: 'headerName',
         },
         {
             field: "categoryName",
             headerName: "Category",
+            headerClassName: 'headerName',
         },
         {
             field: "discount",
             headerName: "Discount",
+            headerClassName: 'headerName',
         },
         {
             field: "startDate",
             headerName: "Start Date",
+            headerClassName: 'headerName',
             valueFormatter: (params) => moment(params.value, "YYYY-MM-DD").format("YYYY-MM-DD")
         },
         {
             field: "endDate",
             headerName: "End Date",
+            headerClassName: 'headerName',
             valueFormatter: (params) => moment(params.value, "YYYY-MM-DD").format("YYYY-MM-DD")
         },
         {
             field: "isApplied",
             headerName: "Apply",
+            headerClassName: 'headerName',
             renderCell: (params) => (
                 <Switch
                     checked={params.value}
@@ -265,6 +273,7 @@ const Promotion = () => {
         {
             field: "promotionId",
             headerName: "Action",
+            headerClassName: 'headerName',
             renderCell: (params) => (
                 <Button
                     onClick={() => handleDeletePromotion(params.value)}
@@ -306,7 +315,7 @@ const Promotion = () => {
                             <Header title="PROMOTIONS" subtitle="List of Promotions" />
                             <Link
                                 style={{ textDecoration: "none" }}
-                                onClick={() => window.open('/addpromotion', 'Add Promotion', 'width=600,height=400')}
+                                onClick={() => window.open('/addpromotion', 'Add Promotion', 'width=600,height=500')}
                             >
                                 <Box
                                     display="flex"
@@ -336,10 +345,10 @@ const Promotion = () => {
                                         borderBottom: "none",
                                     },
                                     "& .name-column--cell": {
-                                        color: colors.greenAccent[300],
+                                        color: colors.mealNUSBlue[100],
                                     },
                                     "& .MuiDataGrid-columnHeaders": {
-                                        backgroundColor: colors.blueAccent[700],
+                                        backgroundColor: colors.mealNUSBlue[100],
                                         borderBottom: "none",
                                     },
                                     "& .MuiDataGrid-virtualScroller": {
@@ -347,13 +356,16 @@ const Promotion = () => {
                                     },
                                     "& .MuiDataGrid-footerContainer": {
                                         borderTop: "none",
-                                        backgroundColor: colors.blueAccent[700],
+                                        backgroundColor: colors.mealNUSOrange[100],
                                     },
                                     "& .MuiCheckbox-root": {
                                         color: `${colors.greenAccent[200]} !important`,
                                     },
                                     "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                                         color: `${colors.grey[100]} !important`,
+                                    },
+                                    "& .headerName": {
+                                        color: colors.white[100],
                                     },
                                 }}
                             >

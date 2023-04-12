@@ -309,6 +309,8 @@ function AddMealBox(props) {
       if (response.ok) {
         setSuccess(true)
         setError("")
+        window.opener.location.reload();
+        navigate(window.close());
       } else {
         throw new Error('Something went wrong');
       }
@@ -594,14 +596,14 @@ function AddMealBox(props) {
                         type="file" onChange={handleFileChange}
                       />
                       {uploading && (
-                          <CircularProgress
-                            sx={{
-                              position: "absolute",
-                              top: "42%",
-                              left: "43%",
-                            }}
-                          />
-                        )}
+                        <CircularProgress
+                          sx={{
+                            position: "absolute",
+                            top: "42%",
+                            left: "43%",
+                          }}
+                        />
+                      )}
                     </div>
 
                     <div className="form-group">
@@ -709,9 +711,9 @@ function AddMealBox(props) {
                     </div>
                   </div>
                   <div className="card-footer">
-                      <button className="btn btn-default" type="button" onClick={() => navigate('/InventoryHome')}>
-                        Cancel
-                      </button>
+                    <button className="btn btn-default" type="button" onClick={() => navigate('/InventoryHome')}>
+                      Cancel
+                    </button>
                     <button className="btn btn-primary float-right" type="submit" style={{ backgroundColor: "orange", border: "orange" }}>
                       Submit
                     </button>

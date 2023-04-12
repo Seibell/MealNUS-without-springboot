@@ -4,7 +4,7 @@ import axios from "axios";
 import { Box, Typography, useTheme } from "@mui/material";
 
 import { IconButton, ImageListItem, ImageListItemBar } from '@mui/material';
-import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../Global/AdminTheme";
@@ -118,9 +118,8 @@ const Ingredient = () => {
                         )
                     }
                     variant="contained"
-                    color="primary"
                 >
-                    <ModeEditOutlinedIcon />
+                    <EditIcon />
                 </IconButton>
             ),
         },

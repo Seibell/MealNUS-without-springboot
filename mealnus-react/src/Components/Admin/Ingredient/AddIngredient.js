@@ -153,39 +153,24 @@ function AddIngredient(props) {
                                 />
                             </div>
 
-
                             <div className="form-group">
-                                <label htmlFor="inputName">Upload an image:</label>
+                                <label htmlFor="image">Upload Image</label>
                                 <input
+                                    id="image"
+                                    required
+                                    className="form-control"
                                     accept="image/*"
                                     type="file" onChange={handleFileChange}
                                 />
-                            </div>
-
-                            <div className="form-group">
-                                <Box
-                                    sx={{
-                                        width: 250,
-                                        height: 250,
-                                    }}>
-                                    <img
-                                        src={picture}
+                                {uploading && (
+                                    <CircularProgress
                                         sx={{
-                                            bgcolor: "primary.main",
-                                            width: "100px",
-                                            height: "100px",
+                                            position: "absolute",
+                                            top: "42%",
+                                            left: "43%",
                                         }}
                                     />
-                                    {uploading && (
-                                        <CircularProgress
-                                            sx={{
-                                                position: "absolute",
-                                                top: "42%",
-                                                left: "43%",
-                                            }}
-                                        />
-                                    )}
-                                </Box>
+                                )}
                             </div>
                         </div>
 

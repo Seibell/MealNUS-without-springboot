@@ -55,6 +55,7 @@ import AdminDashboard from "./Components/Admin/Dashboard/AdminDashboard";
 import AdminMembers from "./Components/Admin/Member";
 import AdminPromotions from "./Components/Admin/Promotion";
 import AdminOrders from "./Components/Admin/Order";
+import AdminUpdateOrder from "./Components/Admin/Order/UpdateOrder";
 import AdminOrderManagement from "./Components/Admin/AdminOrderManagement";
 import AdminPromotion from "./Components/Admin/AdminPromotion";
 import AddPromotion from "./Components/Admin/Promotion/AddPromotion";
@@ -64,7 +65,9 @@ import AdminAddAllergen from "./Components/Admin/Allergen/AddAllergen";
 import AdminIngredients from "./Components/Admin/Ingredient";
 import AdminUpdateIngredient from "./Components/Admin/Ingredient/UpdateIngredient";
 import AdminAddIngredient from "./Components/Admin/Ingredient/AddIngredient";
-import AdminCharts from "./Components/Admin/Charts";
+import AdminMealBoxes from "./Components/Admin/MealBox";
+import AdminUpdateMealBox from "./Components/Admin/MealBox/UpdateMealBox";
+import AdminAddMealBox from "./Components/Admin/MealBox/AddMealBox";
 import UpdatePromotion from "./Components/Admin/Promotion/UpdatePromotion";
 
 function App() {
@@ -80,14 +83,14 @@ function App() {
           <Route path="/viewprofile" element={<ViewProfile />} />
           <Route path="/editprofile" element={<EditProfile />} />
           <Route path="/inventoryhome" element={<InventoryHome />} />
-          <Route path="/AddIngred" element={<AddIngred />} />
-          <Route path="/ViewAllIngred" element={<ViewAllIngred />} />
+          {/* <Route path="/AddIngred" element={<AddIngred />} /> */}
+          {/* <Route path="/ViewAllIngred" element={<ViewAllIngred />} /> */}
           <Route path="/Orders" element={<Orders />} />
           {/* <Route path="/AddAllergen" element={<AddAllergen />} /> */}
-          <Route path="/AddMealBox" element={<AddMealBox />} />
+          {/* <Route path="/AddMealBox" element={<AddMealBox />} /> */}
           <Route path="/UpdateQuantity/:mealBoxId" element={<UpdateQuantity />} />
-          <Route path="/UpdateMealBox/:mealBoxId" element={<UpdateMealBox />} />
-          <Route path="/UpdateOrder/:orderId" element={<UpdateOrder />} />
+          {/* <Route path="/UpdateMealBox/:mealBoxId" element={<UpdateMealBox />} /> */}
+          {/* <Route path="/UpdateOrder/:orderId" element={<UpdateOrder />} /> */}
           <Route path="/UpdateIngred/:ingredientId" element={<UpdateIngred />} />
           <Route path="/home" element={<Home />} />
           <Route path="/mealboxes" element={<MealBoxes />} />
@@ -100,13 +103,19 @@ function App() {
           <Route path="/adminpromotions" element={<AdminPromotions />} />
           <Route path="/addpromotion" element={<AddPromotion />} />
           <Route path="/adminorders" element={<AdminOrders />} />
+          <Route path="/updateorder/:orderId" element={<AdminUpdateOrder />} />
           <Route path="/adminallergens" element={<AdminAllergens />} />
           <Route path="/updateallergen/:allergenId" element={<AdminUpdateAllergen />} />
           <Route path="/addallergen" element={<AdminAddAllergen />} />
           <Route path="/adminingredients" element={<AdminIngredients />} />
           <Route path="/updateingredient/:ingredientId" element={<AdminUpdateIngredient />} />
           <Route path="/addingredient" element={<AdminAddIngredient />} />
-          <Route path="/admincharts" element={<AdminCharts />} />
+          <Route path="/adminmealboxes" element={<AdminMealBoxes />} />
+          <Route path="/updatemealbox/:mealBoxId" element={<AdminUpdateMealBox />} />
+          <Route path="/addmealbox" element={<AdminAddMealBox />} />
+
+
+
           <Route path="/ViewAllAllergen" element={<ViewAllAllergen />} />
           <Route path="/UpdateAllergen/:allergenId" element={<UpdateAllergen />} />
           <Route path="/updatepromotion/:id" element={<UpdatePromotion />} />
