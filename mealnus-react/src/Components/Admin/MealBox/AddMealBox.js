@@ -330,6 +330,8 @@ function AddMealBox(props) {
                                     id="inputCode"
                                     required
                                     className="form-control"
+                                    pattern='[0-9]*'
+                                    inputMode='numeric'
                                     value={itemCode}
                                     onChange={handleCodeChange}
                                 />
@@ -385,7 +387,6 @@ function AddMealBox(props) {
                                 <label htmlFor="image">Upload Image</label>
                                 <input
                                     id="image"
-                                    required
                                     className="form-control"
                                     accept="image/*"
                                     type="file" onChange={handleFileChange}

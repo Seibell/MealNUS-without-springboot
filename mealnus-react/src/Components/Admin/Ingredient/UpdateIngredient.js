@@ -83,7 +83,6 @@ function UpdateIngredient(props) {
 
             if (uploadedImageURL) {
                 setpicture(uploadedImageURL);
-                setpicture(picture);
             } else {
                 setError("Failed to upload image");
             }
@@ -165,7 +164,6 @@ function UpdateIngredient(props) {
                                 <label htmlFor="image">Upload Image</label>
                                 <input
                                     id="image"
-                                    required
                                     className="form-control"
                                     accept="image/*"
                                     type="file" onChange={handleFileChange}

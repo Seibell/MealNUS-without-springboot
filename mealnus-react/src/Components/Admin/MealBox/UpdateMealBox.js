@@ -96,7 +96,7 @@ function UpdateMealBox(props) {
 
             if (uploadedImageURL) {
                 setitemImage(uploadedImageURL);
-                setitemImage(itemImage);
+                // setitemImage(itemImage);
             } else {
                 setError("Failed to upload image");
             }
@@ -369,20 +369,37 @@ function UpdateMealBox(props) {
                                 <label htmlFor="image">Upload Image</label>
                                 <input
                                     id="image"
-                                    required
+                                    src={itemImage}
                                     className="form-control"
                                     accept="image/*"
                                     type="file" onChange={handleFileChange}
                                 />
-                                {uploading && (
-                                    <CircularProgress
+                                   {uploading && (
+                                            <CircularProgress
+                                                sx={{
+                                                    top: "42%",
+                                                    left: "43%",
+                                                }}
+                                            />
+                                        )}
+                                <div className="form-group">
+                                    <Box
                                         sx={{
-                                            position: "absolute",
-                                            top: "42%",
-                                            left: "43%",
-                                        }}
-                                    />
-                                )}
+                                            width: 250,
+                                            height: 250,
+                                        }}>
+                                        <img
+                                            src={itemImage}
+                                            sx={{
+                                                objectFit: "contain",
+                                                bgcolor: "primary.main",
+                                                width: "100",
+                                                height: "100",
+                                            }}
+                                        />
+                                     
+                                    </Box>
+                                </div>
                             </div>
 
                             <div className="form-group">

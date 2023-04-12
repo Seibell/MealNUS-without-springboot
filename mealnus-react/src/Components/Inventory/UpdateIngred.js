@@ -86,7 +86,7 @@ const UpdateIngred = () => {
 
       if (uploadedImageURL) {
         setpicture(uploadedImageURL);
-        setpicture(picture);
+        //setpicture(picture);
       } else {
         setError("Failed to upload image");
       }
