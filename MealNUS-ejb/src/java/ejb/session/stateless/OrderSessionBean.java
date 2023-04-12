@@ -45,22 +45,9 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     // "Insert Code > Add Business Method")
     @Override
     public OrderEntity createOrder(OrderEntity order) throws OrderNotFoundException, UnknownPersistenceException {
-        try {
-            em.persist(order);
-            em.flush();
-            return order;
-
-        } catch (PersistenceException ex) {
-            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    throw new OrderNotFoundException();
-                } else {
-                    throw new UnknownPersistenceException(ex.getMessage());
-                }
-            } else {
-                throw new UnknownPersistenceException(ex.getMessage());
-            }
-        }
+        em.persist(order);
+        em.flush();
+        return order;
     }
 
     // This method helps with Order Management :: Orders Overview
@@ -528,7 +515,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         updatedOrder.setUser(orderToUpdate.getUser());
         em.merge(updatedOrder);
     }
-        
+
     /*
     @Override
     public void updateOrder(OrderEntity orderToUpdate) {
@@ -548,8 +535,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
             Logger.getLogger(OrderSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-*/
-
+     */
     @Override
     public void deleteOrder(Long oId) {
         try {

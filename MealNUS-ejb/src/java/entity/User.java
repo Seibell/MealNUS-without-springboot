@@ -37,7 +37,7 @@ public class User implements Serializable {
     @NotNull
     private String lastName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotNull
     private String email;
 

@@ -189,6 +189,7 @@ const MyOrders = () => {
   if (!currentUser || !currentUser.email) {
     return <div>Loading...</div>;
   }
+
   return (
     <ThemeProvider theme={theme}>
       <NavBar />
@@ -440,8 +441,6 @@ const MyOrders = () => {
             display="flex"
             flexDirection="column"
             padding="16px"
-            flexDirection="column"
-            padding="16px"
             alignItems="center"
             justifyContent="center"
           >
@@ -500,7 +499,6 @@ const MyOrders = () => {
                   <span>{status.label}</span>
                 </div>
               ))}
-            </div>
             </div>
           </Box>
         </Box>

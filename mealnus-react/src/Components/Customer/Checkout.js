@@ -211,8 +211,24 @@ const Checkout = () => {
 
     console.log(JSON.stringify(orderData));
 
-    await axios.post("http://localhost:8080/MealNUS-war/rest/Order", orderData);
-
+    fetch("http://localhost:8080/MealNUS-war/rest/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          setSuccess(true);
+          setError("");
+        } else {
+          throw new Error("Something went wrong");
+        }
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
   };
 
   return (

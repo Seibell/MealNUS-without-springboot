@@ -66,9 +66,10 @@ public class OrdersResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createOrder(CreateOrderResponse createOrderResponse) throws OrderNotFoundException, UserNotFoundException, UnknownPersistenceException {
         List<Pair<MealBox, Integer>> orderDetails = new ArrayList<>();
-        MealBox[] mealboxes = createOrderResponse.getMealboxes();
-        Integer[] quantities = createOrderResponse.getQuantities();
+        MealBox[] mealboxes = createOrderResponse.getMealBoxes().toArray(new MealBox[createOrderResponse.getMealBoxes().size()]);
+        Integer[] quantities = createOrderResponse.getQuantities().toArray(new Integer[createOrderResponse.getQuantities().size()]);
 
+        System.out.println(mealboxes == null);
         for (int i = 0; i < mealboxes.length; i++) {
             orderDetails.add(new Pair<>(mealboxes[i], quantities[i]));
         }
@@ -415,7 +416,7 @@ public class OrdersResource {
         String updateSuccessMessage = "Order with ID [" + orderId + "] has been updated successfully!";
         return Response.status(200).entity(updateSuccessMessage).build();
     }
-   
+
     /*
     @Path("/update2/{orderId}") 
     @Consumes(MediaType.APPLICATION_JSON) 
@@ -427,7 +428,7 @@ public class OrdersResource {
         String updateSuccessMsg = "Order with ID [" + orderId + "] has been updated successfully!"; 
         return Response.status(200).entity(updateSuccessMsg).build(); 
     } //end editOrder
-*/
+     */
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/delete/1
     // success should show the success message
     @DELETE
@@ -454,25 +455,24 @@ public class OrdersResource {
 
     }
 
-    
-    
     // retrieve order status;
     // http://localhost:8080/MealNUS-war/rest/orders/retrieveAllAddress
     @GET
     @Path(value = "retrieveAllAddress")
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllAddress() {
-       AddressEnum[] address = AddressEnum.values();
-       return Response.status(Status.OK).entity(address).build();
+        AddressEnum[] address = AddressEnum.values();
+        return Response.status(Status.OK).entity(address).build();
     }
+
     //retrieve all enum addr
     // http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrderStatus
-       @GET
+    @GET
     @Path(value = "retrieveAllOrderStatus")
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllOrderStatus() {
-       OrderStatus[] status = OrderStatus.values();
-       return Response.status(Status.OK).entity(status).build();
+        OrderStatus[] status = OrderStatus.values();
+        return Response.status(Status.OK).entity(status).build();
     }
 
     private UserSessionBeanLocal lookupUserSessionBeanLocal() {

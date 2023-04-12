@@ -7,6 +7,7 @@ package ws.model;
 
 import entity.MealBox;
 import java.util.Date;
+import java.util.List;
 import util.enumeration.AddressEnum;
 import util.enumeration.OrderStatus;
 
@@ -17,8 +18,8 @@ import util.enumeration.OrderStatus;
 public class CreateOrderResponse {
 
     private Date orderDate;
-    private MealBox[] mealboxes;
-    private Integer[] quantities;
+    private List<MealBox> mealBoxes;
+    private List<Integer> quantities;
     private Date deliveryDate;
     private AddressEnum address;
     private OrderStatus orderStatus;
@@ -27,9 +28,9 @@ public class CreateOrderResponse {
     public CreateOrderResponse() {
     }
 
-    public CreateOrderResponse(Date orderDate, MealBox[] mealboxes, Integer[] quantities, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, Long userId) {
+    public CreateOrderResponse(Date orderDate, List<MealBox> mealBoxes, List<Integer> quantities, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, Long userId) {
         this.orderDate = orderDate;
-        this.mealboxes = mealboxes;
+        this.mealBoxes = mealBoxes;
         this.quantities = quantities;
         this.deliveryDate = deliveryDate;
         this.address = address;
@@ -43,22 +44,6 @@ public class CreateOrderResponse {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public MealBox[] getMealboxes() {
-        return mealboxes;
-    }
-
-    public void setMealboxes(MealBox[] mealboxes) {
-        this.mealboxes = mealboxes;
-    }
-
-    public Integer[] getQuantities() {
-        return quantities;
-    }
-
-    public void setQuantities(Integer[] quantities) {
-        this.quantities = quantities;
     }
 
     public Date getDeliveryDate() {
@@ -92,6 +77,21 @@ public class CreateOrderResponse {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-    
+
+    public List<MealBox> getMealBoxes() {
+        return mealBoxes;
+    }
+
+    public void setMealBoxes(List<MealBox> mealBoxes) {
+        this.mealBoxes = mealBoxes;
+    }
+
+    public List<Integer> getQuantities() {
+        return quantities;
+    }
+
+    public void setQuantities(List<Integer> quantities) {
+        this.quantities = quantities;
+    }
 
 }
