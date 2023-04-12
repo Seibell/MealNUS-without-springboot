@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/c
 import AdminTitle from './AdminTitle';
 import { useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment-timezone';
 
 
 function AdminOrderTable() {
@@ -21,8 +22,18 @@ function AdminOrderTable() {
     console.log(query);
 
     //search filter
+    const updatedOrders = orders.map(order => {
+        const newOrder = { ...order };
+        const formatted = order.orderDate.replace('Z[UTC]', '')
+        newOrder.orderDate = moment.utc(formatted).tz('Asia/Singapore').format('DD/MM/YYYY');
+        console.log(newOrder.orderDate);
+        console.log(order.orderDate);
+        return newOrder;
+      });
 
-    const filteredData = orders.filter(
+    
+
+    const filteredData = updatedOrders.filter(
         (order) =>
             order.user.firstName.toLowerCase().includes(query.toLowerCase()) ||
             order.orderId == query ||
@@ -83,7 +94,7 @@ function AdminOrderTable() {
                             </TableCell>
                             <TableCell >
                                 <button onClick={() => navigate('/UpdateOrder/' + order.orderId)}>
-                                    Add A MealBox
+                                    Update Order
                                 </button>
                             </TableCell>
                         </TableRow>

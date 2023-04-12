@@ -29,7 +29,7 @@ const Home = () => {
         </div>
         <div className="home-text-section" style={{ paddingLeft: "25px" }}>
           <h1 className="primary-heading">
-            Your Favourite Food Delivered Hot & Fresh
+            NUS Exclusive Food Delivered Easy & Fresh
           </h1>
           <p className="primary-text">
             Healthy switcher chefs do all the prep work, like peeding, chopping

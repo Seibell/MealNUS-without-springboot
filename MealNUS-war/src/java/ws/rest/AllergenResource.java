@@ -7,6 +7,7 @@ package ws.rest;
 
 import ejb.session.stateless.AllergenSessionBeanLocal;
 import entity.Allergen;
+import entity.Ingredient;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,12 +16,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.enterprise.context.RequestScoped;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.exception.AllergenNotFound;
+import util.exception.IngredientNotFoundException;
 
 /**
  * REST Web Service
@@ -58,6 +65,33 @@ public class AllergenResource {
             ).build();
     }
     
+    @GET
+    @Path("/getAllergenById/{allergenId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllergenById(@PathParam("allergenId") Long id) {
+        
+        try {
+            Allergen a = allergenSessionBean.retrieveAllergenById(id);
+            return Response.status(200).entity(
+                    a).build();
+        } catch (AllergenNotFound ex) {
+        JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .build();
+        }
+        
+    } //end
+    
+    @PUT
+    @Path("/updateAllergen/{allergenId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateAllergen(@PathParam("allergenId") Long Id, Allergen a){
+        Allergen allergen = allergenSessionBean.updateIngredient(Id, a);
+        return Response.status(200).entity(allergen).build();
+    }  
     
 
     private AllergenSessionBeanLocal lookupAllergenSessionBeanLocal() {

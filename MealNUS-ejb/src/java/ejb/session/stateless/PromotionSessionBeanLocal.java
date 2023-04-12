@@ -34,7 +34,7 @@ public interface PromotionSessionBeanLocal {
 
     public List<Promotion> retrieveAllPromotions();
 
-    public void updatePromotion(Promotion promotion) throws PromotionNotFoundException;
+    public void updatePromotion(Long promoId, Promotion promotion) throws PromotionNotFoundException;
 
     public void deletePromotion(Long promotionId);
 

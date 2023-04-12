@@ -9,8 +9,7 @@ import Sidebar from "../Global/Sidebar";
 import moment from 'moment-timezone';
 
 import { Box, Typography, useTheme } from "@mui/material";
-import { Button } from '@material-ui/core';
-import { IconButton } from '@mui/material';
+import { Button } from '@mui/material';
 import { tokens } from "../Global/AdminTheme";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
@@ -24,11 +23,14 @@ import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 import Header from "../Global/Header";
 import MonthlyOrderLineChart from "../Global/MonthlyOrderLineChart";
 import OrderStatusPieChart from "../Global/OrderStatusPieChart";
+import OrderAddressBarChart from "../Global/OrderAddressBarChart";
 import StatBox from "../Global/StatBox";
 import TopSellingMealboxes from "../Global/TopSellingMealboxes";
 
-import mastercardLogo from "../../../Assets/mastercard-Logo.png";
+import mastercardLogo from "../../../Assets/mastercard-logo.png";
 import visaLogo from "../../../Assets/visa-logo.png";
+import amexLogo from "../../../Assets/amex-logo.png";
+import creditCardLogo from "../../../Assets/creditCard.png";
 
 import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
@@ -41,7 +43,8 @@ function Copyright(props) {
                 MealNUS
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {' (UEN: 54231804G).'} All rights reserved.
+            <p>Computing 1 (COM1), 13 Computing Drive. Singapore 117417</p>
         </Typography>
     );
 }
@@ -338,6 +341,8 @@ const Dashboard = () => {
 
     const getOrderStatusColor = (orderStatus) => {
         switch (orderStatus) {
+            case "CREATED":
+                return "lightpink";
             case "PAID":
                 return "orange";
             case "PREPARING":
@@ -346,8 +351,8 @@ const Dashboard = () => {
                 return "dodgerblue";
             case "COMPLETED":
                 return "dimgray";
-            default:  //CREATED
-                return "lightpink";
+            default:  //CANCELLED
+                return "tomato";
         }
     };
 
@@ -392,7 +397,6 @@ const Dashboard = () => {
                                 gridAutoRows="140px"
                                 gap="20px"
                             >
-
                                 {/* ROW 1 */}
                                 <Box
                                     gridColumn="span 4"
@@ -409,7 +413,7 @@ const Dashboard = () => {
                                         increase={todayOrderCountProgress}
                                         icon={
                                             <LocalMallIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -429,7 +433,7 @@ const Dashboard = () => {
                                         increase={todayOrderRevenueProgress}
                                         icon={
                                             <PointOfSaleIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -449,7 +453,7 @@ const Dashboard = () => {
                                         increase={todayUserCountProgress}
                                         icon={
                                             <PersonAddAlt1Icon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -472,7 +476,7 @@ const Dashboard = () => {
                                         increase={todayMtdCountProgress}
                                         icon={
                                             <LocalMallIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -492,7 +496,7 @@ const Dashboard = () => {
                                         increase={todayMtdRevenueProgress}
                                         icon={
                                             <PointOfSaleIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -512,7 +516,7 @@ const Dashboard = () => {
                                         increase={todayMtdProfitProgress}
                                         icon={
                                             <MonetizationOnIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -532,7 +536,7 @@ const Dashboard = () => {
                                         increase={todayMtdCostProgress}
                                         icon={
                                             <TollIcon
-                                                sx={{ color: colors.blueAccent[600], fontSize: "26px" }}
+                                                sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }}
                                             />
                                         }
                                     />
@@ -552,28 +556,27 @@ const Dashboard = () => {
                                         display="flex "
                                         justifyContent="space-between"
                                         alignItems="center"
-                                        overflow="auto"
                                     >
                                         <Box>
                                             <Typography
                                                 variant="h5"
                                                 fontWeight="600"
-                                                color={colors.grey[100]}
+                                                color={colors.mealNUSBlue[100]}
                                             >
-                                                Total Revenue
+                                                Monthly Order Summary
                                             </Typography>
                                             <Typography
                                                 variant="h6"
                                                 fontWeight="bold"
-                                                color={colors.grey[100]}
+                                                color={colors.mealNUSBlue[100]}
                                                 style={{ display: "inline" }}
                                             >
-                                                SGD&nbsp;
+                                                Total Revenue: SGD&nbsp;
                                             </Typography>
                                             <Typography
                                                 variant="h3"
                                                 fontWeight="bold"
-                                                color={colors.greenAccent[500]}
+                                                color={colors.grey[100]}
                                                 style={{ display: "inline" }}
                                             >
                                                 {totalRev.toLocaleString('en-US', { maximumFractionDigits: 0 })}
@@ -581,7 +584,7 @@ const Dashboard = () => {
                                         </Box>
                                     </Box>
                                     <Box height="250px" m="-20px 0 0 0">
-                                        <MonthlyOrderLineChart isDashboard={true} width="50%" />
+                                        <MonthlyOrderLineChart width="50%" />
                                     </Box>
                                 </Box>
                                 <Box
@@ -590,10 +593,10 @@ const Dashboard = () => {
                                     backgroundColor={colors.primary[400]}
                                     p="30px"
                                 >
-                                    <Typography variant="h5" fontWeight="600">
-                                        Order Breakdown
+                                    <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
+                                        Order Breakdown by STATUS
                                     </Typography>
-                                    <Box height="250px" m="-20px 0 0 0">
+                                    <Box height="250px" m="-5px 0 0 0">
                                         <OrderStatusPieChart />
                                     </Box>
                                 </Box>
@@ -602,10 +605,17 @@ const Dashboard = () => {
 
                                 {/* ROW 4 */}
                                 <Box
-                                    gridColumn="span 8"
+                                    gridColumn="span 7"
                                     gridRow="span 3"
                                     backgroundColor={colors.primary[400]}
                                     overflow="auto"
+
+
+                                // gridColumn="span 3"
+                                // backgroundColor={colors.primary[400]}
+                                // display="flex"
+                                // alignItems="center"
+                                // justifyContent="center"
 
                                 >
                                     <Box
@@ -618,52 +628,55 @@ const Dashboard = () => {
                                         height="20%"
                                     >
 
-                                        <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
-                                            <ReceiptLongIcon />
+                                        <Typography color={colors.mealNUSBlue[100]} variant="h5" fontWeight="600">
+                                            <ReceiptLongIcon sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }} />
                                             {' '}Recent Orders
 
                                         </Typography>
                                     </Box>
-                                    {orderData.slice(0, showAll ? orderData.length : 3).map((order, i) => (
-                                        <Box
-                                            key={`${order.orderId}-${i}`}
-                                            display="flex"
-                                            justifyContent="space-between"
-                                            alignItems="center"
-                                            borderBottom={`4px solid ${colors.primary[500]}`}
-                                            p="30px"
-                                            height="20%"
-                                        >
-                                            <Box textAlign="left" width="100px">
-                                                <Typography color={colors.blueAccent[500]} variant="h5" fontWeight="600">
-                                                    {i + 1}
-                                                </Typography>
-                                                <Typography color={colors.grey[100]}>{order.user.firstName}</Typography>
-                                            </Box>
-                                            <Box textAlign="left" color={colors.grey[100]} width="100px">
-                                                {moment
-                                                    .utc(order.orderDate, 'YYYY-MM-DD HH:mm:ss')
-                                                    .tz('Asia/Singapore')
-                                                    .format('DD/MM/YYYY HH:mm:ss')}
-                                            </Box>
-                                            <Box textAlign="left" color={colors.grey[100]} width="100px">
-                                                {order.address.replace(/_/g, ' ')
-                                                    .split(' ')
-                                                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                                                    .join(' ')}
-                                            </Box>
-                                            <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px">
-                                                <img src={mastercardLogo} alt={"Card type"} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
-                                                SGD&nbsp;
-                                                <Typography>{order.orderDetails.map(detail => detail.key.itemPrice * detail.value).reduce((total, price) => total + price, 0)}</Typography>
-                                            </Box>
-                                            {/* Above cc logo display method to be replaced by below once confirmed */}
-                                            {/* <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px">
+                                    <Box position="relative" height="100%">
+                                        <Box height="90%" >
+                                            {orderData.slice(0, showAll ? orderData.length : 3).map((order, i) => (
+                                                <Box
+                                                    key={`${order.orderId}-${i}`}
+                                                    display="flex"
+                                                    justifyContent="space-between"
+                                                    alignItems="center"
+                                                    borderBottom={`4px solid ${colors.primary[500]}`}
+                                                    p="30px"
+                                                    height="20%"
+                                                    overflow-x="auto"
+                                                >
+                                                    <Box textAlign="left" width="100px">
+                                                        <Typography color={colors.mealNUSBlue[100]} variant="h5" fontWeight="600">
+                                                            {i + 1}
+                                                        </Typography>
+                                                        <Typography color={colors.grey[100]}>{order.user.firstName}</Typography>
+                                                    </Box>
+                                                    <Box textAlign="left" color={colors.grey[100]} width="100px">
+                                                        {moment
+                                                            .utc(order.orderDate, 'YYYY-MM-DD HH:mm:ss')
+                                                            .tz('Asia/Singapore')
+                                                            .format('DD/MM/YYYY HH:mm:ss')}
+                                                    </Box>
+                                                    <Box textAlign="left" color={colors.grey[100]} width="100px">
+                                                        {order.address.replace(/_/g, ' ')
+                                                            .split(' ')
+                                                            .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                                                            .join(' ')}
+                                                    </Box>
+                                                    <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px">
+                                                        <img src={mastercardLogo} alt={"Card type"} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
+                                                        SGD&nbsp;
+                                                        <Typography>{order.orderDetails.map(detail => detail.key.itemPrice * detail.value).reduce((total, price) => total + price, 0)}</Typography>
+                                                    </Box>
+                                                    {/* Above cc logo display method to be replaced by below once confirmed */}
+                                                    {/* <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px">
                                                 <img
                                                     src={
-                                                        order.user.creditCards.get(0).charAt(0) === "4"
+                                                        order.user.creditCards[0]?.startsWith("4")
                                                             ? visaLogo
-                                                            : order.user.creditCards.get(0).charAt(0) === "5"
+                                                            : order.user.creditCards[0]?.startsWith("5")
                                                                 ? mastercardLogo
                                                                 : ""
                                                     }
@@ -682,45 +695,67 @@ const Dashboard = () => {
                                                         .reduce((total, price) => total + price, 0)}
                                                 </Typography>
                                             </Box> */}
-                                            <Box
-                                                textAlign="center"
-                                                backgroundColor={getOrderStatusColor(order.orderStatus)}
-                                                p="5px 10px"
-                                                borderRadius="15px"
-                                                width="100px"
-                                            >
-                                                <b>{order.orderStatus}</b>
-                                            </Box>
+                                                    <Box
+                                                        textAlign="center"
+                                                        backgroundColor={getOrderStatusColor(order.orderStatus)}
+                                                        p="5px 10px"
+                                                        borderRadius="15px"
+                                                        width="100px"
+                                                    >
+                                                        <b>{order.orderStatus}</b>
+                                                    </Box>
+                                                </Box>
+                                            ))}
                                         </Box>
-                                    ))}
-                                    {!showAll && (
-                                        <Box display="flex" justifyContent="center" my="20px">
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                size="medium"
-                                                onClick={handleClick}
-                                                style={{ borderRadius: 20 }}
-                                                startIcon={<UnfoldMoreIcon />}
-                                            >
-                                                View All
-                                            </Button>
+                                        <Box position="absolute" top="-52px" right="18px">
+                                            {!showAll && (
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    size="medium"
+                                                    onClick={handleClick}
+                                                    style={{ borderRadius: 20 }}
+                                                    startIcon={<UnfoldMoreIcon />}
+                                                    sx={{
+                                                        backgroundColor: colors.mealNUSBlue[100],
+                                                    }}
+                                                >
+                                                    View All
+                                                </Button>
+
+                                            )}
+                                            {showAll && (
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    size="medium"
+                                                    onClick={handleClick}
+                                                    style={{ borderRadius: 20 }}
+                                                    startIcon={<UnfoldLessIcon />}
+                                                    sx={{
+                                                        backgroundColor: colors.mealNUSOrange[100],
+                                                    }}
+                                                >
+                                                    View Less
+                                                </Button>
+                                            )}
                                         </Box>
-                                    )}
-                                    {showAll && (
-                                        <Box display="flex" justifyContent="center" my="20px">
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                size="medium"
-                                                onClick={handleClick}
-                                                style={{ borderRadius: 20 }}
-                                                startIcon={<UnfoldLessIcon />}
-                                            >
-                                                View Less
-                                            </Button>
-                                        </Box>
-                                    )}
+                                    </Box>
+                                </Box>
+                                <Box
+                                    // display="flex"
+                                    gridColumn="span 5"
+                                    gridRow="span 3"
+                                    backgroundColor={colors.primary[400]}
+                                    p="30px"
+                                    // overflow="auto"
+                                >
+                                    <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
+                                        Order Breakdown by ADDRESS
+                                    </Typography>
+                                    <Box height="350px" m="50px 0 0 0">
+                                        <OrderAddressBarChart />
+                                    </Box>
                                 </Box>
 
 
@@ -741,7 +776,7 @@ const Dashboard = () => {
                                         <Typography
                                             variant="h5"
                                             fontWeight="600"
-                                            color={colors.grey[100]}
+                                            color={colors.mealNUSBlue[100]}
                                         >
                                             Top Ranking MealBoxes
                                         </Typography>
@@ -750,11 +785,9 @@ const Dashboard = () => {
                                         <TopSellingMealboxes />
                                     </Box>
                                 </Box>
-
-
                             </Box>
+                            {/* End of Main Code Body */}
                         </Box>
-                        {/* End of Main Code Body */}
 
                         <Copyright sx={{ pt: 4 }} />
                     </main>

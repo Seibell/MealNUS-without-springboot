@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
@@ -28,7 +29,7 @@ import util.enumeration.OrderStatus;
  */
 @Entity
 public class OrderEntity implements Serializable {
-
+   
 //name is because order dosent work with SQL  <-- can i replace with OrderEntity?? -CH
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,6 +39,9 @@ public class OrderEntity implements Serializable {
     private Date orderDate;
 
     private List<Pair<MealBox, Integer>> orderDetails;
+    
+    private List<MealBox> userorders;
+    private List<Integer> quantity;
 
     private List<BigDecimal> priceList;
     private List<BigDecimal> costList;
@@ -82,9 +86,18 @@ public class OrderEntity implements Serializable {
         this.orderStatus = orderStatus;
         this.user = user;
     }
-    
-    
 
+    public OrderEntity(Date orderDate, List<Pair<MealBox, Integer>> orderDetails, List<BigDecimal> priceList, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, User user) {
+        this.orderDate = orderDate;
+        this.orderDetails =  orderDetails;
+        this.priceList = priceList;
+        this.deliveryDate = deliveryDate;
+        this.address = address;
+        this.orderStatus = orderStatus;
+        this.user = user;
+    }
+    
+   
     public Long getOrderId() {
         return orderId;
     }
@@ -229,4 +242,22 @@ public class OrderEntity implements Serializable {
     public void setCostList(List<BigDecimal> costList) {
         this.costList = costList;
     }
+
+    public List<MealBox> getUserorders() {
+        return userorders;
+    }
+
+    public void setUserorders(List<MealBox> userorders) {
+        this.userorders = userorders;
+    }
+
+    public List<Integer> getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(List<Integer> quantity) {
+        this.quantity = quantity;
+    }
+    
+    
 }

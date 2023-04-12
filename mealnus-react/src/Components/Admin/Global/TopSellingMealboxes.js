@@ -105,27 +105,33 @@ const TopSellingMealboxes = () => {
         {
             field: "rank",
             headerName: "Rank",
-            flex: 1
+            flex: 1,
+            headerClassName: "headerName",
         },
         {
             field: "key",
             headerName: "MealBox",
-            flex: 1
+            flex: 1,
+            cellClassName: "name-column--cell",
+            headerClassName: "headerName",
         },
         {
             field: "value",
             headerName: "Sold Quantity",
-            flex: 1
+            flex: 1,
+            headerClassName: "headerName",
         },
         {
             field: "stock",
             headerName: "Available Quantity",
-            flex: 1
+            flex: 1,
+            headerClassName: "headerName",
         },
         {
             headerName: "Stock Level",
             field: "fraction",
             flex: 1,
+            headerClassName: "headerName",
             renderCell: (params) => (
                 <TableCell>
                     <Box display="flex" alignItems="center">
@@ -155,24 +161,27 @@ const TopSellingMealboxes = () => {
                         borderBottom: "none",
                     },
                     "& .name-column--cell": {
-                        color: colors.greenAccent[300],
+                        color: colors.mealNUSBlue[100],
                     },
                     "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: colors.blueAccent[700],
+                        backgroundColor: colors.mealNUSBlue[100],
                         borderBottom: "none",
                     },
                     "& .MuiDataGrid-virtualScroller": {
-                        backgroundColor: colors.primary[400],
+                        backgroundColor: colors.white[100],
                     },
                     "& .MuiDataGrid-footerContainer": {
                         borderTop: "none",
-                        backgroundColor: colors.blueAccent[700],
+                        backgroundColor: colors.mealNUSOrange[100],
                     },
                     "& .MuiCheckbox-root": {
                         color: `${colors.greenAccent[200]} !important`,
                     },
                     "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                         color: `${colors.grey[100]} !important`,
+                    },
+                    "& .headerName": {
+                        color: colors.white[100],
                     },
                 }}
             >

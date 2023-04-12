@@ -70,7 +70,7 @@ public class IngredientResource {
     }
     
     @GET
-    @Path("/ingredient/{ingredientId}")
+    @Path("/getIngredientById/{ingredientId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getIngredientById(@PathParam("ingredientId") Long id) {
         

@@ -68,7 +68,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 },
             }}
             colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
-            margin={{ top: 40, right: 140, bottom: 40, left: 45 }}
+            margin={{ top: 40, right: 140, bottom: 50, left: 60 }}
             xScale={{ type: "point" }}
             yScale={{
                 type: "linear",
@@ -77,7 +77,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 stacked: true,
                 reverse: false,
             }}
-            yFormat=" >-.2f"
+            yFormat=".0f"
             curve="catmullRom"
             axisTop={null}
             axisRight={null}
@@ -100,6 +100,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 legendOffset: -40,
                 legendPosition: "middle",
             }}
+            yAxisTickCount={10}
             enableGridX={false}
             enableGridY={false}
             pointSize={10}
@@ -117,8 +118,8 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                     translateY: 0,
                     itemsSpacing: 0,
                     itemDirection: "left-to-right",
-                    itemWidth: 90,
-                    itemHeight: 20,
+                    itemWidth: 100,
+                    itemHeight: 380,
                     itemOpacity: 0.7,
                     symbolSize: 6,
                     symbolShape: "circle",

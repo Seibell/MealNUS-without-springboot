@@ -122,7 +122,7 @@ function UpdateMealBox(props) {
   const [retrieved , setretrieved] = useState({});
 
   const [itemName, setitemName] = useState('');
-  const [itemCode, setitemCode] = useState(''); //Why is this capital? :/ i just copied the one in mealbox... is like this de
+  const [itemCode, setitemCode] = useState(''); // Why is this capital? :/ i just copied the one in mealbox... is like this de
   const [itemCost, setitemCost] = useState('');
   const [itemPrice, setitemPrice] = useState('');
   const [itemDescription, setitemDescription] = useState('');
@@ -746,7 +746,7 @@ const checkIfallergenExisit = (allergens, allergen) => {
                                     </div>
                                   <div className="card-footer">
                                       <Link to="/InventoryHome">
-                                          <button className="btn btn-default" type="button">
+                                          <button className="btn btn-default" type="button" onClick={() => navigate('/InventoryHome')}>
                                               Cancel
                                           </button>
                                       </Link>

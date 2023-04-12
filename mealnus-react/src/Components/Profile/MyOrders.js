@@ -33,6 +33,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Button } from "@mui/material";
+import { makeStyles } from '@material-ui/core/styles';
 
 const MyOrders = () => {
   const { currentUser } = useContext(AuthContext);
@@ -47,6 +48,7 @@ const MyOrders = () => {
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
   const [currentOrderId, setCurrentOrderId] = useState(null);
   const [submittedReviews, setSubmittedReviews] = useState([]);
+
 
   useEffect(() => {
     console.log("currentUser: ", currentUser);
@@ -438,6 +440,8 @@ const MyOrders = () => {
             display="flex"
             flexDirection="column"
             padding="16px"
+            flexDirection="column"
+            padding="16px"
             alignItems="center"
             justifyContent="center"
           >
@@ -496,6 +500,7 @@ const MyOrders = () => {
                   <span>{status.label}</span>
                 </div>
               ))}
+            </div>
             </div>
           </Box>
         </Box>

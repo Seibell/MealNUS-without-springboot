@@ -39,6 +39,7 @@ import util.exception.UnknownPersistenceException;
 import util.enumeration.OrderStatus;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response.Status;
+import util.enumeration.AddressEnum;
 import util.exception.UserNotFoundException;
 import ws.model.CreateOrderResponse;
 import ws.model.RetrieveAllOrdersResponse;
@@ -110,9 +111,9 @@ public class OrdersResource {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/getOrder/{orderId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOrder(@PathParam("id") Long cId) {
+    public Response getOrder(@PathParam("orderId") Long cId) {
         try {
             OrderEntity c = orderSessionBeanLocal.retrieveOrderById(cId);
             return Response.status(200).entity(
@@ -390,6 +391,19 @@ public class OrdersResource {
                 revenue).build();
     }
 
+    // e.g. http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrderLocations
+    @GET
+    @Path("/retrieveAllOrderLocations")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllOrderLocations() {
+        List<List<Double>> orderLocations = orderSessionBeanLocal.retrieveAllOrderLocations();
+        GenericEntity<List<List<Double>>> entity
+                = new GenericEntity<List<List<Double>>>(orderLocations) {
+        };
+        return Response.status(200).entity(
+                entity).build();
+    }
+
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/update/1
     // success should show the success message
     @PUT
@@ -400,8 +414,20 @@ public class OrdersResource {
         orderSessionBeanLocal.updateOrder(orderId, orderToUpdate);
         String updateSuccessMessage = "Order with ID [" + orderId + "] has been updated successfully!";
         return Response.status(200).entity(updateSuccessMessage).build();
+    }
+   
+    /*
+    @Path("/update2/{orderId}") 
+    @Consumes(MediaType.APPLICATION_JSON) 
+    @Produces(MediaType.APPLICATION_JSON) 
+    public Response updateOrder2(@PathParam("orderId") Long orderId, OrderEntity orderEntity) throws OrderNotFoundException { 
+       // OrderEntity order = orderSessionBeanLocal.retrieveOrderById(orderId);
+        System.out.println(orderId + " status: " + orderEntity.getOrderStatus()); 
+        orderSessionBeanLocal.updateOrder(orderEntity);
+        String updateSuccessMsg = "Order with ID [" + orderId + "] has been updated successfully!"; 
+        return Response.status(200).entity(updateSuccessMsg).build(); 
     } //end editOrder
-
+*/
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/delete/1
     // success should show the success message
     @DELETE
@@ -426,6 +452,27 @@ public class OrdersResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
+    }
+
+    
+    
+    // retrieve order status;
+    // http://localhost:8080/MealNUS-war/rest/orders/retrieveAllAddress
+    @GET
+    @Path(value = "retrieveAllAddress")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllAddress() {
+       AddressEnum[] address = AddressEnum.values();
+       return Response.status(Status.OK).entity(address).build();
+    }
+    //retrieve all enum addr
+    // http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrderStatus
+       @GET
+    @Path(value = "retrieveAllOrderStatus")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllOrderStatus() {
+       OrderStatus[] status = OrderStatus.values();
+       return Response.status(Status.OK).entity(status).build();
     }
 
     private UserSessionBeanLocal lookupUserSessionBeanLocal() {

@@ -8,6 +8,8 @@ import Topbar from "../../Admin/Global/Topbar";
 import Sidebar from "../../Admin/Global/Sidebar";
 
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../Global/AdminTheme";
 import Header from "../../Admin/Global/Header";
@@ -35,7 +37,8 @@ function Copyright(props) {
                 MealNUS
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {' (UEN: 54231804G).'} All rights reserved.
+            <p>Computing 1 (COM1), 13 Computing Drive. Singapore 117417</p>
         </Typography>
     );
 }
@@ -63,6 +66,8 @@ const Order = () => {
 
     const getOrderStatusColor = (orderStatus) => {
         switch (orderStatus) {
+            case "CREATED":
+                return "lightpink";
             case "PAID":
                 return "orange";
             case "PREPARING":
@@ -71,8 +76,8 @@ const Order = () => {
                 return "dodgerblue";
             case "COMPLETED":
                 return "dimgray";
-            default:  //CREATED
-                return "lightpink";
+            default:  //CANCELLED
+                return "tomato";
         }
     };
 
@@ -80,12 +85,13 @@ const Order = () => {
         {
             field: "orderId",
             headerName: "Order ID",
-            flex: 1,
+            headerClassName: "headerName",
         },
         {
             field: "orderDate",
             headerName: "Order Date",
             flex: 1,
+            headerClassName: "headerName",
             valueFormatter: (params) => {
                 const utcTime = moment.utc(params.value, 'YYYY-MM-DD HH:mm:ss');
                 const singaporeTime = utcTime.tz('Asia/Singapore');
@@ -97,6 +103,7 @@ const Order = () => {
             field: "firstName",
             headerName: "First Name",
             flex: 1,
+            headerClassName: "headerName",
             cellClassName: "name-column--cell",
             valueGetter: (params) => params.row.user.firstName
         },
@@ -104,25 +111,43 @@ const Order = () => {
             field: "address",
             headerName: "Address",
             flex: 1,
+            headerClassName: "headerName",
         },
         {
             field: "orderStatus",
             headerName: "Status",
             flex: 1,
+            headerClassName: "headerName",
             renderCell: (params) => (
-                <span style={{ color: getOrderStatusColor(params.value) }}>
-                    {params.value}
-                </span>
+                <Box
+                    textAlign="center"
+                    backgroundColor={getOrderStatusColor(params.value)}
+                    p="5px 10px"
+                    borderRadius="15px"
+                    width="100px"
+                >
+                    <b>{params.value}</b>
+                </Box>
             ),
         },
         {
             field: "updateOrder",
-            headerName: "Update Order",
+            headerName: "Actions",
             flex: 1,
+            headerClassName: "headerName",
             renderCell: (params) => (
-                <button onClick={() => navigate('/UpdateOrder/' + params.row.orderId)}>
-                    Add A MealBox
-                </button>
+                <IconButton
+                    onClick={() =>
+                        window.open(
+                            '/updateorder/' + params.row.orderId,
+                            'Update Order',
+                            'width=600,height=500'
+                        )
+                    }
+                    variant="contained"
+                >
+                    <EditIcon />
+                </IconButton>
             ),
         },
     ];
@@ -154,10 +179,10 @@ const Order = () => {
                                         borderBottom: "none",
                                     },
                                     "& .name-column--cell": {
-                                        color: colors.greenAccent[300],
+                                        color: colors.mealNUSBlue[100],
                                     },
                                     "& .MuiDataGrid-columnHeaders": {
-                                        backgroundColor: colors.blueAccent[700],
+                                        backgroundColor: colors.mealNUSBlue[100],
                                         borderBottom: "none",
                                     },
                                     "& .MuiDataGrid-virtualScroller": {
@@ -165,13 +190,16 @@ const Order = () => {
                                     },
                                     "& .MuiDataGrid-footerContainer": {
                                         borderTop: "none",
-                                        backgroundColor: colors.blueAccent[700],
+                                        backgroundColor: colors.mealNUSOrange[100],
                                     },
                                     "& .MuiCheckbox-root": {
                                         color: `${colors.greenAccent[200]} !important`,
                                     },
                                     "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                                         color: `${colors.grey[100]} !important`,
+                                    },
+                                    "& .headerName": {
+                                        color: colors.white[100],
                                     },
                                 }}
                             >
