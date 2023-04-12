@@ -307,7 +307,7 @@ public class DataInitSessionBean {
             try {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(new Date());
-                cal.add(Calendar.DAY_OF_MONTH, -5);
+                cal.add(Calendar.DAY_OF_MONTH, -50);
                 Date orderDate = cal.getTime();
                 MealBox mealBox = new MealBox("https://assets.epicurious.com/photos/61ba94cc79b235be07f993e7/6:4/w_1600%2Cc_limit/gobble.png", "Supreme Meat Box", 004L, new BigDecimal(15), new BigDecimal(20), "This is a high quality meat mealBox", 10);
                 Integer qty = 4;
@@ -324,7 +324,7 @@ public class DataInitSessionBean {
                 orderSessionBean.createOrder(new OrderEntity(orderDate, orderDetails, priceList, costList, deliveryDate, address, orderStatus, user));
 
                 cal.setTime(new Date());
-                cal.add(Calendar.DAY_OF_MONTH, -2);
+                cal.add(Calendar.DAY_OF_MONTH, -20);
                 Date orderDate2 = cal.getTime();
                 MealBox mealBox2 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
                 Integer qty2 = 23;
@@ -345,7 +345,7 @@ public class DataInitSessionBean {
                 OrderEntity newOrder2 = orderSessionBean.createOrder(new OrderEntity(orderDate2, orderDetails2, priceList2, costList2, deliveryDate2, address2, orderStatus2, user2));
 
                 cal.setTime(new Date());
-                cal.add(Calendar.DAY_OF_MONTH, -1);
+                cal.add(Calendar.DAY_OF_MONTH, -15);
                 Date orderDate3 = cal.getTime();
                 MealBox mealBox3 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box 2", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
                 Integer qty3 = 23;
@@ -387,9 +387,9 @@ public class DataInitSessionBean {
         }
         if (creditCardSessionBean.retrieveAllCreditCardsByUserId((long) 6).isEmpty()) {
             try {
-                creditCardSessionBean.addNewCreditCard(new CreditCard("123", "123", "123", "123", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
-                creditCardSessionBean.addNewCreditCard(new CreditCard("1234", "1234", "1234", "1234", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
-                creditCardSessionBean.addNewCreditCard(new CreditCard("12345", "12345", "12345", "12345", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
+                creditCardSessionBean.addNewCreditCard(new CreditCard("Eric5 Tang5", "4231946284028637", "523", "06/28", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
+                creditCardSessionBean.addNewCreditCard(new CreditCard("Eric5 Tang5", "5231946284028637", "972", "05/23", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
+                creditCardSessionBean.addNewCreditCard(new CreditCard("Eric5 Tang5", "4231943285028682", "105", "06/25", userSessionBean.retrieveUserByEmail("user5@gmail.com")), (long) 6);
             } catch (Exception e) {
                 e.printStackTrace();
             }

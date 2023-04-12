@@ -35,7 +35,8 @@ function Copyright(props) {
                 MealNUS
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {' (UEN: 54231804G).'} All rights reserved.
+            <p>Computing 1 (COM1), 13 Computing Drive. Singapore 117417</p>
         </Typography>
     );
 }

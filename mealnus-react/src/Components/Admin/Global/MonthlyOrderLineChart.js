@@ -68,7 +68,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 },
             }}
             colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
-            margin={{ top: 40, right: 140, bottom: 40, left: 45 }}
+            margin={{ top: 40, right: 140, bottom: 50, left: 60 }}
             xScale={{ type: "point" }}
             yScale={{
                 type: "linear",
@@ -77,7 +77,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 stacked: true,
                 reverse: false,
             }}
-            yFormat=" >-.2f"
+            yFormat=".0f"
             curve="catmullRom"
             axisTop={null}
             axisRight={null}

@@ -23,13 +23,14 @@ import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 import Header from "../Global/Header";
 import MonthlyOrderLineChart from "../Global/MonthlyOrderLineChart";
 import OrderStatusPieChart from "../Global/OrderStatusPieChart";
-import OrderAddressGeoChart from "../Global/OrderAddressGeoChart";
+import OrderAddressBarChart from "../Global/OrderAddressBarChart";
 import StatBox from "../Global/StatBox";
 import TopSellingMealboxes from "../Global/TopSellingMealboxes";
 
-import mastercardLogo from "../../../Assets/mastercard-Logo.png";
+import mastercardLogo from "../../../Assets/mastercard-logo.png";
 import visaLogo from "../../../Assets/visa-logo.png";
-import stayTuned from "../../../Assets/stay-tuned.png";
+import amexLogo from "../../../Assets/amex-logo.png";
+import creditCardLogo from "../../../Assets/creditCard.png";
 
 import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
@@ -42,7 +43,8 @@ function Copyright(props) {
                 MealNUS
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {' (UEN: 54231804G).'} All rights reserved.
+            <p>Computing 1 (COM1), 13 Computing Drive. Singapore 117417</p>
         </Typography>
     );
 }
@@ -582,7 +584,7 @@ const Dashboard = () => {
                                         </Box>
                                     </Box>
                                     <Box height="250px" m="-20px 0 0 0">
-                                        <MonthlyOrderLineChart isDashboard={true} width="50%" />
+                                        <MonthlyOrderLineChart width="50%" />
                                     </Box>
                                 </Box>
                                 <Box
@@ -592,7 +594,7 @@ const Dashboard = () => {
                                     p="30px"
                                 >
                                     <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
-                                        Order Breakdown
+                                        Order Breakdown by STATUS
                                     </Typography>
                                     <Box height="250px" m="-20px 0 0 0">
                                         <OrderStatusPieChart />
@@ -603,8 +605,8 @@ const Dashboard = () => {
 
                                 {/* ROW 4 */}
                                 <Box
-                                    gridColumn="span 8"
-                                    gridRow="span 2"
+                                    gridColumn="span 7"
+                                    gridRow="span 3"
                                     backgroundColor={colors.primary[400]}
                                     overflow="auto"
 
@@ -738,28 +740,19 @@ const Dashboard = () => {
                                                 </Button>
                                             )}
                                         </Box>
-
                                     </Box>
                                 </Box>
                                 <Box
-                                    gridColumn="span 4"
-                                    gridRow="span 2"
+                                    gridColumn="span 5"
+                                    gridRow="span 3"
                                     backgroundColor={colors.primary[400]}
-                                    padding="30px"
-                                    overflow="auto"
-                                    overflow-x="auto"
+                                    p="30px"
                                 >
-                                    <Typography
-                                        variant="h5"
-                                        fontWeight="600"
-                                        sx={{ marginBottom: "15px" }}
-                                        color={colors.mealNUSBlue[100]}
-                                    >
-                                        More chart(s) coming soon...
+                                    <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
+                                        Order Breakdown by ADDRESS
                                     </Typography>
-                                    <Box height="200px">
-                                        <img src={stayTuned}></img>
-                                        <OrderAddressGeoChart isDashboard={true} />
+                                    <Box height="250px" m="130px 0 0 0">
+                                        <OrderAddressBarChart />
                                     </Box>
                                 </Box>
 

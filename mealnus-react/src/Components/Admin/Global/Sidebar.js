@@ -6,22 +6,14 @@ import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "./AdminTheme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import TakeoutDiningOutlinedIcon from '@mui/icons-material/TakeoutDiningOutlined';
 import EggOutlinedIcon from '@mui/icons-material/EggOutlined';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import LocalPizzaOutlinedIcon from '@mui/icons-material/LocalPizzaOutlined';
+import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 
 import ProfShalinda from "../../../Assets/shalinda.jpg";
 import mealNUSLogo from '../../../Assets/MealNUS-Logo.png';
@@ -115,17 +107,20 @@ const Sidebar = () => {
                             </Box>
                             <Box textAlign="center">
                                 <Typography
-                                    variant="h2"
+                                    variant="h3"
                                     color={colors.mealNUSBlue[100]}
                                     fontWeight="bold"
-                                    sx={{ m: "10px 0 0 0" }}
+                                    sx={{ m: "10px 0 5px 0" }}
                                 >
-                                    Shalinda
+                                    Shalinda Adikari
                                 </Typography>
-                                <Typography variant="h5" color={colors.mealNUSOrange[100]}>
-                                    Head, Regional Operations
+                                <Typography variant="h6" color={colors.mealNUSOrange[100]}>
+                                    <b>Vice President of Operations
                                     <br />
-                                    MealNUS Asia
+                                    MealNUS Inc.</b>
+                                </Typography>
+                                <Typography variant="h6" color={colors.mealNUSBlue[100]}>
+                                    Joined since Jan 2023
                                 </Typography>
                             </Box>
                         </Box>
@@ -139,10 +134,9 @@ const Sidebar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
-
                         <Typography
                             variant="h6"
-                            color={colors.mealNUSBlue[100]}
+                            color={colors.grey[100]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
                             Members
@@ -157,7 +151,7 @@ const Sidebar = () => {
 
                         <Typography
                             variant="h6"
-                            color={colors.mealNUSBlue[100]}
+                            color={colors.grey[100]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
                             Orders
@@ -172,7 +166,7 @@ const Sidebar = () => {
 
                         <Typography
                             variant="h6"
-                            color={colors.mealNUSBlue[100]}
+                            color={colors.grey[100]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
                             Inventory
@@ -208,7 +202,7 @@ const Sidebar = () => {
 
                         <Typography
                             variant="h6"
-                            color={colors.mealNUSBlue[100]}
+                            color={colors.grey[100]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
                             Promotions
@@ -221,10 +215,24 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
 
+                        {/* <Typography
+                            variant="h6"
+                            color={colors.grey[100]}
+                            sx={{ m: "15px 0 5px 20px" }}
+                        >
+                            Charts
+                        </Typography>
+                        <Item
+                            title="Manage Charts"
+                            to="/admincharts"
+                            icon={<InsertChartOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        /> */}
                     </Box>
                 </Menu>
             </ProSidebar>
-        </Box>
+        </Box >
     );
 };
 

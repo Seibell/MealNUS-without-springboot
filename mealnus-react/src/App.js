@@ -49,6 +49,7 @@ import UpdateIngred from "./Components/Inventory/UpdateIngred";
 import UpdateOrder from "./Components/Inventory/UpdateOrder";
 import ViewAllAllergen from "./Components/Inventory/ViewAllAllergen";
 import UpdateAllergen from "./Components/Inventory/UpdateAllergen";
+
 //Admin
 import AdminDashboard from "./Components/Admin/Dashboard/AdminDashboard";
 import AdminMembers from "./Components/Admin/Member";
@@ -57,6 +58,7 @@ import AdminOrders from "./Components/Admin/Order";
 import AdminOrderManagement from "./Components/Admin/AdminOrderManagement";
 import AdminPromotion from "./Components/Admin/AdminPromotion";
 import AddPromotion from "./Components/Admin/Promotion/AddPromotion";
+import AdminCharts from "./Components/Admin/Charts";
 
 function App() {
 
@@ -91,6 +93,7 @@ function App() {
           <Route path="/adminpromotions" element={<AdminPromotions />} />
           <Route path="/addpromotion" element={<AddPromotion />} />
           <Route path="/adminorders" element={<AdminOrders />} />
+          <Route path="/admincharts" element={<AdminCharts />} />
           <Route path="/ViewAllAllergen" element={<ViewAllAllergen />} />
           <Route path="/UpdateAllergen/:allergenId" element={<UpdateAllergen />} />
 

@@ -18,7 +18,9 @@ import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
 
 import visaLogo from "../../../Assets/visa-logo.png";
-import mastercardLogo from "../../../Assets/mastercard-Logo.png";
+import mastercardLogo from "../../../Assets/mastercard-logo.png";
+import amexLogo from "../../../Assets/amex-logo.png";
+import creditCardLogo from "../../../Assets/creditCard.png";
 
 function Copyright(props) {
     return (
@@ -28,7 +30,8 @@ function Copyright(props) {
                 MealNUS
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {' (UEN: 54231804G).'} All rights reserved.
+            <p>Computing 1 (COM1), 13 Computing Drive. Singapore 117417</p>
         </Typography>
     );
 }
@@ -52,6 +55,29 @@ const Member = () => {
                 console.log(error);
             });
     }, []);
+
+    const getCreditCards = (userId) => {
+        axios.get(`http://localhost:8080/MealNUS-war/rest/User/${userId}/cards`)
+            .then(response => {
+                const updatedMemberData = memberData.map(member => {
+                    if (member.userId === userId) {
+                        member.creditCards = response.data;
+                    }
+                    return member;
+                });
+                setMemberData(updatedMemberData);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    useEffect(() => {
+        memberData.forEach(member => {
+            getCreditCards(member.userId);
+        });
+    }, [memberData]);
+
 
     const columns = [
         {
@@ -100,23 +126,27 @@ const Member = () => {
                 const firstCard = creditCardsList.length > 0 ? creditCardsList[0] : null;
                 if (firstCard) {
                     const maskedNumber = `•••• •••• •••• ${firstCard.creditCardNumber.slice(-4)}`;
-                    const cardType = firstCard.creditCardNumber.startsWith("4") ? "VISA" : "Mastercard";
-                    const cardLogo = firstCard.creditCardNumber.startsWith("4") ? visaLogo : mastercardLogo;
+                    const cardLogo = (() => {
+                        const firstDigit = firstCard.creditCardNumber.charAt(0);
+                        if (firstDigit === '4') {
+                          return visaLogo;
+                        } else if (['2', '5'].includes(firstDigit)) {
+                          return mastercardLogo;
+                        } else if (firstDigit === '3') {
+                          return amexLogo;
+                        } else {
+                          return creditCardLogo;
+                        }
+                      })();
+                    // const cardLogo = firstCard.creditCardNumber.startsWith("4") ? visaLogo : mastercardLogo;
                     return (
                         <div>
-                            <img src={cardLogo} alt={cardType} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
+                            <img src={cardLogo} alt={"Credit Card"} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
                             {maskedNumber}
                         </div>
                     );
                 } else {
-                    // "return N.A." will be used when cc confirmed
-                    return (
-                        <div>
-                            <img src={visaLogo} alt={"Card type"} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
-                            {"•••• •••• •••• 1234"}
-                        </div>
-                    )
-                    // return "N.A.";
+                    return "No credit cards added";
                 }
             },
         },
