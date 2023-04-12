@@ -290,10 +290,9 @@ public class PromotionsResource {
     @Path("/update/{promotionId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updatePromotion(@PathParam("promotionId") Long promotionId) throws PromotionNotFoundException {
-        Promotion promo = promotionSessionBeanLocal.retrievePromotionById(promotionId);
-        promotionSessionBeanLocal.updatePromotion(promo);
-        String updateSuccessMsg = "Promotion with ID [" + promo.getPromotionId() + "] has been updated successfully!";
+    public Response updatePromotion(@PathParam("promotionId") Long promotionId, Promotion promoToUpdate) throws PromotionNotFoundException {
+        promotionSessionBeanLocal.updatePromotion(promotionId, promoToUpdate);
+        String updateSuccessMsg = "Promotion with ID [" + promotionId + "] has been updated successfully! This is what it looks like " + promoToUpdate.getPromotionName();
         return Response.status(200).entity(updateSuccessMsg).build();
     } //end editPromotion
 

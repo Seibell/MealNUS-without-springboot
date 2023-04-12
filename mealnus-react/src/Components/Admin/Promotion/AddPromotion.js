@@ -366,6 +366,8 @@ function AddPromotion(props) {
     const navigate = useNavigate();
     const theme = createTheme();
     const [error, setError] = useState(false);
+    const [dateError, setDateError] = useState(false);
+    const [categoryError, setCategoryError] = useState(false);
     const [open, setOpen] = React.useState(true);
     const [selectedCategory, setSelectedCategory] = useState("");
     const handleCategoryChange = (event) => {
@@ -408,8 +410,10 @@ function AddPromotion(props) {
     }, [id]);
 
     const validateData = () => {
-        return promotionName.trim().length > 0;
-    };
+        return (
+          promotionName.trim().length > 0 
+        );
+      };
 
     const handleSubmit = (e) => {
         //prevent the normal form submit
@@ -423,6 +427,18 @@ function AddPromotion(props) {
                     setError(<Alert severity="warning">Discount value should be a decimal value between 0 and 1</Alert>);
                     return;
                 }
+
+                if (startDate.getTime() > endDate.getTime()) {
+                    // throw MUI error
+                    setDateError(<Alert severity="warning">Promotion start date should be before it's end date</Alert>);
+                    return;
+                }
+
+                if (selectedCategory.length == 0) {
+                    setCategoryError(<Alert severity="warning">Please choose a category</Alert>);
+                    return;
+                }
+
                 const promotionData = {
                     // replace with the relevant data for your use case
                     categoryName: selectedCategory,
@@ -445,32 +461,11 @@ function AddPromotion(props) {
                     .catch((error) => {
                         console.error(error);
                     });
-            } else {
-                const promotionData = {
-                    // replace with the relevant data for your use case
-                    promotionName,
-                    discount,
-                    startDate,
-                    endDate,
-                };
-                fetch('http://localhost:8080/MealNUS-war/rest/promotion/update' + id, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(promotionData),
-                })
-                    .then((response) => {
-                        navigate(window.close());
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            }
+            } 
         }
     }
 
-    const headerLabel = id === 0 ? "New Promotion" : "Edit Promotion";
+    const headerLabel = "New Promotion";
 
     if (!currentStaff) {
         return <div>Access Denied: Please login to access MealNUS Admin Portal...</div>;
@@ -523,6 +518,7 @@ function AddPromotion(props) {
                                             >
                                                 <ClearIcon />
                                             </IconButton>
+                                            {categoryError}
                                         </div>
                                     )}
                                 />
@@ -553,6 +549,7 @@ function AddPromotion(props) {
                                         customInput={<input className="form-control" />}
                                     />
                                 </div>
+                                {dateError}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="inputName">End Date(dd/mm/yyyy)</label>

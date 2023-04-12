@@ -65,6 +65,7 @@ import AdminIngredients from "./Components/Admin/Ingredient";
 import AdminUpdateIngredient from "./Components/Admin/Ingredient/UpdateIngredient";
 import AdminAddIngredient from "./Components/Admin/Ingredient/AddIngredient";
 import AdminCharts from "./Components/Admin/Charts";
+import UpdatePromotion from "./Components/Admin/Promotion/UpdatePromotion";
 
 function App() {
 
@@ -108,6 +109,7 @@ function App() {
           <Route path="/admincharts" element={<AdminCharts />} />
           <Route path="/ViewAllAllergen" element={<ViewAllAllergen />} />
           <Route path="/UpdateAllergen/:allergenId" element={<UpdateAllergen />} />
+          <Route path="/updatepromotion/:id" element={<UpdatePromotion />} />
 
           {/* Soon to be removed */}
           <Route path="/adminordermanagement" element={<AdminOrderManagement />} />
