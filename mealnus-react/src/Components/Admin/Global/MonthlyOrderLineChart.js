@@ -100,6 +100,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 legendOffset: -40,
                 legendPosition: "middle",
             }}
+            yAxisTickCount={10}
             enableGridX={false}
             enableGridY={false}
             pointSize={10}
@@ -118,7 +119,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                     itemsSpacing: 0,
                     itemDirection: "left-to-right",
                     itemWidth: 100,
-                    itemHeight: 20,
+                    itemHeight: 380,
                     itemOpacity: 0.7,
                     symbolSize: 6,
                     symbolShape: "circle",

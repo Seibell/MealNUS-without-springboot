@@ -596,7 +596,7 @@ const Dashboard = () => {
                                     <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
                                         Order Breakdown by STATUS
                                     </Typography>
-                                    <Box height="250px" m="-20px 0 0 0">
+                                    <Box height="250px" m="-5px 0 0 0">
                                         <OrderStatusPieChart />
                                     </Box>
                                 </Box>
@@ -743,15 +743,17 @@ const Dashboard = () => {
                                     </Box>
                                 </Box>
                                 <Box
+                                    // display="flex"
                                     gridColumn="span 5"
                                     gridRow="span 3"
                                     backgroundColor={colors.primary[400]}
                                     p="30px"
+                                    // overflow="auto"
                                 >
                                     <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
                                         Order Breakdown by ADDRESS
                                     </Typography>
-                                    <Box height="250px" m="130px 0 0 0">
+                                    <Box height="350px" m="50px 0 0 0">
                                         <OrderAddressBarChart />
                                     </Box>
                                 </Box>

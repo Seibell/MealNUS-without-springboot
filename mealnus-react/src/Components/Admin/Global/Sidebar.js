@@ -60,7 +60,7 @@ const Sidebar = () => {
                 "& .pro-menu-item.active": {
                     color: "#d97818 !important",
                 },
-                height: "1773px"
+                height: "1933px"
             }}
         >
             <ProSidebar collapsed={isCollapsed} collapsedWidth={75} width={isCollapsed ? 60 : 280} >
@@ -172,7 +172,7 @@ const Sidebar = () => {
                             Inventory
                         </Typography>
                         <Item
-                            title="Manage Mealboxes"
+                            title="Manage MealBoxes"
                             to="/inventoryHome"
                             icon={<TakeoutDiningOutlinedIcon />}
                             selected={selected}
@@ -180,25 +180,25 @@ const Sidebar = () => {
                         />
                         <Item
                             title="Manage Ingredients"
-                            to="/admindashboard"
+                            to="/adminingredients"
                             icon={<LocalPizzaOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
                             title="Manage Allergens"
-                            to="/admindashboard"
+                            to="/adminallergens"
                             icon={<EggOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
-                        <Item
+                        {/* <Item
                             title="Manage Categories"
                             to="/admindashboard"
                             icon={<CategoryOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
-                        />
+                        /> */}
 
                         <Typography
                             variant="h6"

@@ -1,32 +1,30 @@
-// Admin Dashboard Template Imports
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { ColorModeContext, useMode } from "../Global/AdminTheme";
-import Topbar from "../../Admin/Global/Topbar";
-import Sidebar from "../../Admin/Global/Sidebar";
+import { Box, Typography, useTheme } from "@mui/material";
 
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { IconButton, ImageListItem, ImageListItemBar } from '@mui/material';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
+
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../Global/AdminTheme";
-import Header from "../../Admin/Global/Header";
-import { useNavigate } from 'react-router-dom';
-// import LineChart from "../../components/LineChart";
-// import GeographyChart from "../../components/GeographyChart";
-// import BarChart from "../../components/BarChart";
-// import StatBox from "../../components/StatBox";
-// import ProgressCircle from "../../components/ProgressCircle";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import AddCircle from "@mui/icons-material/AddCircle";
+import Header from "../Global/Header";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { ColorModeContext, useMode } from "../Global/AdminTheme";
+import Topbar from "../Global/Topbar";
+import Sidebar from "../Global/Sidebar";
+import { Avatar } from "@material-ui/core";
+
+import moment from "moment-timezone";
 
 import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
 
-import moment from "moment-timezone";
-import { Alert } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import { useCallback } from "react";
-import AddCircle from "@mui/icons-material/AddCircle";
+import questionmark from '../../../Assets/default-question-mark-image-url.jpg';
 
 function Copyright(props) {
     return (
@@ -42,102 +40,84 @@ function Copyright(props) {
     );
 }
 
-const Order = () => {
+const Ingredient = () => {
     const { currentStaff } = useContext(AdminAuthContext);
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
+
     const colors = tokens(theme.palette.mode);
 
-    const navigate = useNavigate();
+    const [ingred, setIngred] = useState([]);
 
-    const [orderData, setOrderData] = useState([]);
+    const [query, setQuery] = useState("");
+
+    console.log("QUERY: " + query);
+    console.log("ingred: ", ingred);
+
+    console.log("HELLO" + ingred[0]);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrders")
-            .then(response => {
-                setOrderData(response.data.orderEntities);
-                console.log(response.data.orderEntities);
+        axios.get(
+            "http://localhost:8080/MealNUS-war/rest/Ingredient/retrieveAllIngredient"
+        )
+            .then((response) => {
+                setIngred(response.data);
+                console.log(response.data);
             })
-            .catch(error => {
-                console.log(error);
+            .catch((err) => {
+                console.log(err);
             });
     }, []);
 
-    const getOrderStatusColor = (orderStatus) => {
-        switch (orderStatus) {
-            case "CREATED":
-                return "lightpink";
-            case "PAID":
-                return "orange";
-            case "PREPARING":
-                return "green";
-            case "DELIVERING":
-                return "dodgerblue";
-            case "COMPLETED":
-                return "dimgray";
-            default:  //CANCELLED
-                return "tomato";
-        }
-    };
-
     const columns = [
         {
-            field: "orderId",
-            headerName: "Order ID",
-            flex: 1,
-            headerClassName: "headerName",
+            field: 'ingredientId',
+            headerName: 'ID',
+            headerClassName: 'headerName',
         },
         {
-            field: "orderDate",
-            headerName: "Order Date",
+            field: 'name',
+            headerName: 'Name',
             flex: 1,
-            headerClassName: "headerName",
-            valueFormatter: (params) => {
-                const utcTime = moment.utc(params.value, 'YYYY-MM-DD HH:mm:ss');
-                const singaporeTime = utcTime.tz('Asia/Singapore');
-                return singaporeTime.format('YYYY-MM-DD HH:mm:ss');
-            }
-
+            cellClassName: 'name-column--cell',
+            headerClassName: 'headerName',
         },
         {
-            field: "firstName",
-            headerName: "First Name",
+            field: 'picture',
+            headerName: 'Image',
             flex: 1,
-            headerClassName: "headerName",
-            cellClassName: "name-column--cell",
-            valueGetter: (params) => params.row.user.firstName
-        },
-        {
-            field: "address",
-            headerName: "Address",
-            flex: 1,
-            headerClassName: "headerName",
-        },
-        {
-            field: "orderStatus",
-            headerName: "Status",
-            flex: 1,
-            headerClassName: "headerName",
+            headerClassName: 'headerName',
             renderCell: (params) => (
-                <Box
-                    textAlign="center"
-                    backgroundColor={getOrderStatusColor(params.value)}
-                    p="5px 10px"
-                    borderRadius="15px"
-                    width="100px"
-                >
-                    <b>{params.value}</b>
-                </Box>
+                <ImageListItem key={params.row.ingredientId}>
+                    <img
+                        src={`${params.row.picture}?w=248&fit=crop&auto=format`}
+                        srcSet={`${params.row.picture}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                        alt={params.row.name}
+                        loading="lazy"
+                        style={{ borderRadius: '50%', width: '40px', height: '40px' }}
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = questionmark;
+                        }}
+                    />
+                </ImageListItem>
             ),
         },
         {
-            field: "updateOrder",
-            headerName: "Actions",
+            field: 'updateIngredient',
+            headerName: 'Actions',
             flex: 1,
-            headerClassName: "headerName",
+            headerClassName: 'headerName',
             renderCell: (params) => (
                 <IconButton
-                    onClick={() => navigate('/UpdateOrder/' + params.row.orderId)}
+                    onClick={() =>
+                        window.open(
+                            '/updateingredient/' + params.row.ingredientId,
+                            'Update Ingredient',
+                            'width=600,height=500'
+                        )
+                    }
+                    variant="contained"
                     color="primary"
                 >
                     <ModeEditOutlinedIcon />
@@ -161,9 +141,31 @@ const Order = () => {
 
 
                         <Box m="20px">
-                            <Header title="ORDERS" subtitle="List of Orders" />
+                            <Header title="INGREDIENTS" subtitle="List of Ingredients" />
+                            <Link
+                                style={{ textDecoration: "none" }}
+                                onClick={() => window.open('/addingredient', 'Add Ingredient', 'width=600,height=500')}
+                            >
+                                <Box
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="flex-end"
+                                    borderRadius="20px"
+                                    bgcolor="transparent"
+                                    ml={0}
+                                    mr={1}
+                                    p={1}
+                                    height="30px"
+                                    style={{ width: '195px' }}
+                                >
+                                    <IconButton>
+                                        <AddCircle style={{ fill: "black" }} />
+                                    </IconButton>
+                                    <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>Create New Ingredient</Typography>
+                                </Box>
+                            </Link>
                             <Box
-                                m="40px 0 0 0"
+                                m="20px 0 0 0"
                                 height="50vh"
                                 sx={{
                                     "& .MuiDataGrid-root": {
@@ -199,9 +201,9 @@ const Order = () => {
                             >
                                 <DataGrid
                                     checkboxSelection
-                                    rows={orderData}
+                                    rows={ingred}
                                     columns={columns}
-                                    getRowId={(row) => row.orderId}
+                                    getRowId={(row) => row.ingredientId}
                                     components={{ Toolbar: GridToolbar }}
                                 />
                             </Box>
@@ -211,9 +213,9 @@ const Order = () => {
                     </main>
                 </div>
             </ThemeProvider>
-        </ColorModeContext.Provider>
+        </ColorModeContext.Provider >
 
     );
 };
 
-export default Order;
+export default Ingredient;

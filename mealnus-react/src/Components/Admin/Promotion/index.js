@@ -946,7 +946,7 @@ const Promotion = () => {
                                     <IconButton>
                                         <AddCircle style={{ fill: "black" }} />
                                     </IconButton>
-                                    <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>ADD NEW PROMOTION</Typography>
+                                    <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>Create New Promotion</Typography>
                                 </Box>
                             </Link>
                             <Box

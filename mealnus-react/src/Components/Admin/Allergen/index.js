@@ -1,32 +1,28 @@
-// Admin Dashboard Template Imports
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { ColorModeContext, useMode } from "../Global/AdminTheme";
-import Topbar from "../../Admin/Global/Topbar";
-import Sidebar from "../../Admin/Global/Sidebar";
+import { Box, Typography, useTheme } from "@mui/material";
 
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
+
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../Global/AdminTheme";
-import Header from "../../Admin/Global/Header";
-import { useNavigate } from 'react-router-dom';
-// import LineChart from "../../components/LineChart";
-// import GeographyChart from "../../components/GeographyChart";
-// import BarChart from "../../components/BarChart";
-// import StatBox from "../../components/StatBox";
-// import ProgressCircle from "../../components/ProgressCircle";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import AddCircle from "@mui/icons-material/AddCircle";
+import Header from "../Global/Header";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { ColorModeContext, useMode } from "../Global/AdminTheme";
+import Topbar from "../Global/Topbar";
+import Sidebar from "../Global/Sidebar";
+import { Avatar } from "@material-ui/core";
+
+import moment from "moment-timezone";
 
 import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
-
-import moment from "moment-timezone";
-import { Alert } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import { useCallback } from "react";
-import AddCircle from "@mui/icons-material/AddCircle";
 
 function Copyright(props) {
     return (
@@ -42,102 +38,55 @@ function Copyright(props) {
     );
 }
 
-const Order = () => {
+const Allergen = () => {
     const { currentStaff } = useContext(AdminAuthContext);
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
+
     const colors = tokens(theme.palette.mode);
 
-    const navigate = useNavigate();
-
-    const [orderData, setOrderData] = useState([]);
+    const [allergen, setallergen] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrders")
+        axios.get("http://localhost:8080/MealNUS-war/rest/Allergen/retrieveAllAllergent")
             .then(response => {
-                setOrderData(response.data.orderEntities);
-                console.log(response.data.orderEntities);
+                setallergen(response.data);
+                console.log(response.data);
             })
             .catch(error => {
                 console.log(error);
             });
     }, []);
 
-    const getOrderStatusColor = (orderStatus) => {
-        switch (orderStatus) {
-            case "CREATED":
-                return "lightpink";
-            case "PAID":
-                return "orange";
-            case "PREPARING":
-                return "green";
-            case "DELIVERING":
-                return "dodgerblue";
-            case "COMPLETED":
-                return "dimgray";
-            default:  //CANCELLED
-                return "tomato";
-        }
-    };
-
     const columns = [
         {
-            field: "orderId",
-            headerName: "Order ID",
-            flex: 1,
+            field: "allergenId",
+            headerName: "ID",
             headerClassName: "headerName",
         },
         {
-            field: "orderDate",
-            headerName: "Order Date",
+            field: "allergenName",
+            headerName: "Name",
             flex: 1,
-            headerClassName: "headerName",
-            valueFormatter: (params) => {
-                const utcTime = moment.utc(params.value, 'YYYY-MM-DD HH:mm:ss');
-                const singaporeTime = utcTime.tz('Asia/Singapore');
-                return singaporeTime.format('YYYY-MM-DD HH:mm:ss');
-            }
-
-        },
-        {
-            field: "firstName",
-            headerName: "First Name",
-            flex: 1,
-            headerClassName: "headerName",
             cellClassName: "name-column--cell",
-            valueGetter: (params) => params.row.user.firstName
-        },
-        {
-            field: "address",
-            headerName: "Address",
-            flex: 1,
             headerClassName: "headerName",
         },
         {
-            field: "orderStatus",
-            headerName: "Status",
+            field: "allergenDescription",
+            headerName: "Description",
             flex: 1,
+            cellClassName: "name-column--cell",
             headerClassName: "headerName",
-            renderCell: (params) => (
-                <Box
-                    textAlign="center"
-                    backgroundColor={getOrderStatusColor(params.value)}
-                    p="5px 10px"
-                    borderRadius="15px"
-                    width="100px"
-                >
-                    <b>{params.value}</b>
-                </Box>
-            ),
         },
         {
-            field: "updateOrder",
+            field: "updateAllergen",
             headerName: "Actions",
             flex: 1,
             headerClassName: "headerName",
             renderCell: (params) => (
                 <IconButton
-                    onClick={() => navigate('/UpdateOrder/' + params.row.orderId)}
+                    onClick={() => window.open('/updateallergen/' + params.row.allergenId, 'Update Allergen', 'width=600,height=400')}
+                    variant="contained"
                     color="primary"
                 >
                     <ModeEditOutlinedIcon />
@@ -161,9 +110,31 @@ const Order = () => {
 
 
                         <Box m="20px">
-                            <Header title="ORDERS" subtitle="List of Orders" />
+                            <Header title="ALLERGENS" subtitle="List of Allergens" />
+                            <Link
+                                style={{ textDecoration: "none" }}
+                                onClick={() => window.open('/addallergen', 'Add Allergen', 'width=600,height=400')}
+                            >
+                                <Box
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="flex-end"
+                                    borderRadius="20px"
+                                    bgcolor="transparent"
+                                    ml={-1.8}
+                                    mr={1}
+                                    p={1}
+                                    height="30px"
+                                    style={{ width: '195px' }}
+                                >
+                                    <IconButton>
+                                        <AddCircle style={{ fill: "black" }} />
+                                    </IconButton>
+                                    <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>Create New Allergen</Typography>
+                                </Box>
+                            </Link>
                             <Box
-                                m="40px 0 0 0"
+                                m="20px 0 0 0"
                                 height="50vh"
                                 sx={{
                                     "& .MuiDataGrid-root": {
@@ -199,9 +170,9 @@ const Order = () => {
                             >
                                 <DataGrid
                                     checkboxSelection
-                                    rows={orderData}
+                                    rows={allergen}
                                     columns={columns}
-                                    getRowId={(row) => row.orderId}
+                                    getRowId={(row) => row.allergenId}
                                     components={{ Toolbar: GridToolbar }}
                                 />
                             </Box>
@@ -211,9 +182,9 @@ const Order = () => {
                     </main>
                 </div>
             </ThemeProvider>
-        </ColorModeContext.Provider>
+        </ColorModeContext.Provider >
 
     );
 };
 
-export default Order;
+export default Allergen;

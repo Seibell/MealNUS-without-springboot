@@ -313,7 +313,7 @@ const AddAllergents = () => {
                   <div className="card-body">
 
                     <div className="form-group">
-                      <label htmlFor="inputName"> Allergen Name:</label>
+                      <label htmlFor="inputName">Allergen Name:</label>
                       <input
                         type="text"
                         id="inputName"

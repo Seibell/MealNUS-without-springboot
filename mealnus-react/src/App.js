@@ -58,6 +58,12 @@ import AdminOrders from "./Components/Admin/Order";
 import AdminOrderManagement from "./Components/Admin/AdminOrderManagement";
 import AdminPromotion from "./Components/Admin/AdminPromotion";
 import AddPromotion from "./Components/Admin/Promotion/AddPromotion";
+import AdminAllergens from "./Components/Admin/Allergen";
+import AdminUpdateAllergen from "./Components/Admin/Allergen/UpdateAllergen";
+import AdminAddAllergen from "./Components/Admin/Allergen/AddAllergen";
+import AdminIngredients from "./Components/Admin/Ingredient";
+import AdminUpdateIngredient from "./Components/Admin/Ingredient/UpdateIngredient";
+import AdminAddIngredient from "./Components/Admin/Ingredient/AddIngredient";
 import AdminCharts from "./Components/Admin/Charts";
 
 function App() {
@@ -76,7 +82,7 @@ function App() {
           <Route path="/AddIngred" element={<AddIngred />} />
           <Route path="/ViewAllIngred" element={<ViewAllIngred />} />
           <Route path="/Orders" element={<Orders />} />
-          <Route path="/AddAllergen" element={<AddAllergen />} />
+          {/* <Route path="/AddAllergen" element={<AddAllergen />} /> */}
           <Route path="/AddMealBox" element={<AddMealBox />} />
           <Route path="/UpdateQuantity/:mealBoxId" element={<UpdateQuantity />} />
           <Route path="/UpdateMealBox/:mealBoxId" element={<UpdateMealBox />} />
@@ -93,6 +99,12 @@ function App() {
           <Route path="/adminpromotions" element={<AdminPromotions />} />
           <Route path="/addpromotion" element={<AddPromotion />} />
           <Route path="/adminorders" element={<AdminOrders />} />
+          <Route path="/adminallergens" element={<AdminAllergens />} />
+          <Route path="/updateallergen/:allergenId" element={<AdminUpdateAllergen />} />
+          <Route path="/addallergen" element={<AdminAddAllergen />} />
+          <Route path="/adminingredients" element={<AdminIngredients />} />
+          <Route path="/updateingredient/:ingredientId" element={<AdminUpdateIngredient />} />
+          <Route path="/addingredient" element={<AdminAddIngredient />} />
           <Route path="/admincharts" element={<AdminCharts />} />
           <Route path="/ViewAllAllergen" element={<ViewAllAllergen />} />
           <Route path="/UpdateAllergen/:allergenId" element={<UpdateAllergen />} />

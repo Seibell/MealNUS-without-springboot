@@ -72,7 +72,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                 "KENT_VALE",
                 "UNIVERSITY_HALL"]}
             indexBy="address"
-            margin={{ top: 0, right: 100, bottom: 50, left: 50 }}
+            margin={{ top: 0, right: 100, bottom: 50, left: 45 }}
             padding={0.3}
             valueScale={{ type: "linear" }}
             indexScale={{ type: "band", round: true }}

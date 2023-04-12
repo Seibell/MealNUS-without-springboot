@@ -48,7 +48,7 @@ const default_image_url = 'https://i.imgur.com/Kvyecsm.png';
 const theme = createTheme();
 
 const UpdateIngred = () => {
-  const {ingredientId } = useParams();
+  const { ingredientId } = useParams();
   const [picture, setpicture] = useState(null);
   const [name, setname] = useState('');
   const [error, setError] = useState("");

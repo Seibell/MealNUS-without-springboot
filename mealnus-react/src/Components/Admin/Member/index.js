@@ -14,6 +14,8 @@ import Topbar from "../../Admin/Global/Topbar";
 import Sidebar from "../../Admin/Global/Sidebar";
 import { Avatar } from "@material-ui/core";
 
+import moment from "moment-timezone";
+
 import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
 
@@ -86,6 +88,16 @@ const Member = () => {
             headerClassName: "headerName",
         },
         {
+            field: "signupDate",
+            headerName: "Sign Up Date",
+            headerClassName: "headerName",
+            valueFormatter: (params) => {
+                const utcTime = moment.utc(params.value, 'YYYY-MM-DD HH:mm:ss');
+                const singaporeTime = utcTime.tz('Asia/Singapore');
+                return singaporeTime.format('YYYY-MM-DD');
+            }
+        },
+        {
             field: "firstName",
             headerName: "First Name",
             flex: 1,
@@ -129,15 +141,15 @@ const Member = () => {
                     const cardLogo = (() => {
                         const firstDigit = firstCard.creditCardNumber.charAt(0);
                         if (firstDigit === '4') {
-                          return visaLogo;
+                            return visaLogo;
                         } else if (['2', '5'].includes(firstDigit)) {
-                          return mastercardLogo;
+                            return mastercardLogo;
                         } else if (firstDigit === '3') {
-                          return amexLogo;
+                            return amexLogo;
                         } else {
-                          return creditCardLogo;
+                            return creditCardLogo;
                         }
-                      })();
+                    })();
                     // const cardLogo = firstCard.creditCardNumber.startsWith("4") ? visaLogo : mastercardLogo;
                     return (
                         <div>
