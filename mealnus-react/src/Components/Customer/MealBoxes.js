@@ -75,15 +75,17 @@ const MealBoxes = () => {
       });
   }, []);
 
-  // Function to get unique categories from mealBoxes.mealBoxEntities
   const getUniqueCategories = () => {
     const allCategories = mealBoxes.mealBoxEntities.flatMap(
       (mealBox) => mealBox.categories
     );
+    const filteredCategories = allCategories.filter(
+      (category) => category.name !== "Site-Wide"
+    );
     const uniqueCategories = Array.from(
-      new Set(allCategories.map((category) => category.name))
+      new Set(filteredCategories.map((category) => category.name))
     ).map((name) => {
-      return allCategories.find((category) => category.name === name);
+      return filteredCategories.find((category) => category.name === name);
     });
     return uniqueCategories;
   };
@@ -215,7 +217,7 @@ const MealBoxes = () => {
               style={{ color: "#003865" }} // Change the color
             >
               <MenuItem value="">
-                <em>None</em>
+                <em>Side Wide</em>
               </MenuItem>
               {/* Add unique categories here */}
               {getUniqueCategories().map((category) => (
