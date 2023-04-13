@@ -392,7 +392,7 @@ const MealBoxes = () => {
               <ReactStars
                 count={5}
                 value={averageRating}
-                size={24}
+                size={30} // Increase the size value as desired
                 isHalf={true}
                 edit={false}
                 activeColor="#ffd700"
