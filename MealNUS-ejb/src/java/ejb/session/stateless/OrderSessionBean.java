@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.MealBox;
 import entity.OrderEntity;
+import entity.User;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -40,7 +42,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 
     @PersistenceContext(unitName = "MealNUS-ejbPU")
     private EntityManager em;
-
+    
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Override
@@ -555,5 +557,9 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
             em.merge(order);
         }
         return order;
+    }
+
+    public void persist(Object object) {
+        em.persist(object);
     }
 }

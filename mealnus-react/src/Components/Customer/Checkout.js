@@ -80,6 +80,17 @@ const Checkout = () => {
     setOpenDialog(false);
   }
 
+  function formatCreditCardNumber(number) {
+    const maskedNumber = number.slice(0, -4).replace(/\d/g, "*");
+    const lastFourDigits = number.slice(-4);
+
+    const formattedNumber = (maskedNumber + lastFourDigits).replace(
+      /(\d{4})(?=\d)/g,
+      "$1 "
+    );
+    return formattedNumber;
+  }
+
   const handleCloseDialog = () => {
     setSuccessDialogOpen(false);
     setCart([]);
@@ -407,7 +418,7 @@ const Checkout = () => {
                       >
                         <CardContent style={{ marginTop: "10px" }}>
                           <Typography style={{ marginBottom: "8px" }}>
-                            Credit Card Number: {card.creditCardNumber}
+                            Credit Card Number: {formatCreditCardNumber(card.creditCardNumber)}
                           </Typography>
                           <Typography>
                             Expiry Date: {card.expiryDate}

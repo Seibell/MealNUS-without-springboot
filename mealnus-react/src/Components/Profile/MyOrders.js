@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogContent,
   Collapse,
+  Rating,
 } from "@mui/material";
 import React from "react";
 import { tokens } from "../Statistics/theme";
@@ -34,7 +35,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Button } from "@mui/material";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
+import { TabUnselected } from "@mui/icons-material";
 
 const MyOrders = () => {
   const { currentUser } = useContext(AuthContext);
@@ -42,16 +44,17 @@ const MyOrders = () => {
   const colors = tokens(theme.palette.mode);
   const [orders, setOrders] = useState([]);
   const [reviewFormOpen, setReviewFormOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [newPostTitle, setNewPostTitle] = useState("");
-  const [newPostDescription, setNewPostDescription] = useState("");
+  const [selectedOrderId, setSelectedOrderId] = useState("");
+  const [newReviewDescription, setNewReviewDescription] = useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
   const [currentOrderId, setCurrentOrderId] = useState(null);
   const [submittedReviews, setSubmittedReviews] = useState([]);
   const [expandedRows, setExpandedRows] = useState([]);
-
-
+  const [newReviewRating, setNewReviewRating] = useState(0);
+  const [selectedMealboxName, setSelectedMealboxName] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     console.log("currentUser: ", currentUser);
@@ -160,23 +163,29 @@ const MyOrders = () => {
   const handleRowClick = (orderId) => {
     const currentIndex = expandedRows.indexOf(orderId);
     const newExpandedRows = [...expandedRows];
-  
+
     if (currentIndex === -1) {
       newExpandedRows.push(orderId);
     } else {
       newExpandedRows.splice(currentIndex, 1);
     }
-  
+
     setExpandedRows(newExpandedRows);
   };
 
-  const openReviewDialog = (orderId) => {
-    setCurrentOrderId(orderId);
+  const openReviewDialog = (orderId, mealboxName) => {
+    setSelectedOrderId(orderId);
+    setSelectedMealboxName(mealboxName);
     setReviewDialogOpen(true);
   };
 
+  const resetReviewForm = () => {
+    setNewReviewRating(null);
+    setNewReviewDescription("");
+  };
+
   const handleReviewSubmit = async (orderId) => {
-    if (newPostTitle === "" || newPostDescription === "") {
+    if (newReviewDescription === "") {
       setErrorMessage("Please enter both the title and description.");
       return;
     }
@@ -184,21 +193,28 @@ const MyOrders = () => {
     setErrorMessage("");
 
     const postData = {
-      postDate: new Date().toISOString(),
-      postTitle: newPostTitle,
-      postDescription: newPostDescription,
-      userId: currentUser.userId, // Assuming currentUser has an "id" field
+      reviewDate: new Date().toISOString(),
+      stars: newReviewRating,
+      comments: newReviewDescription,
     };
 
-    await axios.post(
-      "http://localhost:8080/MealNUS-war/rest/Forum/createNewForumPost",
-      postData
-    );
+    fetch("http://localhost:8080/MealNUS-war/rest/Review", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    }).then((response) => {
+      if (response.ok) {
+        setSuccess(true);
+        setError("");
+      } else {
+        throw new Error("Something went wrong");
+      }
+    });
 
-    setSubmittedReviews([...submittedReviews, currentOrderId]);
-
-    setNewPostTitle("");
-    setNewPostDescription("");
+    setNewReviewRating(null);
+    setNewReviewDescription("");
     setReviewDialogOpen(false);
   };
 
@@ -282,123 +298,140 @@ const MyOrders = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Order ID</TableCell>
-                <TableCell>Item Name</TableCell>
                 <TableCell>Order Date</TableCell>
                 <TableCell>Delivery Date</TableCell>
-                <TableCell>Item Price</TableCell>
-                <TableCell>Item Quantity</TableCell>
+                <TableCell>Delivery Location</TableCell>
+                <TableCell>Order Cost</TableCell>
                 <TableCell>Order Status</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-  {orders.map((order, orderIndex) => (
-    <>
-      <TableRow
-        key={order.orderId}
-        onClick={() => handleRowClick(order.orderId)}
-        style={{ cursor: 'pointer' }}
-      >
-        <TableCell>{order.orderId}</TableCell>
-        <TableCell>
-          {order.orderDetails.length} Item{order.orderDetails.length > 1 ? 's' : ''}
-        </TableCell>
-        <TableCell>
-          {new Date(order.orderDate.replace('[UTC]', '')).toLocaleDateString()}
-        </TableCell>
-        <TableCell>
-          {new Date(order.deliveryDate.replace('[UTC]', '')).toLocaleDateString()}
-        </TableCell>
-        <TableCell colSpan={3} />
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
-          <Collapse in={expandedRows.includes(order.orderId)} timeout="auto" unmountOnExit>
-            <Table size="small" aria-label="expanded-details">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Item Name</TableCell>
-                  <TableCell>Item Price</TableCell>
-                  <TableCell>Item Quantity</TableCell>
-                  <TableCell>Order Status</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {order.orderDetails.map((orderDetail) => (
-                  <TableRow key={`${order.orderId}-${orderDetail.key.itemName}`}>
-                    <TableCell>{orderDetail.key.itemName}</TableCell>
+              {orders.map((order, orderId) => (
+                <>
+                  <TableRow
+                    key={order.orderId}
+                    onClick={() => handleRowClick(order.orderId)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <TableCell>{order.orderId}</TableCell>
                     <TableCell>
-                      {parseFloat(orderDetail.key.itemPrice).toFixed(2)}
+                      {new Date(
+                        order.orderDate.replace("[UTC]", "")
+                      ).toLocaleDateString()}
                     </TableCell>
-                    <TableCell>{orderDetail.value}</TableCell>
+                    <TableCell>
+                      {new Date(
+                        order.deliveryDate.replace("[UTC]", "")
+                      ).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>{order.address}</TableCell>
+                    <TableCell></TableCell>
                     <TableCell>{order.orderStatus}</TableCell>
                     <TableCell>
-                      {order.orderStatus === 'COMPLETED' ? (
-                        submittedReviews.includes(order.orderId) ? (
-                          <Typography variant="body2" color="textSecondary">
-                            Reviewed
-                          </Typography>
-                        ) : (
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => openReviewDialog(order.orderId)}
-                          >
-                            Leave Review
-                          </Button>
-                        )
-                      ) : (
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={() => handleCancelOrder(order.orderId)}
-                          disabled={
-                            order.orderStatus !== 'PAID' &&
-                            order.orderStatus !== 'PREPARING' &&
-                            order.orderStatus !== 'DELIVERING'
-                          }
-                        >
-                          Cancel
-                        </Button>
-                      )}
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => handleCancelOrder(order.orderId)}
+                        disabled={
+                          order.orderStatus !== "PAID" &&
+                          order.orderStatus !== "PREPARING" &&
+                          order.orderStatus !== "DELIVERING"
+                        }
+                      >
+                        Cancel
+                      </Button>
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </>
-  ))}
-</TableBody>
+                  <TableRow>
+                    <TableCell
+                      style={{ paddingBottom: 0, paddingTop: 0 }}
+                      colSpan={8}
+                    >
+                      <Collapse
+                        in={expandedRows.includes(order.orderId)}
+                        timeout="auto"
+                        unmountOnExit
+                      >
+                        <Table size="small" aria-label="expanded-details">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Mealbox</TableCell>
+                              <TableCell>Item Price</TableCell>
+                              <TableCell>Item Quantity</TableCell>
+                              <TableCell></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {order.orderDetails.map((orderDetail) => (
+                              <TableRow
+                                key={`${order.orderId}-${orderDetail.key.itemName}`}
+                              >
+                                <TableCell>
+                                  {orderDetail.key.itemName}
+                                </TableCell>
+                                <TableCell>
+                                  {parseFloat(
+                                    orderDetail.key.itemPrice
+                                  ).toFixed(2)}
+                                </TableCell>
+                                <TableCell>{orderDetail.value}</TableCell>
+                                <TableCell>
+                                  <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() =>
+                                      openReviewDialog(
+                                        order.orderId,
+                                        orderDetail.key.itemName
+                                      )
+                                    }
+                                  >
+                                    Leave Review
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </Collapse>
+                    </TableCell>
+                  </TableRow>
+                </>
+              ))}
+            </TableBody>
           </Table>
         </TableContainer>
       </div>
       <Dialog
         open={reviewDialogOpen}
-        onClose={() => setReviewDialogOpen(false)}
+        onClose={() => {
+          setReviewDialogOpen(false);
+          resetReviewForm();
+        }}
         maxWidth="sm"
         fullWidth
       >
         <DialogTitle>Leave a Review</DialogTitle>
         <DialogContent>
-          <TextField
-            label="Title"
-            fullWidth
-            margin="normal"
-            value={newPostTitle}
-            onChange={(e) => setNewPostTitle(e.target.value)}
+          <Typography variant="h6" gutterBottom style={{ marginTop: "16px" }}>
+            {selectedMealboxName}
+          </Typography>
+          <Rating
+            name="rating"
+            value={newReviewRating}
+            onChange={(e, newValue) => setNewReviewRating(newValue)}
+            precision={1}
+            size="large"
           />
           <TextField
-            label="Description"
+            label="Review"
             fullWidth
             multiline
             rows={4}
             margin="normal"
-            value={newPostDescription}
-            onChange={(e) => setNewPostDescription(e.target.value)}
+            value={newReviewDescription}
+            onChange={(e) => setNewReviewDescription(e.target.value)}
           />
           <Box display="flex" justifyContent="flex-end" marginTop="16px">
             <Button
@@ -410,9 +443,12 @@ const MyOrders = () => {
               Submit Review
             </Button>
             <Button
-              variant="outlined"
+              variant="contained"
               color="error"
-              onClick={() => setReviewDialogOpen(false)}
+              onClick={() => {
+                setReviewDialogOpen(false);
+                resetReviewForm();
+              }}
             >
               Cancel
             </Button>

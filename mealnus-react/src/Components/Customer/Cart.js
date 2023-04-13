@@ -15,6 +15,11 @@ import {
   IconButton,
   ButtonGroup,
   Link,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import NavBar from "../Navigation/NavBar.js";
@@ -25,10 +30,18 @@ import { AuthContext } from "../../Context/AuthContext.js";
 const Cart = () => {
   const [cart, setCart] = useContext(CartContext);
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    if (cart.length === 0) {
+      setErrorDialogOpen(true);
+    } else {
+      navigate("/checkout");
+    }
+  };
 
   const removeFromCart = (mealBox) => {
     const newCart = cart.filter((item) => item.mealBoxId !== mealBox.mealBoxId);
@@ -173,10 +186,35 @@ const Cart = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => navigate("/checkout")}
+                onClick={handleCheckout}
               >
                 Proceed to Checkout
               </Button>
+              <Dialog
+                open={errorDialogOpen}
+                onClose={() => setErrorDialogOpen(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Unable to Proceed to Checkout"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Please add at least one meal box to your cart before
+                    proceeding to checkout.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={() => setErrorDialogOpen(false)}
+                    color="primary"
+                    autoFocus
+                  >
+                    Close
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </Box>
           </Grid>
         </Grid>

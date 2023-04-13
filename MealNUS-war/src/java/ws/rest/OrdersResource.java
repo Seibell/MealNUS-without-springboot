@@ -69,7 +69,6 @@ public class OrdersResource {
         MealBox[] mealboxes = createOrderResponse.getMealBoxes().toArray(new MealBox[createOrderResponse.getMealBoxes().size()]);
         Integer[] quantities = createOrderResponse.getQuantities().toArray(new Integer[createOrderResponse.getQuantities().size()]);
 
-        System.out.println(mealboxes == null);
         for (int i = 0; i < mealboxes.length; i++) {
             orderDetails.add(new Pair<>(mealboxes[i], quantities[i]));
         }
