@@ -261,41 +261,52 @@ const Forum = () => {
           Welcome to the Forum!
         </Typography>
         {/* Create New Post Button */}
-        <Grid
-          item
-          xs={12}
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <FormControl className={classes.formControl}>
-            <InputLabel id="filter-select-label">Filter By</InputLabel>
-            <Select
-              labelId="filter-select-label"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-            >
-              <MenuItem value="time">Latest Posts</MenuItem>
-              <MenuItem value="popularityUp">ThumbUp: High to Low</MenuItem>
-              <MenuItem value="popularityDown">ThumbDown: High to Low</MenuItem>
-            </Select>
-          </FormControl>
-
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpenCreatePostDialog}
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={12}
             style={{
-              marginLeft: 280,
-              marginBottom: 20,
-              backgroundColor: "#FF8C00", // NUS orange color
-              borderRadius: 25,
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
             }}
           >
-            Create New Post
-          </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpenCreatePostDialog}
+              style={{
+                marginBottom: 20,
+                backgroundColor: "#FF8C00", // NUS orange color
+                borderRadius: 25,
+                padding: "10px 30px", // Add padding to the button (top/bottom, left/right)
+                minWidth: 150, // Set a minimum width for the button
+                maxHeight: 60, // Set a minimum height for the button
+                color: "white", // Set the text color if needed
+                marginRight: 320,
+                marginLeft: 50, // Add some margin to separate the button from the filter
+              }}
+            >
+              Create New Post
+            </Button>
+
+            <FormControl className={classes.formControl}>
+              <InputLabel id="filter-select-label">Filter By</InputLabel>
+              <Select
+                labelId="filter-select-label"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+              >
+                <MenuItem value="time">Latest Posts</MenuItem>
+                <MenuItem value="popularityUp">ThumbUp: High to Low</MenuItem>
+                <MenuItem value="popularityDown">
+                  ThumbDown: High to Low
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
+
         <Grid item xs={12} style={{}}>
           <Grid container spacing={3}></Grid>
           <Grid

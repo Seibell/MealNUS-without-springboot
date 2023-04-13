@@ -39,7 +39,6 @@ import Avatar from '@mui/material/Avatar';
 import mealNUSLogo from '../../Assets/MealNUS-Logo.png';
 
 import { withRouter } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
 
 const theme = createTheme();
 

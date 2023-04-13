@@ -28,6 +28,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import util.enumeration.AddressEnum;
 import util.enumeration.OrderStatus;
 import util.exception.OrderNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -504,17 +505,11 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     }
 
     @Override
-    public void updateOrder(Long orderId, OrderEntity orderToUpdate) {
-
+    public void updateOrder(Long orderId, Date deliveryDate,AddressEnum address,OrderStatus orderStatus) {
         OrderEntity updatedOrder = em.find(OrderEntity.class, orderId);
-        updatedOrder.setOrderDate(orderToUpdate.getOrderDate());
-        updatedOrder.setOrderDetails(orderToUpdate.getOrderDetails());
-        updatedOrder.setPriceList(orderToUpdate.getPriceList());
-        updatedOrder.setCostList(orderToUpdate.getCostList());
-        updatedOrder.setDeliveryDate(orderToUpdate.getDeliveryDate());
-        updatedOrder.setAddress(orderToUpdate.getAddress());
-        updatedOrder.setOrderStatus(orderToUpdate.getOrderStatus());
-        updatedOrder.setUser(orderToUpdate.getUser());
+        updatedOrder.setDeliveryDate(deliveryDate);
+        updatedOrder.setAddress(address);
+        updatedOrder.setOrderStatus(orderStatus);
         em.merge(updatedOrder);
     }
 
