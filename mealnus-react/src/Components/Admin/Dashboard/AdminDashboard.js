@@ -606,7 +606,7 @@ const Dashboard = () => {
                                 {/* ROW 4 */}
                                 <Box
                                     gridColumn="span 7"
-                                    gridRow="span 3"
+                                    gridRow="span 2"
                                     backgroundColor={colors.primary[400]}
                                     overflow="auto"
 
@@ -745,15 +745,15 @@ const Dashboard = () => {
                                 <Box
                                     // display="flex"
                                     gridColumn="span 5"
-                                    gridRow="span 3"
+                                    gridRow="span 2"
                                     backgroundColor={colors.primary[400]}
-                                    p="30px"
-                                // overflow="auto"
+                                    p="20px"
+                                    // overflow="auto"
                                 >
                                     <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
                                         Pending Orders (by Address)
                                     </Typography>
-                                    <Box height="360px" m="35px 0 0 0">
+                                    <Box height="220px" m="20px 0 0 0">
                                         <OrderAddressBarChart />
                                     </Box>
                                 </Box>

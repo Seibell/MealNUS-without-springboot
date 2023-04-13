@@ -138,7 +138,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
             }}
             keys={["Qty of Orders"]}
             indexBy="deliveryAddress"
-            margin={{ top: 5, right: 100, bottom: 50, left: 35 }}
+            margin={{ top: 5, right: 90, bottom: 25, left: 35 }}
             padding={0.3}
             valueScale={{ type: "linear" }}
             indexScale={{ type: "band", round: true }}
@@ -200,14 +200,14 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                     anchor: "bottom-right",
                     direction: "column",
                     justify: false,
-                    translateX: 95,
+                    translateX: 88,
                     translateY: 0,
                     itemsSpacing: 2,
                     itemWidth: 90,
-                    itemHeight: 590,
+                    itemHeight: 368,
                     itemDirection: "left-to-right",
-                    itemOpacity: 0.7,
-                    symbolSize: 14,
+                    itemOpacity: 0.8,
+                    symbolSize: 12,
                     effects: [
                         {
                             on: "hover",
