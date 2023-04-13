@@ -1,18 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
-import Axios from "axios";
 import {
   Container,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
-  Divider,
   Box,
   Button,
-  ButtonGroup,
   Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  ButtonGroup,
+  Link,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import NavBar from "../Navigation/NavBar.js";
@@ -20,18 +27,26 @@ import { CartContext } from "../../Context/CartContext.js";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext.js";
 
-
 const Cart = () => {
   const [cart, setCart] = useContext(CartContext);
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
+  const handleCheckout = () => {
+    if (cart.length === 0) {
+      setErrorDialogOpen(true);
+    } else {
+      navigate("/checkout");
+    }
+  };
+
   const removeFromCart = (mealBox) => {
     const newCart = cart.filter((item) => item.mealBoxId !== mealBox.mealBoxId);
     setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
     calculateTotal(newCart);
   };
 
@@ -51,6 +66,7 @@ const Cart = () => {
       return item;
     });
     setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
     calculateTotal(updatedCart);
   };
 
@@ -62,6 +78,21 @@ const Cart = () => {
     return <div>Error: User not found.</div>;
   }
 
+  function Copyright(props) {
+    return (
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        align="center"
+        {...props}
+      >
+        {"Copyright © "}
+        <Link color="inherit">MealNUS</Link> {new Date().getFullYear()}
+        {"."}
+      </Typography>
+    );
+  }
+
   return (
     <div>
       <NavBar />
@@ -71,43 +102,75 @@ const Cart = () => {
             Your Cart
           </Typography>
         </Box>
-        <List>
-          {cart.map((mealBox, index) => (
-            <React.Fragment key={mealBox.mealBoxId}>
-              <ListItem>
-                <ListItemText
-                  primary={`${mealBox.itemName} (x${mealBox.quantity})`}
-                  secondary={`Price: $${mealBox.itemPrice}`}
-                />
-                <ButtonGroup size="small" style={{ marginRight: "16px" }}>
-                  <Button
-                    onClick={() => updateMealBoxQuantity(mealBox.mealBoxId, -1)}
-                  >
-                    -
-                  </Button>
-                  <Box mx={1}>
-                    <Typography>{mealBox.quantity}</Typography>
-                  </Box>
-                  <Button
-                    onClick={() => updateMealBoxQuantity(mealBox.mealBoxId, 1)}
-                  >
-                    +
-                  </Button>
-                </ButtonGroup>
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={() => removeFromCart(mealBox)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-              {index < cart.length - 1 && <Divider />}
-            </React.Fragment>
-          ))}
-        </List>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Mealbox</TableCell>
+                <TableCell align="right">Unit Price</TableCell>
+                <TableCell align="right">Quantity</TableCell>
+                <TableCell align="right">Subtotal</TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {cart.map((mealBox) => (
+                <TableRow key={mealBox.mealBoxId}>
+                  <TableCell component="th" scope="row">
+                    <Box display="flex" alignItems="center">
+                      <img
+                        src={mealBox.itemImage}
+                        alt={mealBox.itemName}
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          marginRight: "16px",
+                        }}
+                      />
+                      {mealBox.itemName}
+                    </Box>
+                  </TableCell>
+                  <TableCell align="right">
+                    ${mealBox.itemPrice.toFixed(2)}
+                  </TableCell>
+                  <TableCell align="right">
+                    <ButtonGroup size="small" style={{ marginLeft: "10px" }}>
+                      <Button
+                        onClick={() =>
+                          updateMealBoxQuantity(mealBox.mealBoxId, -1)
+                        }
+                      >
+                        -
+                      </Button>
+                      <Box mx={1}>
+                        <Typography>{mealBox.quantity}</Typography>
+                      </Box>
+                      <Button
+                        onClick={() =>
+                          updateMealBoxQuantity(mealBox.mealBoxId, 1)
+                        }
+                      >
+                        +
+                      </Button>
+                    </ButtonGroup>
+                  </TableCell>
+                  <TableCell align="right">
+                    ${(mealBox.itemPrice * mealBox.quantity).toFixed(2)}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => removeFromCart(mealBox)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Box mt={4} mb={2}>
@@ -123,13 +186,39 @@ const Cart = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => navigate("/checkout")}
+                onClick={handleCheckout}
               >
                 Proceed to Checkout
               </Button>
+              <Dialog
+                open={errorDialogOpen}
+                onClose={() => setErrorDialogOpen(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Unable to Proceed to Checkout"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Please add at least one meal box to your cart before
+                    proceeding to checkout.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={() => setErrorDialogOpen(false)}
+                    color="primary"
+                    autoFocus
+                  >
+                    Close
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </Box>
           </Grid>
         </Grid>
+        <Copyright sx={{ pt: 4 }} />
       </Container>
     </div>
   );

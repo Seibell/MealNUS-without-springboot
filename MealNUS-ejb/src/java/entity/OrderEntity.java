@@ -14,9 +14,11 @@ import javafx.util.Pair;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,7 +31,7 @@ import util.enumeration.OrderStatus;
  */
 @Entity
 public class OrderEntity implements Serializable {
-   
+
 //name is because order dosent work with SQL  <-- can i replace with OrderEntity?? -CH
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,7 +41,7 @@ public class OrderEntity implements Serializable {
     private Date orderDate;
 
     private List<Pair<MealBox, Integer>> orderDetails;
-    
+
     private List<MealBox> userorders;
     private List<Integer> quantity;
 
@@ -58,7 +60,7 @@ public class OrderEntity implements Serializable {
     @Enumerated
     private OrderStatus orderStatus;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private User user;
 
 //    Q) is review going to be under orders?
@@ -89,15 +91,14 @@ public class OrderEntity implements Serializable {
 
     public OrderEntity(Date orderDate, List<Pair<MealBox, Integer>> orderDetails, List<BigDecimal> priceList, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, User user) {
         this.orderDate = orderDate;
-        this.orderDetails =  orderDetails;
+        this.orderDetails = orderDetails;
         this.priceList = priceList;
         this.deliveryDate = deliveryDate;
         this.address = address;
         this.orderStatus = orderStatus;
         this.user = user;
     }
-    
-   
+
     public Long getOrderId() {
         return orderId;
     }
@@ -258,6 +259,5 @@ public class OrderEntity implements Serializable {
     public void setQuantity(List<Integer> quantity) {
         this.quantity = quantity;
     }
-    
-    
+
 }
