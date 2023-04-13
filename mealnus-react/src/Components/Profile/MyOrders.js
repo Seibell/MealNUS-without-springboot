@@ -332,7 +332,12 @@ const MyOrders = () => {
                       ).toLocaleDateString()}
                     </TableCell>
                     <TableCell>{order.address}</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell>{order.orderDetails.reduce((total, detail) => {
+                      const price = detail.key.itemPrice;
+                      const quantity = detail.value;
+                      return total + (price * quantity);
+                    }, 0)}
+                    </TableCell>
                     <TableCell>{order.orderStatus}</TableCell>
                     <TableCell>
                       <Button
