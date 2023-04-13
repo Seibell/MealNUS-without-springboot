@@ -198,7 +198,7 @@ const MealBox = () => {
                                 justifyContent="flex-end"
                                 borderRadius="20px"
                                 bgcolor="transparent"
-                                ml={-1.7}
+                                ml={-2.5}
                                 mr={1}
                                 p={1}
                                 height="30px"
@@ -210,7 +210,7 @@ const MealBox = () => {
                                 >
                                     <IconButton style={{
                                         borderRadius: "10px",
-                                        color: "#fff",
+                                        backgroundColor: colors.mealNUSBlue[100],
                                         paddingLeft: "10px",
                                         paddingRight: "10px",
                                         paddingTop: "5px",
@@ -219,8 +219,8 @@ const MealBox = () => {
                                         alignItems: "center",
                                         justifyContent: "center",
                                     }}>
-                                        <AddCircle style={{ fill: "black" }} />
-                                        <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>Create New MealBox</Typography>
+                                        {/* <AddCircle style={{ fill: "black" }} /> */}
+                                        <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.white[100] }}>Create New MealBox</Typography>
                                     </IconButton>
                                 </Link>
                             </Box>

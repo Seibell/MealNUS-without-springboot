@@ -320,6 +320,7 @@ const Promotion = () => {
                                 justifyContent="flex-end"
                                 borderRadius="20px"
                                 bgcolor="transparent"
+                                ml={-1.2}
                                 mr={1}
                                 p={1}
                                 height="30px"
@@ -331,6 +332,7 @@ const Promotion = () => {
                                 >
                                     <IconButton style={{
                                         borderRadius: "10px",
+                                        backgroundColor: colors.mealNUSBlue[100],
                                         color: "#fff",
                                         paddingLeft: "10px",
                                         paddingRight: "10px",
@@ -340,9 +342,9 @@ const Promotion = () => {
                                         alignItems: "center",
                                         justifyContent: "center",
                                     }}>
-                                        <AddCircle style={{ fill: "black" }} />
+                                        {/* <AddCircle style={{ fill: "black" }} /> */}
 
-                                        <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>Create New Promotion</Typography>
+                                        <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.white[100] }}>Create New Promotion</Typography>
                                     </IconButton>
                                 </Link>
                             </Box>

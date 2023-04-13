@@ -16,7 +16,7 @@ import { useContext } from "react";
 import Alert from '@mui/material/Alert';
 import Autocomplete from '@mui/material/Autocomplete';
 import ClearIcon from '@mui/icons-material/Clear';
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -77,7 +77,7 @@ function UpdateOrder(props) {
     const navigate = useNavigate();
 
     const handleDeliverydateChange = (event) => {
-        setSelectedOptionaddress(event.target.value);
+        setdeliveryDates(event.target.value);
     };
 
     const handlePriceChange = (event) => {
@@ -100,6 +100,7 @@ function UpdateOrder(props) {
     const formatted2 = deliveryDate.replace('Z[UTC]', '');
     const newDeliveryDate = moment.utc(formatted2).tz('Asia/Singapore').format('YYYY-MM-DD');
 
+
     const handleFormSubmit = (event) => {
         event.preventDefault();
 
@@ -117,8 +118,14 @@ function UpdateOrder(props) {
         };
         console.log(orders);
 
+        const isFutureDate = (date) => {
+            const today = new Date();
+            const inputDate = new Date(date);
+            return inputDate.setHours(0, 0, 0, 0) > today.setHours(0, 0, 0, 0);
+        };
 
-        fetch(`http://localhost:8080/MealNUS-war/rest/orders/update/` + orderId +`/` + orderStatus +`/` + address, {
+
+        fetch(`http://localhost:8080/MealNUS-war/rest/orders/updateOrder/` + orderId, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -132,8 +139,8 @@ function UpdateOrder(props) {
             .catch((error) => {
                 console.error(error);
             });
-        console.log(orders);
-        console.log(`http://localhost:8080/MealNUS-war/rest/orders/update/` + orderId +"/" + orderStatus +"/" + address);
+        console.log(newDeliveryDate);
+        console.log(`http://localhost:8080/MealNUS-war/rest/orders/updateOrder/` + orderId);
     }
 
     //RETRIEVE MEALBOX BY ID
@@ -272,10 +279,10 @@ function UpdateOrder(props) {
                                 <input
                                     id="inputCost"
                                     required
+                                    readOnly
                                     className="form-control"
                                     value={newDeliveryDate}
-                                    onChange={handleDeliverydateChange}
-                                />
+                                    onChange={handleDeliverydateChange}/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="dropdown">Select an option for status:</label>
