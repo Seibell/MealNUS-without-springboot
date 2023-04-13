@@ -191,28 +191,39 @@ const MealBox = () => {
 
                         <Box m="20px">
                             <Header title="MEALBOXES" subtitle="List of MealBoxes" />
-                            <Link
-                                style={{ textDecoration: "none" }}
-                                onClick={() => window.open('/addmealbox', 'Add MealBox', 'width=600,height=700')}
+
+                            <Box
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="flex-end"
+                                borderRadius="20px"
+                                bgcolor="transparent"
+                                ml={-1.7}
+                                mr={1}
+                                p={1}
+                                height="30px"
+                                style={{ width: '195px' }}
                             >
-                                <Box
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="flex-end"
-                                    borderRadius="20px"
-                                    bgcolor="transparent"
-                                    ml={-1.7}
-                                    mr={1}
-                                    p={1}
-                                    height="30px"
-                                    style={{ width: '195px' }}
+                                <Link
+                                    style={{ textDecoration: "none" }}
+                                    onClick={() => window.open('/addmealbox', 'Add MealBox', 'width=600,height=700')}
                                 >
-                                    <IconButton>
+                                    <IconButton style={{
+                                        borderRadius: "10px",
+                                        color: "#fff",
+                                        paddingLeft: "10px",
+                                        paddingRight: "10px",
+                                        paddingTop: "5px",
+                                        paddingBottom: "5px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                    }}>
                                         <AddCircle style={{ fill: "black" }} />
+                                        <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>Create New MealBox</Typography>
                                     </IconButton>
-                                    <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>Create New MealBox</Typography>
-                                </Box>
-                            </Link>
+                                </Link>
+                            </Box>
                             <Box
                                 m="20px 0 0 0"
                                 height="50vh"
