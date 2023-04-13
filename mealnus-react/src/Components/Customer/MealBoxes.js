@@ -13,7 +13,6 @@ import InputLabel from "@mui/material/InputLabel";
 import BannerBackground from "../../Assets/home-banner-background.png";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import ReactStars from "react-rating-stars-component";
 
 import {
   Container,
