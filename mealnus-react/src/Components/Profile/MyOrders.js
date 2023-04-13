@@ -74,6 +74,7 @@ const MyOrders = () => {
       "Number of Orders": dateCounts[date],
     }));
 
+    console.log(data);
     return data;
   };
 
