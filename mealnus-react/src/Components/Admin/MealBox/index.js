@@ -198,7 +198,7 @@ const MealBox = () => {
                                 justifyContent="flex-end"
                                 borderRadius="20px"
                                 bgcolor="transparent"
-                                ml={-2.5}
+                                ml={-2.3}
                                 mr={1}
                                 p={1}
                                 height="30px"
