@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
 import javax.ejb.Local;
+import util.enumeration.AddressEnum;
 import util.enumeration.OrderStatus;
 import util.exception.OrderNotFoundException;
 import util.exception.UnknownPersistenceException;
@@ -65,13 +66,12 @@ public interface OrderSessionBeanLocal {
 
     public BigDecimal getTotalRevenue();
 
-    public void updateOrder(Long orderId, OrderEntity orderToUpdate);
 
     public OrderEntity cancelOrder(Long orderId);
     
     public List<List<Double>> retrieveAllOrderLocations();
 
-   // public void updateOrder(OrderEntity orderToUpdate);
+    public void updateOrder(Long orderId, Date deliveryDate, AddressEnum address, OrderStatus orderStatus);
 
 
 }
