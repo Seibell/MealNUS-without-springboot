@@ -251,7 +251,7 @@ public class DataInitSessionBean {
             Review r3 = reviewSessionBean.retrieveReviewById(4L);
             box3.addReview(r3);
 
-            Category c1 = categorySessionBean.retrieveCategoryById(3L);
+            Category c1 = categorySessionBean.retrieveCategoryById(4L);
             Category c2 = categorySessionBean.retrieveCategoryById(1L);
             Category c3 = categorySessionBean.retrieveCategoryById(2L);
 
@@ -310,7 +310,6 @@ public class DataInitSessionBean {
                 cal.add(Calendar.DAY_OF_MONTH, -50);
                 Date orderDate = cal.getTime();
                 MealBox mealBox = new MealBox("https://assets.epicurious.com/photos/61ba94cc79b235be07f993e7/6:4/w_1600%2Cc_limit/gobble.png", "Supreme Meat Box", 004L, new BigDecimal(15), new BigDecimal(20), "This is a high quality meat mealBox", 10);
-                em.persist(mealBox);
                 Integer qty = 4;
                 List<Pair<MealBox, Integer>> orderDetails = new ArrayList<>();
                 orderDetails.add(new Pair<>(mealBox, qty));
@@ -329,7 +328,6 @@ public class DataInitSessionBean {
                 cal.add(Calendar.DAY_OF_MONTH, -20);
                 Date orderDate2 = cal.getTime();
                 MealBox mealBox2 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
-                em.persist(mealBox2);
                 Integer qty2 = 23;
                 List<Pair<MealBox, Integer>> orderDetails2 = new ArrayList<>();
                 orderDetails2.add(new Pair<>(mealBox2, qty2));
@@ -352,7 +350,6 @@ public class DataInitSessionBean {
                 cal.add(Calendar.DAY_OF_MONTH, -15);
                 Date orderDate3 = cal.getTime();
                 MealBox mealBox3 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box 2", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
-                em.persist(mealBox3);
                 Integer qty3 = 23;
                 List<Pair<MealBox, Integer>> orderDetails3 = new ArrayList<>();
                 orderDetails3.add(new Pair<>(mealBox3, qty3));
@@ -371,7 +368,6 @@ public class DataInitSessionBean {
 
                 Date orderDate4 = new Date();
                 MealBox mealBox4 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box 3", 005L, new BigDecimal(13), new BigDecimal(14.98), "Box catered to your daily nutrition needs!", 60);
-                em.persist(mealBox4);
                 Integer qty4 = 23;
                 List<Pair<MealBox, Integer>> orderDetails4 = new ArrayList<>();
                 orderDetails4.add(new Pair<>(mealBox4, qty4));
