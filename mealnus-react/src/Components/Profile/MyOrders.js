@@ -140,11 +140,13 @@ const MyOrders = () => {
 
   const statusColors = ["#e8c1a0", "#f47560", "#f1e15b", "#e8a838", "#61cdbb"];
 
-  const handleCancelOrder = async (orderId) => {
+  const handleCancelOrder = async (orderId, orderStatus) => {
     const confirmed = window.confirm(
       "Are you sure you want to cancel this order?"
     );
-    if (confirmed) {
+
+    if (confirmed && orderStatus === "PAID") {
+      console.log(orderStatus)
       try {
         await axios.put(
           `http://localhost:8080/MealNUS-war/rest/orders/cancel/${orderId}`
@@ -158,6 +160,9 @@ const MyOrders = () => {
       } catch (error) {
         console.error("Error cancelling order:", error);
       }
+    } else {
+      console.log(orderStatus)
+      alert("This order cannot be cancelled.");
     }
   };
 
@@ -333,7 +338,7 @@ const MyOrders = () => {
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={() => handleCancelOrder(order.orderId)}
+                        onClick={() => handleCancelOrder(order.orderId, order.orderStatus)}
                         disabled={
                           order.orderStatus !== "PAID" &&
                           order.orderStatus !== "PREPARING" &&
