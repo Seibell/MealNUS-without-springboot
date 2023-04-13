@@ -45,6 +45,7 @@ import util.enumeration.AddressEnum;
 import util.exception.UserNotFoundException;
 import ws.model.CreateOrderResponse;
 import ws.model.RetrieveAllOrdersResponse;
+import ws.model.UpdateOrderResponse;
 
 /**
  * REST Web Service
@@ -429,15 +430,22 @@ public class OrdersResource {
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/update/1
     // success should show the success message
     @PUT
-    @Path("/update/{orderId}")
+    @Path("/updateOrder/{orderId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateOrder(@PathParam("orderId") Long orderId, OrderEntity orderToUpdate) {
-        orderSessionBeanLocal.updateOrder(orderId, orderToUpdate);
+    public Response updateOrder(@PathParam("orderId") Long orderId, UpdateOrderResponse updateOrderResponse) 
+            throws UserNotFoundException {
+        
+        System.out.println("Check : " + orderId + " : "  + updateOrderResponse.getDeliveryDate());
+        Date deliveryDate = updateOrderResponse.getDeliveryDate();
+        AddressEnum address = updateOrderResponse.getAddress();
+        OrderStatus orderStatus = updateOrderResponse.getOrderStatus();
+        
+        orderSessionBeanLocal.updateOrder(orderId, deliveryDate, address,orderStatus);
         String updateSuccessMessage = "Order with ID [" + orderId + "] has been updated successfully!";
         return Response.status(200).entity(updateSuccessMessage).build();
     }
-
+    
     /*
     @Path("/update2/{orderId}") 
     @Consumes(MediaType.APPLICATION_JSON) 
