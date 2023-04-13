@@ -184,9 +184,9 @@ public class DataInitSessionBean {
             Calendar calendar = Calendar.getInstance();
             try {
                 reviewSessionBean.createReview(new Review(new Date(calendar.getTime().getTime()), 5, "This is a default review", userSessionBean.retrieveUserByEmail("user@gmail.com")));
-                reviewSessionBean.createReview(new Review(new Date(calendar.getTime().getTime()), 5, "Just tried the Healthy Vegan Box - a delightful DIY meal!", userSessionBean.retrieveUserByEmail("user@gmail.com")));
-                reviewSessionBean.createReview(new Review(new Date(calendar.getTime().getTime()), 5, "I recently tried the BBQ Bliss Box, and it was a fantastic experience! The chicken was tender, and the barbecue sauce provided a delicious, smoky flavor.", userSessionBean.retrieveUserByEmail("user@gmail.com")));
-                reviewSessionBean.createReview(new Review(new Date(calendar.getTime().getTime()), 5, "I absolutely loved the All-in-One Box! The variety of ingredients allowed me to create a unique, mouthwatering meal.", userSessionBean.retrieveUserByEmail("user@gmail.com")));
+                reviewSessionBean.createReview(new Review(new Date(calendar.getTime().getTime()), 4, "Just tried the Healthy Vegan Box - a delightful DIY meal!", userSessionBean.retrieveUserByEmail("user@gmail.com")));
+                reviewSessionBean.createReview(new Review(new Date(calendar.getTime().getTime()), 2, "I recently tried the BBQ Bliss Box, and it was a fantastic experience! The chicken was tender, and the barbecue sauce provided a delicious, smoky flavor.", userSessionBean.retrieveUserByEmail("user@gmail.com")));
+                reviewSessionBean.createReview(new Review(new Date(calendar.getTime().getTime()), 1, "I absolutely loved the All-in-One Box! The variety of ingredients allowed me to create a unique, mouthwatering meal.", userSessionBean.retrieveUserByEmail("user@gmail.com")));
             } catch (UserNotFoundException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -251,7 +251,7 @@ public class DataInitSessionBean {
             Review r3 = reviewSessionBean.retrieveReviewById(4L);
             box3.addReview(r3);
 
-            Category c1 = categorySessionBean.retrieveCategoryById(4L);
+            Category c1 = categorySessionBean.retrieveCategoryById(3L);
             Category c2 = categorySessionBean.retrieveCategoryById(1L);
             Category c3 = categorySessionBean.retrieveCategoryById(2L);
 
