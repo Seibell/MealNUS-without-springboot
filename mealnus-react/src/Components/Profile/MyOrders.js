@@ -279,7 +279,7 @@ const MyOrders = () => {
             <StatBox
               title={
                 "S$" +
-                orders
+                orders.filter((order) => order.orderStatus !== "CANCELLED")
                   .reduce((total, order) => {
                     const orderTotal = order.orderDetails
                       .map((detail) => detail.key.itemPrice * detail.value)
