@@ -7,6 +7,7 @@ import { useState, useEffect, useContext } from "react";
 import { CartContext } from "../../Context/CartContext";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
+import ReactStars from "react-rating-stars-component";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import BannerBackground from "../../Assets/home-banner-background.png";
@@ -40,6 +41,13 @@ import {
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { AuthContext } from "../../Context/AuthContext";
 
+const calculateAverageRating = (reviews) => {
+  if (!reviews || reviews.length === 0) return 0;
+
+  const totalStars = reviews.reduce((sum, review) => sum + review.stars, 0);
+  return totalStars / reviews.length;
+};
+
 const MealBoxes = () => {
   const [mealBoxes, setMealBoxes] = useState({ mealBoxEntities: [] });
   const [selectedMealBox, setSelectedMealBox] = useState(null);
@@ -47,9 +55,9 @@ const MealBoxes = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const history = useNavigate();
-
   const [cart, setCart] = useContext(CartContext);
   const { currentUser } = useContext(AuthContext);
+  const averageRating = calculateAverageRating(selectedMealBox?.reviews);
 
   const navigate = useNavigate();
 
@@ -254,7 +262,7 @@ const MealBoxes = () => {
                         }}
                         noWrap
                       >
-                        Price: ${mealBox.itemPrice}
+                        Price: ${mealBox.itemPrice.toFixed(2)}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -305,7 +313,7 @@ const MealBoxes = () => {
                 variant="subtitle1"
                 sx={{ display: "flex", alignItems: "center" }}
               >
-                <b>Price: </b>&nbsp;${selectedMealBox?.itemPrice}
+                <b>Price: </b>&nbsp;{selectedMealBox?.itemPrice.toFixed(2)}
                 <Box sx={{ flexGrow: 1 }} />
                 <span>{selectedMealBox?.quantityAvailable}</span>
                 <Box sx={{ width: 4 }} />
@@ -368,9 +376,21 @@ const MealBoxes = () => {
               </div>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Typography variant="h6" gutterBottom>
-                Reviews
-              </Typography>
+              <h2>
+                Reviews{" "}
+                <span style={{ fontSize: "0.8em", marginLeft: "8px" }}>
+                  (Overall Rating: {averageRating.toFixed(1)})
+                </span>
+              </h2>
+              <ReactStars
+                count={5}
+                value={averageRating}
+                size={24}
+                isHalf={true}
+                edit={false}
+                activeColor="#ffd700"
+                style={{ marginLeft: "8px" }}
+              />
               <List>
                 {selectedMealBox?.reviews?.map((review) => (
                   <ListItem key={review.reviewId} alignItems="flex-start">
@@ -396,6 +416,15 @@ const MealBoxes = () => {
                               day: "numeric",
                             })}
                           </span>
+                          <ReactStars
+                            count={5}
+                            value={review.stars}
+                            size={16}
+                            isHalf={false}
+                            edit={false}
+                            activeColor="#ffd700"
+                            style={{ marginLeft: "8px" }}
+                          />
                         </>
                       }
                       secondary={review.comments}
