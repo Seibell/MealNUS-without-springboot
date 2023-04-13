@@ -80,6 +80,28 @@ const Member = () => {
         });
     }, [memberData]);
 
+    const getOrders = (userEmail) => {
+        axios.get(`http://localhost:8080/MealNUS-war/rest/orders/retrieveOrdersByUser/${userEmail}`)
+            .then(response => {
+                const updatedMemberData = memberData.map(member => {
+                    if (member.email === userEmail) {
+                        member.orderCount = response.data.length;
+                    }
+                    return member;
+                });
+                return updatedMemberData;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    useEffect(() => {
+        memberData.forEach(member => {
+            getOrders(member.email, setMemberData);
+        });
+    }, [memberData]);
+
 
     const columns = [
         {
@@ -127,6 +149,20 @@ const Member = () => {
                     {params.value ? `${params.value.substring(0, 2)}${"*".repeat(params.value.length - 2)}` : ""}
                 </span>
             ),
+        },
+        {
+            field: "orderCount",
+            headerName: "Num of Orders",
+            flex: 1,
+            headerClassName: "headerName",
+            renderCell: (params) => {
+                const ordersList = params.value;
+                return (
+                    <div>
+                        {ordersList}
+                    </div>
+                )
+            },
         },
         {
             field: "creditCards",

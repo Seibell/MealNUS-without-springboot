@@ -24,6 +24,8 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.util.Pair;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
@@ -66,6 +68,26 @@ public class OrdersResource {
     public Response retrieveAllOrders() {
         RetrieveAllOrdersResponse retrieveAllOrdersResponse = new RetrieveAllOrdersResponse(orderSessionBeanLocal.retrieveAllOrders());
         return Response.status(Status.OK).entity(retrieveAllOrdersResponse).build();
+    }
+
+    @GET
+    @Path(value = "retrieveOrdersByUser/{userEmail}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveOrdersByUser(@PathParam("userEmail") String userEmail) {
+        try {
+            List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByUserEmail(userEmail);
+            GenericEntity<List<OrderEntity>> entity
+                    = new GenericEntity<List<OrderEntity>>(results) {
+            };
+            return Response.status(200).entity(
+                    entity).build();
+        } catch (UserNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+            return Response.status(404).entity(exception)
+                    .build();
+        }
     }
 
     @GET
@@ -386,7 +408,7 @@ public class OrdersResource {
         String updateSuccessMessage = "Order with ID [" + orderId + "] has been updated successfully!";
         return Response.status(200).entity(updateSuccessMessage).build();
     }
-   
+
     /*
     @Path("/update2/{orderId}") 
     @Consumes(MediaType.APPLICATION_JSON) 
@@ -398,7 +420,7 @@ public class OrdersResource {
         String updateSuccessMsg = "Order with ID [" + orderId + "] has been updated successfully!"; 
         return Response.status(200).entity(updateSuccessMsg).build(); 
     } //end editOrder
-*/
+     */
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/delete/1
     // success should show the success message
     @DELETE
@@ -425,24 +447,23 @@ public class OrdersResource {
 
     }
 
-    
-    
     // retrieve order status;
     // http://localhost:8080/MealNUS-war/rest/orders/retrieveAllAddress
     @GET
     @Path(value = "retrieveAllAddress")
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllAddress() {
-       AddressEnum[] address = AddressEnum.values();
-       return Response.status(Status.OK).entity(address).build();
+        AddressEnum[] address = AddressEnum.values();
+        return Response.status(Status.OK).entity(address).build();
     }
+
     //retrieve all enum addr
     // http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrderStatus
-       @GET
+    @GET
     @Path(value = "retrieveAllOrderStatus")
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllOrderStatus() {
-       OrderStatus[] status = OrderStatus.values();
-       return Response.status(Status.OK).entity(status).build();
+        OrderStatus[] status = OrderStatus.values();
+        return Response.status(Status.OK).entity(status).build();
     }
 }
