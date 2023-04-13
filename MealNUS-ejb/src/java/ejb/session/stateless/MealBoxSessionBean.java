@@ -115,6 +115,9 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
         m.setItemPrice(mealbox.getItemPrice());
         m.setQuantityAvailable(mealbox.getQuantityAvailable());
         m.setIngredients(mealbox.getIngredients());
+        m.setAllergens(mealbox.getAllergens());
+        m.setCategories(mealbox.getCategories());
+        m.setItemImage(mealbox.getItemImage());
         em.merge(m);
         return m;
     }

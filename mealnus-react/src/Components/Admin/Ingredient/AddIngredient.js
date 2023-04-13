@@ -157,7 +157,6 @@ function AddIngredient(props) {
                                 <label htmlFor="image">Upload Image</label>
                                 <input
                                     id="image"
-                                    required
                                     className="form-control"
                                     accept="image/*"
                                     type="file" onChange={handleFileChange}
