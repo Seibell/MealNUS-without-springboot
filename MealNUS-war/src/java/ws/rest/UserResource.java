@@ -93,6 +93,7 @@ public class UserResource {
     public Response createUser(User user) {
         try {
             user.setImageURL("https://i.imgur.com/Kvyecsm.png");
+            user.setSignupDate(new Date());
             userSessionBeanLocal.createUser(user);
             System.out.println("*** createuser(): User = " + user.getEmail() + " created via web service");
 

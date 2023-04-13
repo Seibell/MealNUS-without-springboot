@@ -13,6 +13,8 @@ import InputLabel from "@mui/material/InputLabel";
 import BannerBackground from "../../Assets/home-banner-background.png";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import ReactStars from "react-rating-stars-component";
+
 import {
   Container,
   Grid,
@@ -119,15 +121,19 @@ const MealBoxes = () => {
     });
   };
 
-  const handleOrderNow = (mealBox) => {
-    const newMealBox = { ...mealBox, quantity: 1 };
+  const handleOrderNow = (mealBox, quantity) => {
+    if (quantity <= 0) {
+      alert("Please select a quantity greater than 0");
+      return;
+    }
+    const newMealBox = { ...mealBox, quantity };
     setCart((prevCart) => {
       const existingMealBoxIndex = prevCart.findIndex(
         (item) => item.mealBoxId === newMealBox.mealBoxId
       );
       if (existingMealBoxIndex >= 0) {
         const updatedCart = [...prevCart];
-        updatedCart[existingMealBoxIndex].quantity += 1;
+        updatedCart[existingMealBoxIndex].quantity += quantity;
         return updatedCart;
       } else {
         return [...prevCart, newMealBox];
@@ -279,7 +285,7 @@ const MealBoxes = () => {
                       size="small"
                       variant="contained"
                       color="primary"
-                      onClick={() => handleOrderNow(mealBox)}
+                      onClick={() => handleOrderNow(mealBox, 1)}
                     >
                       Order Now
                     </Button>
@@ -449,7 +455,7 @@ const MealBoxes = () => {
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={() => handleOrderNow(selectedMealBox)}
+                onClick={() => handleOrderNow(selectedMealBox, quantity)}
               >
                 Order Now
               </Button>

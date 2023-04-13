@@ -29,6 +29,7 @@ import MuiAlert from '@mui/lab/Alert';
 import axios from 'axios';
 import { AuthContext } from "../../Context/AuthContext";
 import NavBar from '../Navigation/NavBar';
+import CreditCardDisplay from './CreditCardDisplay';
 
 function PaymentMethodsPage() {
   const { currentUser } = useContext(AuthContext);
@@ -169,48 +170,27 @@ function PaymentMethodsPage() {
         <NavBar />
         <Box style={{ paddingLeft: "20px", paddingRight: "20px" }}>
           <h1>Payment Methods</h1>
+          <div style={{textAlign: "right"}}>
           <Button variant="contained" color="primary" onClick={handleClickOpen}>
             Add Credit Card
           </Button>
+          </div>
           <hr />
           {loading ? (
             <CircularProgress />
           ) : (
-            <TableContainer component={Paper}>
-              <Table aria-label="credit cards table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Card ID</TableCell>
-                    <TableCell>Card Owner Name</TableCell>
-                    <TableCell>Credit Card Number</TableCell>
-                    <TableCell>CVV</TableCell>
-                    <TableCell>Expiry Date</TableCell>
-                    <TableCell>Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {cards.map((card, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{card.cardOwnerName}</TableCell>
-                      <TableCell>{card.creditCardNumber}</TableCell>
-                      <TableCell>{card.cvv}</TableCell>
-                      <TableCell>{card.expiryDate}</TableCell>
-                      <TableCell>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => handleRemoveCardDialog(card.creditCardId, index)}
-                          disabled={loading}
-                        >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <Grid container spacing={3}>
+              {cards.map((card, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <CreditCardDisplay
+                    card={card}
+                    index={index}
+                    handleRemoveCardDialog={handleRemoveCardDialog}
+                    loading={loading}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           )}
           {error && <MuiAlert severity="error">{error}</MuiAlert>}
           <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar}>

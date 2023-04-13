@@ -321,6 +321,7 @@ public class DataInitSessionBean {
                 AddressEnum address = AddressEnum.PRINCE_GEORGE_PARK_RESIDENCE;
                 OrderStatus orderStatus = OrderStatus.PREPARING;
                 User user = new User("eric4", "tang4", "user4@gmail.com", "password");
+                em.persist(user);
                 orderSessionBean.createOrder(new OrderEntity(orderDate, orderDetails, priceList, costList, deliveryDate, address, orderStatus, user));
 
                 cal.setTime(new Date());
@@ -342,6 +343,7 @@ public class DataInitSessionBean {
                 AddressEnum address2 = AddressEnum.UTOWN_RESIDENCES;
                 OrderStatus orderStatus2 = OrderStatus.PAID;
                 User user2 = new User("eric5", "tang5", "user5@gmail.com", "password");
+                em.persist(user2);
                 OrderEntity newOrder2 = orderSessionBean.createOrder(new OrderEntity(orderDate2, orderDetails2, priceList2, costList2, deliveryDate2, address2, orderStatus2, user2));
 
                 cal.setTime(new Date());

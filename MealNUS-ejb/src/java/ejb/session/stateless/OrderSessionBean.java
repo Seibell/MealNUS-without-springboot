@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.MealBox;
 import entity.OrderEntity;
+import entity.User;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -40,27 +42,14 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 
     @PersistenceContext(unitName = "MealNUS-ejbPU")
     private EntityManager em;
-
+    
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Override
     public OrderEntity createOrder(OrderEntity order) throws OrderNotFoundException, UnknownPersistenceException {
-        try {
-            em.persist(order);
-            em.flush();
-            return order;
-
-        } catch (PersistenceException ex) {
-            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
-                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    throw new OrderNotFoundException();
-                } else {
-                    throw new UnknownPersistenceException(ex.getMessage());
-                }
-            } else {
-                throw new UnknownPersistenceException(ex.getMessage());
-            }
-        }
+        em.persist(order);
+        em.flush();
+        return order;
     }
 
     // This method helps with Order Management :: Orders Overview
@@ -528,7 +517,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         updatedOrder.setUser(orderToUpdate.getUser());
         em.merge(updatedOrder);
     }
-        
+
     /*
     @Override
     public void updateOrder(OrderEntity orderToUpdate) {
@@ -548,8 +537,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
             Logger.getLogger(OrderSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-*/
-
+     */
     @Override
     public void deleteOrder(Long oId) {
         try {
@@ -569,5 +557,9 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
             em.merge(order);
         }
         return order;
+    }
+
+    public void persist(Object object) {
+        em.persist(object);
     }
 }
