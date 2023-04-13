@@ -251,7 +251,7 @@ public class DataInitSessionBean {
             Review r3 = reviewSessionBean.retrieveReviewById(4L);
             box3.addReview(r3);
 
-            Category c1 = categorySessionBean.retrieveCategoryById(3L);
+            Category c1 = categorySessionBean.retrieveCategoryById(4L);
             Category c2 = categorySessionBean.retrieveCategoryById(1L);
             Category c3 = categorySessionBean.retrieveCategoryById(2L);
 
