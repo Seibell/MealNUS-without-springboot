@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,8 +47,8 @@ public class MealBox implements Serializable {
 
     @ManyToMany
     private List<Category> categories;
-    
-    @OneToMany(mappedBy = "mealBox")
+
+   @OneToMany(mappedBy = "mealBox", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Review> reviews;
 
     public MealBox() {
@@ -70,7 +72,7 @@ public class MealBox implements Serializable {
         this.reviews = new ArrayList<>();
         this.StatusAvail = true;
     }
-    
+
     public MealBox(String itemName, Long ItemCode, BigDecimal itemCost, BigDecimal itemPrice, String itemDescription, Integer quantityAvailable) {
         this.itemName = itemName;
         this.ItemCode = ItemCode;
@@ -80,8 +82,7 @@ public class MealBox implements Serializable {
         this.quantityAvailable = quantityAvailable;
         this.StatusAvail = true;
     }
-    
-    
+
     public MealBox(String itemName, Long ItemCode, String itemImage, BigDecimal itemPrice, BigDecimal itemCost, String itemDescription, Integer quantityAvailable) {
         this.itemName = itemName;
         this.ItemCode = ItemCode;
@@ -121,9 +122,7 @@ public class MealBox implements Serializable {
         this.categories = categories;
         this.StatusAvail = true;
     }
-    
-    
-    
+
     public Long getMealBoxId() {
         return mealBoxId;
     }
@@ -177,7 +176,7 @@ public class MealBox implements Serializable {
     public Long getItemCode() {
         return ItemCode;
     }
-    
+
     public void addReview(Review r) {
         this.reviews.add(r);
         System.out.println("this line executed");
@@ -266,7 +265,7 @@ public class MealBox implements Serializable {
     public List<Ingredient> getIngredients() {
         return ingredients;
     }
-    
+
     public void addIngredients(Ingredient e) {
         this.ingredients.add(e);
     }
@@ -295,6 +294,7 @@ public class MealBox implements Serializable {
     public void addCategory(Category category) {
         this.categories.add(category);
     }
+
     /**
      * @return the reviews
      */
@@ -345,5 +345,4 @@ public class MealBox implements Serializable {
         this.StatusAvail = StatusAvail;
     }
 
-    
 }
