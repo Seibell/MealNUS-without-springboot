@@ -12,6 +12,8 @@ import InputLabel from "@mui/material/InputLabel";
 import BannerBackground from "../../Assets/home-banner-background.png";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import ReactStars from "react-rating-stars-component";
+
 import {
   Container,
   Grid,
@@ -400,6 +402,15 @@ const MealBoxes = () => {
                               day: "numeric",
                             })}
                           </span>
+                          <ReactStars
+                            count={5}
+                            value={review.stars}
+                            size={16}
+                            isHalf={false}
+                            edit={false}
+                            activeColor="#ffd700"
+                            style={{ marginLeft: "8px" }}
+                          />
                         </>
                       }
                       secondary={review.comments}
