@@ -148,7 +148,7 @@ const Ingredient = () => {
                                 justifyContent="flex-end"
                                 borderRadius="20px"
                                 bgcolor="transparent"
-                                ml={0}
+                                ml={-1.2}
                                 mr={1}
                                 p={1}
                                 height="30px"
@@ -160,6 +160,7 @@ const Ingredient = () => {
                                 >
                                     <IconButton style={{
                                         borderRadius: "10px",
+                                        backgroundColor: colors.mealNUSBlue[100],
                                         color: "#fff",
                                         paddingLeft: "10px",
                                         paddingRight: "10px",
@@ -169,9 +170,9 @@ const Ingredient = () => {
                                         alignItems: "center",
                                         justifyContent: "center",
                                     }}>
-                                        <AddCircle style={{ fill: "black" }} />
+                                        {/* <AddCircle style={{ fill: "black" }} /> */}
 
-                                        <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>Create New Ingredient</Typography>
+                                        <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.white[100] }}>Create New Ingredient</Typography>
                                     </IconButton>
 
                                 </Link>
