@@ -666,35 +666,35 @@ const Dashboard = () => {
                                                             .join(' ')}
                                                     </Box>
                                                     <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px">
-                                                        <img src={mastercardLogo} alt={"Card type"} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
-                                                        SGD&nbsp;
+                                                        {/* <img src={mastercardLogo} alt={"Card type"} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
+                                                        SGD&nbsp; */}
                                                         <Typography>{order.orderDetails.map(detail => detail.key.itemPrice * detail.value).reduce((total, price) => total + price, 0)}</Typography>
                                                     </Box>
                                                     {/* Above cc logo display method to be replaced by below once confirmed */}
                                                     {/* <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px">
-                                                <img
-                                                    src={
-                                                        order.user.creditCards[0]?.startsWith("4")
-                                                            ? visaLogo
-                                                            : order.user.creditCards[0]?.startsWith("5")
-                                                                ? mastercardLogo
-                                                                : ""
-                                                    }
-                                                    alt={"Card type"}
-                                                    style={{
-                                                        maxWidth: "24px",
-                                                        maxHeight: "30px",
-                                                        marginRight: "8px",
-                                                        width: "auto",
-                                                        height: "auto",
-                                                    }}
-                                                />
-                                                <Typography>
-                                                    {order.orderDetails
-                                                        .map((detail) => detail.key.itemPrice * detail.value)
-                                                        .reduce((total, price) => total + price, 0)}
-                                                </Typography>
-                                            </Box> */}
+                                                        <img
+                                                            src={
+                                                                order.user.creditCards[0]?.startsWith("4")
+                                                                    ? visaLogo
+                                                                    : order.user.creditCards[0]?.startsWith("5")
+                                                                        ? mastercardLogo
+                                                                        : ""
+                                                            }
+                                                            alt={"Card type"}
+                                                            style={{
+                                                                maxWidth: "24px",
+                                                                maxHeight: "30px",
+                                                                marginRight: "8px",
+                                                                width: "auto",
+                                                                height: "auto",
+                                                            }}
+                                                        />
+                                                        <Typography>
+                                                            {order.orderDetails
+                                                                .map((detail) => detail.key.itemPrice * detail.value)
+                                                                .reduce((total, price) => total + price, 0)}
+                                                        </Typography>
+                                                    </Box> */}
                                                     <Box
                                                         textAlign="center"
                                                         backgroundColor={getOrderStatusColor(order.orderStatus)}
@@ -748,7 +748,7 @@ const Dashboard = () => {
                                     gridRow="span 2"
                                     backgroundColor={colors.primary[400]}
                                     p="20px"
-                                    // overflow="auto"
+                                // overflow="auto"
                                 >
                                     <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
                                         Pending Orders (by Address)
