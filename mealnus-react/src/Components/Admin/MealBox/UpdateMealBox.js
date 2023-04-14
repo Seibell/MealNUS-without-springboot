@@ -367,40 +367,40 @@ function UpdateMealBox(props) {
 
                             <div className="form-group">
                                 <label htmlFor="image">Upload Image</label>
-                                <input
-                                    id="image"
-                                    src={itemImage}
-                                    className="form-control"
-                                    accept="image/*"
-                                    type="file" onChange={handleFileChange}
-                                />
-                                   {uploading && (
-                                            <CircularProgress
+                                {itemImage && (
+                                    <div className="form-group">
+                                        <Box sx={{ width: 250, height: 250 }}>
+                                            <img
+                                                src={itemImage}
                                                 sx={{
-                                                    top: "42%",
-                                                    left: "43%",
+                                                    objectFit: "contain",
+                                                    bgcolor: "primary.main",
+                                                    maxWidth: "100%",
+                                                    maxHeight: "100%",
+                                                    width: 980,
+                                                    height: 980,
                                                 }}
                                             />
-                                        )}
-                                <div className="form-group">
-                                    <Box
+                                        </Box>
+                                    </div>
+                                )}
+                                <input
+                                    id="image"
+                                    className="form-control"
+                                    accept="image/*"
+                                    type="file"
+                                    onChange={handleFileChange}
+                                />
+                                {uploading && (
+                                    <CircularProgress
                                         sx={{
-                                            width: 250,
-                                            height: 250,
-                                        }}>
-                                        <img
-                                            src={itemImage}
-                                            sx={{
-                                                objectFit: "contain",
-                                                bgcolor: "primary.main",
-                                                width: "100",
-                                                height: "100",
-                                            }}
-                                        />
-                                     
-                                    </Box>
-                                </div>
+                                            top: "42%",
+                                            left: "43%",
+                                        }}
+                                    />
+                                )}
                             </div>
+
 
                             <div className="form-group">
                                 <label htmlFor="inputName">Item Code</label>

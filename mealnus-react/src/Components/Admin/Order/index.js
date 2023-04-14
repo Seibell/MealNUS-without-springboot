@@ -135,20 +135,25 @@ const Order = () => {
             headerName: "Actions",
             flex: 1,
             headerClassName: "headerName",
-            renderCell: (params) => (
-                <IconButton
-                    onClick={() =>
-                        window.open(
-                            '/updateorder/' + params.row.orderId,
-                            'Update Order',
-                            'width=600,height=500'
-                        )
-                    }
-                    variant="contained"
-                >
-                    <EditIcon />
-                </IconButton>
-            ),
+            renderCell: (params) => {
+                const isDisabled = params.row.orderStatus === "CANCELLED" || 
+                params.row.orderStatus === "COMPLETED";
+                return (
+                    <IconButton
+                        onClick={() =>
+                            window.open(
+                                '/updateorder/' + params.row.orderId,
+                                'Update Order',
+                                'width=600,height=500'
+                            )
+                        }
+                        variant="contained"
+                        disabled={isDisabled}
+                    >
+                        <EditIcon />
+                    </IconButton>
+                );
+            },
         },
     ];
 

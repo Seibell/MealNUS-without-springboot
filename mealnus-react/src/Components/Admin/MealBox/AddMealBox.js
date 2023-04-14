@@ -329,12 +329,17 @@ function AddMealBox(props) {
                                 <input
                                     id="inputCode"
                                     required
+                                    type="text"
                                     className="form-control"
                                     pattern='[0-9]*'
                                     inputMode='numeric'
                                     value={itemCode}
                                     onChange={handleCodeChange}
+                                    title="MealBox code must be numeric."
                                 />
+                                {itemCode.length > 0 && !/^[0-9 ]+$/.test(itemCode) &&
+                                    <p className="text-danger">MealBox code can only contain numbers.</p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="inputName">Item Cost</label>
@@ -346,7 +351,11 @@ function AddMealBox(props) {
                                     inputMode='numeric'
                                     value={itemCost}
                                     onChange={handleCostChange}
+                                    title="MealBox cost must be numeric."
                                 />
+                                {itemCost.length > 0 && !/^[0-9 ]+$/.test(itemCost) &&
+                                    <p className="text-danger">MealBox cost can only contain numbers.</p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="inputName">Item Price</label>
@@ -358,7 +367,11 @@ function AddMealBox(props) {
                                     pattern='[0-9]*'
                                     inputMode='numeric'
                                     onChange={handlePriceChange}
+                                    title="MealBox price must be numeric."
                                 />
+                                {itemPrice.length > 0 && !/^[0-9 ]+$/.test(itemPrice) &&
+                                    <p className="text-danger">MealBox price can only contain numbers.</p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="inputName">Item Description</label>
@@ -380,7 +393,11 @@ function AddMealBox(props) {
                                     inputMode='numeric'
                                     value={quantityAvailable}
                                     onChange={handleQuantityChange}
+                                    title="MealBox quantity must be numeric."
                                 />
+                                {quantityAvailable.length > 0 && !/^[0-9 ]+$/.test(quantityAvailable) &&
+                                    <p className="text-danger">MealBox quantity can only contain numbers.</p>
+                                }
                             </div>
 
                             <div className="form-group">
