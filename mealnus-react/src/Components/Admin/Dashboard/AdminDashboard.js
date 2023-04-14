@@ -720,7 +720,7 @@ const Dashboard = () => {
                                                         backgroundColor: colors.mealNUSBlue[100],
                                                     }}
                                                 >
-                                                    View All
+                                                     <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.white[100] }}>View All</Typography>
                                                 </Button>
 
                                             )}
@@ -736,7 +736,7 @@ const Dashboard = () => {
                                                         backgroundColor: colors.mealNUSOrange[100],
                                                     }}
                                                 >
-                                                    View Less
+                                                    <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.white[100] }}>View Less</Typography>
                                                 </Button>
                                             )}
                                         </Box>
