@@ -162,6 +162,23 @@ function UpdateIngredient(props) {
 
                             <div className="form-group">
                                 <label htmlFor="image">Upload Image</label>
+                                {picture && (
+                                    <div className="form-group">
+                                        <Box sx={{ width: 250, height: 250 }}>
+                                            <img
+                                                src={picture}
+                                                sx={{
+                                                    objectFit: "contain",
+                                                    bgcolor: "primary.main",
+                                                    maxWidth: "100%",
+                                                    maxHeight: "100%",
+                                                    width: 980,
+                                                    height: 980,
+                                                }}
+                                            />
+                                        </Box>
+                                    </div>
+                                )}
                                 <input
                                     id="image"
                                     className="form-control"
@@ -178,6 +195,7 @@ function UpdateIngredient(props) {
                                     />
                                 )}
                             </div>
+
                         </div>
 
                         <div className="card-footer">
