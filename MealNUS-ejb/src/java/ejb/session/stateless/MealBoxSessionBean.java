@@ -131,10 +131,29 @@ public class MealBoxSessionBean implements MealBoxSessionBeanLocal {
     public void deleteMealBox(MealBox mealBox) {
         em.remove(mealBox);
     }
-    
-    public void setStatusAvailability(Long id, MealBox meal) { 
+
+    public void setStatusAvailability(Long id, MealBox meal) {
         MealBox m = em.find(MealBox.class, id);
         m.setStatusAvail(meal.isStatusAvail());
         em.merge(m);
     }
+
+    @Override
+    public void subtractQuantityAvailable(Long mealBoxId, int quantity) {
+        MealBox mealBox = em.find(MealBox.class, mealBoxId);
+        int updatedQuantity = mealBox.getQuantityAvailable() - quantity;
+        mealBox.setQuantityAvailable(updatedQuantity);
+        em.merge(mealBox);
+        System.out.println(mealBox.getQuantityAvailable());
+    }
+    
+    @Override
+    public void addQuantityAvailable(Long mealBoxId, int quantity) {
+        MealBox mealBox = em.find(MealBox.class, mealBoxId);
+        int updatedQuantity = mealBox.getQuantityAvailable() + quantity;
+        mealBox.setQuantityAvailable(updatedQuantity);
+        em.merge(mealBox);
+    }
+    
+    
 }

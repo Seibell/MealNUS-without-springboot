@@ -5,6 +5,7 @@
  */
 package ws.model;
 
+import entity.CreditCard;
 import entity.MealBox;
 import java.util.Date;
 import java.util.List;
@@ -24,11 +25,12 @@ public class CreateOrderResponse {
     private AddressEnum address;
     private OrderStatus orderStatus;
     private Long userId;
+    private Long creditCardId;
 
     public CreateOrderResponse() {
     }
 
-    public CreateOrderResponse(Date orderDate, List<MealBox> mealBoxes, List<Integer> quantities, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, Long userId) {
+    public CreateOrderResponse(Date orderDate, List<MealBox> mealBoxes, List<Integer> quantities, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, Long userId, Long creditCardId) {
         this.orderDate = orderDate;
         this.mealBoxes = mealBoxes;
         this.quantities = quantities;
@@ -36,6 +38,15 @@ public class CreateOrderResponse {
         this.address = address;
         this.orderStatus = orderStatus;
         this.userId = userId;
+        this.creditCardId = creditCardId;
+    }
+
+    public Long getCreditCardId() {
+        return creditCardId;
+    }
+
+    public void setCreditCardId(Long creditCardId) {
+        this.creditCardId = creditCardId;
     }
 
     public Date getOrderDate() {

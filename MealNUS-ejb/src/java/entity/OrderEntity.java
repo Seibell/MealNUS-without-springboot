@@ -60,8 +60,21 @@ public class OrderEntity implements Serializable {
     @Enumerated
     private OrderStatus orderStatus;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
+    
+    @ManyToOne
+    @JoinColumn(name = "credit_card_id")
+    private CreditCard creditCard;
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+    }
 
 //    Q) is review going to be under orders?
 //    @ManyToOne
@@ -69,13 +82,14 @@ public class OrderEntity implements Serializable {
     public OrderEntity() {
     }
 
-    public OrderEntity(Date orderDate, List<Pair<MealBox, Integer>> orderDetails, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, User user) {
+    public OrderEntity(Date orderDate, List<Pair<MealBox, Integer>> orderDetails, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, User user, CreditCard creditCard) {
         this.orderDate = orderDate;
         this.orderDetails = orderDetails;
         this.deliveryDate = deliveryDate;
         this.address = address;
         this.orderStatus = orderStatus;
         this.user = user;
+        this.creditCard = creditCard;
     }
 
     public OrderEntity(Date orderDate, List<Pair<MealBox, Integer>> orderDetails, List<BigDecimal> priceList, List<BigDecimal> costList, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, User user) {

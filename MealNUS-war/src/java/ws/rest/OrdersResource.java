@@ -5,6 +5,8 @@
  */
 package ws.rest;
 
+import ejb.session.stateless.CreditCardSessionBeanLocal;
+import ejb.session.stateless.MealBoxSessionBeanLocal;
 import entity.OrderEntity;
 import java.util.List;
 import javax.ws.rs.Path;
@@ -55,13 +57,21 @@ import ws.model.UpdateOrderResponse;
 @Path("orders")
 public class OrdersResource {
 
+    private final CreditCardSessionBeanLocal creditCardSessionBeanLocal;
+
+    private final MealBoxSessionBeanLocal mealBoxSessionBeanLocal;
+
     private final OrderSessionBeanLocal orderSessionBeanLocal;
 
     private final UserSessionBeanLocal userSessionBeanLocal;
+    
+    
 
     public OrdersResource() {
         orderSessionBeanLocal = lookupOrderSessionBeanLocal();
         userSessionBeanLocal = lookupUserSessionBeanLocal();
+        mealBoxSessionBeanLocal = lookupMealBoxSessionBeanLocal();
+        creditCardSessionBeanLocal = lookupCreditCardSessionBeanLocal();
     }
 
     @POST
@@ -82,10 +92,15 @@ public class OrdersResource {
                 createOrderResponse.getDeliveryDate(),
                 createOrderResponse.getAddress(),
                 createOrderResponse.getOrderStatus(),
-                userSessionBeanLocal.retrieveUserById(createOrderResponse.getUserId())
+                userSessionBeanLocal.retrieveUserById(createOrderResponse.getUserId()),
+                creditCardSessionBeanLocal.retrieveCreditCardById(createOrderResponse.getCreditCardId())
         );
 
         orderSessionBeanLocal.createOrder(order);
+
+        for (int i = 0; i < mealboxes.length; i++) {
+            mealBoxSessionBeanLocal.subtractQuantityAvailable(mealboxes[i].getMealBoxId(), quantities[i]);
+        }
 
         return Response.status(Status.OK).entity(order).build();
 
@@ -433,19 +448,19 @@ public class OrdersResource {
     @Path("/updateOrder/{orderId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateOrder(@PathParam("orderId") Long orderId, UpdateOrderResponse updateOrderResponse) 
+    public Response updateOrder(@PathParam("orderId") Long orderId, UpdateOrderResponse updateOrderResponse)
             throws UserNotFoundException {
-        
-        System.out.println("Check : " + orderId + " : "  + updateOrderResponse.getDeliveryDate());
+
+        System.out.println("Check : " + orderId + " : " + updateOrderResponse.getDeliveryDate());
         Date deliveryDate = updateOrderResponse.getDeliveryDate();
         AddressEnum address = updateOrderResponse.getAddress();
         OrderStatus orderStatus = updateOrderResponse.getOrderStatus();
-        
-        orderSessionBeanLocal.updateOrder(orderId, deliveryDate, address,orderStatus);
+
+        orderSessionBeanLocal.updateOrder(orderId, deliveryDate, address, orderStatus);
         String updateSuccessMessage = "Order with ID [" + orderId + "] has been updated successfully!";
         return Response.status(200).entity(updateSuccessMessage).build();
     }
-    
+
     /*
     @Path("/update2/{orderId}") 
     @Consumes(MediaType.APPLICATION_JSON) 
@@ -518,6 +533,26 @@ public class OrdersResource {
         try {
             Context c = new InitialContext();
             return (OrderSessionBeanLocal) c.lookup("java:global/MealNUS/MealNUS-ejb/OrderSessionBean!ejb.session.stateless.OrderSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private MealBoxSessionBeanLocal lookupMealBoxSessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (MealBoxSessionBeanLocal) c.lookup("java:global/MealNUS/MealNUS-ejb/MealBoxSessionBean!ejb.session.stateless.MealBoxSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private CreditCardSessionBeanLocal lookupCreditCardSessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (CreditCardSessionBeanLocal) c.lookup("java:global/MealNUS/MealNUS-ejb/CreditCardSessionBean!ejb.session.stateless.CreditCardSessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

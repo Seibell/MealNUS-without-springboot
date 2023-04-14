@@ -5,7 +5,7 @@ import NavBar from "../Navigation/NavBar.js";
 //import { parseISO, format } from "date-fns";
 import { useState, useEffect, useContext } from "react";
 import { CartContext } from "../../Context/CartContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import ReactStars from "react-rating-stars-component";
 import FormControl from "@mui/material/FormControl";
@@ -59,6 +59,9 @@ const MealBoxes = () => {
   const [cart, setCart] = useContext(CartContext);
   const { currentUser } = useContext(AuthContext);
   const averageRating = calculateAverageRating(selectedMealBox?.reviews);
+  const [cartQuantity, setCartQuantity] = useState(0);
+  const location = useLocation();
+
 
   const navigate = useNavigate();
 
@@ -73,7 +76,7 @@ const MealBoxes = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [location]);
 
   const getUniqueCategories = () => {
     const allCategories = mealBoxes.mealBoxEntities.flatMap(
@@ -105,6 +108,10 @@ const MealBoxes = () => {
   };
 
   const handleClickOpen = (mealBox) => {
+    const cartMealBox = cart.find(
+      (item) => item.mealBoxId === mealBox.mealBoxId
+    );
+    setCartQuantity(cartMealBox ? cartMealBox.quantity : 0);
     setSelectedMealBox(mealBox);
     setOpenDialog(true);
   };
@@ -118,7 +125,15 @@ const MealBoxes = () => {
   const handleQuantityChange = (increment) => {
     setQuantity((prevQuantity) => {
       const newQuantity = prevQuantity + increment;
-      return newQuantity < 0 ? 0 : newQuantity;
+      if (newQuantity < 0) return 0;
+
+      const totalQuantity = cartQuantity + newQuantity;
+
+      if (totalQuantity > selectedMealBox?.quantityAvailable) {
+        alert("You cannot order more than the available quantity");
+        return prevQuantity;
+      }
+      return newQuantity;
     });
   };
 
@@ -127,19 +142,33 @@ const MealBoxes = () => {
       alert("Please select a quantity greater than 0");
       return;
     }
-    const newMealBox = { ...mealBox, quantity };
+
     setCart((prevCart) => {
       const existingMealBoxIndex = prevCart.findIndex(
-        (item) => item.mealBoxId === newMealBox.mealBoxId
+        (item) => item.mealBoxId === mealBox.mealBoxId
       );
+
       if (existingMealBoxIndex >= 0) {
         const updatedCart = [...prevCart];
-        updatedCart[existingMealBoxIndex].quantity += quantity;
+        const updatedQuantity =
+          updatedCart[existingMealBoxIndex].quantity + quantity;
+
+        if (updatedQuantity > mealBox.quantityAvailable) {
+          alert("You cannot order more than the available quantity");
+          return prevCart;
+        }
+
+        updatedCart[existingMealBoxIndex].quantity = updatedQuantity;
         return updatedCart;
       } else {
-        return [...prevCart, newMealBox];
+        if (quantity > mealBox.quantityAvailable) {
+          alert("You cannot order more than the available quantity");
+          return prevCart;
+        }
+        return [...prevCart, { ...mealBox, quantity }];
       }
     });
+
     navigate("/cart");
   };
 
@@ -156,7 +185,13 @@ const MealBoxes = () => {
       );
       if (existingMealBoxIndex >= 0) {
         const updatedCart = [...prevCart];
-        updatedCart[existingMealBoxIndex].quantity += quantity;
+        const updatedQuantity =
+          updatedCart[existingMealBoxIndex].quantity + quantity;
+        if (updatedQuantity > mealBox.quantityAvailable) {
+          alert("You cannot order more than the available quantity");
+          return prevCart;
+        }
+        updatedCart[existingMealBoxIndex].quantity = updatedQuantity;
         return updatedCart;
       } else {
         return [...prevCart, newMealBox];
@@ -217,7 +252,7 @@ const MealBoxes = () => {
               style={{ color: "#003865" }} // Change the color
             >
               <MenuItem value="">
-                <em>Side Wide</em>
+                <em>Site Wide</em>
               </MenuItem>
               {/* Add unique categories here */}
               {getUniqueCategories().map((category) => (
@@ -287,6 +322,7 @@ const MealBoxes = () => {
                       variant="contained"
                       color="primary"
                       onClick={() => handleOrderNow(mealBox, 1)}
+                      disabled={mealBox.quantityAvailable === 0}
                     >
                       Order Now
                     </Button>
@@ -296,6 +332,7 @@ const MealBoxes = () => {
                       variant="outlined"
                       startIcon={<ShoppingCartIcon />}
                       onClick={() => handleAddToCart(mealBox, 1)}
+                      disabled={mealBox.quantityAvailable === 0}
                     >
                       Add to Cart
                     </Button>
@@ -456,7 +493,8 @@ const MealBoxes = () => {
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={() => handleOrderNow(selectedMealBox, quantity)}
+                onClick={() => handleOrderNow(selectedMealBox, quantity)} 
+                disabled={selectedMealBox?.quantityAvailable === 0}
               >
                 Order Now
               </Button>
@@ -466,7 +504,8 @@ const MealBoxes = () => {
                 size="small"
                 variant="outlined"
                 startIcon={<ShoppingCartIcon />}
-                onClick={() => handleAddToCart(selectedMealBox, quantity)}
+                onClick={() => handleAddToCart(selectedMealBox, quantity)} 
+                disabled={selectedMealBox?.quantityAvailable === 0}
               >
                 Add to Cart
               </Button>

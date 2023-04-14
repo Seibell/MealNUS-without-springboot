@@ -228,6 +228,7 @@ const Checkout = () => {
       address: deliveryLocation,
       orderStatus: "PAID",
       userId: currentUser.userId,
+      creditCardId: cards[selectedCardIndex].creditCardId,
     };
 
     console.log(JSON.stringify(orderData));
@@ -327,6 +328,7 @@ const Checkout = () => {
                 selected={selectedDate}
                 onChange={handleDateChange}
                 dateFormat="yyyy/MM/dd"
+                minDate={addDays(new Date(), 1)}
                 customInput={
                   <TextField
                     label="Delivery Date"

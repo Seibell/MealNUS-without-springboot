@@ -31,7 +31,7 @@ public interface MealBoxSessionBeanLocal {
 
     public List<Pair<String, Integer>> retrieveAllMealBoxesWithQty();
 
-    public void addIngredientsToBox(Long id, List<Ingredient> i );
+    public void addIngredientsToBox(Long id, List<Ingredient> i);
 
     public MealBox addNewQuantity(Long id, Integer quantity);
 
@@ -40,5 +40,10 @@ public interface MealBoxSessionBeanLocal {
     public List<MealBox> retrieveMealboxByCategory(String category) throws MealBoxNotFoundException;
 
     public void setStatusAvailability(Long id, MealBox meal);
+
+    public void subtractQuantityAvailable(Long mealBoxId, int quantity);
+
+    public void addQuantityAvailable(Long mealBoxId, int quantity);
+    
     
 }

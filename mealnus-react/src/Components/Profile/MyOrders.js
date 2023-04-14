@@ -14,6 +14,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  DialogContentText,
+  DialogActions,
   Collapse,
   Rating,
 } from "@mui/material";
@@ -43,18 +45,19 @@ const MyOrders = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [orders, setOrders] = useState([]);
-  const [reviewFormOpen, setReviewFormOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [newReviewDescription, setNewReviewDescription] = useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
   const [currentOrderId, setCurrentOrderId] = useState(null);
-  const [submittedReviews, setSubmittedReviews] = useState([]);
   const [expandedRows, setExpandedRows] = useState([]);
   const [newReviewRating, setNewReviewRating] = useState(0);
   const [selectedMealboxName, setSelectedMealboxName] = useState("");
+  const [selectedMealboxId, setSelectedMealboxId] = useState(null);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const [selectedItemCode, setSelectedItemCode] = useState(null);
 
   useEffect(() => {
     console.log("currentUser: ", currentUser);
@@ -146,7 +149,7 @@ const MyOrders = () => {
     );
 
     if (confirmed && orderStatus === "PAID") {
-      console.log(orderStatus)
+      console.log(orderStatus);
       try {
         await axios.put(
           `http://localhost:8080/MealNUS-war/rest/orders/cancel/${orderId}`
@@ -161,7 +164,7 @@ const MyOrders = () => {
         console.error("Error cancelling order:", error);
       }
     } else {
-      console.log(orderStatus)
+      console.log(orderStatus);
       alert("This order cannot be cancelled.");
     }
   };
@@ -179,10 +182,15 @@ const MyOrders = () => {
     setExpandedRows(newExpandedRows);
   };
 
-  const openReviewDialog = (orderId, mealboxName) => {
+  const openReviewDialog = (orderId, mealboxName, itemCode) => {
     setSelectedOrderId(orderId);
     setSelectedMealboxName(mealboxName);
+    setSelectedItemCode(itemCode);
     setReviewDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setSuccessDialogOpen(false);
   };
 
   const resetReviewForm = () => {
@@ -190,7 +198,7 @@ const MyOrders = () => {
     setNewReviewDescription("");
   };
 
-  const handleReviewSubmit = async (orderId) => {
+  const handleReviewSubmit = async () => {
     if (newReviewDescription === "") {
       setErrorMessage("Please enter both the title and description.");
       return;
@@ -202,7 +210,10 @@ const MyOrders = () => {
       reviewDate: new Date().toISOString(),
       stars: newReviewRating,
       comments: newReviewDescription,
+      itemCode: selectedItemCode,
+      userId: currentUser.userId,
     };
+    console.log(JSON.stringify(postData));
 
     fetch("http://localhost:8080/MealNUS-war/rest/Review", {
       method: "POST",
@@ -222,6 +233,8 @@ const MyOrders = () => {
     setNewReviewRating(null);
     setNewReviewDescription("");
     setReviewDialogOpen(false);
+
+    setSuccessDialogOpen(true);
   };
 
   if (!currentUser || !currentUser.email) {
@@ -279,7 +292,8 @@ const MyOrders = () => {
             <StatBox
               title={
                 "S$" +
-                orders.filter((order) => order.orderStatus !== "CANCELLED")
+                orders
+                  .filter((order) => order.orderStatus !== "CANCELLED")
                   .reduce((total, order) => {
                     const orderTotal = order.orderDetails
                       .map((detail) => detail.key.itemPrice * detail.value)
@@ -332,18 +346,21 @@ const MyOrders = () => {
                       ).toLocaleDateString()}
                     </TableCell>
                     <TableCell>{order.address}</TableCell>
-                    <TableCell>{order.orderDetails.reduce((total, detail) => {
-                      const price = detail.key.itemPrice;
-                      const quantity = detail.value;
-                      return total + (price * quantity);
-                    }, 0)}
+                    <TableCell>
+                      {order.orderDetails.reduce((total, detail) => {
+                        const price = detail.key.itemPrice;
+                        const quantity = detail.value;
+                        return total + price * quantity;
+                      }, 0)}
                     </TableCell>
                     <TableCell>{order.orderStatus}</TableCell>
                     <TableCell>
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={() => handleCancelOrder(order.orderId, order.orderStatus)}
+                        onClick={() =>
+                          handleCancelOrder(order.orderId, order.orderStatus)
+                        }
                         disabled={
                           order.orderStatus !== "PAID" &&
                           order.orderStatus !== "PREPARING" &&
@@ -388,18 +405,21 @@ const MyOrders = () => {
                                 </TableCell>
                                 <TableCell>{orderDetail.value}</TableCell>
                                 <TableCell>
-                                  <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() =>
-                                      openReviewDialog(
-                                        order.orderId,
-                                        orderDetail.key.itemName
-                                      )
-                                    }
-                                  >
-                                    Leave Review
-                                  </Button>
+                                  {order.orderStatus === "COMPLETED" && (
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      onClick={() =>
+                                        openReviewDialog(
+                                          order.orderId,
+                                          orderDetail.key.itemName,
+                                          orderDetail.key.itemCode
+                                        )
+                                      }
+                                    >
+                                      Leave Review
+                                    </Button>
+                                  )}
                                 </TableCell>
                               </TableRow>
                             ))}
@@ -465,6 +485,23 @@ const MyOrders = () => {
             </Button>
           </Box>
         </DialogContent>
+      </Dialog>
+      <Dialog
+        open={successDialogOpen}
+        onClose={handleCloseDialog}
+        aria-labelledby="success-dialog-title"
+      >
+        <DialogTitle id="success-dialog-title">Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You have successfully left a review!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Ok
+          </Button>
+        </DialogActions>
       </Dialog>
       <Box m="20px">
         {/* GRID & CHARTS */}
