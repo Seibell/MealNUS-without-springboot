@@ -8,11 +8,13 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -25,9 +27,15 @@ public class Allergen implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long allergenId;
+
+    @Column(nullable = false)
+    @NotNull
     private String allergenName;
+
+    @Column(nullable = false)
+    @NotNull
     private String allergenDescription;
-    
+
     @ManyToMany
     private List<MealBox> mealBoxIncluded;
 
@@ -39,8 +47,6 @@ public class Allergen implements Serializable {
         this.allergenDescription = allergenDescription;
         this.mealBoxIncluded = new ArrayList<>();
     }
-    
-    
 
     public Long getAllergenId() {
         return allergenId;
@@ -102,5 +108,5 @@ public class Allergen implements Serializable {
     public void setAllergenDescription(String allergenDescription) {
         this.allergenDescription = allergenDescription;
     }
-    
+
 }

@@ -91,8 +91,11 @@ function PaymentMethodsPage() {
 
     setInputErrors({
       creditCardNumber: !isCardNumberValid,
+      cvv: cvv.length !== 3,
       expiryDate: !isExpiryDateValid,
     });
+
+    //VALIDATION
 
     if (!cardOwnerName || !creditCardNumber || !cvv || !expiryDate) {
       setError('Please fill in all fields');
@@ -200,7 +203,15 @@ function PaymentMethodsPage() {
                     />
                   </Grid>
                   <Grid item>
-                    <TextField label="CVV" name="cvv" fullWidth />
+                    <TextField
+                      label="CVV"
+                      name="cvv"
+                      fullWidth
+                      error={inputErrors.cvv}
+                      helperText={
+                        inputErrors.cvv ? "CVV Must be 3 digits" : ""
+                      }
+                    />
                   </Grid>
                   <Grid item>
                     <TextField

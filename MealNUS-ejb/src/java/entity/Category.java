@@ -8,12 +8,14 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -26,7 +28,12 @@ public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
+
+    @Column(nullable = false)
+    @NotNull
     private String name;
+    
+    //May not have a picture (DESIGN CHOICE)
     private String picture;
 
     @ManyToMany
@@ -133,7 +140,7 @@ public class Category implements Serializable {
     public void setMealBoxes(List<MealBox> mealBoxes) {
         this.mealBoxes = mealBoxes;
     }
-    
+
     public void addMealBox(MealBox m) {
         this.mealBoxes.add(m);
     }

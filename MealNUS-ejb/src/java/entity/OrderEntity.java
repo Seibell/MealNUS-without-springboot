@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import util.enumeration.AddressEnum;
 import util.enumeration.OrderStatus;
 
@@ -30,21 +32,6 @@ import util.enumeration.OrderStatus;
 @Entity
 public class OrderEntity implements Serializable {
 
-    /**
-     * @return the userId
-     */
-    public Long getUserId() {
-        return userId;
-    }
-
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-//name is because order dosent work with SQL  <-- can i replace with OrderEntity?? -CH
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,9 +59,8 @@ public class OrderEntity implements Serializable {
     @Enumerated
     private OrderStatus orderStatus;
 
-
     private Long userId;
-    
+
     @ManyToOne
     @JoinColumn(name = "credit_card_id")
     private CreditCard creditCard;
@@ -186,6 +172,20 @@ public class OrderEntity implements Serializable {
     }
 
     /**
+     * @return the userId
+     */
+    public Long getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    /**
      * @return the address
      */
     public AddressEnum getAddress() {
@@ -226,7 +226,6 @@ public class OrderEntity implements Serializable {
     public void setOrderDetails(List<Pair<MealBox, Integer>> orderDetails) {
         this.orderDetails = orderDetails;
     }
-
 
     /**
      * @return the priceList

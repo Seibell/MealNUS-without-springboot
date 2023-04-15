@@ -11,7 +11,6 @@ import ejb.session.stateless.CreditCardSessionBeanLocal;
 import ejb.session.stateless.ForumSessionBeanLocal;
 import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.MealBoxSessionBeanLocal;
-import ejb.session.stateless.NotificationSessionBeanLocal;
 import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PromotionSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
@@ -23,7 +22,6 @@ import entity.CreditCard;
 import entity.ForumPost;
 import entity.Ingredient;
 import entity.MealBox;
-import entity.Notification;
 import entity.OrderEntity;
 import entity.Promotion;
 import entity.Review;
@@ -72,9 +70,6 @@ public class DataInitSessionBean {
 
     @EJB
     private OrderSessionBeanLocal orderSessionBean;
-
-    @EJB
-    private NotificationSessionBeanLocal notificationSessionBean;
 
     @EJB
     private ReviewSessionBeanLocal reviewSessionBean;
@@ -302,12 +297,6 @@ public class DataInitSessionBean {
             }
             forumSessionBean.createForumPost(fp1);
 
-        }
-
-        //TESTING PURPOSE
-        if (notificationSessionBean.retrieveAllNotifications().isEmpty()) {
-            Calendar calendar = Calendar.getInstance();
-            notificationSessionBean.createNotification(new Notification(new Date(calendar.getTime().getTime()), "Notification", "Hello, MealNUS Admin!"));
         }
 
         //TESTING PURPOSE

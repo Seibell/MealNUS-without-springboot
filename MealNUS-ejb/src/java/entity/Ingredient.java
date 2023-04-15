@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -27,8 +28,10 @@ public class Ingredient implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ingredientId;
     
-    @Column(unique = true)
+    @NotNull
+    @Column(nullable = false, unique = true)
     private String name;
+    
     private String picture;
     
     @ManyToMany
