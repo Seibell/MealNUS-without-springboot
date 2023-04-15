@@ -164,19 +164,19 @@ public class DataInitSessionBean {
             ingredientSessionBean.createIngredient(new Ingredient("Lettuce",
                     "https://www.bhg.com/thmb/oL0DwR0DXrhFynA2y-oiY-nkCbg=/1878x0/filters:no_upscale():strip_icc()/tango-oakleaf-lettuce-c6f6417e-4cffa63034624d96a9e9ec9a3fe158f9.jpg"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Tomato Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
+            ingredientSessionBean.createIngredient(new Ingredient("Tomato Sauce", "https://i.imgur.com/lpyfRQk.jpg"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Barbecue Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
+            ingredientSessionBean.createIngredient(new Ingredient("Barbecue Sauce", "https://i.imgur.com/WiIObfz.png"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Soy Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
+            ingredientSessionBean.createIngredient(new Ingredient("Soy Sauce", "https://i.imgur.com/CNzhXrI.jpg"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Teriyaki Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
+            ingredientSessionBean.createIngredient(new Ingredient("Teriyaki Sauce", "https://i.imgur.com/Lv01jeV.png"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Pesto Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
+            ingredientSessionBean.createIngredient(new Ingredient("Pesto Sauce", "https://imgur.com/Yj5M4W6"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Alfredo Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
+            ingredientSessionBean.createIngredient(new Ingredient("Alfredo Sauce", "https://imgur.com/ArabrPK"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Sweet and Sour Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
+            ingredientSessionBean.createIngredient(new Ingredient("Sweet and Sour Sauce", "https://imgur.com/iGkNqDw"));
         }
 
         //TESTING PURPOSE
