@@ -48,13 +48,15 @@ public class MealBox implements Serializable {
     @ManyToMany
     private List<Category> categories;
 
-   @OneToMany(mappedBy = "mealBox", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+   
+    @OneToMany
     private List<Review> reviews;
 
     public MealBox() {
         this.allergens = new ArrayList<>();
         this.ingredients = new ArrayList<>();
         this.categories = new ArrayList<>();
+        this.reviews = new ArrayList<>();
         this.StatusAvail = true;
     }
 

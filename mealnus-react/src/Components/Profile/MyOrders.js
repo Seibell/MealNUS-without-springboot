@@ -57,7 +57,6 @@ const MyOrders = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
-  const [selectedItemCode, setSelectedItemCode] = useState(null);
 
   useEffect(() => {
     console.log("currentUser: ", currentUser);
@@ -182,10 +181,10 @@ const MyOrders = () => {
     setExpandedRows(newExpandedRows);
   };
 
-  const openReviewDialog = (orderId, mealboxName, itemCode) => {
+  const openReviewDialog = (orderId, mealboxName, mealBoxId) => {
     setSelectedOrderId(orderId);
     setSelectedMealboxName(mealboxName);
-    setSelectedItemCode(itemCode);
+    setSelectedMealboxId(mealBoxId);
     setReviewDialogOpen(true);
   };
 
@@ -210,7 +209,7 @@ const MyOrders = () => {
       reviewDate: new Date().toISOString(),
       stars: newReviewRating,
       comments: newReviewDescription,
-      itemCode: selectedItemCode,
+      mealBoxId: selectedMealboxId,
       userId: currentUser.userId,
     };
     console.log(JSON.stringify(postData));
@@ -363,8 +362,7 @@ const MyOrders = () => {
                         }
                         disabled={
                           order.orderStatus !== "PAID" &&
-                          order.orderStatus !== "PREPARING" &&
-                          order.orderStatus !== "DELIVERING"
+                          order.orderStatus !== "PREPARING"
                         }
                       >
                         Cancel
@@ -413,7 +411,7 @@ const MyOrders = () => {
                                         openReviewDialog(
                                           order.orderId,
                                           orderDetail.key.itemName,
-                                          orderDetail.key.itemCode
+                                          orderDetail.key.mealBoxId
                                         )
                                       }
                                     >

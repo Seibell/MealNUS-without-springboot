@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -30,13 +31,14 @@ public class Review implements Serializable {
     private Date reviewDate;
     private Integer stars;
     private String comments;
-    
+
     @ManyToOne
     private User user;
 
+    @XmlTransient
     @ManyToOne
     private MealBox mealBox;
-    
+
     public Review() {
     }
 
@@ -45,6 +47,14 @@ public class Review implements Serializable {
         this.stars = stars;
         this.comments = comments;
         this.user = user;
+    }
+
+    public Review(Date reviewDate, Integer stars, String comments, User user, MealBox mealbox) {
+        this.reviewDate = reviewDate;
+        this.stars = stars;
+        this.comments = comments;
+        this.user = user;
+        this.mealBox = mealbox;
     }
 
     public Long getReviewId() {
@@ -149,5 +159,5 @@ public class Review implements Serializable {
     public void setMealBox(MealBox mealBox) {
         this.mealBox = mealBox;
     }
-    
+
 }

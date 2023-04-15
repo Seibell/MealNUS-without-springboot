@@ -201,10 +201,15 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         try {
             Promotion promotionToDelete = retrievePromotionById(promotionId);
             if (promotionToDelete.getIsApplied() == true) {
-                disablePromotion(promotionToDelete.getPromotionCode());
+                if (promotionToDelete.getCategoryName().equals("Site-Wide")) {
+
+                    disablePromotion(promotionToDelete.getPromotionCode());
+                } else {
+                    disablePromotionAcrossCategory(promotionToDelete.getPromotionCode(), promotionToDelete.getCategoryName());
+                }
             }
             em.remove(promotionToDelete);
-        } catch (PromotionNotFoundException ex) {
+        } catch (PromotionNotFoundException | MealBoxNotFoundException ex) {
             Logger.getLogger(PromotionSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 

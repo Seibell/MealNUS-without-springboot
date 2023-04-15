@@ -1,4 +1,7 @@
 
+// //-------Including a pop-up window to display the mealbozxes after applying the promotions----
+
+
 // //Editing a promotion
 // import { useState, useEffect } from "react";
 // import { Link } from 'react-router-dom';
@@ -6,9 +9,6 @@
 // import { Box, Typography, useTheme } from "@mui/material";
 // import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 // import { tokens } from "../Global/AdminTheme";
-// import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-// import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-// import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 // import Header from "../Global/Header";
 // import { CssBaseline, ThemeProvider } from "@mui/material";
 // import { ColorModeContext, useMode } from "../Global/AdminTheme";
@@ -19,13 +19,13 @@
 // import { useContext } from "react";
 
 // import moment from "moment-timezone";
-// import { Button, Switch } from "@mui/material";
+// import { Switch } from "@mui/material";
 // import { Alert } from '@mui/material';
 // import Grid from '@mui/material/Grid';
-// import { useCallback } from "react";
 // import AddCircle from "@mui/icons-material/AddCircle";
 // import IconButton from '@mui/material/IconButton';
 // import EditIcon from '@mui/icons-material/Edit';
+// import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 
 // function Copyright(props) {
@@ -129,6 +129,9 @@
 //                 .catch((error) => {
 //                     console.log(error);
 //                 });
+//             setTimeout(() => {
+//                 window.open('/mealboxes', 'Deleted Promotion', 'width=600,height=500');
+//             }, 1000);
 //         }
 //     };
 
@@ -144,9 +147,15 @@
 //         if (promotion.isApplied) {
 //             // switch toggled off
 //             handleToggleBack(promotion);
+//             setTimeout(() => {
+//                 window.open('/mealboxes', 'Enable Promotion', 'width=600,height=500');
+//             }, 1000);
 //         } else {
 //             // switch toggled on
 //             handleToggle(promotion);
+//             setTimeout(() => {
+//                 window.open('/mealboxes', 'Disable Promotion', 'width=600,height=500');
+//             }, 1000);
 //         }
 //     };
 
@@ -219,19 +228,6 @@
 
 //     const columns = [
 //         {
-//             field: "edit",
-//             headerName: "Edit",
-//             headerClassName: 'headerName',
-//             renderCell: (params) => (
-//                 <IconButton>
-//                     <EditIcon
-//                         onClick={() => window.open('/updatepromotion/' + params.row.promotionId, 'Update Promotion', 'width=600,height=480')}
-//                     />
-//                 </IconButton>
-
-//             )
-//         },
-//         {
 //             field: "promotionName",
 //             headerName: "Name",
 //             cellClassName: "name-column--cell",
@@ -281,13 +277,16 @@
 //             headerName: "Action",
 //             headerClassName: 'headerName',
 //             renderCell: (params) => (
-//                 <Button
-//                     onClick={() => handleDeletePromotion(params.value)}
-//                     variant="contained"
-//                     color="error"
-//                 >
-//                     Delete
-//                 </Button>
+//                 <div>
+//                     <IconButton>
+//                         <EditIcon onClick={() => window.open('/updatepromotion/' + params.value, 'Update Promotion', 'width=600,height=480')} />
+//                     </IconButton>
+//                     <IconButton>
+//                         <DeleteOutlineIcon onClick={() => handleDeletePromotion(params.value)} />
+//                     </IconButton>
+//                 </div>
+
+
 //             )
 //         }
 //     ];
@@ -383,8 +382,10 @@
 //                                     components={{ Toolbar: GridToolbar }}
 //                                 />
 //                             </Box>
+//                             <Typography variant="caption" color="textSecondary" gutterBottom fontSize={12}>
+//                                 *Promotions are automatically enabled and disabled at 12:00 A.M. daily.
+//                             </Typography>
 //                         </Box>
-
 //                         <Copyright sx={{ pt: 4 }} />
 //                     </main>
 //                 </div>
@@ -397,7 +398,9 @@
 // export default Promotion;
 
 
-//-------Including a pop-up window to display the mealbozxes after applying the promotions----
+
+
+//-------Enabling and disabling pop-ups----
 
 
 //Editing a promotion
@@ -424,6 +427,7 @@ import AddCircle from "@mui/icons-material/AddCircle";
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { FormControlLabel, Checkbox } from '@material-ui/core';
 
 
 function Copyright(props) {
@@ -452,6 +456,7 @@ const Promotion = () => {
     const [appliedPromotionName, setAppliedPromotionName] = useState("");
     const [disabledPromotionName, setDisabledPromotionName] = useState("");
     const [promotionAlreadyAppliedError, setPromotionAlreadyAppliedError] = useState("");
+    const [showPopups, setShowPopups] = useState(true);
 
     //Only for enabling the promotion. I can also do it for disabling the promotion,
     //but am confused as to how the admin would manually override this automated function
@@ -492,6 +497,9 @@ const Promotion = () => {
     }, []);
 
 
+    const handlePopupToggle = (event) => {
+        setShowPopups(event.target.checked);
+    };
 
     const applyPromotionsAutomatically = () => {
         const today = moment();
@@ -527,6 +535,12 @@ const Promotion = () => {
                 .catch((error) => {
                     console.log(error);
                 });
+            if (showPopups) {
+                setTimeout(() => {
+                    window.open('/mealboxes', 'Deleted Promotion', 'width=600,height=500');
+                }, 1000);
+            }
+
         }
     };
 
@@ -542,15 +556,19 @@ const Promotion = () => {
         if (promotion.isApplied) {
             // switch toggled off
             handleToggleBack(promotion);
-            setTimeout(() => {
-                window.open('/mealboxes', 'Enable Promotion', 'width=600,height=500');
-            }, 1000);
+            if (showPopups) {
+                setTimeout(() => {
+                    window.open('/mealboxes', 'Enable Promotion', 'width=600,height=500');
+                }, 1000);
+            }
         } else {
             // switch toggled on
             handleToggle(promotion);
-            setTimeout(() => {
-                window.open('/mealboxes', 'Disable Promotion', 'width=600,height=500');
-            }, 1000);
+            if (showPopups) {
+                setTimeout(() => {
+                    window.open('/mealboxes', 'Disable Promotion', 'width=600,height=500');
+                }, 1000);
+            }
         }
     };
 
@@ -768,6 +786,8 @@ const Promotion = () => {
                                         color: colors.white[100],
                                     },
                                 }}
+
+
                             >
                                 <DataGrid
                                     checkboxSelection
@@ -776,10 +796,31 @@ const Promotion = () => {
                                     getRowId={(row) => row.promotionId}
                                     components={{ Toolbar: GridToolbar }}
                                 />
+
                             </Box>
+
                             <Typography variant="caption" color="textSecondary" gutterBottom fontSize={12}>
                                 *Promotions are automatically enabled and disabled at 12:00 A.M. daily.
                             </Typography>
+                            <Box>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={showPopups}
+                                            onChange={handlePopupToggle}
+                                            name="showPopups"
+                                            color="primary"
+                                        />
+                                    }
+                                    label={
+                                        <Typography variant="body2" style={{ fontSize: "12px" }}>
+                                            Show pop-ups
+                                        </Typography>
+                                    }
+                                />
+                            </Box>
+
+
                         </Box>
                         <Copyright sx={{ pt: 4 }} />
                     </main>
