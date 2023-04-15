@@ -21,13 +21,18 @@ import mealNUSLogo from '../../../Assets/MealNUS-Logo.png';
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const handleClick = () => {
+        if (selected !== title) {
+            setSelected(title);
+        }
+    };
     return (
         <MenuItem
             active={selected === title}
             style={{
                 color: colors.mealNUSBlue[100],
             }}
-            onClick={() => setSelected(title)}
+            onClick={handleClick}
             icon={icon}
         >
             <Typography>{title}</Typography>
@@ -36,11 +41,12 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     );
 };
 
+
 const Sidebar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [selected, setSelected] = useState("Dashboard");
+    const [selected, setSelected] = useState("");
 
     return (
         <Box
@@ -60,7 +66,7 @@ const Sidebar = () => {
                 "& .pro-menu-item.active": {
                     color: "#d97818 !important",
                 },
-                height: "1773px"
+                height: "1773px",
             }}
         >
             <ProSidebar collapsed={isCollapsed} collapsedWidth={75} width={isCollapsed ? 60 : 280} >
@@ -116,8 +122,8 @@ const Sidebar = () => {
                                 </Typography>
                                 <Typography variant="h6" color={colors.mealNUSOrange[100]}>
                                     <b>Vice President of Operations
-                                    <br />
-                                    MealNUS Inc.</b>
+                                        <br />
+                                        MealNUS Inc.</b>
                                 </Typography>
                                 <Typography variant="h6" color={colors.mealNUSBlue[100]}>
                                     Joined since Jan 2023

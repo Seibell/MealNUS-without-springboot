@@ -12,7 +12,6 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "../Global/AdminTheme";
 import Topbar from "../../Admin/Global/Topbar";
 import Sidebar from "../../Admin/Global/Sidebar";
-import { Avatar } from "@material-ui/core";
 
 import moment from "moment-timezone";
 
