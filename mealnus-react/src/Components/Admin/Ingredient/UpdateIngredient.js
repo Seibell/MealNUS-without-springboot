@@ -164,19 +164,27 @@ function UpdateIngredient(props) {
                                 <label htmlFor="image">Upload Image</label>
                                 {picture && (
                                     <div className="form-group">
-                                        <Box sx={{ width: 250, height: 250 }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            maxWidth: 980,
+                                            maxHeight: 980,
+                                            width: '100%',
+                                            height: '100%',
+                                            overflow: 'hidden'
+                                        }}>
                                             <img
                                                 src={picture}
-                                                sx={{
+                                                style={{
                                                     objectFit: "contain",
-                                                    bgcolor: "primary.main",
+                                                    backgroundColor: "primary.main",
                                                     maxWidth: "100%",
                                                     maxHeight: "100%",
-                                                    width: 980,
-                                                    height: 980,
                                                 }}
                                             />
-                                        </Box>
+                                        </div>
+                                        <hr /> {/* Added divider */}
                                     </div>
                                 )}
                                 <input
