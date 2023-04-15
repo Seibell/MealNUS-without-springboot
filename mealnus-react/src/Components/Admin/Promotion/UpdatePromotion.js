@@ -50,6 +50,7 @@ function UpdatePromotion(props) {
     const navigate = useNavigate();
     const theme = createTheme();
     const [error, setError] = useState(false);
+    const [dateError, setDateError] = useState(false);
     const [open, setOpen] = React.useState(true);
     const [selectedCategory, setSelectedCategory] = useState("");
     const handleCategoryChange = (event) => {
@@ -103,6 +104,12 @@ function UpdatePromotion(props) {
         if (discount < 0 || discount > 1) {
             // throw MUI error
             setError(<Alert severity="warning">Discount value should be a decimal value between 0 and 1</Alert>);
+            return;
+        }
+
+        if (startDate.getTime() > endDate.getTime()) {
+            // throw MUI error
+            setDateError(<Alert severity="warning">Promotion start date should be before it's end date</Alert>);
             return;
         }
 
@@ -208,6 +215,7 @@ function UpdatePromotion(props) {
                                         customInput={<input className="form-control" />}
                                     />
                                 </div>
+                                {dateError}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="inputName">End Date(dd/mm/yyyy)</label>

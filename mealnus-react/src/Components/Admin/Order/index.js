@@ -112,14 +112,14 @@ const Order = () => {
             }
 
         },
-        {
-            field: "firstName",
-            headerName: "First Name",
-            flex: 1,
-            headerClassName: "headerName",
-            cellClassName: "name-column--cell",
-            valueGetter: (params) => params.row.user.firstName
-        },
+        // {
+        //     field: "firstName",
+        //     headerName: "First Name",
+        //     flex: 1,
+        //     headerClassName: "headerName",
+        //     cellClassName: "name-column--cell",
+        //     valueGetter: (params) => params.row.user.firstName
+        // },
         {
             field: "address",
             headerName: "Address",

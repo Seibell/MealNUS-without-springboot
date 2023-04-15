@@ -30,6 +30,20 @@ import util.enumeration.OrderStatus;
 @Entity
 public class OrderEntity implements Serializable {
 
+    /**
+     * @return the userId
+     */
+    public Long getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
 //name is because order dosent work with SQL  <-- can i replace with OrderEntity?? -CH
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,10 +72,8 @@ public class OrderEntity implements Serializable {
     @Enumerated
     private OrderStatus orderStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
-    private User user;
+
+    private Long userId;
     
     @ManyToOne
     @JoinColumn(name = "credit_card_id")
@@ -87,7 +99,7 @@ public class OrderEntity implements Serializable {
         this.deliveryDate = deliveryDate;
         this.address = address;
         this.orderStatus = orderStatus;
-        this.user = user;
+        this.userId = user.getUserId();
         this.creditCard = creditCard;
     }
 
@@ -99,7 +111,7 @@ public class OrderEntity implements Serializable {
         this.deliveryDate = deliveryDate;
         this.address = address;
         this.orderStatus = orderStatus;
-        this.user = user;
+        this.userId = user.getUserId();
     }
 
     public OrderEntity(Date orderDate, List<Pair<MealBox, Integer>> orderDetails, List<BigDecimal> priceList, Date deliveryDate, AddressEnum address, OrderStatus orderStatus, User user) {
@@ -109,7 +121,7 @@ public class OrderEntity implements Serializable {
         this.deliveryDate = deliveryDate;
         this.address = address;
         this.orderStatus = orderStatus;
-        this.user = user;
+        this.userId = user.getUserId();
     }
 
     public Long getOrderId() {
@@ -215,19 +227,6 @@ public class OrderEntity implements Serializable {
         this.orderDetails = orderDetails;
     }
 
-    /**
-     * @return the user
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * @param user the user to set
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     /**
      * @return the priceList

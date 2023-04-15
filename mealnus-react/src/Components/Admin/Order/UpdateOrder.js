@@ -58,6 +58,7 @@ function UpdateOrder(props) {
     const [costList, setcostList] = useState('');
     const [orderDetails, setorderDetails] = useState({});
     const [user, setuser] = useState({});
+    const [userId, setUserId] = useState('');
 
     const [success, setSuccess] = useState(false);
 
@@ -114,7 +115,7 @@ function UpdateOrder(props) {
             deliveryDate,
             address,
             orderStatus,
-            user
+            userId
         };
         console.log(orders);
 
@@ -158,8 +159,13 @@ function UpdateOrder(props) {
                 setSelectedOptionorderStatus(retrieved.orderStatus);
                 setpriceList(retrieved.priceList);
                 setorderDetails(retrieved.orderDetails);
-                setuser(retrieved.user);
+                setUserId(retrieved.userId);
                 setcostList(retrieved.costList);
+
+                return Axios.get("http://localhost:8080/MealNUS-war/rest/User/retrieveUser/" + retrieved.userId)
+            })
+            .then(response => {
+                setuser(response.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -282,7 +288,7 @@ function UpdateOrder(props) {
                                     readOnly
                                     className="form-control"
                                     value={newDeliveryDate}
-                                    onChange={handleDeliverydateChange}/>
+                                    onChange={handleDeliverydateChange} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="dropdown">Select an option for status:</label>

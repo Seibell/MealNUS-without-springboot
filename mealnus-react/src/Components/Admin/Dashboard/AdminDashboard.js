@@ -651,7 +651,7 @@ const Dashboard = () => {
                                                         <Typography color={colors.mealNUSBlue[100]} variant="h5" fontWeight="600">
                                                             {i + 1}
                                                         </Typography>
-                                                        <Typography color={colors.grey[100]}>{order.user.firstName}</Typography>
+                    
                                                     </Box>
                                                     <Box textAlign="left" color={colors.grey[100]} width="100px">
                                                         {moment
