@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import BannerBackground from "../../Assets/home-banner-background.png";
+import Benefits from "../../Assets/our-benefits.jpg";
 import BannerImage from "../../Assets/home-banner-image.png";
 import NavBar from "../Navigation/NavBar.js";
 import { FiArrowRight } from "react-icons/fi";
@@ -43,6 +44,10 @@ const Home = () => {
           <img src={BannerImage} alt="" />
         </div>
       </div>
+      <div className="home-benefits-section" style={{ display: "flex", justifyContent: "center" }}>
+        <img src={Benefits} alt="" />
+      </div>
+
     </div>
   );
 };
