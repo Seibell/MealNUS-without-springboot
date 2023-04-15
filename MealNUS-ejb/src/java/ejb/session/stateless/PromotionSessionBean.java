@@ -92,10 +92,12 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         BigDecimal discountToBeDisabled = BigDecimal.ONE.subtract(promotionToBeDisabled.getDiscount());
         if (discountToBeDisabled.compareTo(BigDecimal.ZERO) != 0) {
             for (MealBox box : mealBoxesAcrossPlatform) {
-                BigDecimal mealBoxPrice = box.getItemPrice();
-                BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled, 2, RoundingMode.HALF_UP);
-                box.setItemPrice(updatedMealBoxPrice);
-                box.setIsPromotionApplied(false);
+                if (box.isIsPromotionApplied() == true) {
+                    BigDecimal mealBoxPrice = box.getItemPrice();
+                    BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled, 2, RoundingMode.HALF_UP);
+                    box.setItemPrice(updatedMealBoxPrice);
+                    box.setIsPromotionApplied(false);
+                }
             }
         }
         promotionToBeDisabled.setIsApplied(false);
@@ -109,10 +111,14 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         BigDecimal discountToBeDisabled = BigDecimal.ONE.subtract(promotionToBeDisabled.getDiscount());
         if (discountToBeDisabled.compareTo(BigDecimal.ZERO) != 0) {
             for (MealBox box : mealBoxesAcrossCategory) {
-                BigDecimal mealBoxPrice = box.getItemPrice();
-                BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled, 2, RoundingMode.HALF_UP);
-                box.setItemPrice(updatedMealBoxPrice);
-                box.setIsPromotionApplied(false);
+                if (box.isIsPromotionApplied() == true) {
+
+                    BigDecimal mealBoxPrice = box.getItemPrice();
+                    BigDecimal updatedMealBoxPrice = mealBoxPrice.divide(discountToBeDisabled, 2, RoundingMode.HALF_UP);
+                    box.setItemPrice(updatedMealBoxPrice);
+                    box.setIsPromotionApplied(false);
+
+                }
             }
         }
         promotionToBeDisabled.setIsApplied(false);
@@ -182,7 +188,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         return query.getResultList();
     }
 
-   @Override
+    @Override
     public void updatePromotion(Long promoId, Promotion promotion) throws PromotionNotFoundException, MealBoxNotFoundException, PromotionAlreadyAppliedException {
         //Potentially could change it to have each attribute changed using the set method
         //It is possible to let the user choose which fields to change the same way a book was edited in the assignment
@@ -193,7 +199,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
 //                disablePromotionAcrossCategory(promotion.getPromotionCode(), promotion.getCategoryName());
 //            }
 //        }
-        
+
         Promotion updatedPromo = em.find(Promotion.class, promoId);
         updatedPromo.setCategoryName(promotion.getCategoryName());
         updatedPromo.setDiscount(promotion.getDiscount());
@@ -202,7 +208,7 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         updatedPromo.setIsApplied(promotion.getIsApplied());
         updatedPromo.setPromotionCode(promotion.getPromotionCode());
         updatedPromo.setPromotionName(promotion.getPromotionName());
-        
+
 //        if (updatedPromo.getIsApplied() == true) {
 //            if (updatedPromo.getCategoryName().equals("Site-Wide")) {
 //                applyPromotionAcrossPlatform(updatedPromo.getPromotionCode());
