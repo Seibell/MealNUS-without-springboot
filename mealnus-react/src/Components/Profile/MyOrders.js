@@ -51,7 +51,7 @@ const MyOrders = () => {
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
   const [currentOrderId, setCurrentOrderId] = useState(null);
   const [expandedRows, setExpandedRows] = useState([]);
-  const [newReviewRating, setNewReviewRating] = useState(1);
+  const [newReviewRating, setNewReviewRating] = useState(5);
   const [selectedMealboxName, setSelectedMealboxName] = useState("");
   const [selectedMealboxId, setSelectedMealboxId] = useState(null);
   const [success, setSuccess] = useState(false);

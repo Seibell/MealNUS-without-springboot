@@ -87,6 +87,11 @@ function EditProfile() {
             userId: currentUser.userId,
         };
 
+        if (!firstName || !lastName || !email || !password) {
+            setError('Please fill in all fields');
+            return;
+        }
+
         fetch(`http://localhost:8080/MealNUS-war/rest/User/edit/${currentUser.userId}`, {
             method: 'PUT',
             headers: {

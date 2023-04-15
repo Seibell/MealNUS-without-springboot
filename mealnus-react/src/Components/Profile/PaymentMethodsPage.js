@@ -41,6 +41,7 @@ function PaymentMethodsPage() {
   const [openDialog, setOpenDialog] = useState(false);
   const [cardToRemove, setCardToRemove] = useState(null);
   const [formattedCreditCardNumber, setFormattedCreditCardNumber] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   //validation state for ccNum/Date
   const [inputErrors, setInputErrors] = useState({
@@ -132,6 +133,7 @@ function PaymentMethodsPage() {
         setCards([...cards, response.data]);
         setLoading(false);
         setOpenSnackbar(true);
+        setSuccessMessage('Credit card added successfully!');
         setFormattedCreditCardNumber('');
         handleClose();
       })
@@ -156,6 +158,7 @@ function PaymentMethodsPage() {
           setCards(updatedCards);
           setLoading(false);
           setOpenSnackbar(true);
+          setSuccessMessage('Credit card removed!');
         })
         .catch((error) => {
           setError(error.message);
@@ -197,7 +200,7 @@ function PaymentMethodsPage() {
           )}
           {error && <MuiAlert severity="error">{error}</MuiAlert>}
           <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
-            <MuiAlert severity="success">Card successfully {error ? 'updated' : 'added'}!</MuiAlert>
+            <MuiAlert severity="success">{successMessage}</MuiAlert>
           </Snackbar>
           <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Add Credit Card</DialogTitle>

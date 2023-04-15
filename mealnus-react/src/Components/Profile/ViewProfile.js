@@ -38,7 +38,6 @@ function ViewProfile() {
                     </Typography>
                     <Box sx={{ mt: 2 }}>
                         <Typography>Email: {currentUser.email}</Typography>
-                        <Typography>Password: {currentUser.password}</Typography>
                     </Box>
                     <Box sx={{ mt: 2 }}>
                         <Link to="/editprofile">Edit Profile</Link>

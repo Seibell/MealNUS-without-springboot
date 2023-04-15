@@ -85,12 +85,13 @@ const TopSellingMealboxes = () => {
                     return createData(index + 1, key, value, 6, allMealBoxes);
                 }
             });
-            const allMealBoxRows = allMealBoxes.map((mealBox, index) => {
+            const allMealBoxRows = topSellingMealBoxes.map((mealBox, index) => {
                 const { key, value } = mealBox;
                 const topSellingMealBox = topSellingMealBoxes.find(pair => pair.key === key);
                 if (topSellingMealBox) {
-                    return createData(index + 1 + topSellingMealBoxes.length, key, topSellingMealBox.value, mealBox.value, allMealBoxes);
-                } else {
+                    return createData(index + 1 + topSellingMealBoxes.length, key, topSellingMealBox.value, mealBox.value);
+                }
+                else {
                     return createData(index + 1 + topSellingMealBoxes.length, key, 0, value, allMealBoxes);
                 }
             });
@@ -99,7 +100,13 @@ const TopSellingMealboxes = () => {
         });
     }, []);
 
-    const rows = [...topSellingRows, ...allMealBoxRows];
+    const rows = [
+        ...topSellingRows,
+        ...allMealBoxRows.filter(
+            (mealBoxRow) =>
+                !topSellingRows.find((topSellingRow) => topSellingRow.key === mealBoxRow.key)
+        ),
+    ];
 
     const columns = [
         {
