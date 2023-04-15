@@ -64,8 +64,6 @@ public class OrdersResource {
     private final OrderSessionBeanLocal orderSessionBeanLocal;
 
     private final UserSessionBeanLocal userSessionBeanLocal;
-    
-    
 
     public OrdersResource() {
         orderSessionBeanLocal = lookupOrderSessionBeanLocal();
@@ -96,11 +94,25 @@ public class OrdersResource {
                 creditCardSessionBeanLocal.retrieveCreditCardById(createOrderResponse.getCreditCardId())
         );
 
-        orderSessionBeanLocal.createOrder(order);
+        OrderEntity createdOrder = orderSessionBeanLocal.createOrder(order);
 
         for (int i = 0; i < mealboxes.length; i++) {
             mealBoxSessionBeanLocal.subtractQuantityAvailable(mealboxes[i].getMealBoxId(), quantities[i]);
         }
+
+        List<BigDecimal> priceList = new ArrayList<>();
+        List<BigDecimal> costList = new ArrayList<>();
+
+        for (MealBox mealbox : mealboxes) {
+            priceList.add(mealbox.getItemPrice());
+        }
+
+        for (MealBox mealbox : mealboxes) {
+            costList.add(mealbox.getItemCost());
+        }
+
+        orderSessionBeanLocal.updatePriceList(createdOrder.getOrderId(), priceList);
+        orderSessionBeanLocal.updateCostList(createdOrder.getOrderId(), costList);
 
         return Response.status(Status.OK).entity(order).build();
 
@@ -490,9 +502,9 @@ public class OrdersResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response cancelOrder(@PathParam("orderId") Long orderId) throws OrderNotFoundException {
         OrderEntity order = orderSessionBeanLocal.retrieveOrderById(orderId);
-        
+
         OrderEntity updatedOrder = orderSessionBeanLocal.cancelOrder(orderId);
-        
+
         List<Pair<MealBox, Integer>> orderDetails = order.getOrderDetails();
         for (Pair<MealBox, Integer> detail : orderDetails) {
             MealBox mealbox = detail.getKey();

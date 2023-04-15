@@ -7,6 +7,7 @@ package ws.model;
 
 import entity.CreditCard;
 import entity.MealBox;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import util.enumeration.AddressEnum;
@@ -26,6 +27,15 @@ public class CreateOrderResponse {
     private OrderStatus orderStatus;
     private Long userId;
     private Long creditCardId;
+    private List<BigDecimal> priceList; 
+
+    public List<BigDecimal> getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(List<BigDecimal> priceList) {
+        this.priceList = priceList;
+    }
 
     public CreateOrderResponse() {
     }
@@ -40,7 +50,8 @@ public class CreateOrderResponse {
         this.userId = userId;
         this.creditCardId = creditCardId;
     }
-
+    
+    
     public Long getCreditCardId() {
         return creditCardId;
     }
