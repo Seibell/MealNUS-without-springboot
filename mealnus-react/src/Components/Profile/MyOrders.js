@@ -51,12 +51,13 @@ const MyOrders = () => {
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
   const [currentOrderId, setCurrentOrderId] = useState(null);
   const [expandedRows, setExpandedRows] = useState([]);
-  const [newReviewRating, setNewReviewRating] = useState(0);
+  const [newReviewRating, setNewReviewRating] = useState(1);
   const [selectedMealboxName, setSelectedMealboxName] = useState("");
   const [selectedMealboxId, setSelectedMealboxId] = useState(null);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const [reviewErrorMessage, setReviewErrorMessage] = useState("");
 
   useEffect(() => {
     console.log("currentUser: ", currentUser);
@@ -193,47 +194,44 @@ const MyOrders = () => {
   };
 
   const resetReviewForm = () => {
-    setNewReviewRating(null);
+    setNewReviewRating(1);
     setNewReviewDescription("");
+    setReviewErrorMessage("");
   };
 
   const handleReviewSubmit = async () => {
-    if (newReviewDescription === "") {
-      setErrorMessage("Please enter both the title and description.");
-      return;
+    if (newReviewDescription.trim() === "") {
+      setErrorMessage("Review description cannot be empty.");
+    } else {
+      const postData = {
+        reviewDate: new Date().toISOString(),
+        stars: newReviewRating,
+        comments: newReviewDescription,
+        mealBoxId: selectedMealboxId,
+        userId: currentUser.userId,
+      };
+      console.log(JSON.stringify(postData));
+
+      fetch("http://localhost:8080/MealNUS-war/rest/Review", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+      }).then((response) => {
+        if (response.ok) {
+          setSuccess(true);
+          setError("");
+        } else {
+          throw new Error("Something went wrong");
+        }
+      });
+
+      resetReviewForm();
+      setReviewDialogOpen(false);
+
+      setSuccessDialogOpen(true);
     }
-
-    setErrorMessage("");
-
-    const postData = {
-      reviewDate: new Date().toISOString(),
-      stars: newReviewRating,
-      comments: newReviewDescription,
-      mealBoxId: selectedMealboxId,
-      userId: currentUser.userId,
-    };
-    console.log(JSON.stringify(postData));
-
-    fetch("http://localhost:8080/MealNUS-war/rest/Review", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    }).then((response) => {
-      if (response.ok) {
-        setSuccess(true);
-        setError("");
-      } else {
-        throw new Error("Something went wrong");
-      }
-    });
-
-    setNewReviewRating(null);
-    setNewReviewDescription("");
-    setReviewDialogOpen(false);
-
-    setSuccessDialogOpen(true);
   };
 
   if (!currentUser || !currentUser.email) {
@@ -346,6 +344,7 @@ const MyOrders = () => {
                     </TableCell>
                     <TableCell>{order.address}</TableCell>
                     <TableCell>
+                      $
                       {order.orderDetails.reduce((total, detail) => {
                         const price = detail.key.itemPrice;
                         const quantity = detail.value;
@@ -360,10 +359,7 @@ const MyOrders = () => {
                         onClick={() =>
                           handleCancelOrder(order.orderId, order.orderStatus)
                         }
-                        disabled={
-                          order.orderStatus !== "PAID" &&
-                          order.orderStatus !== "PREPARING"
-                        }
+                        disabled={order.orderStatus !== "PAID"}
                       >
                         Cancel
                       </Button>
@@ -397,6 +393,7 @@ const MyOrders = () => {
                                   {orderDetail.key.itemName}
                                 </TableCell>
                                 <TableCell>
+                                  $
                                   {parseFloat(
                                     orderDetail.key.itemPrice
                                   ).toFixed(2)}
@@ -452,6 +449,7 @@ const MyOrders = () => {
             onChange={(e, newValue) => setNewReviewRating(newValue)}
             precision={1}
             size="large"
+            min={1} 
           />
           <TextField
             label="Review"
@@ -461,6 +459,8 @@ const MyOrders = () => {
             margin="normal"
             value={newReviewDescription}
             onChange={(e) => setNewReviewDescription(e.target.value)}
+            error={!!errorMessage} 
+            helperText={errorMessage} 
           />
           <Box display="flex" justifyContent="flex-end" marginTop="16px">
             <Button
@@ -482,7 +482,6 @@ const MyOrders = () => {
             >
               Submit Review
             </Button>
-
           </Box>
         </DialogContent>
       </Dialog>
