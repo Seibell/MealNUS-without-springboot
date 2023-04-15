@@ -78,7 +78,7 @@ const MealBox = () => {
             if (response.ok) {
             }
         }).catch((error) => {
-
+            console.log(error)
         });
     };
 

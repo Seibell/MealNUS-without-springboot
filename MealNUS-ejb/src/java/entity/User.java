@@ -5,6 +5,7 @@
  */
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +56,7 @@ public class User implements Serializable {
     @OneToMany
     private List<Review> reviews;
     
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderEntity> orders;
     

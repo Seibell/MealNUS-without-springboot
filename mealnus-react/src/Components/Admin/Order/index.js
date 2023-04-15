@@ -54,14 +54,27 @@ const Order = () => {
     const [orderData, setOrderData] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrders")
-            .then(response => {
-                setOrderData(response.data.orderEntities);
-                console.log(response.data.orderEntities);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        const fetchOrders = () => {
+            axios.get("http://localhost:8080/MealNUS-war/rest/orders/retrieveAllOrders")
+                .then(response => {
+                    setOrderData(response.data.orderEntities);
+                    console.log(response.data.orderEntities);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        };
+
+        fetchOrders();
+
+        const intervalId = setInterval(() => {
+            fetchOrders();
+        }, 5000); // Polling every 5 seconds (5000 ms)
+
+        // Clean up the interval when the component unmounts
+        return () => {
+            clearInterval(intervalId);
+        };
     }, []);
 
     const getOrderStatusColor = (orderStatus) => {
@@ -136,8 +149,8 @@ const Order = () => {
             flex: 1,
             headerClassName: "headerName",
             renderCell: (params) => {
-                const isDisabled = params.row.orderStatus === "CANCELLED" || 
-                params.row.orderStatus === "COMPLETED";
+                const isDisabled = params.row.orderStatus === "CANCELLED" ||
+                    params.row.orderStatus === "COMPLETED";
                 return (
                     <IconButton
                         onClick={() =>

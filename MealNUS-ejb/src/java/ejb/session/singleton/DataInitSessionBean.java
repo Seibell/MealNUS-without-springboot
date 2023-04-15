@@ -164,19 +164,19 @@ public class DataInitSessionBean {
             ingredientSessionBean.createIngredient(new Ingredient("Lettuce",
                     "https://www.bhg.com/thmb/oL0DwR0DXrhFynA2y-oiY-nkCbg=/1878x0/filters:no_upscale():strip_icc()/tango-oakleaf-lettuce-c6f6417e-4cffa63034624d96a9e9ec9a3fe158f9.jpg"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Tomato Sauce", ""));
+            ingredientSessionBean.createIngredient(new Ingredient("Tomato Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Barbecue Sauce", ""));
+            ingredientSessionBean.createIngredient(new Ingredient("Barbecue Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Soy Sauce", ""));
+            ingredientSessionBean.createIngredient(new Ingredient("Soy Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Teriyaki Sauce", ""));
+            ingredientSessionBean.createIngredient(new Ingredient("Teriyaki Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Pesto Sauce", ""));
+            ingredientSessionBean.createIngredient(new Ingredient("Pesto Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Alfredo Sauce", ""));
+            ingredientSessionBean.createIngredient(new Ingredient("Alfredo Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
 
-            ingredientSessionBean.createIngredient(new Ingredient("Sweet and Sour Sauce", ""));
+            ingredientSessionBean.createIngredient(new Ingredient("Sweet and Sour Sauce", "https://res.cloudinary.com/drkpzjlro/image/upload/v1680155404/samples/landscapes/landscape-panorama.jpg"));
         }
 
         //TESTING PURPOSE
@@ -218,11 +218,11 @@ public class DataInitSessionBean {
             categorySessionBean.createCategory(new Category("Site-Wide", "")); //For promotions
         }
         if (mealBoxSessionBean.retrieveAllMealBoxes().isEmpty()) {
-            MealBox box1 = new MealBox("https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1660763547-veestro-best-vegan-meal-delivery-1643295633.jpg?crop=0.670xw:1.00xh;0.223xw,0&resize=980:*",
+            MealBox box1 = new MealBox("https://i.imgur.com/K8ex5m6.jpg",
                     "Healthy Vegan Box", 001L, new BigDecimal(7), new BigDecimal(12), "This is a vegetable mealBox", 15);
             MealBox box2 = new MealBox("https://cdn.shopify.com/s/files/1/0588/6705/6848/products/bbqchickenricebox.jpg?v=1631767089",
                     "BBQ Bliss Box", 002L, new BigDecimal(9), new BigDecimal(15), "This is a BBQ meat mealBox", 15);
-            MealBox box3 = new MealBox("https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1660847883-sprinly-best-vegan-meal-delivery-service-1643296178.png?crop=0.688xw:1.00xh;0.0449xw,0&resize=980:*",
+            MealBox box3 = new MealBox("https://i.imgur.com/jVlcI4N.png",
                     "All-in-One Box", 003L, new BigDecimal(11), new BigDecimal(18), "This is a all in one meat & vegetable mealBox", 15);
             List<Ingredient> ingres1 = new ArrayList<>();
             ingres1.add(ingredientSessionBean.retrieveIngredientByName("Soba"));
@@ -329,65 +329,6 @@ public class DataInitSessionBean {
                 em.persist(user);
                 orderSessionBean.createOrder(new OrderEntity(orderDate, orderDetails, priceList, costList, deliveryDate, address, orderStatus, user));
 
-                cal.setTime(new Date());
-                cal.add(Calendar.DAY_OF_MONTH, -20);
-                Date orderDate2 = cal.getTime();
-                MealBox mealBox2 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box", 005L, new BigDecimal(13), new BigDecimal(15), "Box catered to your daily nutrition needs!", 60);
-                Integer qty2 = 23;
-                List<Pair<MealBox, Integer>> orderDetails2 = new ArrayList<>();
-                orderDetails2.add(new Pair<>(mealBox2, qty2));
-                List<BigDecimal> priceList2 = new ArrayList<>();
-                priceList2.add(mealBox2.getItemPrice());
-                List<BigDecimal> costList2 = new ArrayList<>();
-                costList2.add(mealBox2.getItemCost());
-                Date deliveryDate2 = new Date();
-                Calendar calEnd2 = Calendar.getInstance();
-                calEnd2.setTime(deliveryDate2);
-                calEnd2.add(Calendar.DAY_OF_MONTH, 3);
-                deliveryDate2 = calEnd2.getTime();
-                AddressEnum address2 = AddressEnum.UTOWN_RESIDENCES;
-                OrderStatus orderStatus2 = OrderStatus.PAID;
-                User user2 = new User("eric5", "tang5", "user5@gmail.com", "password");
-                em.persist(user2);
-                OrderEntity newOrder2 = orderSessionBean.createOrder(new OrderEntity(orderDate2, orderDetails2, priceList2, costList2, deliveryDate2, address2, orderStatus2, user2));
-
-                cal.setTime(new Date());
-                cal.add(Calendar.DAY_OF_MONTH, -15);
-                Date orderDate3 = cal.getTime();
-                MealBox mealBox3 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box 2", 005L, new BigDecimal(13), new BigDecimal(15), "Box catered to your daily nutrition needs!", 60);
-                Integer qty3 = 23;
-                List<Pair<MealBox, Integer>> orderDetails3 = new ArrayList<>();
-                orderDetails3.add(new Pair<>(mealBox3, qty3));
-                List<BigDecimal> priceList3 = new ArrayList<>();
-                priceList3.add(mealBox3.getItemPrice());
-                List<BigDecimal> costList3 = new ArrayList<>();
-                costList3.add(mealBox3.getItemCost());
-                Date deliveryDate3 = new Date();
-                Calendar calEnd3 = Calendar.getInstance();
-                calEnd3.setTime(deliveryDate3);
-                calEnd3.add(Calendar.DAY_OF_MONTH, 3);
-                deliveryDate3 = calEnd3.getTime();
-                AddressEnum address3 = AddressEnum.UTOWN_RESIDENCES;
-                OrderStatus orderStatus3 = OrderStatus.PREPARING;
-                OrderEntity newOrder3 = orderSessionBean.createOrder(new OrderEntity(orderDate3, orderDetails3, priceList3, costList3, deliveryDate3, address3, orderStatus3, user2));
-
-                Date orderDate4 = new Date();
-                MealBox mealBox4 = new MealBox("https://media.self.com/photos/63a31904dcba23cb155ff501/4:3/w_2560%2Cc_limit/greenchef.jpeg", "Aww in One Box 3", 005L, new BigDecimal(13), new BigDecimal(15), "Box catered to your daily nutrition needs!", 60);
-                Integer qty4 = 23;
-                List<Pair<MealBox, Integer>> orderDetails4 = new ArrayList<>();
-                orderDetails4.add(new Pair<>(mealBox4, qty4));
-                List<BigDecimal> priceList4 = new ArrayList<>();
-                priceList4.add(mealBox4.getItemPrice());
-                List<BigDecimal> costList4 = new ArrayList<>();
-                costList4.add(mealBox4.getItemCost());
-                Date deliveryDate4 = new Date();
-                Calendar calEnd4 = Calendar.getInstance();
-                calEnd4.setTime(deliveryDate4);
-                calEnd4.add(Calendar.DAY_OF_MONTH, 3);
-                deliveryDate4 = calEnd4.getTime();
-                AddressEnum address4 = AddressEnum.UTOWN_RESIDENCES;
-                OrderStatus orderStatus4 = OrderStatus.DELIVERING;
-                OrderEntity newOrder4 = orderSessionBean.createOrder(new OrderEntity(orderDate4, orderDetails4, priceList4, costList4, deliveryDate4, address4, orderStatus4, user2));
             } catch (OrderNotFoundException | UnknownPersistenceException ex) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
