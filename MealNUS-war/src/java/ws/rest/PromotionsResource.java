@@ -291,10 +291,19 @@ public class PromotionsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updatePromotion(@PathParam("promotionId") Long promotionId, Promotion promoToUpdate) throws PromotionNotFoundException {
-        promotionSessionBeanLocal.updatePromotion(promotionId, promoToUpdate);
-        String updateSuccessMsg = "Promotion with ID [" + promotionId + "] has been updated successfully! This is what it looks like " + promoToUpdate.getPromotionName();
-        return Response.status(200).entity(updateSuccessMsg).build();
-    } //end editPromotion
+        try {
+            promotionSessionBeanLocal.updatePromotion(promotionId, promoToUpdate);
+            String updateSuccessMsg = "Promotion with ID [" + promotionId + "] has been updated successfully! This is what it looks like " + promoToUpdate.getPromotionName();
+            return Response.status(200).entity(updateSuccessMsg).build();
+        } //end editPromotion
+        catch (MealBoxNotFoundException ex) {
+            Logger.getLogger(PromotionsResource.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        } catch (PromotionAlreadyAppliedException ex) {
+            Logger.getLogger(PromotionsResource.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
 
     //http://localhost:8080/MealNUS-war/rest/promotion/delete/1
     @DELETE
