@@ -1,7 +1,7 @@
 # MealNUS-without-springboot
 springsecurity too hard
 
-##BOGOSORT
+## BOGOSORT
 // Java Program to implement BogoSort
 public class BogoSort {
     // Sorts array a[0..n-1] using Bogo sort
