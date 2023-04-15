@@ -159,24 +159,23 @@ function UpdateIngredient(props) {
                                     onChange={handleNameChange}
                                 />
                             </div>
-
+                            
                             <div className="form-group">
                                 <label htmlFor="image">Upload Image</label>
                                 {picture && (
                                     <div className="form-group">
-                                        <Box sx={{ width: 250, height: 250 }}>
+                                        <div style={{ maxWidth: 250, maxHeight: 250, width: '100%', height: '100%', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                                             <img
                                                 src={picture}
-                                                sx={{
+                                                style={{
                                                     objectFit: "contain",
-                                                    bgcolor: "primary.main",
+                                                    backgroundColor: "primary.main",
                                                     maxWidth: "100%",
                                                     maxHeight: "100%",
-                                                    width: 980,
-                                                    height: 980,
                                                 }}
                                             />
-                                        </Box>
+                                        </div>
+                                        <br/>
                                     </div>
                                 )}
                                 <input
@@ -185,6 +184,7 @@ function UpdateIngredient(props) {
                                     accept="image/*"
                                     type="file" onChange={handleFileChange}
                                 />
+                        
                                 {uploading && (
                                     <CircularProgress
                                         sx={{
@@ -197,7 +197,7 @@ function UpdateIngredient(props) {
                             </div>
 
                         </div>
-
+                       
                         <div className="card-footer">
                             <RouterLink to="/adminingredients" className="btn btn-default" onClick={(e) => window.close()}>
                                 Cancel
