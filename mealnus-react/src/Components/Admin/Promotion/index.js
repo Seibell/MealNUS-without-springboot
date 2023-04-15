@@ -427,7 +427,7 @@ import AddCircle from "@mui/icons-material/AddCircle";
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { FormControlLabel, Checkbox } from '@material-ui/core';
+import { FormControlLabel, Checkbox } from '@mui/material';
 
 
 function Copyright(props) {
@@ -731,27 +731,40 @@ const Promotion = () => {
 
                         <Box m="20px">
                             <Header title="PROMOTIONS" subtitle="List of Promotions" />
-                            <Link
-                                style={{ textDecoration: "none" }}
-                                onClick={() => window.open('/addpromotion', 'Add Promotion', 'width=600,height=500')}
+
+                            <Box
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="flex-end"
+                                borderRadius="20px"
+                                bgcolor="transparent"
+                                ml={-1.4}
+                                mr={1}
+                                p={1}
+                                height="30px"
+                                style={{ width: '195px' }}
                             >
-                                <Box
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="flex-end"
-                                    borderRadius="20px"
-                                    bgcolor="transparent"
-                                    mr={1}
-                                    p={1}
-                                    height="30px"
-                                    style={{ width: '195px' }}
+                                <Link
+                                    style={{ textDecoration: "none" }}
+                                    onClick={() => window.open('/addpromotion', 'Add Promotion', 'width=600,height=500')}
                                 >
-                                    <IconButton>
-                                        <AddCircle style={{ fill: "black" }} />
+                                    <IconButton style={{
+                                        borderRadius: "10px",
+                                        backgroundColor: colors.mealNUSBlue[100],
+                                        paddingLeft: "10px",
+                                        paddingRight: "10px",
+                                        paddingTop: "5px",
+                                        paddingBottom: "5px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                    }}>
+                                        {/* <AddCircle style={{ fill: "black" }} /> */}
+                                        <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.white[100] }}>Create New Promotion</Typography>
                                     </IconButton>
-                                    <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.mealNUSBlue[100] }}>Create New Promotion</Typography>
-                                </Box>
-                            </Link>
+                                </Link>
+                            </Box>
+
                             <Box
                                 m="20px 0 0 0"
                                 height="50vh"
@@ -809,7 +822,7 @@ const Promotion = () => {
                                             checked={showPopups}
                                             onChange={handlePopupToggle}
                                             name="showPopups"
-                                            color="primary"
+                                            color="secondary"
                                         />
                                     }
                                     label={
@@ -826,7 +839,7 @@ const Promotion = () => {
                     </main>
                 </div>
             </ThemeProvider>
-        </ColorModeContext.Provider>
+        </ColorModeContext.Provider >
 
     );
 };
