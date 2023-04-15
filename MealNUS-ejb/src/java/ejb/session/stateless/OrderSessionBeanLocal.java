@@ -73,5 +73,10 @@ public interface OrderSessionBeanLocal {
 
     public void updateOrder(Long orderId, Date deliveryDate, AddressEnum address, OrderStatus orderStatus);
 
+    public OrderEntity updatePriceList(Long orderId, List<BigDecimal> priceList);
+
+    public OrderEntity updateCostList(Long orderId, List<BigDecimal> costList);
+
+
 
 }

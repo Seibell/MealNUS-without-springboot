@@ -52,6 +52,22 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         em.flush();
         return order;
     }
+    
+    @Override
+    public OrderEntity updatePriceList(Long orderId, List<BigDecimal> priceList) {
+        OrderEntity order = em.find(OrderEntity.class, orderId);
+        order.setPriceList(priceList);
+        em.flush();
+        return order;
+    }
+    
+    @Override
+    public OrderEntity updateCostList(Long orderId, List<BigDecimal> costList) {
+        OrderEntity order = em.find(OrderEntity.class, orderId);
+        order.setCostList(costList);
+        em.flush();
+        return order;
+    }
 
     // This method helps with Order Management :: Orders Overview
     @Override
