@@ -488,6 +488,7 @@ const Forum = () => {
                           variant="contained"
                           color="primary"
                           onClick={handleReplyButtonClick}
+                          disabled={!replyText.trim()}
                           style={{
                             margin: "auto",
                             backgroundColor: "orange",
@@ -559,6 +560,9 @@ const Forum = () => {
                       createNewPost();
                       handleCloseCreatePostDialog();
                     }}
+                    disabled={
+                      !newPostTitle.trim() || !newPostDescription.trim()
+                    }
                     style={{ marginTop: 16 }}
                   >
                     Create Post
