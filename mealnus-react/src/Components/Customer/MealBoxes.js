@@ -62,6 +62,7 @@ const MealBoxes = () => {
   const [cartQuantity, setCartQuantity] = useState(0);
   const location = useLocation();
 
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -307,18 +308,11 @@ const MealBoxes = () => {
                       </Typography>
                       <Typography
                         variant="body2"
-                        style={{
-                          textAlign: "center",
-                          color:
-                            mealBox.quantityAvailable === 0
-                              ? "red"
-                              : "text.secondary",
-                        }}
+                        style={{ textAlign: "center" }}
+                        color="text.secondary"
                         noWrap
                       >
-                        {mealBox.quantityAvailable === 0
-                          ? "Sold Out"
-                          : `${mealBox.quantityAvailable} available`}
+                        {mealBox.quantityAvailable} available
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -365,25 +359,14 @@ const MealBoxes = () => {
               >
                 <b>Price: </b>&nbsp;{selectedMealBox?.itemPrice.toFixed(2)}
                 <Box sx={{ flexGrow: 1 }} />
-                {selectedMealBox?.quantityAvailable === 0 ? (
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ color: "red", marginRight: 6.5 }}
-                  >
-                    <b>Sold Out</b>
-                  </Typography>
-                ) : (
-                  <>
-                    <span>{selectedMealBox?.quantityAvailable}</span>
-                    <Box sx={{ width: 4 }} />
-                    <Typography
-                      variant="subtitle1"
-                      sx={{ color: "green", marginRight: 6.5 }}
-                    >
-                      <b>available</b>
-                    </Typography>
-                  </>
-                )}
+                <span>{selectedMealBox?.quantityAvailable}</span>
+                <Box sx={{ width: 4 }} />
+                <Typography
+                  variant="subtitle1"
+                  sx={{ color: "green", marginRight: 6.5 }}
+                >
+                  <b>available</b>
+                </Typography>
               </Typography>
               <Typography variant="subtitle1">
                 <b>Description:</b> {selectedMealBox?.itemDescription}
@@ -510,7 +493,7 @@ const MealBoxes = () => {
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={() => handleOrderNow(selectedMealBox, quantity)}
+                onClick={() => handleOrderNow(selectedMealBox, quantity)} 
                 disabled={selectedMealBox?.quantityAvailable === 0}
               >
                 Order Now
@@ -521,7 +504,7 @@ const MealBoxes = () => {
                 size="small"
                 variant="outlined"
                 startIcon={<ShoppingCartIcon />}
-                onClick={() => handleAddToCart(selectedMealBox, quantity)}
+                onClick={() => handleAddToCart(selectedMealBox, quantity)} 
                 disabled={selectedMealBox?.quantityAvailable === 0}
               >
                 Add to Cart
