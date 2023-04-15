@@ -489,7 +489,16 @@ public class OrdersResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response cancelOrder(@PathParam("orderId") Long orderId) throws OrderNotFoundException {
+        OrderEntity order = orderSessionBeanLocal.retrieveOrderById(orderId);
+        
         OrderEntity updatedOrder = orderSessionBeanLocal.cancelOrder(orderId);
+        
+        List<Pair<MealBox, Integer>> orderDetails = order.getOrderDetails();
+        for (Pair<MealBox, Integer> detail : orderDetails) {
+            MealBox mealbox = detail.getKey();
+            Integer quantity = detail.getValue();
+            mealBoxSessionBeanLocal.addQuantityAvailable(mealbox.getMealBoxId(), quantity);
+        }
 
         if (updatedOrder != null) {
             return Response.status(Response.Status.OK).entity(updatedOrder).build();
