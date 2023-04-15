@@ -86,10 +86,10 @@ const Topbar = () => {
                         <LightModeOutlinedIcon />
                     )}
                 </IconButton>
-                <BluetoothOutlinedIcon />
+                {/* <BluetoothOutlinedIcon />
                 <SignalWifi3BarOutlinedIcon />
                 <FiveGOutlinedIcon />
-                <SignalCellular3BarOutlinedIcon />
+                <SignalCellular3BarOutlinedIcon /> */}
                 <IconButton onClick={handleMenuOpen}>
                     <Avatar
                         src={ProfShalinda}

@@ -368,7 +368,16 @@ function UpdateMealBox(props) {
                                 <label htmlFor="image">Upload Image</label>
                                 {itemImage && (
                                     <div className="form-group">
-                                        <div style={{ maxWidth: 250, maxHeight: 250, width: '100%', height: '100%', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            maxWidth: 250,
+                                            maxHeight: 250,
+                                            width: '100%',
+                                            height: '100%',
+                                            overflow: 'hidden'
+                                        }}>
                                             <img
                                                 src={itemImage}
                                                 style={{
@@ -379,19 +388,19 @@ function UpdateMealBox(props) {
                                                 }}
                                             />
                                         </div>
-                                        <br />
+                                        <hr /> {/* Added divider */}
                                     </div>
                                 )}
                                 <input
                                     id="image"
                                     className="form-control"
                                     accept="image/*"
-                                    type="file"
-                                    onChange={handleFileChange}
+                                    type="file" onChange={handleFileChange}
                                 />
                                 {uploading && (
                                     <CircularProgress
                                         sx={{
+                                            position: "absolute",
                                             top: "42%",
                                             left: "43%",
                                         }}
