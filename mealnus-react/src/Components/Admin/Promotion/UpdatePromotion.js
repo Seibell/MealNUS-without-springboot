@@ -1,43 +1,21 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import MUILink from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import { useParams } from 'react-router-dom';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
-import LocalOfferTwoToneIcon from '@mui/icons-material/LocalOfferTwoTone';
-import { AdminAuthContext } from "../../../Context/AdminAuthContext";
-import { useContext } from "react";
+import ClearIcon from '@mui/icons-material/Clear';
 import Alert from '@mui/material/Alert';
 import Autocomplete from '@mui/material/Autocomplete';
-import ClearIcon from '@mui/icons-material/Clear';
+import IconButton from '@mui/material/IconButton';
+import { createTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 
 
 // Mehak's Update Promotion
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from "react-router-dom";
 
 function UpdatePromotion(props) {
     const { id } = useParams();

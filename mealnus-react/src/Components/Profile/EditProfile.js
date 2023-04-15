@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
-import { TextField, Button, Grid, Box, Typography, CircularProgress } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Grid, TextField, Typography } from "@mui/material";
+import Avatar from '@mui/material/Avatar';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from "react";
+import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
 import NavBar from '../Navigation/NavBar';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Navigate } from 'react-router-dom';
-import { Alert } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
-import axios from 'axios';
 
 const API_KEY = '995621471943455';
 const default_image_url = 'https://i.imgur.com/Kvyecsm.png';

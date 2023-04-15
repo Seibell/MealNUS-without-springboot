@@ -1,32 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
-import {
-  TextField,
-  Typography,
-  ThemeProvider,
-  createTheme,
-  useTheme,
-  Button,
-  IconButton,
-  CircularProgress,
-  Snackbar,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Box,
-  Grid
-} from '@mui/material';
-import { Delete } from '@mui/icons-material';
 import MuiAlert from '@mui/lab/Alert';
+import {
+  Box, Button, CircularProgress, Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle, Grid, Snackbar, TextField, ThemeProvider, useTheme
+} from '@mui/material';
 import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from "../../Context/AuthContext";
 import NavBar from '../Navigation/NavBar';
 import CreditCardDisplay from './CreditCardDisplay';

@@ -1,39 +1,34 @@
 // Admin Dashboard Template Imports
-import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import { ColorModeContext, useMode } from "../Global/AdminTheme";
-import Topbar from "../Global/Topbar";
 import Sidebar from "../Global/Sidebar";
+import Topbar from "../Global/Topbar";
 
 import moment from 'moment-timezone';
 
-import { Box, Typography, useTheme } from "@mui/material";
-import { Button } from '@mui/material';
-import { tokens } from "../Global/AdminTheme";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import TollIcon from '@mui/icons-material/Toll';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import TollIcon from '@mui/icons-material/Toll';
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import { Box, Button, Typography } from "@mui/material";
+import { tokens } from "../Global/AdminTheme";
 
 import Header from "../Global/Header";
 import MonthlyOrderLineChart from "../Global/MonthlyOrderLineChart";
-import OrderStatusPieChart from "../Global/OrderStatusPieChart";
 import OrderAddressBarChart from "../Global/OrderAddressBarChart";
+import OrderStatusPieChart from "../Global/OrderStatusPieChart";
 import StatBox from "../Global/StatBox";
 import TopSellingMealboxes from "../Global/TopSellingMealboxes";
 
-import mastercardLogo from "../../../Assets/mastercard-logo.png";
-import visaLogo from "../../../Assets/visa-logo.png";
-import amexLogo from "../../../Assets/amex-logo.png";
-import creditCardLogo from "../../../Assets/creditCard.png";
 
-import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 import { useContext } from "react";
+import { AdminAuthContext } from "../../../Context/AdminAuthContext";
 
 function Copyright(props) {
     return (

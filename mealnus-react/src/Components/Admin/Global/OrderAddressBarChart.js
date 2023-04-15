@@ -1,9 +1,9 @@
-import { ResponsiveBar } from "@nivo/bar";
 import { useTheme } from "@mui/material";
-import { tokens } from "./AdminTheme";
-import { useState, useEffect } from "react";
+import { ResponsiveBar } from "@nivo/bar";
 import Axios from "axios";
 import { scaleLinear } from "d3";
+import { useEffect, useState } from "react";
+import { tokens } from "./AdminTheme";
 
 const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
     const theme = useTheme();

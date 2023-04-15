@@ -1,13 +1,11 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import BannerBackground from "../../Assets/home-banner-background.png";
-import Benefits from "../../Assets/our-benefits.jpg";
-import BannerImage from "../../Assets/home-banner-image.png";
-import NavBar from "../Navigation/NavBar.js";
+import React, { useContext } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import BannerBackground from "../../Assets/home-banner-background.png";
+import BannerImage from "../../Assets/home-banner-image.png";
+import Benefits from "../../Assets/our-benefits.jpg";
 import { AuthContext } from "../../Context/AuthContext.js";
-import { useContext } from "react";
+import NavBar from "../Navigation/NavBar.js";
 
 const Home = () => {
   const navigate = useNavigate();

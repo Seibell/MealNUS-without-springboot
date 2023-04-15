@@ -1,44 +1,22 @@
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import {
-  Box,
-  ThemeProvider,
-  useTheme,
-  Table,
+  Box, Button, Collapse, Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle, Paper, Rating, Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
-  TableSortLabel,
-  Paper,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Collapse,
-  Rating,
+  TableRow, TextField, ThemeProvider, Typography, useTheme
 } from "@mui/material";
-import React from "react";
-import { tokens } from "../Statistics/theme";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import StatBox from "../Statistics/StatBox";
-import NavBar from "../Navigation/NavBar";
-import { AuthContext } from "../../Context/AuthContext";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
 import { ResponsiveBar } from "@nivo/bar";
 import { ResponsivePie } from "@nivo/pie";
-import { Typography } from "@mui/material";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { Button } from "@mui/material";
-import { makeStyles } from "@material-ui/core/styles";
-import { TabUnselected } from "@mui/icons-material";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../Context/AuthContext";
+import NavBar from "../Navigation/NavBar";
+import StatBox from "../Statistics/StatBox";
+import { tokens } from "../Statistics/theme";
 
 const MyOrders = () => {
   const { currentUser } = useContext(AuthContext);
