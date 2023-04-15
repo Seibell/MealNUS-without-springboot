@@ -8,6 +8,7 @@ package ws.rest;
 import ejb.session.stateless.MealBoxSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
+import entity.MealBox;
 import entity.Review;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,16 +66,22 @@ public class ReviewResource {
     public Response createNewReview(CreateReviewResponse createReviewResponse) throws UserNotFoundException, MealBoxNotFoundException {
 
         System.out.println(createReviewResponse.getItemCode() == null);
-
+        MealBox test = mealBoxSessionBeanLocal.retrieveMealBoxById(createReviewResponse.getItemCode());
         Review review = new Review(
                 createReviewResponse.getReviewDate(),
                 createReviewResponse.getStars(),
                 createReviewResponse.getComments(),
                 userSessionBeanLocal.retrieveUserById(createReviewResponse.getUserId())
+                //test
+        //mealBoxSessionBeanLocal.retrieveMealBoxById(createReviewResponse.getItemCode())
         );
 
         reviewSessionBeanLocal.createReview(review);
-        mealBoxSessionBeanLocal.retrieveMealBoxById(createReviewResponse.getItemCode()).addReview(review);
+        //mealBoxSessionBeanLocal.retrieveMealBoxById(createReviewResponse.getItemCode()).addReview(review);
+        test.addReview(review);
+        mealBoxSessionBeanLocal.updateMealBox(test);
+        System.out.println("###########TEST HERE test:" + test.getReviews().toString());
+        System.out.println("###########TEST HERE sessionbean:" + mealBoxSessionBeanLocal.retrieveMealBoxById(createReviewResponse.getItemCode()).getReviews().toString());
         return Response.status(Status.OK).entity(review).build();
     }
 
