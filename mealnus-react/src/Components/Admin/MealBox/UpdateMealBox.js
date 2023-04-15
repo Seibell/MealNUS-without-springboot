@@ -364,24 +364,22 @@ function UpdateMealBox(props) {
                                 />
                             </div>
 
-
                             <div className="form-group">
                                 <label htmlFor="image">Upload Image</label>
                                 {itemImage && (
                                     <div className="form-group">
-                                        <Box sx={{ width: 250, height: 250 }}>
+                                        <div style={{ maxWidth: 250, maxHeight: 250, width: '100%', height: '100%', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                                             <img
                                                 src={itemImage}
-                                                sx={{
+                                                style={{
                                                     objectFit: "contain",
-                                                    bgcolor: "primary.main",
+                                                    backgroundColor: "primary.main",
                                                     maxWidth: "100%",
                                                     maxHeight: "100%",
-                                                    width: 980,
-                                                    height: 980,
                                                 }}
                                             />
-                                        </Box>
+                                        </div>
+                                        <br />
                                     </div>
                                 )}
                                 <input
