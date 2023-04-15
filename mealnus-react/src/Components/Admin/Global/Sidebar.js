@@ -66,7 +66,7 @@ const Sidebar = () => {
                 "& .pro-menu-item.active": {
                     color: `${colors.mealNUSOrange[100]} !important`,
                 },
-                height: "1773px",
+                height: "1612px",
             }}
         >
             <ProSidebar collapsed={isCollapsed} collapsedWidth={75} width={isCollapsed ? 60 : 280} >
@@ -148,7 +148,7 @@ const Sidebar = () => {
                             Members
                         </Typography>
                         <Item
-                            title="Manage Members"
+                            title="View Members"
                             to="/adminmembers"
                             icon={<PeopleOutlinedIcon />}
                             selected={selected}

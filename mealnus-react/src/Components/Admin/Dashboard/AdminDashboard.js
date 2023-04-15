@@ -762,9 +762,9 @@ const Dashboard = () => {
                                 {/* ROW 5 */}
                                 <Box
                                     gridColumn="span 12"
-                                    gridRow="span 4"
+                                    gridRow="span 3"
                                     backgroundColor={colors.primary[400]}
-                                    overflow="auto"
+                                    // overflow="auto"
                                 >
                                     <Box
                                         mt="20px"
@@ -781,7 +781,7 @@ const Dashboard = () => {
                                             Top Ranking MealBoxes
                                         </Typography>
                                     </Box>
-                                    <Box height="180px" m="-20px 0 0 0">
+                                    <Box height="0px" m="-20px 0 0 0">
                                         <TopSellingMealboxes />
                                     </Box>
                                 </Box>

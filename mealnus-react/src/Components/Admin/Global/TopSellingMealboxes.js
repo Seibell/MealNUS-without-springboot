@@ -159,7 +159,7 @@ const TopSellingMealboxes = () => {
         <Box m="20px">
             <Box
                 m="40px 0 0 0"
-                height="52vh"
+                height="40vh"
                 sx={{
                     "& .MuiDataGrid-root": {
                         border: "none",
