@@ -9,14 +9,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -29,14 +29,41 @@ public class MealBox implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mealBoxId;
+
+    @Column(nullable = false)
+    @NotNull
     private String itemName;
+
+    @Column(unique = true, nullable = false)
+    @NotNull
     private Long ItemCode;
+
+    @Column(nullable = false)
+    @NotNull
     private String itemImage;
+
+    @Column(nullable = false)
+    @NotNull
     private BigDecimal itemCost;
+
+    @Column(nullable = false)
+    @NotNull
     private BigDecimal itemPrice;
+
+    @Column(nullable = false)
+    @NotNull
     private String itemDescription;
+
+    @Column(nullable = false)
+    @NotNull
     private Integer quantityAvailable;
+
+    @Column(nullable = false)
+    @NotNull
     private boolean isPromotionApplied;
+
+    @Column(nullable = false)
+    @NotNull
     private boolean StatusAvail;
 
     @ManyToMany
@@ -48,7 +75,6 @@ public class MealBox implements Serializable {
     @ManyToMany
     private List<Category> categories;
 
-   
     @OneToMany
     private List<Review> reviews;
 

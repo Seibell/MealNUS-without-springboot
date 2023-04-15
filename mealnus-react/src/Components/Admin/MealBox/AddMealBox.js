@@ -249,6 +249,7 @@ function AddMealBox(props) {
             navigate(window.close());
         })
             .catch((error) => {
+                setError("Item code must be unique"); //This is the only case mealbox creation fails
                 console.error(error);
             });
 
@@ -533,11 +534,11 @@ function AddMealBox(props) {
                             </button>
                         </div>
                     </form>
-                    {/* {error && (
+                    {error && (
                         <Box mt={2}>
                             <Alert severity="error">{error}</Alert>
                         </Box>
-                    )} */}
+                    )}
 
                 </div>
             </section>

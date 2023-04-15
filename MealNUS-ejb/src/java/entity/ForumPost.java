@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import util.enumeration.ForumCategory;
 
 /**
@@ -31,10 +33,20 @@ public class ForumPost implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
+
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    @NotNull
     private Date postDate;
+
+    @Column(nullable = false)
+    @NotNull
     private String posTitle;
+
+    @Column(nullable = false)
+    @NotNull
     private String postDescription;
+
     private String[] postAttachments;
     private ForumCategory forumCategory;
     private Integer numThumbsUp;

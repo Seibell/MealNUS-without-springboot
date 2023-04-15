@@ -47,6 +47,7 @@ const Checkout = () => {
   const [error, setError] = useState("");
   const [inputErrors, setInputErrors] = useState({
     creditCardNumber: false,
+    cvv: false,
     expiryDate: false,
   });
   const [openDialog, setOpenDialog] = useState(false);
@@ -154,8 +155,21 @@ const Checkout = () => {
 
     setInputErrors({
       creditCardNumber: !isCardNumberValid,
+      cvv: cvv.length != 3,
       expiryDate: !isExpiryDateValid,
     });
+
+    //VALIDATION
+
+    if (!cardOwnerName || !creditCardNumber || !cvv || !expiryDate) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    if (cvv.length !== 3) {
+      setError('CVV must be 3 digits');
+      return;
+    }
 
     if (!isCardNumberValid || !isExpiryDateValid) {
       return;
@@ -465,7 +479,15 @@ const Checkout = () => {
                         />
                       </Grid>
                       <Grid item>
-                        <TextField label="CVV" name="cvv" fullWidth />
+                        <TextField
+                          label="CVV"
+                          name="cvv"
+                          fullWidth
+                          error={inputErrors.cvv}
+                          helperText={
+                            inputErrors.cvv ? "CVV Must be 3 digits" : ""
+                          }
+                        />
                       </Grid>
                       <Grid item>
                         <TextField

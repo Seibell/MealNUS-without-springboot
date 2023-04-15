@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -23,16 +24,27 @@ public class CreditCard implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long creditCardId;
+
+    @Column(nullable = false)
+    @NotNull
     private String cardOwnerName;
-    
+
     @Column(unique = true)
     private String creditCardNumber;
+
+    @Column(nullable = false, length = 3)
+    @NotNull
     private String cvv;
+
+    @Column(nullable = false)
+    @NotNull
     private String expiryDate; //should this be date?
-    
+
     //Reference userId instead to prevent cyclic reference problem
+    @Column(nullable = false)
+    @NotNull
     private Long userId;
-    
+
     public CreditCard() {
     }
 
@@ -43,7 +55,7 @@ public class CreditCard implements Serializable {
         this.expiryDate = expiryDate;
         this.userId = user.getUserId();
     }
-    
+
     public Long getCreditCardId() {
         return creditCardId;
     }
@@ -146,5 +158,5 @@ public class CreditCard implements Serializable {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-    
+
 }
