@@ -107,6 +107,7 @@ const Forum = () => {
   const { currentUser } = useContext(AuthContext);
   const classes = useStyles();
   const [replyText, setReplyText] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchPosts();
@@ -151,6 +152,20 @@ const Forum = () => {
 
     setReplyText("");
     fetchPosts();
+  };
+
+  const getFilteredPosts = () => {
+    return posts.forumPostEntities.filter((post) => {
+      const isNameMatch = post.posTitle
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      const isContentMatch = post.postDescription
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      return isNameMatch || isContentMatch;
+    });
   };
 
   const createNewPost = async () => {
@@ -262,41 +277,65 @@ const Forum = () => {
         </Typography>
         {/* Create New Post Button */}
         <Grid container spacing={2}>
-          <Grid
-            item
-            xs={12}
-            style={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
+          <Grid item xs={12} style={{ display: "flex", alignItems: "center" }}>
+            {/* Add a search bar */}
+            <TextField
+              label="Search by Keyword"
+              variant="outlined"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                marginRight: "2rem",
+                marginLeft: "4rem",
+                width: "50%", // Increase the width
+                borderColor: "#0077B5", // Change the border color to NUS blue
+              }}
+              InputProps={{
+                style: {
+                  borderColor: "#0077B5", // Change the border color to NUS blue
+                },
+                // Change the border color
+                classes: {
+                  notchedOutline: "textFieldOutline",
+                },
+              }}
+              InputLabelProps={{
+                // Update the label color
+                style: { color: "#0077B5" }, // Change the label color to NUS blue
+              }}
+            />
+
             <Button
               variant="contained"
               color="primary"
               onClick={handleOpenCreatePostDialog}
               style={{
-                marginBottom: 20,
-                backgroundColor: "#FF8C00", // NUS orange color
+                marginBottom: 15,
+                backgroundColor: "#0077B5", // NUS orange color#FF8C00
                 borderRadius: 25,
                 padding: "10px 30px", // Add padding to the button (top/bottom, left/right)
                 minWidth: 150, // Set a minimum width for the button
                 maxHeight: 60, // Set a minimum height for the button
                 color: "white", // Set the text color if needed
-                marginRight: 320,
-                marginLeft: 50, // Add some margin to separate the button from the filter
+                marginLeft: "1rem", // Add some margin to separate the button from the search bar
+                marginRight: "3rem",
               }}
             >
               Create New Post
             </Button>
 
-            <FormControl className={classes.formControl}>
+            <FormControl
+              className={classes.formControl}
+              style={{ marginLeft: "1rem", marginTop: 30 }}
+            >
               <InputLabel id="filter-select-label">Filter By</InputLabel>
               <Select
                 labelId="filter-select-label"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
               >
+                <MenuItem value="">None</MenuItem>{" "}
+                {/* Add an empty value as default */}
                 <MenuItem value="time">Latest Posts</MenuItem>
                 <MenuItem value="popularityUp">ThumbUp: High to Low</MenuItem>
                 <MenuItem value="popularityDown">
@@ -315,7 +354,8 @@ const Forum = () => {
             style={{ height: "70vh", overflow: "auto" }}
           >
             {posts.forumPostEntities &&
-              [...posts.forumPostEntities]
+              getFilteredPosts()
+                // [...posts.forumPostEntities]
                 .sort((a, b) => {
                   if (filter === "time") {
                     return (

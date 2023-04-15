@@ -254,18 +254,23 @@ public class DataInitSessionBean {
             Category c1 = categorySessionBean.retrieveCategoryById(4L);
             Category c2 = categorySessionBean.retrieveCategoryById(1L);
             Category c3 = categorySessionBean.retrieveCategoryById(2L);
-
+            Category vegan = categorySessionBean.retrieveCategoryByName("Vegan");
+            Category meat = categorySessionBean.retrieveCategoryByName("Meat");
+            Category lowc = categorySessionBean.retrieveCategoryByName("Low-Calorie");
+            Category seafood = categorySessionBean.retrieveCategoryByName("Seafood");
             //c1.addMealBox(box1);
-            box1.addCategory(c1);
+            box1.addCategory(vegan);
 
             //c2.addMealBox(box1);
-            box1.addCategory(c2);
+            box1.addCategory(lowc);
 
             //c3.addMealBox(box2);
-            box2.addCategory(c3);
+            box2.addCategory(meat);
 
             //c3.addMealBox(box3);
-            box3.addCategory(c3);
+            box3.addCategory(meat);
+            box3.addCategory(seafood);
+            box3.addCategory(vegan);
             mealBoxSessionBean.createMealBox(box1);
             mealBoxSessionBean.createMealBox(box2);
             mealBoxSessionBean.createMealBox(box3);
