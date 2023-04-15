@@ -202,6 +202,8 @@ const MyOrders = () => {
   const handleReviewSubmit = async () => {
     if (newReviewDescription.trim() === "") {
       setErrorMessage("Review description cannot be empty.");
+    } else if (newReviewRating < 1) {
+      setErrorMessage("Rating must be at least 1 star.");
     } else {
       const postData = {
         reviewDate: new Date().toISOString(),
@@ -449,7 +451,7 @@ const MyOrders = () => {
             onChange={(e, newValue) => setNewReviewRating(newValue)}
             precision={1}
             size="large"
-            min={1} 
+            min={1}
           />
           <TextField
             label="Review"
@@ -459,8 +461,8 @@ const MyOrders = () => {
             margin="normal"
             value={newReviewDescription}
             onChange={(e) => setNewReviewDescription(e.target.value)}
-            error={!!errorMessage} 
-            helperText={errorMessage} 
+            error={!!errorMessage}
+            helperText={errorMessage}
           />
           <Box display="flex" justifyContent="flex-end" marginTop="16px">
             <Button
