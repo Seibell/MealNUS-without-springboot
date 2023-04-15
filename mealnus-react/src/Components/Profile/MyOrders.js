@@ -14,8 +14,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
-  DialogActions,
   Collapse,
   Rating,
 } from "@mui/material";
@@ -45,18 +43,18 @@ const MyOrders = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [orders, setOrders] = useState([]);
+  const [reviewFormOpen, setReviewFormOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [newReviewDescription, setNewReviewDescription] = useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
   const [currentOrderId, setCurrentOrderId] = useState(null);
+  const [submittedReviews, setSubmittedReviews] = useState([]);
   const [expandedRows, setExpandedRows] = useState([]);
   const [newReviewRating, setNewReviewRating] = useState(0);
   const [selectedMealboxName, setSelectedMealboxName] = useState("");
-  const [selectedMealboxId, setSelectedMealboxId] = useState(null);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
-  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
   useEffect(() => {
     console.log("currentUser: ", currentUser);
@@ -147,24 +145,26 @@ const MyOrders = () => {
       "Are you sure you want to cancel this order?"
     );
 
-    if (confirmed && orderStatus === "PAID") {
-      console.log(orderStatus);
-      try {
-        await axios.put(
-          `http://localhost:8080/MealNUS-war/rest/orders/cancel/${orderId}`
-        );
-        alert("Order cancelled successfully");
-        // Refresh the order list
-        const response = await axios.get(
-          `http://localhost:8080/MealNUS-war/rest/orders/email/${currentUser.email}`
-        );
-        setOrders(response.data);
-      } catch (error) {
-        console.error("Error cancelling order:", error);
+    if (confirmed) {
+      if (orderStatus === "PAID") {
+        console.log(orderStatus)
+        try {
+          await axios.put(
+            `http://localhost:8080/MealNUS-war/rest/orders/cancel/${orderId}`
+          );
+          alert("Order cancelled successfully");
+          // Refresh the order list
+          const response = await axios.get(
+            `http://localhost:8080/MealNUS-war/rest/orders/email/${currentUser.email}`
+          );
+          setOrders(response.data);
+        } catch (error) {
+          console.error("Error cancelling order:", error);
+        }
+      } else {
+        console.log(orderStatus)
+        alert("This order cannot be cancelled.");
       }
-    } else {
-      console.log(orderStatus);
-      alert("This order cannot be cancelled.");
     }
   };
 
@@ -181,15 +181,10 @@ const MyOrders = () => {
     setExpandedRows(newExpandedRows);
   };
 
-  const openReviewDialog = (orderId, mealboxName, mealBoxId) => {
+  const openReviewDialog = (orderId, mealboxName) => {
     setSelectedOrderId(orderId);
     setSelectedMealboxName(mealboxName);
-    setSelectedMealboxId(mealBoxId);
     setReviewDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setSuccessDialogOpen(false);
   };
 
   const resetReviewForm = () => {
@@ -197,7 +192,7 @@ const MyOrders = () => {
     setNewReviewDescription("");
   };
 
-  const handleReviewSubmit = async () => {
+  const handleReviewSubmit = async (orderId) => {
     if (newReviewDescription === "") {
       setErrorMessage("Please enter both the title and description.");
       return;
@@ -209,10 +204,7 @@ const MyOrders = () => {
       reviewDate: new Date().toISOString(),
       stars: newReviewRating,
       comments: newReviewDescription,
-      mealBoxId: selectedMealboxId,
-      userId: currentUser.userId,
     };
-    console.log(JSON.stringify(postData));
 
     fetch("http://localhost:8080/MealNUS-war/rest/Review", {
       method: "POST",
@@ -232,8 +224,6 @@ const MyOrders = () => {
     setNewReviewRating(null);
     setNewReviewDescription("");
     setReviewDialogOpen(false);
-
-    setSuccessDialogOpen(true);
   };
 
   if (!currentUser || !currentUser.email) {
@@ -291,8 +281,7 @@ const MyOrders = () => {
             <StatBox
               title={
                 "S$" +
-                orders
-                  .filter((order) => order.orderStatus !== "CANCELLED")
+                orders.filter((order) => order.orderStatus !== "CANCELLED")
                   .reduce((total, order) => {
                     const orderTotal = order.orderDetails
                       .map((detail) => detail.key.itemPrice * detail.value)
@@ -345,24 +334,22 @@ const MyOrders = () => {
                       ).toLocaleDateString()}
                     </TableCell>
                     <TableCell>{order.address}</TableCell>
-                    <TableCell>
-                      {order.orderDetails.reduce((total, detail) => {
-                        const price = detail.key.itemPrice;
-                        const quantity = detail.value;
-                        return total + price * quantity;
-                      }, 0)}
+                    <TableCell>{order.orderDetails.reduce((total, detail) => {
+                      const price = detail.key.itemPrice;
+                      const quantity = detail.value;
+                      return total + (price * quantity);
+                    }, 0)}
                     </TableCell>
                     <TableCell>{order.orderStatus}</TableCell>
                     <TableCell>
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={() =>
-                          handleCancelOrder(order.orderId, order.orderStatus)
-                        }
+                        onClick={() => handleCancelOrder(order.orderId, order.orderStatus)}
                         disabled={
                           order.orderStatus !== "PAID" &&
-                          order.orderStatus !== "PREPARING"
+                          order.orderStatus !== "PREPARING" &&
+                          order.orderStatus !== "DELIVERING"
                         }
                       >
                         Cancel
@@ -403,21 +390,18 @@ const MyOrders = () => {
                                 </TableCell>
                                 <TableCell>{orderDetail.value}</TableCell>
                                 <TableCell>
-                                  {order.orderStatus === "COMPLETED" && (
-                                    <Button
-                                      variant="contained"
-                                      color="primary"
-                                      onClick={() =>
-                                        openReviewDialog(
-                                          order.orderId,
-                                          orderDetail.key.itemName,
-                                          orderDetail.key.mealBoxId
-                                        )
-                                      }
-                                    >
-                                      Leave Review
-                                    </Button>
-                                  )}
+                                  <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() =>
+                                      openReviewDialog(
+                                        order.orderId,
+                                        orderDetail.key.itemName
+                                      )
+                                    }
+                                  >
+                                    Leave Review
+                                  </Button>
                                 </TableCell>
                               </TableRow>
                             ))}
@@ -465,14 +449,6 @@ const MyOrders = () => {
           <Box display="flex" justifyContent="flex-end" marginTop="16px">
             <Button
               variant="contained"
-              color="primary"
-              onClick={handleReviewSubmit}
-              style={{ marginRight: "8px" }}
-            >
-              Submit Review
-            </Button>
-            <Button
-              variant="contained"
               color="error"
               onClick={() => {
                 setReviewDialogOpen(false);
@@ -481,25 +457,16 @@ const MyOrders = () => {
             >
               Cancel
             </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleReviewSubmit}
+              style={{ marginRight: "8px" }}
+            >
+              Submit Review
+            </Button>
           </Box>
         </DialogContent>
-      </Dialog>
-      <Dialog
-        open={successDialogOpen}
-        onClose={handleCloseDialog}
-        aria-labelledby="success-dialog-title"
-      >
-        <DialogTitle id="success-dialog-title">Success</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            You have successfully left a review!
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Ok
-          </Button>
-        </DialogActions>
       </Dialog>
       <Box m="20px">
         {/* GRID & CHARTS */}
