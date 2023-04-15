@@ -56,7 +56,7 @@ function UpdateOrder(props) {
     const [orderDate, setorderDate] = useState('');
     const [priceList, setpriceList] = useState([]);
     const [costList, setcostList] = useState('');
-    const [orderDetails, setorderDetails] = useState({});
+    const [orderDetails, setorderDetails] = useState([]);
     const [user, setuser] = useState({});
     const [userId, setUserId] = useState('');
 
@@ -267,7 +267,7 @@ function UpdateOrder(props) {
                                     readOnly
                                     className="form-control"
                                     value={newOrderDate}
-                                    onChange={handleorderDate}
+                                // onChange={handleorderDate}
                                 />
                             </div>
                             <div className="form-group">
@@ -276,8 +276,9 @@ function UpdateOrder(props) {
                                     id="inputCode"
                                     readOnly
                                     className="form-control"
-                                    value={priceList}
-                                    onChange={handlePriceChange}
+                                    value={orderDetails.map((detail) => detail.key.itemPrice * detail.value)
+                                        .reduce((total, price) => total + price, 0)}
+                                // onChange={handlePriceChange}
                                 />
                             </div>
                             <div className="form-group">
@@ -288,7 +289,8 @@ function UpdateOrder(props) {
                                     readOnly
                                     className="form-control"
                                     value={newDeliveryDate}
-                                    onChange={handleDeliverydateChange} />
+                                // onChange={handleDeliverydateChange} 
+                                />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="dropdown">Select an option for status:</label>
