@@ -396,7 +396,7 @@ const Forum = () => {
                           <IconButton
                             aria-label="thumbs up"
                             onClick={() =>
-                              handleThumbUp(post.postId, post.user.userId)
+                              handleThumbUp(post.postId, currentUser.userId)
                             }
                           >
                             <ThumbUp className={classes.thumbIcon} />
@@ -415,7 +415,7 @@ const Forum = () => {
                           <IconButton
                             aria-label="thumbs down"
                             onClick={() =>
-                              handleThumbDown(post.postId, post.user.userId)
+                              handleThumbDown(post.postId, currentUser.userId)
                             }
                           >
                             <ThumbDown className={classes.thumbIcon} />

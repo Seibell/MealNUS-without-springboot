@@ -72,14 +72,20 @@ public class ForumSessionBean implements ForumSessionBeanLocal {
 
     @Override
     public Boolean increaseThumbsUp(Long postId, Long userId) {
+        System.out.println(userId);
         ForumPost post = retrieveForumPostById(postId);
+        System.out.println(post.getLikedUsers().toString());
         //check if the user alr liked the post
         for (User user : post.getLikedUsers()) {
+            System.out.println(user.getEmail() + " " + user.getUserId());
+            
             if (user.getUserId() == userId) {
+                System.out.println("Line 79");
                 return false;
             }
         }
         User currUser = em.find(User.class, userId);
+
         post.setNumThumbsUp(post.getNumThumbsUp() + 1);
         List<User> likedUsers = post.getLikedUsers();
         likedUsers.add(currUser);
