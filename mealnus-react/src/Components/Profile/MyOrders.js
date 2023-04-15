@@ -61,11 +61,11 @@ const MyOrders = () => {
 
   useEffect(() => {
     console.log("currentUser: ", currentUser);
-    if (currentUser && currentUser.email) {
+    if (currentUser && currentUser.userId) {
       const fetchOrders = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:8080/MealNUS-war/rest/orders/email/${currentUser.email}`
+            `http://localhost:8080/MealNUS-war/rest/orders/userId/${currentUser.userId}`
           );
           setOrders(response.data);
         } catch (error) {
@@ -157,7 +157,7 @@ const MyOrders = () => {
         alert("Order cancelled successfully");
         // Refresh the order list
         const response = await axios.get(
-          `http://localhost:8080/MealNUS-war/rest/orders/email/${currentUser.email}`
+          `http://localhost:8080/MealNUS-war/rest/orders/userId/${currentUser.userId}`
         );
         setOrders(response.data);
       } catch (error) {
@@ -234,7 +234,7 @@ const MyOrders = () => {
     }
   };
 
-  if (!currentUser || !currentUser.email) {
+  if (!currentUser || !currentUser.userId) {
     return <div>Loading...</div>;
   }
 

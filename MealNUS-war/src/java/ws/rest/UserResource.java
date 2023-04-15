@@ -36,6 +36,7 @@ import javax.ws.rs.core.UriInfo;
 import util.exception.CreditCardNotFoundException;
 import util.exception.InvalidLoginException;
 import util.exception.UserAlreadyExistsException;
+import util.exception.UserNotFoundException;
 import ws.model.RetrieveAllUsersResponse;
 
 /**
@@ -184,6 +185,20 @@ public class UserResource {
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
+        }
+    }
+
+    @GET
+    @Path(value = "retrieveUser/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveUserFromUserId(@PathParam("userId") long userId) {
+        User user = null;
+        try {
+            user = userSessionBeanLocal.retrieveUserById(userId);
+            return Response.status(Response.Status.OK).entity(user).build();
+        } catch (UserNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
 }

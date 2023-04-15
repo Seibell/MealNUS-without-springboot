@@ -79,11 +79,11 @@ const Member = () => {
         });
     }, [memberData]);
 
-    const getOrders = (userEmail) => {
-        axios.get(`http://localhost:8080/MealNUS-war/rest/orders/retrieveOrdersByUser/${userEmail}`)
+    const getOrders = (userId) => {
+        axios.get(`http://localhost:8080/MealNUS-war/rest/orders/retrieveOrdersByUser/${userId}`)
             .then(response => {
                 const updatedMemberData = memberData.map(member => {
-                    if (member.email === userEmail) {
+                    if (member.userId === userId) {
                         member.orderCount = response.data.length;
                     }
                     return member;
@@ -97,7 +97,7 @@ const Member = () => {
 
     useEffect(() => {
         memberData.forEach(member => {
-            getOrders(member.email, setMemberData);
+            getOrders(member.userId, setMemberData);
         });
     }, [memberData]);
 

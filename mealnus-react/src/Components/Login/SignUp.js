@@ -69,6 +69,10 @@ function SignUp() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (!firstName || !lastName  || !email || !password) {
+            setError('Please fill in all fields');
+            return;
+        }
 
         if (error) {
             setError('Please enter a valid email address');

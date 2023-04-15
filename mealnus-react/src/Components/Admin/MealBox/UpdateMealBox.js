@@ -414,10 +414,17 @@ function UpdateMealBox(props) {
                                 <input
                                     id="inputCode"
                                     required
+                                    type="text"
                                     className="form-control"
+                                    pattern='[0-9]*'
+                                    inputMode='numeric'
                                     value={itemCode}
                                     onChange={handleCodeChange}
+                                    title="MealBox code must be numeric."
                                 />
+                                {itemCode.length > 0 && !/^[0-9 ]+$/.test(itemCode) &&
+                                    <p className="text-danger">MealBox code can only contain numbers.</p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="inputName">Item Cost</label>

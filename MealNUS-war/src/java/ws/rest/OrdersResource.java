@@ -128,11 +128,11 @@ public class OrdersResource {
     }
 
     @GET
-    @Path(value = "retrieveOrdersByUser/{userEmail}")
+    @Path(value = "retrieveOrdersByUser/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveOrdersByUser(@PathParam("userEmail") String userEmail) {
+    public Response retrieveOrdersByUser(@PathParam("userId") Long userId) {
         try {
-            List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByUserEmail(userEmail);
+            List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByUserId(userId);
             GenericEntity<List<OrderEntity>> entity
                     = new GenericEntity<List<OrderEntity>>(results) {
             };
@@ -192,60 +192,60 @@ public class OrdersResource {
                 entity).build();
     } //end
 
-    // This method is an alternative of the next 2 methods
-    // http://localhost:8080/MealNUS-war/rest/orders/query?{queryParam that you are using}={variable name you are searching for}
-    // e.g. http://localhost:8080/MealNUS-war/rest/orders/query?mealBoxName=Supreme Meat Box
-    @GET
-    @Path("/query")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response searchOrders(@QueryParam("orderStatus") OrderStatus orderStatus,
-            @QueryParam("userEmail") String email,
-            @QueryParam("mealBoxName") String mealBoxName) {
-
-        if (orderStatus != null) {
-            List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByOrderStatus(orderStatus);
-            GenericEntity<List<OrderEntity>> entity
-                    = new GenericEntity<List<OrderEntity>>(results) {
-            };
-            return Response.status(200).entity(
-                    entity).build();
-        } else if (email != null) {
-            try {
-                List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByUserEmail(email);
-                GenericEntity<List<OrderEntity>> entity
-                        = new GenericEntity<List<OrderEntity>>(results) {
-                };
-                return Response.status(200).entity(
-                        entity).build();
-            } catch (UserNotFoundException ex) {
-                JsonObject exception = Json.createObjectBuilder()
-                        .add("error", "Not found")
-                        .build();
-                return Response.status(404).entity(exception)
-                        .build();
-            }
-        } else if (mealBoxName != null) {
-            List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByMealBoxName(mealBoxName);
-            GenericEntity<List<OrderEntity>> entity
-                    = new GenericEntity<List<OrderEntity>>(results) {
-            };
-            return Response.status(200).entity(
-                    entity).build();
-        } else {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "No query conditions")
-                    .build();
-            return Response.status(400).entity(exception).build();
-        }
-    }
+//    // This method is an alternative of the next 2 methods
+//    // http://localhost:8080/MealNUS-war/rest/orders/query?{queryParam that you are using}={variable name you are searching for}
+//    // e.g. http://localhost:8080/MealNUS-war/rest/orders/query?mealBoxName=Supreme Meat Box
+//    @GET
+//    @Path("/query")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response searchOrders(@QueryParam("orderStatus") OrderStatus orderStatus,
+//            @QueryParam("userEmail") String email,
+//            @QueryParam("mealBoxName") String mealBoxName) {
+//
+//        if (orderStatus != null) {
+//            List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByOrderStatus(orderStatus);
+//            GenericEntity<List<OrderEntity>> entity
+//                    = new GenericEntity<List<OrderEntity>>(results) {
+//            };
+//            return Response.status(200).entity(
+//                    entity).build();
+//        } else if (email != null) {
+//            try {
+//                List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByUserEmail(email);
+//                GenericEntity<List<OrderEntity>> entity
+//                        = new GenericEntity<List<OrderEntity>>(results) {
+//                };
+//                return Response.status(200).entity(
+//                        entity).build();
+//            } catch (UserNotFoundException ex) {
+//                JsonObject exception = Json.createObjectBuilder()
+//                        .add("error", "Not found")
+//                        .build();
+//                return Response.status(404).entity(exception)
+//                        .build();
+//            }
+//        } else if (mealBoxName != null) {
+//            List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByMealBoxName(mealBoxName);
+//            GenericEntity<List<OrderEntity>> entity
+//                    = new GenericEntity<List<OrderEntity>>(results) {
+//            };
+//            return Response.status(200).entity(
+//                    entity).build();
+//        } else {
+//            JsonObject exception = Json.createObjectBuilder()
+//                    .add("error", "No query conditions")
+//                    .build();
+//            return Response.status(400).entity(exception).build();
+//        }
+//    }
 
     // e.g. http://localhost:8080/MealNUS-war/rest/orders/email/user4@gmail.com
     @GET
-    @Path("/email/{email}")
+    @Path("/userId/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOrdersByUserEmail(@PathParam("email") String email) {
+    public Response getOrdersByUserEmail(@PathParam("userId") Long userId) {
         try {
-            List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByUserEmail(email);
+            List<OrderEntity> results = orderSessionBeanLocal.retrieveOrdersByUserId(userId);
             GenericEntity<List<OrderEntity>> entity
                     = new GenericEntity<List<OrderEntity>>(results) {
             };

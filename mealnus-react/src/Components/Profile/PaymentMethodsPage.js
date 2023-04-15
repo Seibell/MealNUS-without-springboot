@@ -115,6 +115,11 @@ function PaymentMethodsPage() {
       expiryDate: !isExpiryDateValid,
     });
 
+    if (!cardOwnerName || !creditCardNumber || !cvv || !expiryDate) {
+      setError('Please fill in all fields');
+      return;
+    }
+
     if (!isCardNumberValid || !isExpiryDateValid) {
       return;
     }
@@ -170,11 +175,9 @@ function PaymentMethodsPage() {
         <NavBar />
         <Box style={{ paddingLeft: "20px", paddingRight: "20px" }}>
           <h1>Payment Methods</h1>
-          <div style={{textAlign: "right"}}>
           <Button variant="contained" color="primary" onClick={handleClickOpen}>
             Add Credit Card
           </Button>
-          </div>
           <hr />
           {loading ? (
             <CircularProgress />

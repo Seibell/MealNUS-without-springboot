@@ -56,8 +56,6 @@ public class User implements Serializable {
     @OneToMany
     private List<Review> reviews;
     
-    @JsonManagedReference
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderEntity> orders;
     
     @OneToMany

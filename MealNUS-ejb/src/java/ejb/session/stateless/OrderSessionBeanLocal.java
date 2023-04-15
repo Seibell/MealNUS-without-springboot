@@ -34,7 +34,7 @@ public interface OrderSessionBeanLocal {
 
     public List<OrderEntity> retrieveOrdersByOrderStatus(OrderStatus orderStatus);
 
-    public List<OrderEntity> retrieveOrdersByUserEmail(String email) throws UserNotFoundException;
+    public List<OrderEntity> retrieveOrdersByUserId(Long userId) throws UserNotFoundException;
 
     public List<OrderEntity> retrieveOrdersByOrderDate(Date queryDate);
 
