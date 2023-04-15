@@ -687,7 +687,7 @@ const Promotion = () => {
         },
         {
             field: "promotionId",
-            headerName: "Action",
+            headerName: "Actions",
             headerClassName: 'headerName',
             renderCell: (params) => (
                 <div>
