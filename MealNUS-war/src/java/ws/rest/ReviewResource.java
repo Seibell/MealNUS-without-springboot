@@ -65,8 +65,8 @@ public class ReviewResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createNewReview(CreateReviewResponse createReviewResponse) throws UserNotFoundException, MealBoxNotFoundException {
 
-        System.out.println(createReviewResponse.getItemCode() == null);
-        MealBox test = mealBoxSessionBeanLocal.retrieveMealBoxById(createReviewResponse.getItemCode());
+        System.out.println(createReviewResponse.getMealBoxId() == null);
+        MealBox test = mealBoxSessionBeanLocal.retrieveMealBoxById(createReviewResponse.getMealBoxId());
         Review review = new Review(
                 createReviewResponse.getReviewDate(),
                 createReviewResponse.getStars(),
@@ -81,7 +81,7 @@ public class ReviewResource {
         test.addReview(review);
         mealBoxSessionBeanLocal.updateMealBox(test);
         System.out.println("###########TEST HERE test:" + test.getReviews().toString());
-        System.out.println("###########TEST HERE sessionbean:" + mealBoxSessionBeanLocal.retrieveMealBoxById(createReviewResponse.getItemCode()).getReviews().toString());
+        System.out.println("###########TEST HERE sessionbean:" + mealBoxSessionBeanLocal.retrieveMealBoxById(createReviewResponse.getMealBoxId()).getReviews().toString());
         return Response.status(Status.OK).entity(review).build();
     }
 

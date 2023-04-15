@@ -16,17 +16,17 @@ public class CreateReviewResponse {
     private Date reviewDate;
     private Integer stars;
     private String comments;
-    private Long itemCode;
+    private Long mealBoxId;
     private Long userId;
 
     public CreateReviewResponse() {
     }
 
-    public CreateReviewResponse(Date reviewDate, Integer stars, String comments, Long itemCode, Long userId) {
+    public CreateReviewResponse(Date reviewDate, Integer stars, String comments, Long mealBoxId , Long userId) {
         this.reviewDate = reviewDate;
         this.stars = stars;
         this.comments = comments;
-        this.itemCode = itemCode;
+        this.mealBoxId = mealBoxId;
         this.userId = userId;
     }
 
@@ -54,12 +54,12 @@ public class CreateReviewResponse {
         this.comments = comments;
     }
 
-    public Long getItemCode() {
-        return itemCode;
+    public Long getMealBoxId() {
+        return mealBoxId;
     }
 
-    public void setItemCode(Long itemCode) {
-        this.itemCode = itemCode;
+    public void setMealBoxId(Long mealBoxId) {
+        this.mealBoxId = mealBoxId;
     }
 
     public Long getUserId() {
