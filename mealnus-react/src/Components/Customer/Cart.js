@@ -24,14 +24,17 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import NavBar from "../Navigation/NavBar.js";
 import { CartContext } from "../../Context/CartContext.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext.js";
+import Axios from "axios";
 
 const Cart = () => {
   const [cart, setCart] = useContext(CartContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
+  const location = useLocation();
+  const [mealBoxes, setMealBoxes] = useState({ mealBoxEntities: [] });
 
   const navigate = useNavigate();
 
@@ -42,6 +45,25 @@ const Cart = () => {
       navigate("/checkout");
     }
   };
+
+  useEffect(() => {
+    Axios.get(
+      "http://localhost:8080/MealNUS-war/rest/Mealbox/retrieveAllMealBoxes"
+    )
+      .then((response) => {
+        const updatedMealBoxes = response.data.mealBoxEntities.map(
+          (mealBox) => ({
+            ...mealBox,
+            quantityAvailable: mealBox.quantityAvailable,
+          })
+        );
+        setMealBoxes({ mealBoxEntities: updatedMealBoxes });
+        console.log(updatedMealBoxes);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [location]);
 
   const removeFromCart = (mealBox) => {
     const newCart = cart.filter((item) => item.mealBoxId !== mealBox.mealBoxId);
@@ -59,9 +81,16 @@ const Cart = () => {
   };
 
   const updateMealBoxQuantity = (mealBoxId, increment) => {
+    const mealBox = mealBoxes.mealBoxEntities.find(
+      (mealBox) => mealBox.mealBoxId === mealBoxId
+    );
     const updatedCart = cart.map((item) => {
       if (item.mealBoxId === mealBoxId) {
-        return { ...item, quantity: Math.max(item.quantity + increment, 1) };
+        const updatedQuantity = item.quantity + increment;
+        if (increment > 0 && updatedQuantity > mealBox.quantityAvailable) {
+          return item; 
+        }
+        return { ...item, quantity: Math.max(updatedQuantity, 1) };
       }
       return item;
     });
@@ -69,7 +98,6 @@ const Cart = () => {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     calculateTotal(updatedCart);
   };
-
   useEffect(() => {
     calculateTotal(cart);
   }, [cart]);
