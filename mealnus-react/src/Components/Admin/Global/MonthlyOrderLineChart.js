@@ -1,10 +1,10 @@
-import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
-import { tokens } from "./AdminTheme";
-import { useState, useEffect } from "react";
+import { ResponsiveLine } from "@nivo/line";
 import Axios from "axios";
-import moment from "moment-timezone";
 import { scaleLinear } from 'd3-scale';
+import moment from "moment-timezone";
+import { useEffect, useState } from "react";
+import { tokens } from "./AdminTheme";
 
 const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
     const theme = useTheme();

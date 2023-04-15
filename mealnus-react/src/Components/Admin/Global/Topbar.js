@@ -1,21 +1,12 @@
 
-import { useState, useEffect, useContext } from "react";
+import Typography from '@mui/material/Typography';
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ColorModeContext, tokens } from "./AdminTheme";
-import Typography from '@mui/material/Typography';
 
-import { Box, IconButton, Menu, MenuItem, useTheme, Avatar } from "@mui/material";
-import InputBase from "@mui/material/InputBase";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import SearchIcon from "@mui/icons-material/Search";
-import SignalWifi3BarOutlinedIcon from '@mui/icons-material/SignalWifi3BarOutlined';
-import FiveGOutlinedIcon from '@mui/icons-material/FiveGOutlined';
-import SignalCellular3BarOutlinedIcon from '@mui/icons-material/SignalCellular3BarOutlined';
-import BluetoothOutlinedIcon from '@mui/icons-material/BluetoothOutlined';
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import { Avatar, Box, IconButton, Menu, MenuItem, useTheme } from "@mui/material";
 
 import ProfShalinda from "../../../Assets/shalinda.jpg";
 

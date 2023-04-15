@@ -1,45 +1,24 @@
 ///this one is the current no working one
-import "./MealBoxes.css";
 import Axios from "axios";
 import NavBar from "../Navigation/NavBar.js";
+import "./MealBoxes.css";
 //import { parseISO, format } from "date-fns";
-import { useState, useEffect, useContext } from "react";
-import { CartContext } from "../../Context/CartContext";
-import { useNavigate, useLocation } from "react-router-dom";
-import TextField from "@mui/material/TextField";
-import ReactStars from "react-rating-stars-component";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import BannerBackground from "../../Assets/home-banner-background.png";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import { useContext, useEffect, useState } from "react";
+import ReactStars from "react-rating-stars-component";
+import { useLocation, useNavigate } from "react-router-dom";
+import { CartContext } from "../../Context/CartContext";
 
-import {
-  Container,
-  Grid,
-  Card,
-  Chip,
-  CardMedia,
-  CardContent,
-  Typography,
-  CardActions,
-  Button,
-  Box,
-  CardActionArea,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  ButtonGroup,
-  ListItemAvatar,
-  Avatar,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-} from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import {
+  Avatar, Box, Button, ButtonGroup, Card, CardActionArea, CardActions, CardContent, CardMedia, Chip, Container, Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle, Grid, List,
+  ListItem, ListItemAvatar, ListItemText, Typography
+} from "@mui/material";
 import { AuthContext } from "../../Context/AuthContext";
 
 const calculateAverageRating = (reviews) => {
