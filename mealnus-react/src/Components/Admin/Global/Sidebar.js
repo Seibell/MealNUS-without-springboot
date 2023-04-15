@@ -1,22 +1,23 @@
-import { useState } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
-import "react-pro-sidebar/dist/css/styles.css";
-import { tokens } from "./AdminTheme";
+import EggOutlinedIcon from '@mui/icons-material/EggOutlined';
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import LocalPizzaOutlinedIcon from '@mui/icons-material/LocalPizzaOutlined';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import TakeoutDiningOutlinedIcon from '@mui/icons-material/TakeoutDiningOutlined';
-import EggOutlinedIcon from '@mui/icons-material/EggOutlined';
-import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
-import LocalPizzaOutlinedIcon from '@mui/icons-material/LocalPizzaOutlined';
-import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { useState } from "react";
+import { Menu, MenuItem, ProSidebar } from "react-pro-sidebar";
+import "react-pro-sidebar/dist/css/styles.css";
+import { Link } from "react-router-dom";
+import { tokens } from "./AdminTheme";
 
-import ProfShalinda from "../../../Assets/shalinda.jpg";
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 import mealNUSLogo from '../../../Assets/MealNUS-Logo.png';
+import ProfShalinda from "../../../Assets/shalinda.jpg";
+
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -45,6 +46,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const Sidebar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("");
 
@@ -69,38 +71,37 @@ const Sidebar = () => {
                 height: "1612px",
             }}
         >
-            <ProSidebar collapsed={isCollapsed} collapsedWidth={75} width={isCollapsed ? 60 : 280} >
+            <ProSidebar collapsed={isSmallScreen ? true : isCollapsed} collapsedWidth={75} width={isSmallScreen ? 60 : 280} >
                 <Menu iconShape="square">
                     {/* LOGO AND MENU ICON */}
                     <MenuItem
                         onClick={() => setIsCollapsed(!isCollapsed)}
-                        icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
+                        icon={isSmallScreen ? undefined : (isCollapsed ? <MenuOutlinedIcon /> : undefined)}
                         style={{
                             margin: "0px 0 20px -5px",
                             color: colors.mealNUSBlue[100],
                         }}
                     >
-                        {!isCollapsed && (
+                        {!isSmallScreen && (
                             <Box
                                 display="flex"
                                 justifyContent="space-between"
                                 alignItems="center"
                                 ml="15px"
                             >
-                                <div style={{ paddingLeft: '30px' }}>
+                                <div style={{ paddingLeft: isCollapsed ? '15px' : '30px' }}>
                                     <img src={mealNUSLogo} alt="MealNUS Logo" style={{ width: '100%', height: 'auto' }} />
                                 </div>
-                                {/* <Typography variant="h3" color={colors.grey[100]}>
-                                    MealNUS Inc.
-                                </Typography> */}
-                                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                                    <MenuOutlinedIcon />
-                                </IconButton>
+                                {!isCollapsed && (
+                                    <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                                        <MenuOutlinedIcon />
+                                    </IconButton>
+                                )}
                             </Box>
                         )}
                     </MenuItem>
 
-                    {!isCollapsed && (
+                    {!isSmallScreen && (
                         <Box mb="20px">
                             <Box display="flex" justifyContent="center" alignItems="center">
                                 <img
@@ -132,7 +133,7 @@ const Sidebar = () => {
                         </Box>
                     )}
 
-                    <Box paddingLeft={isCollapsed ? undefined : "5%"}>
+                    <Box paddingLeft={isSmallScreen ? undefined : "5%"}>
                         <Item
                             title="Dashboard"
                             to="/admindashboard"
@@ -154,6 +155,7 @@ const Sidebar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
+
 
                         <Typography
                             variant="h6"

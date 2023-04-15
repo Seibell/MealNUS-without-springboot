@@ -544,6 +544,8 @@ const Dashboard = () => {
                                     gridColumn="span 7"
                                     gridRow="span 2"
                                     backgroundColor={colors.primary[400]}
+                                    overflow="auto"
+                                    overflow-x="auto"
                                 >
                                     <Box
                                         mt="20px"
@@ -587,6 +589,7 @@ const Dashboard = () => {
                                     gridRow="span 2"
                                     backgroundColor={colors.primary[400]}
                                     p="30px"
+                                    overflow="auto"
                                 >
                                     <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
                                         Order Summary (by Status)
@@ -604,14 +607,7 @@ const Dashboard = () => {
                                     gridRow="span 2"
                                     backgroundColor={colors.primary[400]}
                                     overflow="auto"
-
-
-                                // gridColumn="span 3"
-                                // backgroundColor={colors.primary[400]}
-                                // display="flex"
-                                // alignItems="center"
-                                // justifyContent="center"
-
+                                    overflow-x="auto"
                                 >
                                     <Box
                                         display="flex"
@@ -622,16 +618,14 @@ const Dashboard = () => {
                                         p="30px"
                                         height="20%"
                                     >
-
-                                        <Typography color={colors.mealNUSBlue[100]} variant="h5" fontWeight="600">
+                                        <Typography color={colors.mealNUSBlue[100]} variant="h5" fontWeight="600" >
                                             <ReceiptLongIcon sx={{ color: colors.mealNUSBlue[100], fontSize: "26px" }} />
                                             {' '}Recent Orders
-
                                         </Typography>
                                     </Box>
                                     <Box position="relative" height="100%">
                                         <Box height="90%" >
-                                            {orderData.slice(0, showAll ? orderData.length : 3).map((order, i) => (
+                                            {orderData.slice(0, showAll ? 5 : 3).map((order, i) => (
                                                 <Box
                                                     key={`${order.orderId}-${i}`}
                                                     display="flex"
@@ -642,54 +636,36 @@ const Dashboard = () => {
                                                     height="20%"
                                                     overflow-x="auto"
                                                 >
-                                                    <Box textAlign="left" width="100px">
+                                                    <Box textAlign="left" width="60px" overflow="hidden" textOverflow="ellipsis">
                                                         <Typography color={colors.mealNUSBlue[100]} variant="h5" fontWeight="600">
                                                             {i + 1}
                                                         </Typography>
-                    
                                                     </Box>
-                                                    <Box textAlign="left" color={colors.grey[100]} width="100px">
+                                                    <Box textAlign="center" color={colors.grey[100]} width="200px" overflow="hidden" textOverflow="ellipsis">
                                                         {moment
                                                             .utc(order.orderDate, 'YYYY-MM-DD HH:mm:ss')
                                                             .tz('Asia/Singapore')
                                                             .format('DD/MM/YYYY HH:mm:ss')}
                                                     </Box>
-                                                    <Box textAlign="left" color={colors.grey[100]} width="100px">
+                                                    <Box
+                                                        textAlign="center"
+                                                        color={colors.grey[100]}
+                                                        height="50px"
+                                                        width="300px"
+                                                        overflow="hidden"
+                                                        textOverflow="ellipsis"
+                                                        display="flex"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                    >
                                                         {order.address.replace(/_/g, ' ')
                                                             .split(' ')
                                                             .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
                                                             .join(' ')}
                                                     </Box>
-                                                    <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px">
-                                                        {/* <img src={mastercardLogo} alt={"Card type"} style={{ maxWidth: '24px', maxHeight: '24px', marginRight: '8px', width: 'auto', height: 'auto' }} />
-                                                        SGD&nbsp; */}
+                                                    <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px" overflow="hidden" textOverflow="ellipsis" justifyContent="center" >
                                                         <Typography>{order.orderDetails.map(detail => detail.key.itemPrice * detail.value).reduce((total, price) => total + price, 0)}</Typography>
                                                     </Box>
-                                                    {/* Above cc logo display method to be replaced by below once confirmed */}
-                                                    {/* <Box display="flex" alignItems="center" color={colors.grey[100]} width="100px">
-                                                        <img
-                                                            src={
-                                                                order.user.creditCards[0]?.startsWith("4")
-                                                                    ? visaLogo
-                                                                    : order.user.creditCards[0]?.startsWith("5")
-                                                                        ? mastercardLogo
-                                                                        : ""
-                                                            }
-                                                            alt={"Card type"}
-                                                            style={{
-                                                                maxWidth: "24px",
-                                                                maxHeight: "30px",
-                                                                marginRight: "8px",
-                                                                width: "auto",
-                                                                height: "auto",
-                                                            }}
-                                                        />
-                                                        <Typography>
-                                                            {order.orderDetails
-                                                                .map((detail) => detail.key.itemPrice * detail.value)
-                                                                .reduce((total, price) => total + price, 0)}
-                                                        </Typography>
-                                                    </Box> */}
                                                     <Box
                                                         textAlign="center"
                                                         backgroundColor={getOrderStatusColor(order.orderStatus)}
@@ -715,7 +691,7 @@ const Dashboard = () => {
                                                         backgroundColor: colors.mealNUSBlue[100],
                                                     }}
                                                 >
-                                                     <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.white[100] }}>View All</Typography>
+                                                    <Typography variant="body1" style={{ whiteSpace: "nowrap", color: colors.white[100] }}>View All</Typography>
                                                 </Button>
 
                                             )}
@@ -743,7 +719,8 @@ const Dashboard = () => {
                                     gridRow="span 2"
                                     backgroundColor={colors.primary[400]}
                                     p="20px"
-                                // overflow="auto"
+                                    overflow="auto"
+                                    overflow-x="auto"
                                 >
                                     <Typography variant="h5" fontWeight="600" color={colors.mealNUSBlue[100]}>
                                         Pending Orders (by Address)
@@ -759,7 +736,8 @@ const Dashboard = () => {
                                     gridColumn="span 12"
                                     gridRow="span 3"
                                     backgroundColor={colors.primary[400]}
-                                    // overflow="auto"
+                                    overflow="auto"
+                                    overflow-x="auto"
                                 >
                                     <Box
                                         mt="20px"

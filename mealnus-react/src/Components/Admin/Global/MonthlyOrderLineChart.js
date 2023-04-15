@@ -124,7 +124,7 @@ const MonthlyOrderLineChart = ({ isCustomLineColors = false, isDashboard = false
                     itemsSpacing: 0,
                     itemDirection: "left-to-right",
                     itemWidth: 100,
-                    itemHeight: 380,
+                    itemHeight: 200,
                     itemOpacity: 0.7,
                     symbolSize: 6,
                     symbolShape: "circle",
