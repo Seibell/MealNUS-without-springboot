@@ -363,8 +363,7 @@ const MyOrders = () => {
                         }
                         disabled={
                           order.orderStatus !== "PAID" &&
-                          order.orderStatus !== "PREPARING" &&
-                          order.orderStatus !== "DELIVERING"
+                          order.orderStatus !== "PREPARING"
                         }
                       >
                         Cancel
