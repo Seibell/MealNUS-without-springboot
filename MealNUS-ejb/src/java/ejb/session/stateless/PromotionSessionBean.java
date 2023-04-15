@@ -186,13 +186,13 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
     public void updatePromotion(Long promoId, Promotion promotion) throws PromotionNotFoundException, MealBoxNotFoundException, PromotionAlreadyAppliedException {
         //Potentially could change it to have each attribute changed using the set method
         //It is possible to let the user choose which fields to change the same way a book was edited in the assignment
-        if (promotion.getIsApplied() == true) {
-            if (promotion.getCategoryName().equals("Site-Wide")) {
-                disablePromotion(promotion.getPromotionCode());
-            } else {
-                disablePromotionAcrossCategory(promotion.getPromotionCode(), promotion.getCategoryName());
-            }
-        }
+//        if (promotion.getIsApplied() == true) {
+//            if (promotion.getCategoryName().equals("Site-Wide")) {
+//                disablePromotion(promotion.getPromotionCode());
+//            } else {
+//                disablePromotionAcrossCategory(promotion.getPromotionCode(), promotion.getCategoryName());
+//            }
+//        }
         
         Promotion updatedPromo = em.find(Promotion.class, promoId);
         updatedPromo.setCategoryName(promotion.getCategoryName());
@@ -203,13 +203,13 @@ public class PromotionSessionBean implements PromotionSessionBeanLocal {
         updatedPromo.setPromotionCode(promotion.getPromotionCode());
         updatedPromo.setPromotionName(promotion.getPromotionName());
         
-        if (updatedPromo.getIsApplied() == true) {
-            if (updatedPromo.getCategoryName().equals("Site-Wide")) {
-                applyPromotionAcrossPlatform(updatedPromo.getPromotionCode());
-            } else {
-                applyPromotionAcrossCategory(updatedPromo.getPromotionCode(), updatedPromo.getCategoryName());
-            }
-        }
+//        if (updatedPromo.getIsApplied() == true) {
+//            if (updatedPromo.getCategoryName().equals("Site-Wide")) {
+//                applyPromotionAcrossPlatform(updatedPromo.getPromotionCode());
+//            } else {
+//                applyPromotionAcrossCategory(updatedPromo.getPromotionCode(), updatedPromo.getCategoryName());
+//            }
+//        }
     }
 
     @Override
