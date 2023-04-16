@@ -1,4 +1,4 @@
-# MealNUS
+<img src="./mealnus-react/src/Assets/MealNUS-Logo.png" alt="Alt Text" width="20%">
 Welcome to our meal box delivery platform, designed specifically for NUS students staying on campus! We understand that being a student can be a busy and stressful time, which is why we have created a convenient and healthy meal solution that will save you time and effort.
 
 Our platform offers a wide array of categories and healthy options, catering to different dietary requirements and preferences. Whether you're looking for vegetarian, vegan, low-carb, or high-protein meals, we have got you covered. Our meals are carefully curated by our team of experienced chefs, using only the freshest and highest-quality ingredients to ensure that you get the best possible dining experience.
