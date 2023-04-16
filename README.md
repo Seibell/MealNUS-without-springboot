@@ -1,62 +1,11 @@
-# MealNUS-without-springboot
-springsecurity too hard
+# MealNUS
+Welcome to our meal box delivery platform, designed specifically for NUS students staying on campus! We understand that being a student can be a busy and stressful time, which is why we have created a convenient and healthy meal solution that will save you time and effort.
 
-## BOGOSORT
-// Java Program to implement BogoSort
-public class BogoSort {
-    // Sorts array a[0..n-1] using Bogo sort
-    void bogoSort(int[] a)
-    {
-        // if array is not sorted then shuffle the
-        // array again
-        while (isSorted(a) == false)
-            shuffle(a);
-    }
-  
-    // To generate permutation of the array
-    void shuffle(int[] a)
-    {
-        // Math.random() returns a double positive
-        // value, greater than or equal to 0.0 and
-        // less than 1.0.
-        for (int i = 1; i < a.length; i++)
-            swap(a, i, (int)(Math.random() * i));
-    }
-  
-    // Swapping 2 elements
-    void swap(int[] a, int i, int j)
-    {
-        int temp = a[i];
-        a[i] = a[j];
-        a[j] = temp;
-    }
-  
-    // To check if array is sorted or not
-    boolean isSorted(int[] a)
-    {
-        for (int i = 1; i < a.length; i++)
-            if (a[i] < a[i - 1])
-                return false;
-        return true;
-    }
-  
-    // Prints the array
-    void printArray(int[] arr)
-    {
-        for (int i = 0; i < arr.length; i++)
-            System.out.print(arr[i] + " ");
-        System.out.println();
-    }
-  
-    public static void main(String[] args)
-    {
-        // Enter array to be sorted here
-        int[] a = { 3, 2, 5, 1, 0, 4 };
-        BogoSort ob = new BogoSort();
-  
-        ob.bogoSort(a);
-  
-        System.out.print("Sorted array: ");
-        ob.printArray(a);
-    }
-}
+Our platform offers a wide array of categories and healthy options, catering to different dietary requirements and preferences. Whether you're looking for vegetarian, vegan, low-carb, or high-protein meals, we have got you covered. Our meals are carefully curated by our team of experienced chefs, using only the freshest and highest-quality ingredients to ensure that you get the best possible dining experience.
+
+With our meal box delivery service, you can expect your meals to be delivered straight to your doorstep, ready to be heated up and enjoyed in just under minutes. Say goodbye to long queues at the canteen or spending hours in the kitchen trying to cook a meal from scratch.
+
+We take pride in making healthy eating accessible and convenient for students on campus, without compromising on taste or quality. 
+Our mission is to help you fuel your body with nutritious and delicious meals, so that you can focus on what really matters - your studies.
+
+Ordering from our platform is easy and hassle-free. Simply browse our menu, select your desired meal box, and sit back and relax as we take care of the rest. With our affordable prices, regular promotions throughout the year, and reliable delivery service, you can count on us to be your go-to meal solution on campus.
